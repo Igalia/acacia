@@ -15,8 +15,28 @@ add_executable(
   dump_tree_atspi.cc
 )
 
-# Find installed libatspi
-find_library(LIB_ATSPI libatspi.so.0)
+# CMake module that can find system c++ librarys
+find_package(
+  PkgConfig
+  REQUIRED
+)
+
+pkg_check_modules(
+  # Prefix for variable names set by this function
+  # _INCLUDE_DIRS, _LIBRARIES and _CFLAGS_OTHER
+  ATSPI2
+  REQUIRED
+  # Module name
+  "atspi-2")
+
+# With this, we can #include "atspi/atspi.h"
+# in dump_tree_atspi.cc
+target_include_directories(
+  dump_tree_atspi
+
+  PUBLIC
+    ${ATSPI2_INCLUDE_DIRS}
+)
 
 target_link_libraries(
   # Target to link (created above)
@@ -25,5 +45,5 @@ target_link_libraries(
   # Items to link into the target
   PRIVATE
     atspi_wrapper
-    "${LIB_ATSPI}"
+    "${ATSPI2_LIBRARIES}"
 )
