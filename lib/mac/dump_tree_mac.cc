@@ -4,7 +4,8 @@
 #include <regex>
 #include <string>
 
-#include "lib/mac/mac.h"
+#include "lib/mac/mac_wrapper.h"
+#include "lib/mac/mac_utils_swift.h"
 
 void print_usage(std::string& program_name) {
     std::cout << "Usage: "<< program_name << " <pid>\n";
@@ -27,6 +28,9 @@ int main(int argc, char** argv) {
 
     const int pid = std::stoi(pid_string);
     std::cout << "Got PID: " << pid << "\n";
+
+    SwiftMacUtils::helloSwift();
+    std::cout << my_lib_function();
 
     return 0;
 }
