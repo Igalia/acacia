@@ -29,8 +29,7 @@ int main(int argc, char** argv) {
     const int pid = std::stoi(pid_string);
     std::cout << "Got PID: " << pid << "\n";
 
-    SwiftMacUtils::helloSwift();
-    std::cout << my_lib_function();
+    SwiftMacUtils::logInfoForPID(pid);
 
     return 0;
 }
