@@ -5,14 +5,8 @@ add_library(
   # Sources
   atspi_wrapper.cc
   atspi_wrapper.h
-)
-
-add_executable(
-  # Name
-  dump_tree_atspi
-
-  # Sources
-  dump_tree_atspi.cc
+  linux_utils.cc
+  linux_utils.h
 )
 
 # CMake module that can find system c++ librarys
@@ -30,12 +24,28 @@ pkg_check_modules(
   "atspi-2")
 
 # With this, we can #include "atspi/atspi.h"
-# in dump_tree_atspi.cc
 target_include_directories(
-  dump_tree_atspi
+  atspi_wrapper
 
   PUBLIC
     ${ATSPI2_INCLUDE_DIRS}
+)
+
+target_link_libraries(
+  # Target to link (created above)
+  atspi_wrapper
+
+  # Items to link into the target
+  PRIVATE
+    "${ATSPI2_LIBRARIES}"
+)
+
+add_executable(
+  # Name
+  dump_tree_atspi
+
+  # Sources
+  dump_tree_atspi.cc
 )
 
 target_link_libraries(
@@ -45,5 +55,4 @@ target_link_libraries(
   # Items to link into the target
   PRIVATE
     atspi_wrapper
-    "${ATSPI2_LIBRARIES}"
 )

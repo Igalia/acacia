@@ -3,9 +3,7 @@
 #include <regex>
 #include <string>
 
-#include <lib/atspi/atspi_wrapper.h>
-
-#include "atspi/atspi.h"
+#include <lib/atspi/linux_utils.h>
 
 void print_usage(std::string& program_name) {
     std::cout << "Usage: "<< program_name << " <pid>\n";
@@ -28,6 +26,9 @@ int main(int argc, char** argv) {
 
     const int pid = std::stoi(pid_string);
     std::cout << "Got PID: " << pid << "\n";
+    AtspiWrapperPtr root = find_root_accessible_from_pid(pid);
 
+    std::cout << "root accessible name: " << root->GetName() << "\n";
+    std::cout << "root accessible role: " << root->GetRole() << "\n";
     return 0;
 }
