@@ -1,9 +1,12 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <lib/atspi/atspi_wrapper.h>
+#include <lib/atspi/atspi_node.h>
 
-std::string AtspiWrapper::GetRole() {
+// TODO: Discuss naming convention for these functions.
+// I wanted "atspi_accessible_get_role_name" to be as close to the API
+// as possible, but I get a compilation error.
+std::string AtspiNode::accessible_get_role_name() {
   GError* error = nullptr;
   char* role_name = atspi_accessible_get_role_name(accessible_, &error);
   if (error) {
@@ -13,7 +16,7 @@ std::string AtspiWrapper::GetRole() {
   return role_name;
 }
 
-std::string AtspiWrapper::GetName() {
+std::string AtspiNode::accessible_get_name() {
   GError* error = nullptr;
   char* name = atspi_accessible_get_name(accessible_, &error);
   if (error) {

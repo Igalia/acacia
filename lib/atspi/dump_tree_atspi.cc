@@ -26,9 +26,9 @@ int main(int argc, char** argv) {
 
     const int pid = std::stoi(pid_string);
     std::cout << "Got PID: " << pid << "\n";
-    AtspiWrapperPtr root = find_root_accessible_from_pid(pid);
+    AtspiNodePtr root = find_root_accessible_from_pid(pid);
 
-    std::cout << "root accessible name: " << root->GetName() << "\n";
-    std::cout << "root accessible role: " << root->GetRole() << "\n";
+    std::cout << "root accessible name: " << root->accessible_get_name() << "\n";
+    std::cout << "root accessible role: " << root->accessible_get_role_name() << "\n";
     return 0;
 }

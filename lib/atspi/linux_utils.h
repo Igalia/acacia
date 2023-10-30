@@ -1,9 +1,13 @@
+#ifndef LIB_ATSPI_LINUX_UTILS_H_
+#define LIB_ATSPI_LINUX_UTILS_H_
+
 #include <memory>
 #include <string>
 
-#include <lib/atspi/atspi_wrapper.h>
+#include <lib/atspi/atspi_node.h>
 
-using AtspiWrapperPtr = std::unique_ptr<AtspiWrapper>;
+using AtspiNodePtr = std::unique_ptr<AtspiNode>;
 
-AtspiWrapperPtr find_root_accessible_from_pid(const int pid);
+AtspiNodePtr find_root_accessible_from_pid(const int pid);
 
+#endif // LIB_ATSPI_LINUX_UTILS_H_
