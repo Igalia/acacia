@@ -22,6 +22,18 @@ This will produce the executable:
 % build/lib/atspi/dump_tree_atspi
 ```
 
+As well as a python module.
+```
+% cd build/lib/atspi/
+% python
+>>> import atspi_inspect
+>>> node = atspi_inspect.find_root_accessible_from_pid(1244182)
+>>> node.accessible_get_role_name()
+'application'
+>>> node.accessible_get_name()
+'Google Chrome'
+```
+
 ### On Mac
 
 Ensure you have XCode, including Swift support, and Ninja installed.
