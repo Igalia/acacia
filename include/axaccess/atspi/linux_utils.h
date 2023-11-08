@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include <lib/atspi/atspi_node.h>
+#include "atspi_node.h"
 
 using AtspiNodePtr = std::unique_ptr<AtspiNode>;
 

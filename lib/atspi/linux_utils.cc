@@ -2,7 +2,7 @@
 #include <ostream>
 #include <string>
 
-#include <lib/atspi/linux_utils.h>
+#include <axaccess/atspi/linux_utils.h>
 
 #define CHECK_ATSPI_ERROR_NULLPTR(error) \
   if (error) {                           \

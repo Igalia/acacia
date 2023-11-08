@@ -3,7 +3,7 @@
 #include <regex>
 #include <string>
 
-#include <lib/atspi/linux_utils.h>
+#include <axaccess/atspi/linux_utils.h>
 
 void print_usage(std::string& program_name) {
     std::cout << "Usage: "<< program_name << " <pid>\n";
