@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <lib/atspi/atspi_node.h>
+#include <axaccess/atspi/atspi_node.h>
 
 // TODO: Discuss naming convention for these functions.
 // I wanted "atspi_accessible_get_role_name" to be as close to the API

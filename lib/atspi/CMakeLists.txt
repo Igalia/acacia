@@ -8,9 +8,7 @@ add_library(
 
   # Sources
   atspi_node.cc
-  atspi_node.h
   linux_utils.cc
-  linux_utils.h
 )
 
 # CMake module that can find system c++ librarys
@@ -32,6 +30,7 @@ target_include_directories(
   atspi_inspect
 
   PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
     ${ATSPI2_INCLUDE_DIRS}
 )
 
@@ -86,3 +85,8 @@ TARGET_LINK_LIBRARIES(
   ${PYTHON_LIBRARIES}
 )
 
+set_property(
+  TARGET atspi_python_inspect
+  PROPERTY
+    SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+)
