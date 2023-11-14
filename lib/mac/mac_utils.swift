@@ -3,31 +3,45 @@ import ApplicationServices
 public func logInfoForPID(_ pid: pid_t) {
     let application = AXUIElementCreateApplication(pid)
 
-    var attributes: CFArray?
-    let result = AXUIElementCopyAttributeNames(application, &attributes)
-    guard result == .success else {
-        print("Couldn't get attributes")
-        return
-    }
-
-    for attribute in attributes! as! [String] {
+    let attributes: [String] = getAttributeNames(application)
+    for attribute in attributes {
         switch attribute {
         case kAXTitleAttribute:
-            printAttribute(application, kAXTitleAttribute)
+            let title = getStringAttribute(application, kAXTitleAttribute)
+            if let title {
+                print("title is: \(title)")
+            }
         case kAXRoleAttribute:
-            printAttribute(application, kAXRoleAttribute)
+            let role = getStringAttribute(application, kAXRoleAttribute)
+            if let role {
+                print("role is: \(role)")
+            }
         default:
             break
         }
     }
 }
 
-func printAttribute(_ element: AXUIElement, _ attribute: String) {
+func getAttributeNames(_ element: AXUIElement) -> [String] {
+    var attributes: CFArray?
+    let result = AXUIElementCopyAttributeNames(element, &attributes)
+    guard result == .success else {
+        print("Couldn't get attributes")
+        return []
+    }
+
+    return attributes! as! [String]
+}
+
+func getStringAttribute(_ element: AXUIElement, _ attribute: String) -> String? {
     var value: CFTypeRef?
     let result = AXUIElementCopyAttributeValue(element, attribute as CFString, &value)
     guard result == .success else {
         print("Couldn't get \(attribute)")
-        return
+        return nil
     }
-    print("\(attribute) is \(value!)")
+    if let string_value = value as? String {
+        return string_value
+    }
+    return nil
 }
