@@ -88,7 +88,7 @@ cooltest({
  */
 
 cooltest({
-  file: 'tests/checkbox-mixed.html',
+  file: 'tests/aria-checked-true.html',
   name: "aria-checked=true",
   ATSPI: async (t) => {
 
