@@ -89,7 +89,7 @@ cooltest({
 
 cooltest({
   file: 'tests/checkbox-mixed.html',
-  name: "role=checkbox",
+  name: "aria-checked=true",
   ATSPI: async (t) => {
 
     let checkbox = t.context.rootAccessible().findAccessibleById('test');
