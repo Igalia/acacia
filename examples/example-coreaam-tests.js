@@ -18,7 +18,7 @@ In some other file, for this test suite, we would find the code that starts the 
  * </html>
  */
 
-cooltest({
+cooltest({   // Cool test only runs the test for the appropriate platform
   file: 'tests/checkbox-mixed.html',
   name: "role=checkbox",
   ATSPI: async (t) => {
