@@ -25,7 +25,7 @@ cooltest({   // Cool test only runs the test for the appropriate platform
   name: "role=checkbox",
   ATSPI: async (t) => {
 
-    // *findAccessibleById* is from our library
+    // *findAccessibleById* is from our library, it finds the node by DOM  ID
     let checkbox = t.context.rootAccessible().findAccessibleById('test');
 
     // Alternatively, we might end up doing:
