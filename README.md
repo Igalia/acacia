@@ -9,11 +9,15 @@
 For swig:
 * `sudo apt install swig`
 
+For NodeJS module (optional):
+
+* `sudo apt install node-gyp`
+
 #### Build steps
 ```
 % mkdir build
 % cd build
-% cmake .. --fresh
+% cmake <feature-flags> .. --fresh
 % make
 ```
 
@@ -33,6 +37,22 @@ As well as a python module.
 >>> node.accessible_get_name()
 'Google Chrome'
 ```
+
+An optionally a NodeJS module `atspi_inspect.node`.
+```
+% cd build/lib/atspi/
+% nodejs
+> const atspi_inspect = require("./atspi_inspect");
+> let node = atspi_inspect.find_root_accessible_from_pid(<pid>);
+> node.accessible_get_role_name();
+'application'
+> node.accessible_get_name();
+'Chromium'
+```
+
+#### Feature flags
+
+* NodeJS bindings: `-DATSPI_NODEJS_MODULE=<ON/OFF>`, ON by default.
 
 ### On Mac
 
