@@ -2,6 +2,8 @@
 `cooltest` is a wrapper around ava.
 
 In some other file, for this test suite, we would find the code that starts the browser, get the pid.
+This is where you would see the importing of our library, and the using of our library to find the
+root accessible.
 
 `cooltest` will load the file passed in before getting the root accessible and passing it to the appropriate test (for example ATSPI, if running on linux). The root accessible is provided to the test in `t.context.rootAccessibe`.
 
