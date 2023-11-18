@@ -73,6 +73,7 @@ cooltest({
     let checkbox = t.context.rootAccessible().findAccessibleById('test');
 
     t.is(checkbox.GetCachedPropertyValue('UIA_ControlTypePropertyId'), 'Checkbox')
+
     // notes:
     // I'm the least familiar with this API, I really don't know if this the part
     // of the API we want to expose.
@@ -155,11 +156,13 @@ cooltest({
   ATSPI: async (t) => {
 
     let checkbox = t.context.rootAccessible().findAccessibleById('test');
+
     // These are webdriver commands, where "session" is the webdriver
     // session.
     await t.context.session.findElement(By.id('run_test')).click();
-    t.true(await checkbox.expectEvent('STATE-CHANGE:CHECKED:TRUE'));
 
+    // "expectEvent" would come from our library.
+    t.true(await checkbox.expectEvent('STATE-CHANGE:CHECKED:TRUE'));
   },
   AXAPI: async (t) => {
 
