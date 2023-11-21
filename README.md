@@ -4,14 +4,15 @@
 
 #### Dependencies
 
-`sudo apt install libatspi2.0-dev`
+`sudo apt install cmake libatspi2.0-dev`
 
-For swig:
-* `sudo apt install swig`
+For Python3 bindings (optional):
+* `sudo apt install swig python3-dev`
 
 For NodeJS module (optional):
+* `sudo apt install swig node-gyp`
 
-* `sudo apt install node-gyp`
+These bindings dependencies are on my default. See *Feature Flags* section below for how to disable them.
 
 #### Build steps
 ```
@@ -38,7 +39,7 @@ As well as a python module.
 'Google Chrome'
 ```
 
-An optionally a NodeJS module `atspi_inspect.node`.
+And a NodeJS module `atspi_inspect.node`.
 ```
 % cd build/lib/atspi/
 % nodejs
@@ -52,6 +53,7 @@ An optionally a NodeJS module `atspi_inspect.node`.
 
 #### Feature flags
 
+* Python3 bindings: `-DATSPI_PYTHON_MODULE=<ON/OFF>`, ON by default.
 * NodeJS bindings: `-DATSPI_NODEJS_MODULE=<ON/OFF>`, ON by default.
 
 ### On Mac

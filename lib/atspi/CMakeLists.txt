@@ -1,4 +1,11 @@
-# Feature flag for NodeJS bindings
+# Feature flag for Python bindings, ON by default
+option(
+  ATSPI_PYTHON_MODULE
+  "Build Python bindings (requires swig and python3)"
+  ON
+)
+
+# Feature flag for NodeJS bindings, ON by default
 option(
   ATSPI_NODEJS_MODULE
   "Build NodeJS bindings (requires swig and node-gyp)"
@@ -67,36 +74,44 @@ target_link_libraries(
     atspi_inspect
 )
 
-# SWIG Instructions to build a python module called "atspi_inspect"
+# SWIG Instructions to build library bindings to different languages
+# (only required if at least one binding is ON).
 
-FIND_PACKAGE(SWIG REQUIRED)
-INCLUDE(${SWIG_USE_FILE})
+if (ATSPI_PYTHON_MODULE OR ATSPI_NODEJS_MODULE)
+  FIND_PACKAGE(SWIG REQUIRED)
+  INCLUDE(${SWIG_USE_FILE})
+endif()
 
-FIND_PACKAGE(PythonLibs)
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+# Generate Python bindings using swig + python3
 
-SET_SOURCE_FILES_PROPERTIES(atspi_inspect.i PROPERTIES CPLUSPLUS ON)
+if (ATSPI_PYTHON_MODULE)
+  FIND_PACKAGE(PythonLibs)
+  INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
-SWIG_ADD_LIBRARY(
-  # The name of the c++ library used by python module
-  atspi_python_inspect
-  TYPE SHARED
-  LANGUAGE python
-  SOURCES atspi_inspect.i
-)
+  SET_SOURCE_FILES_PROPERTIES(atspi_inspect.i PROPERTIES CPLUSPLUS ON)
 
-TARGET_LINK_LIBRARIES(
-  atspi_python_inspect
-  atspi_inspect
-  ${PYTHON_LIBRARIES}
-)
+  SWIG_ADD_LIBRARY(
+    # The name of the c++ library used by python module
+    atspi_python_inspect
+    TYPE SHARED
+    LANGUAGE python
+    SOURCES atspi_inspect.i
+  )
 
-set_property(
-  TARGET atspi_python_inspect
-  PROPERTY
-    SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-)
+  TARGET_LINK_LIBRARIES(
+    atspi_python_inspect
+    atspi_inspect
+    ${PYTHON_LIBRARIES}
+  )
+
+  set_property(
+    TARGET atspi_python_inspect
+    PROPERTY
+      SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+  )
+endif()
+
 
 # Generate a NodeJS Module using swig + node-gyp
 
