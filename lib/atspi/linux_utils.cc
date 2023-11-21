@@ -23,7 +23,7 @@ AtspiNodePtr find_root_accessible_from_pid(const int pid) {
         atspi_accessible_get_child_at_index(desktop, i, &error);
     CHECK_ATSPI_ERROR_NULLPTR(error);
 
-    uint application_pid = atspi_accessible_get_process_id(child, &error);
+    pid_t application_pid = atspi_accessible_get_process_id(child, &error);
     CHECK_ATSPI_ERROR_NULLPTR(error)
     if (pid == application_pid) {
       return std::make_unique<AtspiNode>(AtspiNode(child));
