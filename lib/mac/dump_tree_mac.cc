@@ -4,7 +4,6 @@
 #include <regex>
 #include <string>
 
-#include "lib/mac/mac_wrapper.h"
 #include "lib/mac/mac_utils_swift.h"
 
 void print_usage(std::string& program_name) {

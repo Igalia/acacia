@@ -34,22 +34,15 @@ _swift_generate_cxx_header_target(
   # generated header path
   "${GENERATED_FILES_BASEPATH}/${RELATIVE_CURRENT_SOURCE_DIR}/mac_utils_swift.h"
 
-  SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/mac_utils.swift")
-
-add_library(
-  # Name
-  mac
-
-  # Sources
-  mac_wrapper.cc
-  mac_wrapper.h
-)
+  SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/mac_utils.swift"
+          "${CMAKE_CURRENT_SOURCE_DIR}/axapi_node.swift")
 
 add_library(
   # Name
   swift_mac_utils
 
   # Sources
+  axapi_node.swift
   mac_utils.swift
 )
 set_target_properties(swift_mac_utils
@@ -77,5 +70,4 @@ target_link_libraries(
   dump_tree_mac
 
   # Items to link into the target
-  PRIVATE mac
   PRIVATE swift_mac_utils)
