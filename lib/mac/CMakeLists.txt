@@ -1,5 +1,5 @@
 # Swift/C++ CMake configuration based heavily on
-# https://github.com/apple/swift-cmake-examples/blob/main/3_bidirectional_cxx_interop/
+# https://github.com/mac/swift-cmake-examples/blob/main/3_bidirectional_cxx_interop/
 
 # Verify that we have a new enough compiler
 if("${CMAKE_Swift_COMPILER_VERSION}" VERSION_LESS 5.9)
@@ -26,52 +26,68 @@ include(InitializeSwift)
 # C++ bridging header
 include(AddSwift)
 
-# Set up a list called SWIFT_SOURCES which will be used by both the
+# Set up a list called MAC_INSPECT_SOURCES which will be used by both the
 # Swift-only library and the C++ header generation rule
-list(APPEND SWIFT_SOURCES
+list(APPEND MAC_INSPECT_SOURCES
   axapi_node.swift
   mac_utils.swift
 )
 
 # The C++ header generation rule requires a path relative to the project root,
-# so create a copy of SWIFT_SOURCES with the current source dir prepended
+# so create a copy of MAC_INSPECT_SOURCES with the current source dir prepended
 # to each
-list(TRANSFORM SWIFT_SOURCES
+list(TRANSFORM MAC_INSPECT_SOURCES
   PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/"
-  OUTPUT_VARIABLE SWIFT_SOURCES_FULL_PATH
-)
-
-# Pure Swift library
-add_library(
-  # Name
-  swift_mac_utils
-
-  # Sources
-  ${SWIFT_SOURCES}
-)
-
-# Set the Swift_MODULE_NAME property for swift_mac_utils, used below to generate
-# the C++ header file.
-#
-# Normally it defaults to the name of the target, but we're using snake_case for
-# the target name, so this gives it a more Swift-appropriate CamelCased name.
-set_target_properties(swift_mac_utils
-  PROPERTIES Swift_MODULE_NAME "SwiftMacUtils"
+  OUTPUT_VARIABLE MAC_INSPECT_SOURCES_FULL_PATH
 )
 
 # Generated C++ header for the Swift library
 _swift_generate_cxx_header_target(
   # Target name
-  mac_utils_swift_h
+  mac_inspect_swift_h
 
   # SwiftModule/C++ namespace
-  SwiftMacUtils
+  MacInspect
 
   # Generated header output path
-  "${GENERATED_FILES_BASEPATH}/${RELATIVE_CURRENT_SOURCE_DIR}/mac_utils_swift.h"
+  "${GENERATED_FILES_BASEPATH}/include/axaccess/mac/mac_inspect.h"
 
   # Sources (keyword argument)
-  SOURCES "${SWIFT_SOURCES_FULL_PATH}"
+  SOURCES "${MAC_INSPECT_SOURCES_FULL_PATH}"
+)
+
+add_library(
+  # Name
+  mac_inspect
+
+  # Sources
+  ${MAC_INSPECT_SOURCES}
+)
+
+add_dependencies(
+  # Add dependencies to target
+  mac_inspect
+
+  # Dependencies to add
+  mac_inspect_swift_h
+)
+
+# Make sure SWIG (and other users of the mac_inspect library) can find the
+# generated header file
+target_include_directories(
+  mac_inspect
+
+  PUBLIC
+    "${GENERATED_FILES_BASEPATH}/include"
+)
+
+# When building mac_inspect, enable C++ interoperability mode for Swift
+# compilation. Make it 'PUBLIC' to ensure it is propagated to users of the
+# library.
+target_compile_options(
+  mac_inspect
+
+  PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
 )
 
 # Example C++ executable which depends on the Swift library/C++ bindings we
@@ -85,13 +101,13 @@ add_executable(
 )
 
 # dump_tree_mac depends on the C++ header generated above
-add_dependencies(
-  # Add dependencies to target
-  dump_tree_mac
+# add_dependencies(
+#   # Add dependencies to target
+#   dump_tree_mac
 
-  # Dependencies to add
-  mac_utils_swift_h
-)
+#   # Dependencies to add
+#   mac_inspect_swift_h
+# )
 
 # Link the pure Swift implementation of swift_mac_utils into the dump_tree_mac
 # executable
@@ -100,12 +116,44 @@ target_link_libraries(
   dump_tree_mac
 
   # Items to link into the target
-  PRIVATE swift_mac_utils
+  PRIVATE mac_inspect
 )
 
 # When building dump_tree_mac, enable C++ interoperability mode for Swift
 # compilation. Make it 'PUBLIC' to ensure it is propagated to users of the
-# library.
-target_compile_options(swift_mac_utils
+# library. (Obviously this is not a library, but just as an example.)
+target_compile_options(dump_tree_mac
   PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
 )
+
+# SWIG Instructions to build a python module called "mac_inspect"
+
+FIND_PACKAGE(SWIG REQUIRED)
+INCLUDE(${SWIG_USE_FILE})
+
+FIND_PACKAGE(Python3 COMPONENTS Development)
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
+SET_SOURCE_FILES_PROPERTIES(mac_inspect.i PROPERTIES CPLUSPLUS ON)
+
+SWIG_ADD_LIBRARY(
+  # The name of the c++ library used by python module
+  mac_python_inspect
+  TYPE SHARED
+  LANGUAGE python
+  SOURCES mac_inspect.i
+)
+
+TARGET_LINK_LIBRARIES(
+  mac_python_inspect
+  mac_inspect
+  ${Python3_LIBRARIES}
+)
+
+set_property(
+  TARGET mac_python_inspect
+  PROPERTY
+    SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+)
+
