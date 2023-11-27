@@ -20,7 +20,16 @@ include(AddSwift)
 
 file(RELATIVE_PATH RELATIVE_CURRENT_SOURCE_DIR ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 include(CMakePrintHelpers)
-cmake_print_variables(RELATIVE_CURRENT_SOURCE_DIR)
+
+list(APPEND SWIFT_SOURCES
+  axapi_node.swift
+  mac_utils.swift
+)
+
+list(TRANSFORM SWIFT_SOURCES
+  PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/"
+  OUTPUT_VARIABLE SWIFT_SOURCES_FULL_PATH
+)
 
 # Generate a C++ header from Swift sources
 # This function is implemented in cmake/modules/AddSwift.cmake.
@@ -34,19 +43,20 @@ _swift_generate_cxx_header_target(
   # generated header path
   "${GENERATED_FILES_BASEPATH}/${RELATIVE_CURRENT_SOURCE_DIR}/mac_utils_swift.h"
 
-  SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/mac_utils.swift"
-          "${CMAKE_CURRENT_SOURCE_DIR}/axapi_node.swift")
+  SOURCES "${SWIFT_SOURCES_FULL_PATH}"
+)
 
 add_library(
   # Name
   swift_mac_utils
 
   # Sources
-  axapi_node.swift
-  mac_utils.swift
+  ${SWIFT_SOURCES}
 )
+
 set_target_properties(swift_mac_utils
-                      PROPERTIES Swift_MODULE_NAME "SwiftMacUtils")
+                      PROPERTIES Swift_MODULE_NAME "SwiftMacUtils"
+)
 
 add_executable(
   # Name
@@ -57,17 +67,21 @@ add_executable(
 )
 
 add_dependencies(dump_tree_mac
-                 mac_utils_swift_h)
+                 mac_utils_swift_h
+)
 
 target_include_directories(dump_tree_mac
-                           PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include")
+                           PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include"
+)
 
 target_compile_options(dump_tree_mac PUBLIC
-                       "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>")
+                       "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
+)
 
 target_link_libraries(
   # Target to link (created above)
   dump_tree_mac
 
   # Items to link into the target
-  PRIVATE swift_mac_utils)
+  PRIVATE swift_mac_utils
+)
