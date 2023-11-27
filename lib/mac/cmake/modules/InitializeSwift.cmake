@@ -71,3 +71,6 @@ function(_setup_swift_paths)
 endfunction()
 
 _setup_swift_paths()
+
+# This file was copied from
+# https://github.com/apple/swift-cmake-examples/blob/main/3_bidirectional_cxx_interop/cmake/modules/AddSwift.cmake
