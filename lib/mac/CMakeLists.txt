@@ -100,8 +100,6 @@ add_executable(
   dump_tree_mac.cc
 )
 
-# Link the pure Swift implementation of swift_mac_utils into the dump_tree_mac
-# executable
 target_link_libraries(
   # Target to link (created above)
   dump_tree_mac
@@ -110,25 +108,18 @@ target_link_libraries(
   PRIVATE mac_inspect
 )
 
-# When building dump_tree_mac, enable C++ interoperability mode for Swift
-# compilation. Make it 'PUBLIC' to ensure it is propagated to users of the
-# library. (Obviously this is not a library, but just as an example.)
-target_compile_options(dump_tree_mac
-  PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
-)
-
 # SWIG Instructions to build a python module called "mac_inspect"
 
-FIND_PACKAGE(SWIG REQUIRED)
-INCLUDE(${SWIG_USE_FILE})
+find_package(SWIG COMPONENTS python)
+include(UseSWIG)
 
-FIND_PACKAGE(Python3 COMPONENTS Development)
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+find_package(Python3 COMPONENTS Development)
+include_directories(${Python_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-SET_SOURCE_FILES_PROPERTIES(mac_inspect.i PROPERTIES CPLUSPLUS ON)
+set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
 
-SWIG_ADD_LIBRARY(
+swig_add_library(
   # The name of the c++ library used by python module
   mac_python_inspect
   TYPE SHARED
@@ -136,8 +127,11 @@ SWIG_ADD_LIBRARY(
   SOURCES mac_inspect.i
 )
 
-TARGET_LINK_LIBRARIES(
+target_link_libraries(
+  # Target to link
   mac_python_inspect
+
+  # Items to link into the target
   mac_inspect
   ${Python3_LIBRARIES}
 )
