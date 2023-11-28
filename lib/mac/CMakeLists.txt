@@ -64,13 +64,13 @@ add_library(
   ${MAC_INSPECT_SOURCES}
 )
 
-add_dependencies(
-  # Add dependencies to target
-  mac_inspect
+# Manually set the Swift module name for the mac_inspect module to match the
+# module name used in the header generation above
+set_target_properties(mac_inspect PROPERTIES Swift_MODULE_NAME "MacInspect")
 
-  # Dependencies to add
-  mac_inspect_swift_h
-)
+# Include the header generation as a dependency so that the header is available
+# to users of the library
+add_dependencies(mac_inspect mac_inspect_swift_h)
 
 # Make sure SWIG (and other users of the mac_inspect library) can find the
 # generated header file
@@ -99,15 +99,6 @@ add_executable(
   # Sources
   dump_tree_mac.cc
 )
-
-# dump_tree_mac depends on the C++ header generated above
-# add_dependencies(
-#   # Add dependencies to target
-#   dump_tree_mac
-
-#   # Dependencies to add
-#   mac_inspect_swift_h
-# )
 
 # Link the pure Swift implementation of swift_mac_utils into the dump_tree_mac
 # executable
