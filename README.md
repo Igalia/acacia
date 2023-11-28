@@ -58,7 +58,23 @@ And a NodeJS module `atspi_inspect.node`.
 
 ### On Mac
 
+#### Dependencies
+
 Ensure you have XCode, including Swift support, and Ninja installed.
+
+```
+brew install cmake
+brew install ninja
+brew install swig
+```
+
+If you encounter a python3_LIBRARIES not found, try updating python with:
+
+```
+brew install python
+```
+
+#### Build steps
 
 ```
 % mkdir build
