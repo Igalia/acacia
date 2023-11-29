@@ -4,7 +4,5 @@
 %}
 
 %include "std_string.i"
-%include <std_unique_ptr.i>
-%unique_ptr(AXAPINode)
 
-%include <axaccess/mac/mac_inspect.h>
+void logInfoForPID(int32_t pid);
