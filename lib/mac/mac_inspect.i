@@ -5,4 +5,4 @@
 
 %include "std_string.i"
 
-void logInfoForPID(int32_t pid);
+void MacInspect::logInfoForPID(int32_t pid);

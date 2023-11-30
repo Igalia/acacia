@@ -1,5 +1,5 @@
 # Swift/C++ CMake configuration based heavily on
-# https://github.com/mac/swift-cmake-examples/blob/main/3_bidirectional_cxx_interop/
+# https://github.com/apple/swift-cmake-examples/blob/main/3_bidirectional_cxx_interop/
 
 # Verify that we have a new enough compiler
 if("${CMAKE_Swift_COMPILER_VERSION}" VERSION_LESS 5.9)
@@ -113,9 +113,15 @@ target_link_libraries(
 find_package(SWIG COMPONENTS python)
 include(UseSWIG)
 
-find_package(Python3 COMPONENTS Development)
+find_package(Python3 COMPONENTS Interpreter Development)
+
+# Temporially set
+SET(Python_INCLUDE_DIR /opt/homebrew/Cellar/python@3.11/3.11.6_1/Frameworks/Python.framework/Versions/3.11/include/python3.11)
+
 include_directories(${Python_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+message("Python_INCLUDE_DIR ${Python_INCLUDE_DIR}")
 
 set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
 
