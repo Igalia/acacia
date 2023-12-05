@@ -10,6 +10,7 @@ class AtspiNode {
 
   public:
     AtspiNode(AtspiAccessible* accessible): accessible_(accessible) {};
+    ~AtspiNode();
 
     std::string accessible_get_role_name();
     std::string accessible_get_name();
