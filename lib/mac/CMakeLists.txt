@@ -128,6 +128,13 @@ swig_add_library(
   SOURCES mac_inspect.i
 )
 
+set_target_properties(
+  mac_python_inspect
+
+  PROPERTIES
+  SUFFIX .so
+)
+
 target_link_libraries(
   # Target to link
   mac_python_inspect
