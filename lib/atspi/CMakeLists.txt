@@ -85,9 +85,9 @@ endif()
 # Generate Python bindings using swig + python3
 
 if (ATSPI_PYTHON_MODULE)
-  FIND_PACKAGE(PythonLibs)
-  INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+  FIND_PACKAGE(Python3 COMPONENTS Interpreter Development.Module)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+  INCLUDE_DIRECTORIES(${Python3_INCLUDE_DIRS})
 
   SET_SOURCE_FILES_PROPERTIES(atspi_inspect.i PROPERTIES CPLUSPLUS ON)
 
@@ -102,7 +102,7 @@ if (ATSPI_PYTHON_MODULE)
   TARGET_LINK_LIBRARIES(
     atspi_python_inspect
     atspi_inspect
-    ${PYTHON_LIBRARIES}
+    ${python3_LIBRARIES}
   )
 
   set_property(
