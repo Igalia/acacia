@@ -115,13 +115,8 @@ include(UseSWIG)
 
 find_package(Python3 COMPONENTS Interpreter Development)
 
-# Temporially set
-SET(Python_INCLUDE_DIR /opt/homebrew/Cellar/python@3.11/3.11.6_1/Frameworks/Python.framework/Versions/3.11/include/python3.11)
-
-include_directories(${Python_INCLUDE_DIR})
+include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-message("Python_INCLUDE_DIR ${Python_INCLUDE_DIR}")
 
 set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
 
