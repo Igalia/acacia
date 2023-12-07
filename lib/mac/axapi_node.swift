@@ -4,14 +4,14 @@ public class AXAPINode {
     let ax_element: AXUIElement
 
     init(_ ax_element: AXUIElement) {
-        self.ax_element = ax_element
+      self.ax_element = ax_element
     }
 
-    var role: String? {
+    public var role: String? {
       return getStringAttribute(kAXRoleAttribute)
     }
 
-    var title: String? {
+    public var title: String? {
       return getStringAttribute(kAXTitleAttribute)
     }
 
@@ -41,4 +41,9 @@ public class AXAPINode {
         print("\(attribute) could not be converted to String")
         return nil
     }
+}
+
+public func createAXAPINodeForApplication(_ pid: pid_t) -> AXAPINode {
+  let pid_ax_element = AXUIElementCreateApplication(pid)
+  return AXAPINode(pid_ax_element)
 }

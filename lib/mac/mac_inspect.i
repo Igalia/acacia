@@ -7,4 +7,11 @@
 
 namespace MacInspect {
   void logInfoForPID(long pid);
+
+  class AXAPINode {
+   public:
+    AXAPINode() = delete;
+  };
+
+  AXAPINode createAXAPINodeForApplication(long pid);
 }
