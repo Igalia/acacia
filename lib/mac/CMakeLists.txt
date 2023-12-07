@@ -90,24 +90,6 @@ target_compile_options(
   PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
 )
 
-# Example C++ executable which depends on the Swift library/C++ bindings we
-# defined above
-add_executable(
-  # Name
-  dump_tree_mac
-
-  # Sources
-  dump_tree_mac.cc
-)
-
-target_link_libraries(
-  # Target to link (created above)
-  dump_tree_mac
-
-  # Items to link into the target
-  PRIVATE mac_inspect
-)
-
 # SWIG Instructions to build a python module called "mac_inspect"
 
 find_package(SWIG COMPONENTS python)

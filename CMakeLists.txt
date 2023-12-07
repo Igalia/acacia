@@ -20,3 +20,4 @@ SET(GENERATED_FILES_BASEPATH "${CMAKE_BINARY_DIR}/generated")
 INCLUDE_DIRECTORIES("${GENERATED_FILES_BASEPATH}")
 
 add_subdirectory(lib)
+add_subdirectory(examples)
