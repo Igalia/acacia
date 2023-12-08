@@ -58,7 +58,23 @@ And a NodeJS module `atspi_inspect.node`.
 
 ### On Mac
 
+#### Dependencies
+
 Ensure you have XCode, including Swift support, and Ninja installed.
+
+```
+brew install cmake
+brew install ninja
+brew install swig
+```
+
+If you encounter a python3_LIBRARIES not found, try updating python with:
+
+```
+brew install python
+```
+
+#### Build steps
 
 ```
 % mkdir build
@@ -70,3 +86,15 @@ Ensure you have XCode, including Swift support, and Ninja installed.
 ## Output files
 
 The outputs will show up at the same relative path under `build/` as the path to the `CMakeLists.txt` file which defined the target, e.g. for a target defined in `lib/atspi/CMakeLists.txt`, the output will be in `build/lib/atspi/<target>`.
+
+Currently, we build the executable:
+```
+% build/lib/mac/dump_tree_mac
+```
+
+As well as a python module:
+```
+% cd build/lib/mac/
+% python
+>>> import mac_inspect
+```

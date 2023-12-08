@@ -48,3 +48,6 @@ function(_swift_generate_cxx_header_target target module header)
       "${header}"
   )
 endfunction()
+
+# This file was copied from
+# https://github.com/apple/swift-cmake-examples/blob/main/3_bidirectional_cxx_interop/cmake/modules/AddSwift.cmake

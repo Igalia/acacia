@@ -1,47 +1,25 @@
 import ApplicationServices
 
 public func logInfoForPID(_ pid: pid_t) {
-    let application = AXUIElementCreateApplication(pid)
+    let application_ax_element = AXUIElementCreateApplication(pid)
+    let application = AXAPINode(application_ax_element)
+    let title = application.title
+    print("Title: \(String(describing:title))")
+    let role = application.role
+    print("Role: \(String(describing:role))")
 
-    let attributes: [String] = getAttributeNames(application)
+    let attributes: [String] = application.getAttributeNames()
     for attribute in attributes {
         switch attribute {
-        case kAXTitleAttribute:
-            let title = getStringAttribute(application, kAXTitleAttribute)
-            if let title {
-                print("title is: \(title)")
-            }
-        case kAXRoleAttribute:
-            let role = getStringAttribute(application, kAXRoleAttribute)
-            if let role {
-                print("role is: \(role)")
-            }
-        default:
+        case kAXTitleAttribute, kAXRoleAttribute:
             break
+        default:
+            let attribute_value = application.getStringAttribute(attribute)
+            if let attribute_value {
+              print("\(attribute) is \(attribute_value)")
+            }
         }
     }
 }
 
-func getAttributeNames(_ element: AXUIElement) -> [String] {
-    var attributes: CFArray?
-    let result = AXUIElementCopyAttributeNames(element, &attributes)
-    guard result == .success else {
-        print("Couldn't get attributes")
-        return []
-    }
 
-    return attributes! as! [String]
-}
-
-func getStringAttribute(_ element: AXUIElement, _ attribute: String) -> String? {
-    var value: CFTypeRef?
-    let result = AXUIElementCopyAttributeValue(element, attribute as CFString, &value)
-    guard result == .success else {
-        print("Couldn't get \(attribute)")
-        return nil
-    }
-    if let string_value = value as? String {
-        return string_value
-    }
-    return nil
-}
