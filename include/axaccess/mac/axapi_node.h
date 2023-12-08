@@ -10,7 +10,7 @@ class AXAPINode {
   explicit AXAPINode(AXUIElementRef ax_element);
   ~AXAPINode() = default;
 
-  static AXAPINode createForPID(pid_t pid);
+  static AXAPINode createForPID(long pid);
 
   std::string GetRole();
   std::string GetTitle();
