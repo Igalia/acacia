@@ -29,32 +29,31 @@ include(AddSwift)
 # Set up a list called MAC_INSPECT_SOURCES which will be used by both the
 # Swift-only library and the C++ header generation rule
 list(APPEND MAC_INSPECT_SOURCES
-  axapi_node.swift
-  mac_utils.swift
+  axapi_node.cc
 )
 
 # The C++ header generation rule requires a path relative to the project root,
 # so create a copy of MAC_INSPECT_SOURCES with the current source dir prepended
 # to each
-list(TRANSFORM MAC_INSPECT_SOURCES
-  PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/"
-  OUTPUT_VARIABLE MAC_INSPECT_SOURCES_FULL_PATH
-)
+# list(TRANSFORM MAC_INSPECT_SOURCES
+#   PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/"
+#   OUTPUT_VARIABLE MAC_INSPECT_SOURCES_FULL_PATH
+# )
 
-# Generated C++ header for the Swift library
-_swift_generate_cxx_header_target(
-  # Target name
-  mac_inspect_swift_h
+# # Generated C++ header for the Swift library
+# _swift_generate_cxx_header_target(
+#   # Target name
+#   mac_inspect_swift_h
 
-  # SwiftModule/C++ namespace
-  MacInspect
+#   # SwiftModule/C++ namespace
+#   MacInspect
 
-  # Generated header output path
-  "${GENERATED_FILES_BASEPATH}/include/axaccess/mac/mac_inspect.h"
+#   # Generated header output path
+#   "${GENERATED_FILES_BASEPATH}/include/axaccess/mac/mac_inspect.h"
 
-  # Sources (keyword argument)
-  SOURCES "${MAC_INSPECT_SOURCES_FULL_PATH}"
-)
+#   # Sources (keyword argument)
+#   SOURCES "${MAC_INSPECT_SOURCES_FULL_PATH}"
+# )
 
 add_library(
   # Name
@@ -66,69 +65,85 @@ add_library(
 
 # Manually set the Swift module name for the mac_inspect module to match the
 # module name used in the header generation above
-set_target_properties(mac_inspect PROPERTIES Swift_MODULE_NAME "MacInspect")
+# set_target_properties(mac_inspect PROPERTIES Swift_MODULE_NAME "MacInspect")
 
 # Include the header generation as a dependency so that the header is available
 # to users of the library
-add_dependencies(mac_inspect mac_inspect_swift_h)
+# add_dependencies(mac_inspect mac_inspect_swift_h)
 
-# Make sure SWIG (and other users of the mac_inspect library) can find the
-# generated header file
+find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices)
+cmake_print_variables(APPLICATION_SERVICES_FRAMEWORK)
+
 target_include_directories(
   mac_inspect
 
   PUBLIC
-    "${GENERATED_FILES_BASEPATH}/include"
+    ${PROJECT_SOURCE_DIR}/include
 )
+
+target_link_libraries(
+  mac_inspect
+
+  PUBLIC
+    ${APPLICATION_SERVICES_FRAMEWORK}
+)
+# Make sure SWIG (and other users of the mac_inspect library) can find the
+# generated header file
+# target_include_directories(
+#   mac_inspect
+
+#   PUBLIC
+#     "${GENERATED_FILES_BASEPATH}/include"
+# )
 
 # When building mac_inspect, enable C++ interoperability mode for Swift
 # compilation. Make it 'PUBLIC' to ensure it is propagated to users of the
 # library.
-target_compile_options(
-  mac_inspect
+# target_compile_options(
+#   mac_inspect
 
-  PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
-)
+#   PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
+# )
 
 # SWIG Instructions to build a python module called "mac_inspect"
 
-find_package(SWIG COMPONENTS python)
-include(UseSWIG)
+# find_package(SWIG COMPONENTS python)
+# include(UseSWIG)
 
-find_package(Python3 COMPONENTS Interpreter Development)
+# find_package(Python3 COMPONENTS Interpreter Development)
 
-include_directories(${Python3_INCLUDE_DIRS})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+# include_directories(${Python3_INCLUDE_DIRS})
+# include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
+# set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
 
-swig_add_library(
-  # The name of the c++ library used by python module
-  mac_python_inspect
-  TYPE SHARED
-  LANGUAGE python
-  SOURCES mac_inspect.i
-)
+# swig_add_library(
+#   # The name of the c++ library used by python module
+#   mac_python_inspect
+#   TYPE SHARED
+#   LANGUAGE python
+#   SOURCES mac_inspect.i
+# )
 
-set_target_properties(
-  mac_python_inspect
+# set_target_properties(
+#   mac_python_inspect
 
-  PROPERTIES
-  SUFFIX .so
-)
+#   PROPERTIES
+#   SUFFIX .so
+# )
 
-target_link_libraries(
-  # Target to link
-  mac_python_inspect
+# target_link_libraries(
+#   # Target to link
+#   mac_python_inspect
 
-  # Items to link into the target
-  mac_inspect
-  ${Python3_LIBRARIES}
-)
+#   # Items to link into the target
+#   mac_inspect
+#   ${Python3_LIBRARIES}
+# )
 
-set_property(
-  TARGET mac_python_inspect
-  PROPERTY
-    SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-)
+# set_property(
+#   TARGET mac_python_inspect
+#   PROPERTY
+#     SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+# )
 

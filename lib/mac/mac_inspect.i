@@ -10,7 +10,7 @@ namespace MacInspect {
 
   class AXAPINode {
    public:
-    AXAPINode() = delete;
+    getRole();
   };
 
   AXAPINode createAXAPINodeForApplication(long pid);

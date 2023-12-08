@@ -7,12 +7,18 @@ public class AXAPINode {
       self.ax_element = ax_element
     }
 
-    public var role: String? {
-      return getStringAttribute(kAXRoleAttribute)
+    public var role: String {
+      guard let role = getStringAttribute(kAXRoleAttribute) else {
+        return ""
+      }
+      return role
     }
 
-    public var title: String? {
-      return getStringAttribute(kAXTitleAttribute)
+    public var title: String {
+      guard let title = getStringAttribute(kAXTitleAttribute) else {
+        return ""
+      }
+      return title
     }
 
     func getAttributeNames() -> [String] {
