@@ -9,6 +9,8 @@ let checkboxNode = application.findAccessibleByDomId('checkbox_test');
 let role = checkboxNode.getRole();
 let name = checkboxNode.getName();
 
+let navigation = application.findFirstAccessibleWithName('cool nav');
+
 // For a tree?
 let accessibilityData = checkboxNode.dataDump();
 
