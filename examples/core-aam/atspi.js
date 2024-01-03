@@ -1,11 +1,13 @@
+import AXAccess;
 import AXAAtspi;
 
 var PID = Number(process.argv[2]);
-let application = AXAAtspi.findApplication(PID);
+let application = AXAccess.findApplication(PID);
+let atspiRoot = AXAAtspi.getAtspiNodeFor(application);
 
 /********************* Checkbox *********************/
 
-let checkboxNode = application.findAccessibleByDomId('checkbox_test');
+let checkboxNode = atspiRoot.findAccessibleByDomId('checkbox_test');
 
 // Role
 // https://docs.gtk.org/atspi2/method.Accessible.get_role_name.html
@@ -30,7 +32,7 @@ stateSet.includes('ATSPI_STATE_CHECKED'); // true
 
 /********************* Navigation *********************/
 
-let navigationNode = application.findAccessibleByDomId('navigation_test');
+let navigationNode = atspiRoot.findAccessibleByDomId('navigation_test');
 navigationNode.get_role_name(); // 'ATSPI_ROLE_LANDMARK'
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_attributes.html
@@ -39,7 +41,7 @@ attrs['xml-roles']; // 'navigation'
 
 /********************* Error Message *********************/
 
-let withErrorNode = application.findAccessibleByDomId('error_msg_test');
+let withErrorNode = atspiRoot.findAccessibleByDomId('error_msg_test');
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_relation_set.html
 // https://docs.gtk.org/atspi2/class.Relation.html
@@ -57,7 +59,7 @@ node === withErrorNode;                           // true
 
 /********************* Listbox *********************/
 
-let listboxNode = application.findAccessibleByDomId('listbox_test');
+let listboxNode = atspiRoot.findAccessibleByDomId('listbox_test');
 listboxNode.get_role_name(); // 'ATSPI_ROLE_LIST_BOX'
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_selection_iface.html
@@ -73,7 +75,7 @@ selectionIface.clear_selection();  // false
 
 /********************* Progressbar *********************/
 
-let progressbarNode = application.findAccessibleByDomId('progressbar_test');
+let progressbarNode = atspiRoot.findAccessibleByDomId('progressbar_test');
 progressbarNode.get_role_name(); // 'ATSPI_ROLE_PROGRESS_BAR'
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_value_iface.html
@@ -87,7 +89,7 @@ valueIface.set_current_value(); // false, not settable.
 
 /********************* Readonly Textbox *********************/
 
-let textboxNode = application.findAccessibleByDomId('textbox_test');
+let textboxNode = atspiRoot.findAccessibleByDomId('textbox_test');
 textboxNode.get_role_name(); // 'ATSPI_ROLE_ENTRY'
 
 // https://w3c.github.io/core-aam/#role-map-textbox
@@ -97,7 +99,7 @@ editableTextIface === null;  // true
 
 /********************* Insetion *********************/
 
-let insertionNode = application.findAccessibleByDomId('insetion_test');
+let insertionNode = atspiRoot.findAccessibleByDomId('insetion_test');
 insertionNode.get_role_name(); // ATSPI_ROLE_INSERTION
 
 let attrs = insertionNode.get_attributes();
