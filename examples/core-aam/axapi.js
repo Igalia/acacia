@@ -3,7 +3,7 @@ import AXAAxapi;
 
 var PID = Number(process.argv[2]);
 let application = AXAccess.findAxapiRoot(PID);
-let axapiRoot = AXAxapi.getAxapiNodeFor(axapiRoot);
+let axapiRoot = AXAxapi.getAxapiNodeFor(application);
 
 /********************* Checkbox *********************/
 
