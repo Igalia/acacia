@@ -2,12 +2,12 @@ import AXAccess;
 import AXAAxapi;
 
 var PID = Number(process.argv[2]);
-let application = AXAccess.findAxapiRoot(PID);
+let application = AXAccess.findApplication(PID);
 let axapiRoot = AXAxapi.getAxapiNodeFor(application);
 
 /********************* Checkbox *********************/
 
-let checkboxNode = axapiRoot.findAccessibleByDomId('checkbox_test');
+let checkboxNode = axapiRoot.findAccessibleByDOMId('checkbox_test');
 
 // https://developer.apple.com/documentation/axapiRootservices/1459475-axuielementcopyattributenames
 // Set of: https://developer.apple.com/documentation/axapiRootservices/axattributeconstants_h/miscellaneous_defines
@@ -21,14 +21,14 @@ checkboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXValueAttribute);   // 1
 
 /********************* Navigation *********************/
 
-let navigationNode = axapiRoot.findAccessibleByDomId('navigation_test');
+let navigationNode = axapiRoot.findAccessibleByDOMId('navigation_test');
 
 navigationNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXGroup'
 navigationNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // 'AXLandmarkNavigation'
 
 /********************* Error Message *********************/
 
-let withErrorNode = axapiRoot.findAccessibleByDomId('error_msg_test');
+let withErrorNode = axapiRoot.findAccessibleByDOMId('error_msg_test');
 
 // There is no documentation in apple for this for this attribute
 let axapisNodes = checkboxNode.AXUIElementCopyAttributeValue(
@@ -39,7 +39,7 @@ axapisNodes[0].accessibilityValue() // 'hello world'
 
 /********************* Listbox *********************/
 
-let listboxNode = axapiRoot.findAccessibleByDomId('listbox_test');
+let listboxNode = axapiRoot.findAccessibleByDOMId('listbox_test');
 listboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXList'
 listboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // undefined
 
@@ -51,7 +51,7 @@ selectedOptions[0].accessibilitySelected(); // true
 
 /********************* Progressbar *********************/
 
-let progressbarNode = axapiRoot.findAccessibleByDomId('progressbar_test');
+let progressbarNode = axapiRoot.findAccessibleByDOMId('progressbar_test');
 progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXList'
 progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // undefined
 progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXValueAttribute);   // 20
@@ -59,12 +59,12 @@ progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXValueAttribute);   // 
 
 /********************* Readonly Textbox *********************/
 
-let textboxNode = axapiRoot.findAccessibleByDomId('textbox_test');
+let textboxNode = axapiRoot.findAccessibleByDOMId('textbox_test');
 textboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute); // 'AXTextField'
 
 /********************* Insetion *********************/
 
-let insertionNode = axapiRoot.findAccessibleByDomId('insertion_test');
+let insertionNode = axapiRoot.findAccessibleByDOMId('insertion_test');
 insetionNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXGroup'
 insetionNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // 'AXInsertStyleGroup'
 

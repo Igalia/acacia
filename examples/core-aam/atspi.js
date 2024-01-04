@@ -7,7 +7,7 @@ let atspiRoot = AXAAtspi.getAtspiNodeFor(application);
 
 /********************* Checkbox *********************/
 
-let checkboxNode = atspiRoot.findAccessibleByDomId('checkbox_test');
+let checkboxNode = atspiRoot.findAccessibleByDOMId('checkbox_test');
 
 // Role
 // https://docs.gtk.org/atspi2/method.Accessible.get_role_name.html
@@ -32,7 +32,7 @@ stateSet.includes('ATSPI_STATE_CHECKED'); // true
 
 /********************* Navigation *********************/
 
-let navigationNode = atspiRoot.findAccessibleByDomId('navigation_test');
+let navigationNode = atspiRoot.findAccessibleByDOMId('navigation_test');
 navigationNode.get_role_name(); // 'ATSPI_ROLE_LANDMARK'
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_attributes.html
@@ -41,25 +41,27 @@ attrs['xml-roles']; // 'navigation'
 
 /********************* Error Message *********************/
 
-let withErrorNode = atspiRoot.findAccessibleByDomId('error_msg_test');
+let withErrorNode = atspiRoot.findAccessibleByDOMId('error_msg_test');
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_relation_set.html
 // https://docs.gtk.org/atspi2/class.Relation.html
-let relationObjs = withDetailsNode.get_relation_set();
+let relationObjs = withErrorNode.get_relation_set();
 
 // https://docs.gtk.org/atspi2/enum.RelationType.html
-relationObjs[0].get_relation_type();              // 'ATSPI_RELATION_ERROR_MESSAGE'
-relationObjs[0].get_n_relations();                // 1
-let errorNode = relationObjs[0].get_target(0);    // atspiNode
+relationObjs[0].get_relation_type();                    // 'ATSPI_RELATION_ERROR_MESSAGE'
+relationObjs[0].get_n_relations();                      // 1
+let errorNode = relationObjs[0].get_target(0);          // atspiNode
+errorNode === atspiRoot.findAccessibleByDomId('error'); // true
+
 newRelationObjs = errorNode.get_relation_set();
-newRelationObjs[0].get_relation_type();           // 'ATSPI_RELATION_ERROR_MESSAGE_FOR'
-newRelationObjs[0].get_n_relations();             // 1
-let node = relationObjs[0].get_target(0);         // atspiNode
-node === withErrorNode;                           // true
+newRelationObjs[0].get_relation_type();          // 'ATSPI_RELATION_ERROR_MESSAGE_FOR'
+newRelationObjs[0].get_n_relations();            // 1
+let node = relationObjs[0].get_target(0);        // atspiNode
+node === withErrorNode;                          // true
 
 /********************* Listbox *********************/
 
-let listboxNode = atspiRoot.findAccessibleByDomId('listbox_test');
+let listboxNode = atspiRoot.findAccessibleByDOMId('listbox_test');
 listboxNode.get_role_name(); // 'ATSPI_ROLE_LIST_BOX'
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_selection_iface.html
@@ -75,7 +77,7 @@ selectionIface.clear_selection();  // false
 
 /********************* Progressbar *********************/
 
-let progressbarNode = atspiRoot.findAccessibleByDomId('progressbar_test');
+let progressbarNode = atspiRoot.findAccessibleByDOMId('progressbar_test');
 progressbarNode.get_role_name(); // 'ATSPI_ROLE_PROGRESS_BAR'
 
 // https://docs.gtk.org/atspi2/method.Accessible.get_value_iface.html
@@ -89,7 +91,7 @@ valueIface.set_current_value(); // false, not settable.
 
 /********************* Readonly Textbox *********************/
 
-let textboxNode = atspiRoot.findAccessibleByDomId('textbox_test');
+let textboxNode = atspiRoot.findAccessibleByDOMId('textbox_test');
 textboxNode.get_role_name(); // 'ATSPI_ROLE_ENTRY'
 
 // https://w3c.github.io/core-aam/#role-map-textbox
@@ -99,7 +101,7 @@ editableTextIface === null;  // true
 
 /********************* Insetion *********************/
 
-let insertionNode = atspiRoot.findAccessibleByDomId('insertion_test');
+let insertionNode = atspiRoot.findAccessibleByDOMId('insertion_test');
 insertionNode.get_role_name(); // ATSPI_ROLE_INSERTION
 
 let attrs = insertionNode.get_attributes();
