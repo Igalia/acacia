@@ -99,7 +99,7 @@ editableTextIface === null;  // true
 
 /********************* Insetion *********************/
 
-let insertionNode = atspiRoot.findAccessibleByDomId('insetion_test');
+let insertionNode = atspiRoot.findAccessibleByDomId('insertion_test');
 insertionNode.get_role_name(); // ATSPI_ROLE_INSERTION
 
 let attrs = insertionNode.get_attributes();
