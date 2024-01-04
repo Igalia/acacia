@@ -64,7 +64,7 @@ textboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute); // 'AXText
 
 /********************* Insetion *********************/
 
-let insertionNode = axapiRoot.findAccessibleByDomId('insetion_test');
+let insertionNode = axapiRoot.findAccessibleByDomId('insertion_test');
 insetionNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXGroup'
 insetionNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // 'AXInsertStyleGroup'
 
