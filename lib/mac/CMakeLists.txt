@@ -7,11 +7,13 @@ add_library(
   mac_inspect
 
   # Sources
-  axapi_node.cc
+  axapi_node.mm
 )
 
 find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices)
 cmake_print_variables(APPLICATION_SERVICES_FRAMEWORK)
+find_library(FOUNDATION_FRAMEWORK Foundation)
+cmake_print_variables(FOUNDATION_FRAMEWORK)
 
 target_include_directories(
   mac_inspect
@@ -25,6 +27,7 @@ target_link_libraries(
 
   PUBLIC
     ${APPLICATION_SERVICES_FRAMEWORK}
+    ${FOUNDATION_FRAMEWORK}
 )
 
 # SWIG Instructions to build a python module called "mac_inspect"

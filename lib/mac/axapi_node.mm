@@ -1,5 +1,6 @@
 #include "include/axaccess/mac/axapi_node.h"
 
+#import <Foundation/Foundation.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,30 +8,35 @@
 namespace mac_inspect {
 
 std::string CFStringRefToStdString(CFStringRef cf_string) {
-  std::cerr << "CFStringRefToStdString " << cf_string << "\n";
+  std::cerr << "CFStringRefToStdString\n";
+  CFShowStr(cf_string);
   if (cf_string == nil)
     return "";
   std::cerr << "not nil" << "\n";
+  std::cerr << "encoding is " << (CFStringGetSystemEncoding() == kCFStringEncodingMacRoman ? "kCFStringEncodingMacRoman" : "something else") << "\n";
 
-  auto c_string = CFStringGetCStringPtr(cf_string, kCFStringEncodingUTF8);
-  if (c_string == nullptr) {
-    std::cerr << "Couldn't get c_string\n";
-    return "";
+
+  const char* chars = CFStringGetCStringPtr(cf_string, CFStringGetSystemEncoding());
+  if (chars) {
+    return std::string(chars);
   }
-  std::cerr << "got c_string: " << c_string << "\n";
-  std::string result(c_string);
-  std::cerr << "got result" << "\n";
-  return result;
+  std::cerr << "Couldn't get c_string - might be an NSString\n";
+  NSString* ns_string = (__bridge NSString*) cf_string;
+  chars = [ns_string cStringUsingEncoding:[NSString defaultCStringEncoding]];
+  if (!chars) {
+    return std::string();
+  }
+  return std::string(chars);
 }
 
 AXAPINode::AXAPINode(AXUIElementRef ax_element) : ax_element_(ax_element) {}
 
 std::string AXAPINode::GetRole() {
-  CFStringRef cf_role = nullptr;
-  if (AXUIElementCopyAttributeValue(ax_element_, kAXRoleAttribute, (CFTypeRef*)&cf_role) != noErr)
+  CFTypeRef cf_role = nullptr;
+  if (AXUIElementCopyAttributeValue(ax_element_, kAXRoleAttribute, &cf_role) != noErr)
     return "";
 
-  return CFStringRefToStdString(cf_role);
+  return CFStringRefToStdString((CFStringRef) cf_role);
 }
 
 std::string AXAPINode::GetTitle() {
