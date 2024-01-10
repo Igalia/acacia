@@ -60,7 +60,7 @@ And a NodeJS module `atspi_inspect.node`.
 
 #### Dependencies
 
-Ensure you have XCode, including Swift support, and Ninja installed.
+Ensure you have XCode and Ninja installed.
 
 ```
 brew install cmake

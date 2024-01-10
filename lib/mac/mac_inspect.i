@@ -1,10 +1,11 @@
 %module mac_inspect
 %{
-#include <axaccess/mac/mac_inspect.h>
+#include <axaccess/mac/axapi_node.h>
 %}
 
-%include "std_string.i"
 
-namespace MacInspect {
-  void logInfoForPID(long pid);
-}
+%include "std_string.i"
+%include <std_unique_ptr.i>
+%unique_ptr(AXAPINode)
+
+%include <axaccess/mac/axapi_node.h>

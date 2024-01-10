@@ -4,10 +4,21 @@
 #include <regex>
 #include <string>
 
-#include "include/axaccess/mac/mac_inspect.h"
+#include "include/axaccess/mac/axapi_node.h"
+
+using mac_inspect::AXAPINode;
 
 void print_usage(std::string& program_name) {
-    std::cout << "Usage: "<< program_name << " <pid>\n";
+  std::cout << "Usage: "<< program_name << " <pid>\n";
+}
+
+void logInfoForPID(pid_t pid) {
+  AXAPINode application = AXAPINode::createForPID(pid);
+
+  std::string title = application.GetTitle();
+  std::cerr <<  "Title: " << title << "\n";
+  std::string role = application.GetRole();
+  std::cerr << "Role: " << role << "\n";
 }
 
 int main(int argc, char** argv) {
@@ -26,9 +37,9 @@ int main(int argc, char** argv) {
     }
 
     const int pid = std::stoi(pid_string);
-    std::cout << "Got PID: " << pid << "\n";
+    std::cerr << "Got PID: " << pid << "\n";
 
-    MacInspect::logInfoForPID(pid);
+    logInfoForPID(pid);
 
     return 0;
 }
