@@ -8,23 +8,15 @@
 namespace mac_inspect {
 
 std::string CFStringRefToStdString(CFStringRef cf_string) {
-  std::cerr << "CFStringRefToStdString\n";
-  CFShowStr(cf_string);
-  if (cf_string == nil)
+  if (cf_string == nullptr)
     return "";
-  std::cerr << "not nil" << "\n";
-  std::cerr << "encoding is " << (CFStringGetSystemEncoding() == kCFStringEncodingMacRoman ? "kCFStringEncodingMacRoman" : "something else") << "\n";
-
 
   const char* chars = CFStringGetCStringPtr(cf_string, CFStringGetSystemEncoding());
-  if (chars) {
-    return std::string(chars);
-  }
-  std::cerr << "Couldn't get c_string - might be an NSString\n";
-  NSString* ns_string = (__bridge NSString*) cf_string;
-  chars = [ns_string cStringUsingEncoding:[NSString defaultCStringEncoding]];
   if (!chars) {
-    return std::string();
+    // CFStringRef can secretly be an NSString, in which case CFStringGetCStringPtr doesn't work.
+    NSString* ns_string = (__bridge NSString*) cf_string;
+    const char* ns_chars = [ns_string cStringUsingEncoding:[NSString defaultCStringEncoding]];
+    chars = ns_chars ? ns_chars : "";
   }
   return std::string(chars);
 }
