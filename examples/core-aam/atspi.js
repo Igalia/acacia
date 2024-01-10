@@ -72,7 +72,7 @@ selectedChild.get_name();                                 // 'selected option'
 // https://docs.gtk.org/atspi2/method.Selection.clear_selection.html
 // These functions should not "work" in ARIA scenario, see:
 // https://w3c.github.io/core-aam/#role-map-listbox
-selectionIface.clear_selection();  // false
+selectionIface.clear_selection();  // false, inaccessible per CORE-AAM.
 
 /********************* Progressbar *********************/
 
@@ -86,7 +86,7 @@ let valueIface = progressbarNode.get_value_iface();
 valueIface.get_current_value(); // 20
 
 // https://w3c.github.io/core-aam/#role-map-progressbar
-valueIface.set_current_value(); // false, not settable.
+valueIface.set_current_value(1); // false, not settable per CORE-AAM.
 
 /********************* Readonly Textbox *********************/
 
