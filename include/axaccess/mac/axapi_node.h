@@ -16,6 +16,7 @@ class AXAPINode {
   std::string GetTitle();
   std::vector<std::string> GetAttributeNames();
   std::string GetStringAttributeValue(std::string& attribute_name);
+  std::vector<AXAPINode> GetChildren();
 
  private:
   AXUIElementRef ax_element_;

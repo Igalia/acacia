@@ -53,4 +53,14 @@ AXAPINode AXAPINode::createForPID(long pid) {
   return AXAPINode(axuielement);
 }
 
+std::vector<AXAPINode> AXAPINode::GetChildren() {
+  CFArrayRef children_ref;
+  if ((AXUIElementCopyAttributeValue(
+      ax_element_, kAXChildrenAttribute, (CFTypeRef *)&children_ref)) != kAXErrorSuccess) {
+    return std::vector<AXAPINode>();
+  }
+  std::cerr << "Got children\n";
+  return std::vector<AXAPINode>();
+}
+
 }  // namespace mac_inspect
