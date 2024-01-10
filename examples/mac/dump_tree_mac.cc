@@ -14,21 +14,11 @@ void print_usage(std::string& program_name) {
 
 void logInfoForPID(pid_t pid) {
   AXAPINode application = AXAPINode::createForPID(pid);
-  std::cerr << "Got application" << "\n";
-  // std::vector<std::string> attributes = application.GetAttributeNames();
-  // if (attributes.empty()) {
-  //   std::cerr << "No application with PID " << pid << "\n";
-  //   return;
-  // }
+
   std::string title = application.GetTitle();
   std::cerr <<  "Title: " << title << "\n";
   std::string role = application.GetRole();
   std::cerr << "Role: " << role << "\n";
-
-  // for (std::string attribute : attributes) {
-  //   std::string attribute_value = application.GetStringAttributeValue(attribute);
-  //   std::cout << attribute << " is " << attribute_value << "\n";
-  // }
 }
 
 int main(int argc, char** argv) {
@@ -53,4 +43,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
