@@ -1,17 +1,16 @@
 import AXAccess;
-import AXAAxapi;
 
 var PID = Number(process.argv[2]);
 let application = AXAccess.findApplication(PID);
-let axapiRoot = AXAxapi.getAxapiNodeFor(application);
+let axapiRootNode = application.getAccessibleRoot();
 
 /********************* Checkbox *********************/
 
-let checkboxNode = axapiRoot.findAccessibleByDOMId('checkbox_test');
+let checkboxNode = application.findAccessibleByDOMId('checkbox_test');
 
-// https://developer.apple.com/documentation/axapiRootservices/1459475-axuielementcopyattributenames
-// Set of: https://developer.apple.com/documentation/axapiRootservices/axattributeconstants_h/miscellaneous_defines
-// https://developer.apple.com/documentation/axapiRootservices/kaxroleattribute
+// https://developer.apple.com/documentation/applicationservices/1459475-axuielementcopyattributenames
+// Set of: https://developer.apple.com/documentation/applicationservices/axattributeconstants_h/miscellaneous_defines
+// https://developer.apple.com/documentation/applicationservices/kaxroleattribute
 let attributes = checkboxNode.AXUIElementCopyAttributeNames() // [kAXRoleAttribute, ...] -> ['AXRole', ...] ??
 
 // Provide these constants?
@@ -21,14 +20,14 @@ checkboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXValueAttribute);   // 1
 
 /********************* Navigation *********************/
 
-let navigationNode = axapiRoot.findAccessibleByDOMId('navigation_test');
+let navigationNode = application.findAccessibleByDOMId('navigation_test');
 
 navigationNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXGroup'
 navigationNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // 'AXLandmarkNavigation'
 
 /********************* Error Message *********************/
 
-let withErrorNode = axapiRoot.findAccessibleByDOMId('error_msg_test');
+let withErrorNode = application.findAccessibleByDOMId('error_msg_test');
 
 // There is no documentation in apple for this for this attribute
 let axapisNodes = checkboxNode.AXUIElementCopyAttributeValue(
@@ -39,11 +38,11 @@ axapisNodes[0].accessibilityValue() // 'hello world'
 
 /********************* Listbox *********************/
 
-let listboxNode = axapiRoot.findAccessibleByDOMId('listbox_test');
+let listboxNode = application.findAccessibleByDOMId('listbox_test');
 listboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXList'
 listboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // undefined
 
-// https://developer.apple.com/documentation/axapiRootservices/kaxselectedchildrenattribute
+// https://developer.apple.com/documentation/applicationservices/kaxselectedchildrenattribute
 let selectedOptions = listboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSelectedChildrenAttribute);
 
 // https://developer.apple.com/documentation/appkit/nsaccessibility/1534981-accessibilityselected
@@ -51,7 +50,7 @@ selectedOptions[0].accessibilitySelected(); // true
 
 /********************* Progressbar *********************/
 
-let progressbarNode = axapiRoot.findAccessibleByDOMId('progressbar_test');
+let progressbarNode = application.findAccessibleByDOMId('progressbar_test');
 progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXList'
 progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // undefined
 progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXValueAttribute);   // 20
@@ -59,12 +58,12 @@ progressbarNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXValueAttribute);   // 
 
 /********************* Readonly Textbox *********************/
 
-let textboxNode = axapiRoot.findAccessibleByDOMId('textbox_test');
+let textboxNode = application.findAccessibleByDOMId('textbox_test');
 textboxNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute); // 'AXTextField'
 
 /********************* Insetion *********************/
 
-let insertionNode = axapiRoot.findAccessibleByDOMId('insertion_test');
+let insertionNode = application.findAccessibleByDOMId('insertion_test');
 insetionNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXRoleAttribute);    // 'AXGroup'
 insetionNode.AXUIElementCopyAttributeValue(AXAAxapi.kAXSubroleAttribute); // 'AXInsertStyleGroup'
 

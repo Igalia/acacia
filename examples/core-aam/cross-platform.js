@@ -2,25 +2,24 @@ import AXAccess;
 
 var PID = Number(process.argv[2]);
 
-// Application is a wrapper node with some cross platform functionality.
+/* The following code will work on all platforms */
+
 let application = AXAccess.findApplication(PID);
 
 let checkboxNode = application.findAccessibleByDOMId('checkbox_test');
-let role = checkboxNode.getRole();
-let name = checkboxNode.getName();
+let role = checkboxNode.role;
+let name = checkboxNode.name;
 
 let navigation = application.findFirstAccessibleWithName('cool nav');
 
-// For a tree?
-let accessibilityData = checkboxNode.dataDump();
+// Contains role and name information only
+checkboxNode.toString()
 
 let listboxNode = application.findAccessibleByDOMId('listbox_test');
 let child = listboxNode.child();
 child.parent() === listboxNode;
 
-// Then, if you are on a linux:
-import AXAAtspi;
-
-let atspiNode = AXAAtspi.getAtspiNodeFor(checkboxNode);
+/* However, the API for the platform is still available based on platform */
+// For example, if on linux:
 let stateSet = checkboxNode.get_state_set();
 stateSet.contains('ATSPI_STATE_CHECKED');
