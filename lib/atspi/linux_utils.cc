@@ -28,6 +28,8 @@ AtspiNodePtr find_root_accessible_from_pid(const int pid) {
     if (pid == application_pid) {
       return std::make_unique<AtspiNode>(AtspiNode(child));
     }
+
+    g_object_unref(child);
   }
   return nullptr;
 }
