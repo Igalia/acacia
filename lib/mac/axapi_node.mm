@@ -11,30 +11,43 @@ std::string CFStringRefToStdString(CFStringRef cf_string) {
   if (cf_string == nullptr)
     return "";
 
-  const char* chars = CFStringGetCStringPtr(cf_string, CFStringGetSystemEncoding());
+  const char* chars =
+      CFStringGetCStringPtr(cf_string, CFStringGetSystemEncoding());
   if (!chars) {
-    // CFStringRef can secretly be an NSString, in which case CFStringGetCStringPtr doesn't work.
-    NSString* ns_string = (__bridge NSString*) cf_string;
-    const char* ns_chars = [ns_string cStringUsingEncoding:[NSString defaultCStringEncoding]];
+    // CFStringRef can secretly be an NSString, in which case
+    // CFStringGetCStringPtr doesn't work.
+    NSString* ns_string = (__bridge NSString*)cf_string;
+    const char* ns_chars =
+        [ns_string cStringUsingEncoding:[NSString defaultCStringEncoding]];
     chars = ns_chars ? ns_chars : "";
   }
   return std::string(chars);
 }
 
-AXAPINode::AXAPINode(AXUIElementRef ax_element) : ax_element_(ax_element) {}
+AXAPINode::AXAPINode(AXUIElementRef ax_ui_element)
+    : ax_ui_element_(ax_ui_element) {}
+
+AXAPINodePtr AXAPINode::createForPID(long pid) {
+  AXUIElementRef ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
+  return AXAPINodePtr(new AXAPINode(ax_ui_element));
+}
 
 std::string AXAPINode::GetRole() {
   CFTypeRef cf_role = nullptr;
-  if (AXUIElementCopyAttributeValue(ax_element_, kAXRoleAttribute, &cf_role) != noErr)
+  if (AXUIElementCopyAttributeValue(ax_ui_element_, kAXRoleAttribute,
+                                    &cf_role) != kAXErrorSuccess) {
     return "";
+  }
 
-  return CFStringRefToStdString((CFStringRef) cf_role);
+  return CFStringRefToStdString((CFStringRef)cf_role);
 }
 
 std::string AXAPINode::GetTitle() {
   CFStringRef cf_title = nullptr;
-  if (AXUIElementCopyAttributeValue(ax_element_, kAXTitleAttribute, (CFTypeRef*)&cf_title) != noErr)
+  if (AXUIElementCopyAttributeValue(ax_ui_element_, kAXTitleAttribute,
+                                    (CFTypeRef*)&cf_title) != kAXErrorSuccess) {
     return "";
+  }
 
   return CFStringRefToStdString(cf_title);
 }
@@ -48,19 +61,29 @@ std::string AXAPINode::GetStringAttributeValue(std::string& attribute_name) {
   return "";
 }
 
-AXAPINode AXAPINode::createForPID(long pid) {
-  AXUIElementRef axuielement = AXUIElementCreateApplication((pid_t) pid);
-  return AXAPINode(axuielement);
+long AXAPINode::GetChildCount() {
+  CFArrayRef children_ref;
+  if ((AXUIElementCopyAttributeValue(ax_ui_element_, kAXChildrenAttribute,
+                                     (CFTypeRef*)&children_ref)) !=
+      kAXErrorSuccess) {
+    return 0;
+  }
+  return CFArrayGetCount(children_ref);
 }
 
-std::vector<AXAPINode> AXAPINode::GetChildren() {
+AXAPINodePtr AXAPINode::GetChildAt(long index) {
   CFArrayRef children_ref;
-  if ((AXUIElementCopyAttributeValue(
-      ax_element_, kAXChildrenAttribute, (CFTypeRef *)&children_ref)) != kAXErrorSuccess) {
-    return std::vector<AXAPINode>();
+  if ((AXUIElementCopyAttributeValue(ax_ui_element_, kAXChildrenAttribute,
+                                     (CFTypeRef*)&children_ref)) !=
+      kAXErrorSuccess) {
+    return nullptr;
   }
-  std::cerr << "Got children\n";
-  return std::vector<AXAPINode>();
+  std::cerr << "Got children " << CFArrayGetCount(children_ref) << "\n";
+  AXUIElementRef child_ref =
+      (AXUIElementRef)CFArrayGetValueAtIndex(children_ref, index);
+  if (!child_ref)
+    return nullptr;
+  return AXAPINodePtr(new AXAPINode(child_ref));
 }
 
 }  // namespace mac_inspect

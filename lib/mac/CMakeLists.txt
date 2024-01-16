@@ -31,7 +31,6 @@ target_link_libraries(
 )
 
 # SWIG Instructions to build a python module called "mac_inspect"
-
 find_package(SWIG COMPONENTS python)
 include(UseSWIG)
 

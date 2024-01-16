@@ -7,17 +7,18 @@
 #include "include/axaccess/mac/axapi_node.h"
 
 using mac_inspect::AXAPINode;
+using mac_inspect::AXAPINodePtr;
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: "<< program_name << " <pid>\n";
 }
 
 void logInfoForPID(pid_t pid) {
-  AXAPINode application = AXAPINode::createForPID(pid);
+  AXAPINodePtr application = AXAPINode::createForPID(pid);
 
-  std::string title = application.GetTitle();
+  std::string title = application->GetTitle();
   std::cerr <<  "Title: " << title << "\n";
-  std::string role = application.GetRole();
+  std::string role = application->GetRole();
   std::cerr << "Role: " << role << "\n";
 }
 
