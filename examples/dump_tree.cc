@@ -13,7 +13,7 @@ void print_usage(std::string& program_name) {
 static void print_node(AXA::NodePtr& node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
-  std::cout << "> " << node->GetRole();
+  std::cout << "> " << node->GetRoleName();
   std::string node_name = node->GetName();
   if (!node_name.empty())
     std::cout << " (" << node_name << ")";

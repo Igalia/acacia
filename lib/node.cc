@@ -29,8 +29,8 @@ std::string Node::GetName() {
   return impl->GetName();
 }
 
-std::string Node::GetRole() {
-  return impl->GetRole();
+std::string Node::GetRoleName() {
+  return impl->GetRoleName();
 }
 
 int32_t Node::GetChildCount() {

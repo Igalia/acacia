@@ -32,10 +32,7 @@ NodePtr AtspiContextImpl::GetAccessibleRootByPID(const int pid) {
   if (atspiRoot == nullptr)
     return nullptr;
 
-  // This shouldn't fail (unless out of memory)
   auto rootNodeImpl = AtspiNodeImpl::Create(atspiRoot);
-  if (rootNodeImpl == nullptr)
-    return nullptr;
 
   return Node::Create(std::move(rootNodeImpl));
 }

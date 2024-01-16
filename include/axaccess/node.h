@@ -15,7 +15,7 @@ class NodeImpl {
   NodeImpl() {
   }
   virtual std::string GetName() = 0;
-  virtual std::string GetRole() = 0;
+  virtual std::string GetRoleName() = 0;
   virtual int32_t GetChildCount() = 0;
   virtual NodePtr GetChildAt(const int32_t index) = 0;
 };
@@ -30,7 +30,7 @@ class Node {
   ~Node();
 
   std::string GetName();
-  std::string GetRole();
+  std::string GetRoleName();
   int32_t GetChildCount();
   NodePtr GetChildAt(const int32_t index);
 

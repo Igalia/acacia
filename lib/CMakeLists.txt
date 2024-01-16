@@ -17,8 +17,6 @@ if(LINUX)
     PUBLIC -DAXA_API_ATSPI
   )
   add_subdirectory(atspi)
-  list(APPEND AXA_SOURCES
-  )
   target_link_libraries(
     axaccess
     PRIVATE
@@ -33,8 +31,6 @@ if(APPLE)
   )
 
   add_subdirectory(mac)
-  list(APPEND AXA_SOURCES
-  )
 endif(APPLE)
 
 

@@ -21,7 +21,7 @@ std::string AtspiNodeImpl::GetName() {
   return atspiNode->accessible_get_name();
 }
 
-std::string AtspiNodeImpl::GetRole() {
+std::string AtspiNodeImpl::GetRoleName() {
   return atspiNode->accessible_get_role_name();
 }
 
@@ -35,8 +35,6 @@ NodePtr AtspiNodeImpl::GetChildAt(const int32_t index) {
     return nullptr;
 
   auto nodeImpl = AtspiNodeImpl::Create(childNode);
-  if (nodeImpl == nullptr)
-    return nullptr;
 
   return Node::Create(std::move(nodeImpl));
 }

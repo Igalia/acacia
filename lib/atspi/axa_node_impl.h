@@ -13,7 +13,7 @@ public:
   ~AtspiNodeImpl();
 
   std::string GetName() override;
-  std::string GetRole() override;
+  std::string GetRoleName() override;
   int32_t GetChildCount() override;
   NodePtr GetChildAt(const int32_t index) override;
 
