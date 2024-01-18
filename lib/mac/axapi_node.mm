@@ -29,7 +29,7 @@ AXAPINode::AXAPINode(AXUIElementRef ax_ui_element)
 
 AXAPINodePtr AXAPINode::createForPID(long pid) {
   AXUIElementRef ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
-  return AXAPINodePtr(new AXAPINode(ax_ui_element));
+  return std::unique_ptr<AXAPINode>(new AXAPINode(ax_ui_element));
 }
 
 std::string AXAPINode::GetRole() {
@@ -78,7 +78,6 @@ AXAPINodePtr AXAPINode::GetChildAt(long index) {
       kAXErrorSuccess) {
     return nullptr;
   }
-  std::cerr << "Got children " << CFArrayGetCount(children_ref) << "\n";
   AXUIElementRef child_ref =
       (AXUIElementRef)CFArrayGetValueAtIndex(children_ref, index);
   if (!child_ref)
