@@ -17,14 +17,14 @@ class AXAPINode {
  public:
   ~AXAPINode() = default;
 
-  static std::unique_ptr<AXAPINode> createForPID(long pid);
+  static AXAPINodePtr createForPID(long pid);
 
   std::string GetRole();
   std::string GetTitle();
   std::vector<std::string> GetAttributeNames();
   std::string GetStringAttributeValue(std::string& attribute_name);
   long GetChildCount();
-  std::unique_ptr<AXAPINode> GetChildAt(long index);
+  AXAPINodePtr GetChildAt(long index);
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
