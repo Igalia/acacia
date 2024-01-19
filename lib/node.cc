@@ -14,8 +14,7 @@ Node::~Node() {
 
 NodePtr Node::Create(std::unique_ptr<NodeImpl> aImpl) {
   assert(aImpl != nullptr);
-  NodePtr result = std::make_shared<Node>(std::move(aImpl));
-  return result;
+  return std::make_unique<Node>(std::move(aImpl));
 }
 
 std::string Node::Name() {

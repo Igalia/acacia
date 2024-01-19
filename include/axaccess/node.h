@@ -5,7 +5,7 @@
 namespace axa {
 
 class Node;
-typedef std::shared_ptr<Node> NodePtr;
+typedef std::unique_ptr<Node> NodePtr;
 
 class NodeImpl {
  public:
