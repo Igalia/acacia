@@ -3,21 +3,18 @@
 #include <memory>
 #include "./node.h"
 
-namespace AXA {
+namespace axa {
 
-enum AccessibleAPIType {
+enum APIType {
   UNKNOWN,
   ATSPI,        // Linux
   AXUI,         // MacOS
   IACCESSIBLE2, // Windows
 };
 
-class ContextImpl;
-typedef std::unique_ptr<ContextImpl> ContextImplPtr;
-
 class ContextImpl {
 public:
-  virtual enum AccessibleAPIType GetAccessibleAPIType() = 0;
+  virtual enum APIType GetAPIType() = 0;
   virtual NodePtr GetAccessibleRootByPID(int pid) = 0;
 };
 
@@ -27,17 +24,14 @@ typedef std::shared_ptr<Context> ContextPtr;
 
 class Context {
  public:
-  struct State;
-
   static ContextPtr Create();
-  Context(State& aState);
+  Context();
   ~Context();
 
-  enum AccessibleAPIType GetAccessibleAPIType();
+  enum APIType GetAPIType();
   NodePtr GetAccessibleRootByPID(const int pid);
  private:
-  State& m;
-  ContextImplPtr impl;
+  std::unique_ptr<ContextImpl> impl;
 };
 
-}
+} // namespace axa

@@ -3,21 +3,16 @@
 #include <axaccess/context.h>
 #include <string>
 
-namespace AXA {
+namespace axa {
 
 class AtspiContextImpl: public ContextImpl {
 public:
-  struct State;
+  static std::unique_ptr<ContextImpl> Create();
+  AtspiContextImpl() = default;
+  ~AtspiContextImpl() = default;
 
-  static AXA::ContextImplPtr Create();
-  AtspiContextImpl(State& aState);
-  ~AtspiContextImpl();
-
-  enum AccessibleAPIType GetAccessibleAPIType() override;
+  enum APIType GetAPIType() override;
   NodePtr GetAccessibleRootByPID(const int pid) override;
-
- private:
-  State& m;
 };
 
-};
+} // namespace axa

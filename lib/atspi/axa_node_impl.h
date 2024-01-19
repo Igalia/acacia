@@ -4,21 +4,21 @@
 #include <axaccess/node.h>
 #include <string>
 
-namespace AXA {
+namespace axa {
 
 class AtspiNodeImpl: public NodeImpl {
 public:
-  static AXA::NodeImplPtr Create(AtspiNodePtr& atspiNode);
+  static std::unique_ptr<NodeImpl> Create(AtspiNodePtr& atspiNode);
   AtspiNodeImpl(AtspiNodePtr& atspiNode);
   ~AtspiNodeImpl();
 
-  std::string GetName() override;
-  std::string GetRoleName() override;
-  int32_t GetChildCount() override;
-  NodePtr GetChildAt(const int32_t index) override;
+  std::string Name() override;
+  std::string RoleName() override;
+  int32_t ChildCount() override;
+  NodePtr ChildAt(const int32_t index) override;
 
  private:
   AtspiNodePtr atspiNode;
 };
 
-};
+} // namespace axa

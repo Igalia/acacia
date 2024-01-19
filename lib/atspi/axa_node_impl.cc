@@ -1,7 +1,7 @@
 #include <assert.h>
 #include "axa_node_impl.h"
 
-namespace AXA {
+namespace axa {
 
 AtspiNodeImpl::AtspiNodeImpl(AtspiNodePtr& aAtspiNode):
   atspiNode(std::move(aAtspiNode)) {
@@ -11,25 +11,24 @@ AtspiNodeImpl::~AtspiNodeImpl() {
   atspiNode.reset();
 }
 
-AXA::NodeImplPtr AtspiNodeImpl::Create(AtspiNodePtr& aAtspiNode) {
+std::unique_ptr<NodeImpl> AtspiNodeImpl::Create(AtspiNodePtr& aAtspiNode) {
   assert(aAtspiNode);
-  NodeImplPtr result = std::make_unique<AtspiNodeImpl>(aAtspiNode);
-  return result;
+  return std::make_unique<AtspiNodeImpl>(aAtspiNode);
 }
 
-std::string AtspiNodeImpl::GetName() {
+std::string AtspiNodeImpl::Name() {
   return atspiNode->accessible_get_name();
 }
 
-std::string AtspiNodeImpl::GetRoleName() {
+std::string AtspiNodeImpl::RoleName() {
   return atspiNode->accessible_get_role_name();
 }
 
-int32_t AtspiNodeImpl::GetChildCount() {
+int32_t AtspiNodeImpl::ChildCount() {
   return atspiNode->accessible_get_child_count();
 }
 
-NodePtr AtspiNodeImpl::GetChildAt(const int32_t index) {
+NodePtr AtspiNodeImpl::ChildAt(const int32_t index) {
   auto childNode = atspiNode->accessible_get_child_at_index(index);
   if (childNode == nullptr)
     return nullptr;
@@ -39,4 +38,4 @@ NodePtr AtspiNodeImpl::GetChildAt(const int32_t index) {
   return Node::Create(std::move(nodeImpl));
 }
 
-} // namespace AXA
+} // namespace axa

@@ -4,15 +4,9 @@
   #include "atspi/axa_context_impl.h"
 #endif
 
-namespace AXA {
+namespace axa {
 
-struct Context::State {
-
-  State() = default;
-  ~State() = default;
-};
-
-Context::Context(State& aState) : m(aState) {
+Context::Context() {
 #if defined(AXA_API_ATSPI)
   impl = std::move(AtspiContextImpl::Create());
 #endif
@@ -24,17 +18,16 @@ Context::~Context() {
 }
 
 ContextPtr Context::Create() {
-  Context::State state = {};
-  ContextPtr result = std::make_shared<AXA::Context>(state);
+  ContextPtr result = std::make_shared<Context>();
   return result;
 }
 
-enum AccessibleAPIType Context::GetAccessibleAPIType() {
-  return impl->GetAccessibleAPIType();
+enum APIType Context::GetAPIType() {
+  return impl->GetAPIType();
 }
 
 NodePtr Context::GetAccessibleRootByPID(const int pid) {
   return impl->GetAccessibleRootByPID(pid);
 }
 
-} // namespace AXA
+} // namespace axa

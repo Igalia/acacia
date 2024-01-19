@@ -2,15 +2,9 @@
 #include <axaccess/node.h>
 #include <string>
 
-namespace AXA {
+namespace axa {
 
-struct Node::State {
-  State() = default;
-  ~State() = default;
-};
-
-Node::Node(State& aState, NodeImplPtr aImpl):
-  m(aState),
+Node::Node(std::unique_ptr<NodeImpl> aImpl):
   impl(std::move(aImpl)) {
 }
 
@@ -18,27 +12,26 @@ Node::~Node() {
   impl.reset();
 }
 
-AXA::NodePtr Node::Create(NodeImplPtr aImpl) {
+NodePtr Node::Create(std::unique_ptr<NodeImpl> aImpl) {
   assert(aImpl != nullptr);
-  Node::State state = {};
-  NodePtr result = std::make_shared<Node>(state, std::move(aImpl));
+  NodePtr result = std::make_shared<Node>(std::move(aImpl));
   return result;
 }
 
-std::string Node::GetName() {
-  return impl->GetName();
+std::string Node::Name() {
+  return impl->Name();
 }
 
-std::string Node::GetRoleName() {
-  return impl->GetRoleName();
+std::string Node::RoleName() {
+  return impl->RoleName();
 }
 
-int32_t Node::GetChildCount() {
-  return impl->GetChildCount();
+int32_t Node::ChildCount() {
+  return impl->ChildCount();
 }
 
-NodePtr Node::GetChildAt(const int32_t index) {
-  return impl->GetChildAt(index);
+NodePtr Node::ChildAt(const int32_t index) {
+  return impl->ChildAt(index);
 }
 
-} // namespace AXA
+} // namespace axa

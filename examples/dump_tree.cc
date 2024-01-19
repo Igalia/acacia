@@ -10,21 +10,21 @@ void print_usage(std::string& program_name) {
     std::cout << "Usage: "<< program_name << " <pid>\n";
 }
 
-static void print_node(AXA::NodePtr& node, int level) {
+static void print_node(axa::NodePtr& node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
-  std::cout << "> " << node->GetRoleName();
-  std::string node_name = node->GetName();
+  std::cout << "> " << node->RoleName();
+  std::string node_name = node->Name();
   if (!node_name.empty())
     std::cout << " (" << node_name << ")";
   std::cout << "\n";
 
-  int32_t child_count = node->GetChildCount();
+  int32_t child_count = node->ChildCount();
   if (child_count < 0)
     return;
 
   for (auto i = 0; i < child_count; i++) {
-    auto child = node->GetChildAt(i);
+    auto child = node->ChildAt(i);
     print_node(child, level + 1);
   }
 }
@@ -47,10 +47,10 @@ int main(int argc, char** argv) {
   const int pid = std::stoi(pid_string);
   std::cout << "Got PID: " << pid << "\n";
 
-  AXA::ContextPtr ctx = AXA::Context::Create();
+  axa::ContextPtr ctx = axa::Context::Create();
   assert(ctx != nullptr);
 
-  AXA::NodePtr root = ctx->GetAccessibleRootByPID(pid);
+  axa::NodePtr root = ctx->GetAccessibleRootByPID(pid);
   if (root == nullptr) {
     std::cerr << "No accessible root found at pid " << pid << "\n";
     return EXIT_FAILURE;
