@@ -1,0 +1,25 @@
+{
+  "targets": [
+    {
+      "target_name": "axapi_inspect",
+      "include_dirs": [
+        "${CMAKE_SOURCE_DIR}",
+      ],
+      "sources": [
+        "../../../lib/mac/axapi_node.mm",
+        "./axapi_nodejs_inspect_wrap.cxx",
+      ],
+      "xcode_settings": {
+        "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
+        "CLANG_CXX_LIBRARY": "libc++",
+        "OTHER_CPLUSPLUSFLAGS": [
+          "-stdlib=libc++",
+        ],
+        "OTHER_LDFLAGS": [
+          "-framework", "ApplicationServices",
+          "-framework", "CoreFoundation",
+        ],
+      },
+    }
+  ]
+}
