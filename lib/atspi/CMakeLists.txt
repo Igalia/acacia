@@ -23,6 +23,8 @@ add_library(
   # Sources
   atspi_node.cc
   linux_utils.cc
+  axa_context_impl.cc
+  axa_node_impl.cc
 )
 
 # CMake module that can find system c++ librarys
