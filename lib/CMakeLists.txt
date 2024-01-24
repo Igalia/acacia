@@ -26,6 +26,20 @@ target_compile_definitions(
     axaccess_EXPORTS
 )
 
+# Feature flag for Python bindings, ON by default
+option(
+  AXA_PYTHON_MODULE
+  "Build Python bindings (requires swig and python3)"
+  ON
+)
+
+# Feature flag for NodeJS bindings, ON by default
+option(
+  AXA_NODEJS_MODULE
+  "Build NodeJS bindings (requires swig and node-gyp)"
+  ON
+)
+
 ## Backends
 if(LINUX)
   target_compile_definitions(

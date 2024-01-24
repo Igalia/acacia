@@ -53,8 +53,8 @@ And a NodeJS module `atspi_inspect.node`.
 
 #### Feature flags
 
-* Python3 bindings: `-DATSPI_PYTHON_MODULE=<ON/OFF>`, ON by default.
-* NodeJS bindings: `-DATSPI_NODEJS_MODULE=<ON/OFF>`, ON by default.
+* Python3 bindings: `-DAXA_PYTHON_MODULE=<ON/OFF>`, ON by default.
+* NodeJS bindings: `-DAXA_NODEJS_MODULE=<ON/OFF>`, ON by default.
 
 ### On Mac
 
@@ -74,6 +74,12 @@ If you encounter a python3_LIBRARIES not found, try updating python with:
 brew install python
 ```
 
+For the nodeJS bindings, you will need to download and build node-gyp app and put the executable on your path. One way to do this is through npm:
+
+```
+npm install -g node-gyp
+```
+
 #### Build steps
 
 ```
@@ -81,6 +87,31 @@ brew install python
 % cd build
 % cmake .. -G 'Ninja' --fresh
 % ninja
+```
+
+#### Output files
+
+The outputs will show up at the same relative path under `build/` as the path to the `CMakeLists.txt` file which defined the target, e.g. for a target defined in `lib/mac/CMakeLists.txt`, the output will be in `build/lib/mac/<target>`.
+
+Currently, we build the executable:
+```
+% build/lib/mac/dump_tree_mac
+```
+
+As well as a python module:
+```
+% cd build/lib/mac/
+% python
+>>> import mac_inspect
+```
+
+And a node C++ add-on:
+```
+% cd build/lib/mac/
+% node
+>>> const axapi_inspect = require("./axapi_inspect");
+>>> let node = axapi_inspect.AXAPINode.createForPID(8077)
+>>> node.GetRole()
 ```
 
 ### On Windows
@@ -112,20 +143,4 @@ You can also run the following from a bash terminal:
 ```
 
 **OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
-
-## Output files
-
-The outputs will show up at the same relative path under `build/` as the path to the `CMakeLists.txt` file which defined the target, e.g. for a target defined in `lib/atspi/CMakeLists.txt`, the output will be in `build/lib/atspi/<target>`.
-
-Currently, we build the executable:
-```
-% build/lib/mac/dump_tree_mac
-```
-
-As well as a python module:
-```
-% cd build/lib/mac/
-% python
->>> import mac_inspect
-```
 

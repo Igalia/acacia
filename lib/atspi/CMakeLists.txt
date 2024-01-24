@@ -1,16 +1,3 @@
-# Feature flag for Python bindings, ON by default
-option(
-  ATSPI_PYTHON_MODULE
-  "Build Python bindings (requires swig and python3)"
-  ON
-)
-
-# Feature flag for NodeJS bindings, ON by default
-option(
-  ATSPI_NODEJS_MODULE
-  "Build NodeJS bindings (requires swig and node-gyp)"
-  ON
-)
 
 add_library(
   # Name
@@ -79,14 +66,14 @@ target_link_libraries(
 # SWIG Instructions to build library bindings to different languages
 # (only required if at least one binding is ON).
 
-if (ATSPI_PYTHON_MODULE OR ATSPI_NODEJS_MODULE)
+if (AXA_PYTHON_MODULE OR AXA_NODEJS_MODULE)
   FIND_PACKAGE(SWIG REQUIRED)
   INCLUDE(${SWIG_USE_FILE})
 endif()
 
 # Generate Python bindings using swig + python3
 
-if (ATSPI_PYTHON_MODULE)
+if (AXA_PYTHON_MODULE)
   FIND_PACKAGE(Python3 COMPONENTS Interpreter Development.Module)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
   INCLUDE_DIRECTORIES(${Python3_INCLUDE_DIRS})
@@ -117,7 +104,7 @@ endif()
 
 # Generate a NodeJS Module using swig + node-gyp
 
-if (ATSPI_NODEJS_MODULE)
+if (AXA_NODEJS_MODULE)
   find_program(
     NODE_GYP "node-gyp"
     REQUIRED
@@ -158,4 +145,4 @@ if (ATSPI_NODEJS_MODULE)
     COMMAND ${NODE_GYP} configure build
     VERBATIM
   )
-endif (ATSPI_NODEJS_MODULE)
+endif (AXA_NODEJS_MODULE)
