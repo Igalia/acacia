@@ -10,6 +10,22 @@ set(
   node.cc
 )
 
+# Generate AXA_EXPORT and AXA_NO_EXPORT axa_exported.h necessary for
+# including dllexport and dllimport statements in .dll source code.
+include(GenerateExportHeader)
+generate_export_header(
+  axaccess
+  BASE_NAME axa
+  EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/exports/axa_export.h
+)
+target_compile_definitions(
+  axaccess
+  PRIVATE
+    # preprocessor macro to specific we are building a binary .dll, in which
+    # case all AXA_EXPORTS will result in a dllexport statement.
+    axaccess_EXPORTS
+)
+
 ## Backends
 if(LINUX)
   target_compile_definitions(
@@ -33,6 +49,9 @@ if(APPLE)
   add_subdirectory(mac)
 endif(APPLE)
 
+if(WIN32)
+  add_subdirectory(ia2)
+endif(WIN32)
 
 target_sources(
   axaccess
@@ -44,4 +63,5 @@ target_include_directories(
   axaccess
   PUBLIC
     ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_BINARY_DIR}/exports  # axa_export.h
 )

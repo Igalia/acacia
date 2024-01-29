@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include "axa_export.h"
+
 #include "./node.h"
 
 namespace axa {
@@ -22,7 +24,7 @@ public:
 class Context;
 typedef std::shared_ptr<Context> ContextPtr;
 
-class Context {
+class AXA_EXPORT Context {
  public:
   static ContextPtr Create();
   Context();

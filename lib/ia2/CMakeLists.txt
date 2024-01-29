@@ -1,0 +1,25 @@
+add_library(
+  # Name
+  ia2_inspect
+  SHARED
+
+  # Sources
+  ia2_node.cc
+  win_utils.cc
+)
+
+target_include_directories(
+  ia2_inspect
+
+  PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_BINARY_DIR}/exports  # axa_import.h
+)
+
+target_compile_definitions(
+  ia2_inspect
+  PRIVATE
+    # preprocessor macro to specific we are building a binary .dll, in which
+    # case all AXA_EXPORTS will result in a dllexport statement.
+    axaccess_EXPORTS
+)
