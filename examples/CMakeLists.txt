@@ -28,3 +28,8 @@ endif(LINUX)
 if(APPLE)
    add_subdirectory(mac)
 endif(APPLE)
+
+
+if(WIN32)
+   add_subdirectory(ia2)
+endif(WIN32)

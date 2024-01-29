@@ -83,6 +83,26 @@ brew install python
 % ninja
 ```
 
+### On Window
+
+#### Dependencies
+
+Through the Visual Studio Installer, install:
+- Under individual components: Clang
+- Under workloads: Desktop Development
+
+In VS Code, set the compiler:
+- view -> command pallet -> cmake select kit -> clang with MSVC like command line
+
+Git for windows (this also installs git bash, very nice to have!):
+- https://git-scm.com/download/win
+
+#### Build steps
+
+You can build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
+
+**OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
+
 ## Output files
 
 The outputs will show up at the same relative path under `build/` as the path to the `CMakeLists.txt` file which defined the target, e.g. for a target defined in `lib/atspi/CMakeLists.txt`, the output will be in `build/lib/atspi/<target>`.
@@ -98,3 +118,4 @@ As well as a python module:
 % python
 >>> import mac_inspect
 ```
+

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include "axa_export.h"
 
 namespace axa {
 
@@ -18,7 +20,7 @@ class NodeImpl {
 };
 
 
-class Node {
+class AXA_EXPORT Node {
  public:
   static NodePtr Create(std::unique_ptr<NodeImpl> impl);
   Node(std::unique_ptr<NodeImpl> aImpl);
