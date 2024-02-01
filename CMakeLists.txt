@@ -17,10 +17,12 @@ project(
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
 INCLUDE_DIRECTORIES("${BASEPATH}")
 
-# Puts all of the resulting libraries and executables in build/bin/<CONFIG>
-# For windows, the dll must be in the same directory as the executables.
-# We may decide to solve this problem differently in the future, or use the bin
-# for all executables across all platforms.
+# On windows, put all of the resulting libraries and executables in
+# `build/bin/<CONFIG>` where CONFIG is Debug, Release, etc, because
+# windows .dll must be in the same directory as the executables unless
+# they are on the path.
+# We may decide to solve this problem differently in the future, or use
+# the bin for all executables across all platforms.
 if(WIN32)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")

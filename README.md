@@ -87,6 +87,8 @@ brew install python
 
 #### Dependencies
 
+First, install Visual Studios to get the Visual Studio installer. You can then find the "Visual Studio Installer" from the windows search box thing.
+
 Through the Visual Studio Installer, install:
 - Under individual components: Clang
 - Under workloads: Desktop Development
@@ -94,12 +96,20 @@ Through the Visual Studio Installer, install:
 In VS Code, set the compiler:
 - view -> command palette -> cmake select kit -> clang with MSVC like command line
 
-Git for windows (this also installs git bash, very nice to have!):
+Git for windows (this also installs git bash, very nice to have and used by default in VSCode's terminal):
 - https://git-scm.com/download/win
 
 #### Build steps
 
 You can build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
+
+You can also run the following from a bash terminal:
+```
+% mkdir build
+% cd build
+% cmake ..
+% cmake --build .
+```
 
 **OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
 
