@@ -19,7 +19,7 @@ target_include_directories(
 target_compile_definitions(
   ia2_inspect
   PRIVATE
-    # preprocessor macro to specific we are building a binary .dll, in which
+    # preprocessor macro to specify we are building a binary .dll, in which
     # case all AXA_EXPORTS will result in a dllexport statement.
     axaccess_EXPORTS
 )
