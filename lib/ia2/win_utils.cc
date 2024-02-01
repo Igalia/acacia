@@ -10,11 +10,11 @@
 //#include "third_party/iaccessible2/ia2_api_all.h"
 
 // imports to try to get the hwnd
-#include "windows.h"
-#include "tlhelp32.h"
-#include "vector"
+#include <windows.h>
+#include <tlhelp32.h>
+#include <vector>
 
-#include <axaccess/ia2/win_utils.h>
+#include "axaccess/ia2/win_utils.h"
 
 void GetAllWindowsFromProcessID(DWORD dwProcessID, std::vector<HWND> &hwnds)
 {

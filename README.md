@@ -83,7 +83,7 @@ brew install python
 % ninja
 ```
 
-### On Window
+### On Windows
 
 #### Dependencies
 
@@ -92,7 +92,7 @@ Through the Visual Studio Installer, install:
 - Under workloads: Desktop Development
 
 In VS Code, set the compiler:
-- view -> command pallet -> cmake select kit -> clang with MSVC like command line
+- view -> command palette -> cmake select kit -> clang with MSVC like command line
 
 Git for windows (this also installs git bash, very nice to have!):
 - https://git-scm.com/download/win
