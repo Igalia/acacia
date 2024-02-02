@@ -10,6 +10,7 @@
 
 namespace mac_inspect {
 
+class AXAPIContextImpl;
 class AXAPINode;
 typedef std::unique_ptr<AXAPINode> AXAPINodePtr;
 
@@ -17,18 +18,19 @@ class AXAPINode {
  public:
   ~AXAPINode() = default;
 
-  static AXAPINodePtr createForPID(long pid);
+  static AXAPINodePtr CreateForPID(pid_t pid);
 
-  std::string GetRole();
-  std::string GetTitle();
-  std::vector<std::string> GetAttributeNames();
-  std::string GetStringAttributeValue(std::string& attribute_name);
-  long GetChildCount();
-  AXAPINodePtr GetChildAt(long index);
+  AXError CopyAttributeNames(std::vector<std::string>& names);
+
+  AXError CopyAttributeValue(const std::string& attribute, std::string& value);
+  AXError CopyAttributeValue(const std::string& attribute,
+                             std::vector<AXAPINode>& value);
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
   AXUIElementRef ax_ui_element_;
+
+  friend class AXAPIContextImpl;
 };
 
 }  // namespace mac_inspect

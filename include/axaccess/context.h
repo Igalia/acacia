@@ -9,9 +9,9 @@ namespace axa {
 
 enum APIType {
   UNKNOWN,
-  ATSPI,        // Linux
-  AXUI,         // MacOS
-  IACCESSIBLE2, // Windows
+  ATSPI,         // Linux
+  AXAPI,         // MacOS
+  IACCESSIBLE2,  // Windows
 };
 
 class ContextImpl {

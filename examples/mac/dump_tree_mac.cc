@@ -14,12 +14,33 @@ void print_usage(std::string& program_name) {
 }
 
 void logInfoForPID(pid_t pid) {
-  AXAPINodePtr application = AXAPINode::createForPID(pid);
+  AXAPINodePtr application = AXAPINode::CreateForPID(pid);
 
-  std::string title = application->GetTitle();
+  std::vector<std::string> attributes;
+  application->CopyAttributeNames(attributes);
+  for (std::string& attribute : attributes) {
+    std::cerr << attribute << "\n";
+  }
+  std::cerr << "\n";
+
+  std::string title;
+  application->CopyAttributeValue("AXTitle", title);
   std::cerr <<  "Title: " << title << "\n";
-  std::string role = application->GetRole();
+  std::string role;
+  application->CopyAttributeValue("AXRole", role);
   std::cerr << "Role: " << role << "\n";
+
+  std::cerr << "\n";
+
+  std::vector<AXAPINode> children;
+  application->CopyAttributeValue("AXChildren", children);
+  for (AXAPINode& child : children) {
+    std::string child_title;
+    application->CopyAttributeValue("AXTitle", child_title);
+    std::string child_role;
+    application->CopyAttributeValue("AXRole", child_role);
+    std::cerr << "Child: " << child_title << " " << child_role << "\n";
+  }
 }
 
 int main(int argc, char** argv) {
@@ -40,7 +61,7 @@ int main(int argc, char** argv) {
     const int pid = std::stoi(pid_string);
     std::cerr << "Got PID: " << pid << "\n";
 
-    logInfoForPID(pid);
+    logInfoForPID((pid_t)pid);
 
     return 0;
 }
