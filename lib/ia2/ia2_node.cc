@@ -4,11 +4,11 @@
 #include <string>
 #include "axaccess/ia2/ia2_node.h"
 
-std::string Ia2Node::get_accRole() {
+std::string IA2Node::get_accRole() {
   return "RoleTest";
 }
 
-std::string Ia2Node::get_accName() {
+std::string IA2Node::get_accName() {
 
   return "NameTest";
 }

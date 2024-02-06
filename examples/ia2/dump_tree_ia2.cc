@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
     const int pid = std::stoi(pid_string);
     std::cout << "Got PID: " << pid << "\n";
-    Ia2NodePtr root = find_root_accessible_from_pid(pid);
+    IA2NodePtr root = find_root_accessible_from_pid(pid);
     if (!root) {
       std::cerr << "No accessible root found at pid " << pid << "\n";
       return -1;
