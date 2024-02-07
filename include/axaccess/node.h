@@ -11,8 +11,8 @@ typedef std::unique_ptr<Node> NodePtr;
 
 class NodeImpl {
  public:
-  NodeImpl() {
-  }
+  NodeImpl() {}
+  virtual ~NodeImpl(){};
   virtual std::string Name() = 0;
   virtual std::string RoleName() = 0;
   virtual int32_t ChildCount() = 0;

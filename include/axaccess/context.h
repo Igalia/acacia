@@ -16,8 +16,9 @@ enum APIType {
 
 class ContextImpl {
 public:
-  virtual enum APIType GetAPIType() = 0;
-  virtual NodePtr GetAccessibleRootByPID(int pid) = 0;
+ virtual ~ContextImpl(){};
+ virtual enum APIType GetAPIType() = 0;
+ virtual NodePtr GetAccessibleRootByPID(int pid) = 0;
 };
 
 

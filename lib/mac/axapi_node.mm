@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+using std::cerr;
+
 namespace mac_inspect {
 
 std::string CFStringRefToStdString(CFStringRef cf_string) {
@@ -30,16 +32,17 @@ CFStringRef StdStringToCFStringRef(const std::string& std_string) {
 }
 
 AXAPINode::AXAPINode(AXUIElementRef ax_ui_element)
-    : ax_ui_element_(ax_ui_element) {}
+    : ax_ui_element_((AXUIElementRef)CFRetain(ax_ui_element)) {}
 
-AXAPINodePtr AXAPINode::CreateForPID(pid_t pid) {
-  AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication(pid);
+AXAPINodePtr AXAPINode::CreateForPID(int pid) {
+  AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
   return AXAPINodePtr(new AXAPINode(root_ax_ui_element));
 }
 
-AXError AXAPINode::CopyAttributeNames(std::vector<std::string>& attributes) {
+std::vector<std::string> AXAPINode::CopyAttributeNames() {
   CFArrayRef cf_attributes = NULL;
   AXError err = AXUIElementCopyAttributeNames(ax_ui_element_, &cf_attributes);
+  std::vector<std::string> attributes;
   if (err == kAXErrorSuccess) {
     for (CFIndex i = 0; i < CFArrayGetCount(cf_attributes); ++i) {
       CFStringRef cf_attribute =
@@ -52,43 +55,75 @@ AXError AXAPINode::CopyAttributeNames(std::vector<std::string>& attributes) {
   // releases?
   if (cf_attributes)
     CFRelease(cf_attributes);
-  return err;
+  if (err) {
+    throw std::invalid_argument(
+        "Attempting to copy attribute names produced error code " +
+        std::to_string(err));
+  }
+  return attributes;
 }
 
-AXError AXAPINode::CopyAttributeValue(const std::string& attribute,
-                                      std::string& value) {
+std::string AXAPINode::CopyStringAttributeValue(const std::string& attribute) {
   CFStringRef cf_attribute = StdStringToCFStringRef(attribute);
-  CFTypeRef cf_value;
+  CFTypeRef cf_value = NULL;
   AXError err =
       AXUIElementCopyAttributeValue(ax_ui_element_, cf_attribute, &cf_value);
-
+  std::string value;
   // TODO: better handling of attributes which return the wrong type
   if (err == kAXErrorSuccess && CFGetTypeID(cf_value) == CFStringGetTypeID()) {
     value = CFStringRefToStdString((CFStringRef)cf_value);
+  } else if (err == kAXErrorNoValue) {
+    return "";
   }
 
   if (cf_attribute)
     CFRelease(cf_attribute);
   if (cf_value)
     CFRelease(cf_value);
-  return err;
+  if (err) {
+    std::string ax_err;
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        ax_err = "kAXErrorAttributeUnsupported";
+        break;
+      case kAXErrorNoValue:
+        ax_err = "kAXErrorNoValue";
+        break;
+      case kAXErrorIllegalArgument:
+        ax_err = "kAXErrorIllegalArgument";
+        break;
+      case kAXErrorCannotComplete:
+        ax_err = "kAXErrorCannotComplete";
+        break;
+      case kAXErrorNotImplemented:
+        ax_err = "kAXErrorNotImplemented";
+        break;
+      default:
+        ax_err = std::to_string(err);
+    }
+    throw std::invalid_argument("Attempting to copy value for attribute " +
+                                attribute + " produced error code " + ax_err);
+  }
+  return value;
 }
 
-AXError AXAPINode::CopyAttributeValue(const std::string& attribute,
-                                      std::vector<AXAPINode>& nodes) {
+std::vector<AXAPINodePtr> AXAPINode::CopyNodeListAttributeValue(
+    const std::string& attribute) {
   CFStringRef cf_attribute = StdStringToCFStringRef(attribute);
   CFTypeRef cf_value;
   AXError err =
       AXUIElementCopyAttributeValue(ax_ui_element_, cf_attribute, &cf_value);
 
   // TODO: better handling of attributes which return the wrong type
+  std::vector<AXAPINodePtr> value;
   if (err == kAXErrorSuccess && CFGetTypeID(cf_value) == CFArrayGetTypeID()) {
     CFArrayRef cf_value_array = (CFArrayRef)cf_value;
     for (CFIndex i = 0; i < CFArrayGetCount(cf_value_array); ++i) {
       CFTypeRef cf_ith_value =
           (CFTypeRef)CFArrayGetValueAtIndex(cf_value_array, i);
       if (CFGetTypeID(cf_ith_value) == AXUIElementGetTypeID()) {
-        nodes.push_back(AXAPINode((AXUIElementRef)cf_ith_value));
+        value.push_back(std::move(
+            AXAPINodePtr(new AXAPINode((AXUIElementRef)cf_ith_value))));
       }
     }
   }
@@ -97,7 +132,31 @@ AXError AXAPINode::CopyAttributeValue(const std::string& attribute,
     CFRelease(cf_attribute);
   if (cf_value)
     CFRelease(cf_value);
-  return err;
+  if (err) {
+    std::string ax_err;
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        ax_err = "kAXErrorAttributeUnsupported";
+        break;
+      case kAXErrorNoValue:
+        ax_err = "kAXErrorNoValue";
+        break;
+      case kAXErrorIllegalArgument:
+        ax_err = "kAXErrorIllegalArgument";
+        break;
+      case kAXErrorCannotComplete:
+        ax_err = "kAXErrorCannotComplete";
+        break;
+      case kAXErrorNotImplemented:
+        ax_err = "kAXErrorNotImplemented";
+        break;
+      default:
+        ax_err = std::to_string(err);
+    }
+    throw std::invalid_argument("Attempting to copy value for attribute " +
+                                attribute + " produced error code " + ax_err);
+  }
+  return value;
 }
 
 }  // namespace mac_inspect

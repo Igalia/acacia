@@ -18,13 +18,14 @@ class AXAPINode {
  public:
   ~AXAPINode() = default;
 
-  static AXAPINodePtr CreateForPID(pid_t pid);
+  static AXAPINodePtr CreateForPID(int pid);
 
-  AXError CopyAttributeNames(std::vector<std::string>& names);
+  std::vector<std::string> CopyAttributeNames();
 
-  AXError CopyAttributeValue(const std::string& attribute, std::string& value);
-  AXError CopyAttributeValue(const std::string& attribute,
-                             std::vector<AXAPINode>& value);
+  std::string CopyStringAttributeValue(const std::string& attribute);
+
+  std::vector<AXAPINodePtr> CopyNodeListAttributeValue(
+      const std::string& attribute);
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
