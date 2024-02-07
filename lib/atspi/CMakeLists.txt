@@ -12,6 +12,8 @@ add_library(
   linux_utils.cc
   axa_context_impl.cc
   axa_node_impl.cc
+  ../node.cc
+  ../context.cc
 )
 
 # CMake module that can find system c++ librarys
