@@ -122,8 +122,8 @@ std::vector<AXAPINodePtr> AXAPINode::CopyNodeListAttributeValue(
       CFTypeRef cf_ith_value =
           (CFTypeRef)CFArrayGetValueAtIndex(cf_value_array, i);
       if (CFGetTypeID(cf_ith_value) == AXUIElementGetTypeID()) {
-        value.push_back(std::move(
-            AXAPINodePtr(new AXAPINode((AXUIElementRef)cf_ith_value))));
+        value.push_back(
+            AXAPINodePtr(new AXAPINode((AXUIElementRef)cf_ith_value)));
       }
     }
   }
