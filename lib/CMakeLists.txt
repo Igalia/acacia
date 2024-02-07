@@ -25,6 +25,8 @@ target_compile_definitions(
     # case all AXA_EXPORTS will result in a dllexport statement.
     axaccess_EXPORTS
 )
+include_directories(${PROJECT_BINARY_DIR}/exports)
+
 
 # Feature flag for Python bindings, ON by default
 option(
