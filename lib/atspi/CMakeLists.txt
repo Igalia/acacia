@@ -33,7 +33,7 @@ target_include_directories(
   atspi_inspect
 
   PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_BINARY_DIR}/include
     ${ATSPI2_INCLUDE_DIRS}
 )
 

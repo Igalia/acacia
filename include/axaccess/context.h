@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "axa_export.h"
+#include "export.h"
 
 #include "./node.h"
 
