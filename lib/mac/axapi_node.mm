@@ -1,6 +1,8 @@
 #include "include/axaccess/mac/axapi_node.h"
 
 #import <Foundation/Foundation.h>
+
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,7 +11,7 @@ using std::cerr;
 
 namespace mac_inspect {
 
-std::string CFStringRefToStdString(CFStringRef cf_string) {
+const std::string CFStringRefToStdString(CFStringRef cf_string) {
   if (cf_string == nullptr)
     return "";
 
@@ -31,15 +33,17 @@ CFStringRef StdStringToCFStringRef(const std::string& std_string) {
                                    [NSString defaultCStringEncoding]);
 }
 
+AXAPINode::AXAPINode() {}
+
 AXAPINode::AXAPINode(AXUIElementRef ax_ui_element)
     : ax_ui_element_((AXUIElementRef)CFRetain(ax_ui_element)) {}
 
-AXAPINodePtr AXAPINode::CreateForPID(int pid) {
+AXAPINode AXAPINode::CreateForPID(int pid) {
   AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
-  return AXAPINodePtr(new AXAPINode(root_ax_ui_element));
+  return AXAPINode(root_ax_ui_element);
 }
 
-std::vector<std::string> AXAPINode::CopyAttributeNames() {
+std::vector<std::string> AXAPINode::CopyAttributeNames() const {
   CFArrayRef cf_attributes = NULL;
   AXError err = AXUIElementCopyAttributeNames(ax_ui_element_, &cf_attributes);
   std::vector<std::string> attributes;
@@ -63,7 +67,8 @@ std::vector<std::string> AXAPINode::CopyAttributeNames() {
   return attributes;
 }
 
-std::string AXAPINode::CopyStringAttributeValue(const std::string& attribute) {
+std::string AXAPINode::CopyStringAttributeValue(
+    const std::string& attribute) const {
   CFStringRef cf_attribute = StdStringToCFStringRef(attribute);
   CFTypeRef cf_value = NULL;
   AXError err =
@@ -107,23 +112,22 @@ std::string AXAPINode::CopyStringAttributeValue(const std::string& attribute) {
   return value;
 }
 
-std::vector<AXAPINodePtr> AXAPINode::CopyNodeListAttributeValue(
-    const std::string& attribute) {
+std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
+    const std::string& attribute) const {
   CFStringRef cf_attribute = StdStringToCFStringRef(attribute);
   CFTypeRef cf_value;
   AXError err =
       AXUIElementCopyAttributeValue(ax_ui_element_, cf_attribute, &cf_value);
 
   // TODO: better handling of attributes which return the wrong type
-  std::vector<AXAPINodePtr> value;
+  std::vector<AXAPINode> value;
   if (err == kAXErrorSuccess && CFGetTypeID(cf_value) == CFArrayGetTypeID()) {
     CFArrayRef cf_value_array = (CFArrayRef)cf_value;
     for (CFIndex i = 0; i < CFArrayGetCount(cf_value_array); ++i) {
       CFTypeRef cf_ith_value =
           (CFTypeRef)CFArrayGetValueAtIndex(cf_value_array, i);
       if (CFGetTypeID(cf_ith_value) == AXUIElementGetTypeID()) {
-        value.push_back(
-            AXAPINodePtr(new AXAPINode((AXUIElementRef)cf_ith_value)));
+        value.push_back(AXAPINode((AXUIElementRef)cf_ith_value));
       }
     }
   }

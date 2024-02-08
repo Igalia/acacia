@@ -7,36 +7,35 @@
 #include "include/axaccess/mac/axapi_node.h"
 
 using mac_inspect::AXAPINode;
-using mac_inspect::AXAPINodePtr;
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: "<< program_name << " <pid>\n";
 }
 
 void logInfoForPID(pid_t pid) {
-  AXAPINodePtr application = AXAPINode::CreateForPID(pid);
+  AXAPINode application = AXAPINode::CreateForPID(pid);
 
-  std::vector<std::string> attributes = application->CopyAttributeNames();
+  std::vector<std::string> attributes = application.CopyAttributeNames();
   std::cerr << "Attributes: ";
   for (std::string& attribute : attributes) {
     std::cerr << attribute << " ";
   }
   std::cerr << "\n";
 
-  std::string title = application->CopyStringAttributeValue("AXTitle");
+  std::string title = application.CopyStringAttributeValue("AXTitle");
   std::cerr <<  "Title: " << title << "\n";
-  std::string role = application->CopyStringAttributeValue("AXRole");
+  std::string role = application.CopyStringAttributeValue("AXRole");
   std::cerr << "Role: " << role << "\n";
 
   std::cerr << "\n";
 
-  std::vector<AXAPINodePtr> children =
-      application->CopyNodeListAttributeValue("AXChildren");
-  for (AXAPINodePtr& child : children) {
-    std::string child_title = child->CopyStringAttributeValue("AXTitle");
-    std::string child_role = child->CopyStringAttributeValue("AXRole");
+  std::vector<AXAPINode> children =
+      application.CopyNodeListAttributeValue("AXChildren");
+  for (AXAPINode& child : children) {
+    std::string child_title = child.CopyStringAttributeValue("AXTitle");
+    std::string child_role = child.CopyStringAttributeValue("AXRole");
     std::cerr << "Child: " << child_role << " \"" << child_title << "\"\n";
-    std::vector<std::string> attributes = child->CopyAttributeNames();
+    std::vector<std::string> attributes = child.CopyAttributeNames();
     std::cerr << "Attributes: ";
     for (std::string& attribute : attributes) {
       std::cerr << attribute << " ";

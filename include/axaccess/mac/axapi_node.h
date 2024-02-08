@@ -3,7 +3,6 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -11,21 +10,22 @@
 namespace mac_inspect {
 
 class AXAPIContextImpl;
-class AXAPINode;
-typedef std::unique_ptr<AXAPINode> AXAPINodePtr;
 
 class AXAPINode {
  public:
-  ~AXAPINode() = default;
+  ~AXAPINode() { CFRelease(ax_ui_element_); }
+  AXAPINode();
+  AXAPINode(const AXAPINode& other)
+      : ax_ui_element_((AXUIElementRef)CFRetain(other.ax_ui_element_)) {}
 
-  static AXAPINodePtr CreateForPID(int pid);
+  static AXAPINode CreateForPID(int pid);
 
-  std::vector<std::string> CopyAttributeNames();
+  std::vector<std::string> CopyAttributeNames() const;
 
-  std::string CopyStringAttributeValue(const std::string& attribute);
+  std::string CopyStringAttributeValue(const std::string& attribute) const;
 
-  std::vector<AXAPINodePtr> CopyNodeListAttributeValue(
-      const std::string& attribute);
+  std::vector<AXAPINode> CopyNodeListAttributeValue(
+      const std::string& attribute) const;
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
