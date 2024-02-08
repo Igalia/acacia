@@ -2,8 +2,7 @@
 
 add_custom_target(
   pub_headers
-  COMMAND
-    cp -a ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
   VERBATIM
 )
 

@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "axa_export.h"
+#include "axaccess/export.h"
 
 class IA2Node;
 typedef std::unique_ptr<IA2Node> IA2NodePtr;
