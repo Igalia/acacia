@@ -1,57 +1,35 @@
+#include "lib/mac/axapi_node_impl.h"
+
+#include <string>
+
+namespace axa {
+
+AXAPINodeImpl::AXAPINodeImpl(AXAPINode axapi_node) : axapi_node_(axapi_node) {}
 
 // TODO: use the C++ API in AXAPINode
-std::string AXAPINodeImpl::Role() {
-  /*
-  CFTypeRef cf_role = nullptr;
-  if (AXUIElementCopyAttributeValue(ax_ui_element_, kAXRoleAttribute,
-                                    &cf_role) != kAXErrorSuccess) {
-    return "";
-  }
-
-  return CFStringRefToStdString((CFStringRef)cf_role);
-*/
-  return "";
+std::string AXAPINodeImpl::RoleName() {
+  return axapi_node_.CopyStringAttributeValue("AXRole");
 }
 
-std::string AXAPINodeImpl::Title() {
-  /*
-  CFStringRef cf_title = nullptr;
-  if (AXUIElementCopyAttributeValue(ax_ui_element_, kAXTitleAttribute,
-                                    (CFTypeRef*)&cf_title) != kAXErrorSuccess) {
-    return "";
-  }
-
-  return CFStringRefToStdString(cf_title);
-  */
-  return "";
+std::string AXAPINodeImpl::Name() {
+  return axapi_node_.CopyStringAttributeValue("AXTitle");
 }
 
-long AXAPINodeImpl::ChildCount() {
-  /*
-  CFArrayRef children_ref;
-  if ((AXUIElementCopyAttributeValue(ax_ui_element_, kAXChildrenAttribute,
-                                     (CFTypeRef*)&children_ref)) !=
-      kAXErrorSuccess) {
-    return 0;
-  }
-  return CFArrayGetCount(children_ref);
-  */
-  return 0;
+int32_t AXAPINodeImpl::ChildCount() {
+  std::vector<AXAPINode> children =
+      axapi_node_.CopyNodeListAttributeValue("AXChildren");
+  return children.size();
 }
 
-AXAPINodePtr AXAPINodeImpl::ChildAt(long index) {
-  /*
-  CFArrayRef children_ref;
-  if ((AXUIElementCopyAttributeValue(ax_ui_element_, kAXChildrenAttribute,
-                                     (CFTypeRef*)&children_ref)) !=
-      kAXErrorSuccess) {
-    return nullptr;
+NodePtr AXAPINodeImpl::ChildAt(int32_t index) {
+  std::vector<AXAPINode> children =
+      axapi_node_.CopyNodeListAttributeValue("AXChildren");
+  if (index < 0 || index >= children.size()) {
+    throw std::invalid_argument("Index out of bounds");
   }
-  AXUIElementRef child_ref =
-      (AXUIElementRef)CFArrayGetValueAtIndex(children_ref, index);
-  if (!child_ref)
-    return nullptr;
-  return AXAPINodePtr(new AXAPINode(child_ref));
-  */
-  return std::make_unique<AXAPINodeImpl>()
+  std::unique_ptr<NodeImpl> child =
+      std::unique_ptr<NodeImpl>(new AXAPINodeImpl(children[index]));
+  return Node::Create(std::move(child));
 }
+
+}  // namespace axa

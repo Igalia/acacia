@@ -8,6 +8,8 @@ add_library(
 
   # Sources
   axapi_node.mm
+  axapi_node_impl.cc
+  axapi_context_impl.cc
 )
 
 find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices)
