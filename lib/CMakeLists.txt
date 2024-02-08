@@ -16,7 +16,7 @@ include(GenerateExportHeader)
 generate_export_header(
   axaccess
   BASE_NAME axa
-  EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/exports/axa_export.h
+  EXPORT_FILE_NAME ${GENERATED_FILES_BASEPATH}/exports/axa_export.h
 )
 target_compile_definitions(
   axaccess

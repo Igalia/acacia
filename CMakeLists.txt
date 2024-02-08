@@ -17,6 +17,9 @@ project(
 SET(BASEPATH "${CMAKE_SOURCE_DIR}")
 INCLUDE_DIRECTORIES("${BASEPATH}")
 
+SET(GENERATED_FILES_BASEPATH "${CMAKE_BINARY_DIR}/generated")
+INCLUDE_DIRECTORIES("${GENERATED_FILES_BASEPATH}")
+
 # On windows, put all of the resulting libraries and executables in
 # `build/bin/<CONFIG>` where CONFIG is Debug, Release, etc, because
 # windows .dll must be in the same directory as the executables unless

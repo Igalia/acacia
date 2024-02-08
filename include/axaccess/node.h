@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <string>
-#include "axa_export.h"
+#include "exports/axa_export.h"
 
 namespace axa {
 
