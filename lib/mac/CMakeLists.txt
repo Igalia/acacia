@@ -98,14 +98,13 @@ if (AXA_NODEJS_MODULE)
     TARGET axapi_inspect.node
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
-      binding.gyp
       ${CMAKE_CURRENT_BINARY_DIR}/build
       axapi_inspect.node
   )
 
   # Generate `binding.gyp` file for node-gyp
   configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/binding.gyp.in binding.gyp
+    binding.gyp.in binding.gyp
   )
 
   # Generate C++ wrapper for NodeJS
