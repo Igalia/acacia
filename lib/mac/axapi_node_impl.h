@@ -9,10 +9,9 @@ namespace axa {
 
 using mac_inspect::AXAPINode;
 
-class AXAPIContextImpl;
-
 class AXAPINodeImpl : public NodeImpl {
  public:
+  AXAPINodeImpl(AXAPINode axapi_node);
   ~AXAPINodeImpl();
 
   std::string Name() override;
@@ -21,11 +20,7 @@ class AXAPINodeImpl : public NodeImpl {
   NodePtr ChildAt(const int32_t index) override;
 
  private:
-  AXAPINodeImpl(AXAPINode axapi_node);
-
   AXAPINode axapi_node_;
-
-  friend class AXAPIContextImpl;
 };
 
 }  // namespace axa

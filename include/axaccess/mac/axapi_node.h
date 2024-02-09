@@ -27,6 +27,9 @@ class AXAPINode {
   std::vector<AXAPINode> CopyNodeListAttributeValue(
       const std::string& attribute) const;
 
+  AXAPINode CopyNodeListAttributeValueAtIndex(const std::string& attribute,
+                                              int32_t index) const;
+
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
   AXUIElementRef ax_ui_element_;

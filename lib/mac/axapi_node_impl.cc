@@ -6,7 +6,6 @@ namespace axa {
 
 AXAPINodeImpl::AXAPINodeImpl(AXAPINode axapi_node) : axapi_node_(axapi_node) {}
 
-// TODO: use the C++ API in AXAPINode
 std::string AXAPINodeImpl::RoleName() {
   return axapi_node_.CopyStringAttributeValue("AXRole");
 }
@@ -28,7 +27,7 @@ NodePtr AXAPINodeImpl::ChildAt(int32_t index) {
     throw std::invalid_argument("Index out of bounds");
   }
   std::unique_ptr<NodeImpl> child =
-      std::unique_ptr<NodeImpl>(new AXAPINodeImpl(children[index]));
+      std::make_unique<AXAPINodeImpl>(children[index]);
   return Node::Create(std::move(child));
 }
 

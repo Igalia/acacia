@@ -9,7 +9,31 @@
 
 using std::cerr;
 
-namespace mac_inspect {
+namespace {
+
+template <typename T>
+class ScopedCFTypeRef {
+ public:
+  ScopedCFTypeRef() = default;
+  ScopedCFTypeRef(T ref) : ref_(ref) {}
+
+  ~ScopedCFTypeRef() {
+    if (ref_)
+      CFRelease(ref_);
+  }
+
+  T get() { return ref_; }
+  T* get_ptr() { return &ref_; }
+
+  ScopedCFTypeRef& operator=(ScopedCFTypeRef other) {
+    if (ref_)
+      CFRelease(ref_);
+    ref_ = other.ref_;
+  }
+
+ private:
+  T ref_{NULL};
+};
 
 const std::string CFStringRefToStdString(CFStringRef cf_string) {
   if (cf_string == nullptr)
@@ -28,10 +52,32 @@ const std::string CFStringRefToStdString(CFStringRef cf_string) {
   return std::string(chars);
 }
 
-CFStringRef StdStringToCFStringRef(const std::string& std_string) {
-  return CFStringCreateWithCString(kCFAllocatorDefault, std_string.c_str(),
-                                   [NSString defaultCStringEncoding]);
+ScopedCFTypeRef<CFStringRef> StdStringToCFStringRef(
+    const std::string& std_string) {
+  return ScopedCFTypeRef<CFStringRef>(
+      CFStringCreateWithCString(kCFAllocatorDefault, std_string.c_str(),
+                                [NSString defaultCStringEncoding]));
 }
+
+std::string AXErrorToString(AXError err) {
+  switch (err) {
+    case kAXErrorAttributeUnsupported:
+      return "kAXErrorAttributeUnsupported";
+    case kAXErrorNoValue:
+      return "kAXErrorNoValue";
+    case kAXErrorIllegalArgument:
+      return "kAXErrorIllegalArgument";
+    case kAXErrorCannotComplete:
+      return "kAXErrorCannotComplete";
+    case kAXErrorNotImplemented:
+      return "kAXErrorNotImplemented";
+    default:
+      return std::to_string(err);
+  }
+}
+}  // namespace
+
+namespace mac_inspect {
 
 AXAPINode::AXAPINode() {}
 
@@ -44,85 +90,67 @@ AXAPINode AXAPINode::CreateForPID(int pid) {
 }
 
 std::vector<std::string> AXAPINode::CopyAttributeNames() const {
-  CFArrayRef cf_attributes = NULL;
-  AXError err = AXUIElementCopyAttributeNames(ax_ui_element_, &cf_attributes);
+  ScopedCFTypeRef<CFArrayRef> cf_attributes;
+  AXError err =
+      AXUIElementCopyAttributeNames(ax_ui_element_, cf_attributes.get_ptr());
   std::vector<std::string> attributes;
-  if (err == kAXErrorSuccess) {
-    for (CFIndex i = 0; i < CFArrayGetCount(cf_attributes); ++i) {
-      CFStringRef cf_attribute =
-          (CFStringRef)CFArrayGetValueAtIndex(cf_attributes, i);
-      attributes.push_back(CFStringRefToStdString(cf_attribute));
-    }
-  }
-
-  // TODO: can we do something clever with scoping to automatically do these
-  // releases?
-  if (cf_attributes)
-    CFRelease(cf_attributes);
   if (err) {
     throw std::invalid_argument(
         "Attempting to copy attribute names produced error code " +
-        std::to_string(err));
+        AXErrorToString(err));
+  }
+  for (CFIndex i = 0; i < CFArrayGetCount(cf_attributes.get()); ++i) {
+    CFStringRef cf_attribute =
+        (CFStringRef)CFArrayGetValueAtIndex(cf_attributes.get(), i);
+    attributes.push_back(CFStringRefToStdString(cf_attribute));
   }
   return attributes;
 }
 
 std::string AXAPINode::CopyStringAttributeValue(
     const std::string& attribute) const {
-  CFStringRef cf_attribute = StdStringToCFStringRef(attribute);
-  CFTypeRef cf_value = NULL;
-  AXError err =
-      AXUIElementCopyAttributeValue(ax_ui_element_, cf_attribute, &cf_value);
-  std::string value;
-  // TODO: better handling of attributes which return the wrong type
-  if (err == kAXErrorSuccess && CFGetTypeID(cf_value) == CFStringGetTypeID()) {
-    value = CFStringRefToStdString((CFStringRef)cf_value);
-  } else if (err == kAXErrorNoValue) {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFTypeRef> cf_value;
+  AXError err = AXUIElementCopyAttributeValue(
+      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+
+  if (err == kAXErrorNoValue)
     return "";
+
+  if (err) {
+    throw std::invalid_argument("Attempting to copy value for attribute " +
+                                attribute + " produced error code " +
+                                AXErrorToString(err));
   }
 
-  if (cf_attribute)
-    CFRelease(cf_attribute);
-  if (cf_value)
-    CFRelease(cf_value);
-  if (err) {
-    std::string ax_err;
-    switch (err) {
-      case kAXErrorAttributeUnsupported:
-        ax_err = "kAXErrorAttributeUnsupported";
-        break;
-      case kAXErrorNoValue:
-        ax_err = "kAXErrorNoValue";
-        break;
-      case kAXErrorIllegalArgument:
-        ax_err = "kAXErrorIllegalArgument";
-        break;
-      case kAXErrorCannotComplete:
-        ax_err = "kAXErrorCannotComplete";
-        break;
-      case kAXErrorNotImplemented:
-        ax_err = "kAXErrorNotImplemented";
-        break;
-      default:
-        ax_err = std::to_string(err);
-    }
-    throw std::invalid_argument("Attempting to copy value for attribute " +
-                                attribute + " produced error code " + ax_err);
-  }
-  return value;
+  // TODO: better handling of attributes which return the wrong type.
+  // Should throw a useful exception if not a string.
+  if (CFGetTypeID(cf_value.get()) != CFStringGetTypeID())
+    return "";
+
+  return CFStringRefToStdString((CFStringRef)cf_value.get());
 }
 
 std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
     const std::string& attribute) const {
-  CFStringRef cf_attribute = StdStringToCFStringRef(attribute);
-  CFTypeRef cf_value;
-  AXError err =
-      AXUIElementCopyAttributeValue(ax_ui_element_, cf_attribute, &cf_value);
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFTypeRef> cf_value;
 
-  // TODO: better handling of attributes which return the wrong type
+  AXError err = AXUIElementCopyAttributeValue(
+      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+
+  if (err) {
+    throw std::invalid_argument("Attempting to copy value for attribute " +
+                                attribute + " produced error code " +
+                                AXErrorToString(err));
+  }
+
+  // TODO: better handling of attributes which return the wrong type.
+  // Should throw a useful exception if not an array, or (any?) element is not
+  // an AXUIElement.
   std::vector<AXAPINode> value;
-  if (err == kAXErrorSuccess && CFGetTypeID(cf_value) == CFArrayGetTypeID()) {
-    CFArrayRef cf_value_array = (CFArrayRef)cf_value;
+  if (CFGetTypeID(cf_value.get()) == CFArrayGetTypeID()) {
+    CFArrayRef cf_value_array = (CFArrayRef)cf_value.get();
     for (CFIndex i = 0; i < CFArrayGetCount(cf_value_array); ++i) {
       CFTypeRef cf_ith_value =
           (CFTypeRef)CFArrayGetValueAtIndex(cf_value_array, i);
@@ -132,35 +160,36 @@ std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
     }
   }
 
-  if (cf_attribute)
-    CFRelease(cf_attribute);
-  if (cf_value)
-    CFRelease(cf_value);
-  if (err) {
-    std::string ax_err;
-    switch (err) {
-      case kAXErrorAttributeUnsupported:
-        ax_err = "kAXErrorAttributeUnsupported";
-        break;
-      case kAXErrorNoValue:
-        ax_err = "kAXErrorNoValue";
-        break;
-      case kAXErrorIllegalArgument:
-        ax_err = "kAXErrorIllegalArgument";
-        break;
-      case kAXErrorCannotComplete:
-        ax_err = "kAXErrorCannotComplete";
-        break;
-      case kAXErrorNotImplemented:
-        ax_err = "kAXErrorNotImplemented";
-        break;
-      default:
-        ax_err = std::to_string(err);
-    }
-    throw std::invalid_argument("Attempting to copy value for attribute " +
-                                attribute + " produced error code " + ax_err);
-  }
   return value;
+}
+
+AXAPINode AXAPINode::CopyNodeListAttributeValueAtIndex(
+    const std::string& attribute,
+    int32_t index) const {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFTypeRef> cf_value;
+  AXError err = AXUIElementCopyAttributeValue(
+      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+
+  if (err) {
+    throw std::invalid_argument("Attempting to copy value for attribute " +
+                                attribute + " produced error code " +
+                                AXErrorToString(err));
+  }
+
+  // TODO: better handling of attributes which return the wrong type
+  if (CFGetTypeID(cf_value.get()) != CFArrayGetTypeID())
+    return AXAPINode();
+
+  CFArrayRef cf_value_array = (CFArrayRef)cf_value.get();
+  CFTypeRef cf_ith_value =
+      (CFTypeRef)CFArrayGetValueAtIndex(cf_value_array, index);
+
+  // TODO: better handling of attributes which return the wrong type
+  if (CFGetTypeID(cf_ith_value) != AXUIElementGetTypeID())
+    return AXAPINode();
+
+  return AXAPINode((AXUIElementRef)cf_ith_value);
 }
 
 }  // namespace mac_inspect
