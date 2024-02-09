@@ -84,6 +84,13 @@ AXAPINode::AXAPINode() {}
 AXAPINode::AXAPINode(AXUIElementRef ax_ui_element)
     : ax_ui_element_((AXUIElementRef)CFRetain(ax_ui_element)) {}
 
+AXAPINode::AXAPINode(const AXAPINode& other)
+    : ax_ui_element_((AXUIElementRef)CFRetain(other.ax_ui_element_)) {}
+
+AXAPINode::~AXAPINode() {
+  CFRelease(ax_ui_element_);
+}
+
 AXAPINode AXAPINode::CreateForPID(int pid) {
   AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
   return AXAPINode(root_ax_ui_element);
@@ -134,10 +141,9 @@ std::string AXAPINode::CopyStringAttributeValue(
 std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
     const std::string& attribute) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
-  ScopedCFTypeRef<CFTypeRef> cf_value;
-
-  AXError err = AXUIElementCopyAttributeValue(
-      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+  ScopedCFTypeRef<CFArrayRef> cf_array;
+  AXError err = AXUIElementCopyAttributeValues(
+      ax_ui_element_, cf_attribute.get(), 0, INT32_MAX, cf_array.get_ptr());
 
   if (err) {
     throw std::invalid_argument("Attempting to copy value for attribute " +
@@ -149,14 +155,11 @@ std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
   // Should throw a useful exception if not an array, or (any?) element is not
   // an AXUIElement.
   std::vector<AXAPINode> value;
-  if (CFGetTypeID(cf_value.get()) == CFArrayGetTypeID()) {
-    CFArrayRef cf_value_array = (CFArrayRef)cf_value.get();
-    for (CFIndex i = 0; i < CFArrayGetCount(cf_value_array); ++i) {
-      CFTypeRef cf_ith_value =
-          (CFTypeRef)CFArrayGetValueAtIndex(cf_value_array, i);
-      if (CFGetTypeID(cf_ith_value) == AXUIElementGetTypeID()) {
-        value.push_back(AXAPINode((AXUIElementRef)cf_ith_value));
-      }
+  for (CFIndex i = 0; i < CFArrayGetCount(cf_array.get()); ++i) {
+    CFTypeRef cf_ith_value =
+        (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), i);
+    if (CFGetTypeID(cf_ith_value) == AXUIElementGetTypeID()) {
+      value.push_back(AXAPINode((AXUIElementRef)cf_ith_value));
     }
   }
 
@@ -167,9 +170,10 @@ AXAPINode AXAPINode::CopyNodeListAttributeValueAtIndex(
     const std::string& attribute,
     int32_t index) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
-  ScopedCFTypeRef<CFTypeRef> cf_value;
-  AXError err = AXUIElementCopyAttributeValue(
-      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+  ScopedCFTypeRef<CFArrayRef> cf_array;
+  AXError err =
+      AXUIElementCopyAttributeValues(ax_ui_element_, cf_attribute.get(),
+                                     (CFIndex)index, 1l, cf_array.get_ptr());
 
   if (err) {
     throw std::invalid_argument("Attempting to copy value for attribute " +
@@ -177,13 +181,10 @@ AXAPINode AXAPINode::CopyNodeListAttributeValueAtIndex(
                                 AXErrorToString(err));
   }
 
-  // TODO: better handling of attributes which return the wrong type
-  if (CFGetTypeID(cf_value.get()) != CFArrayGetTypeID())
-    return AXAPINode();
-
-  CFArrayRef cf_value_array = (CFArrayRef)cf_value.get();
-  CFTypeRef cf_ith_value =
-      (CFTypeRef)CFArrayGetValueAtIndex(cf_value_array, index);
+  if (CFArrayGetCount(cf_array.get()) != 1l) {
+    throw std::runtime_error("Couldn't get array");
+  }
+  CFTypeRef cf_ith_value = (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), 0);
 
   // TODO: better handling of attributes which return the wrong type
   if (CFGetTypeID(cf_ith_value) != AXUIElementGetTypeID())

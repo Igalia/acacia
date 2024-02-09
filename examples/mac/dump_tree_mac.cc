@@ -42,6 +42,21 @@ void logInfoForPID(pid_t pid) {
     }
     std::cerr << "\n\n";
   }
+
+  for (int32_t i = 0; i < children.size(); i++) {
+    AXAPINode child =
+        application.CopyNodeListAttributeValueAtIndex("AXChildren", i);
+    std::string child_title = child.CopyStringAttributeValue("AXTitle");
+    std::string child_role = child.CopyStringAttributeValue("AXRole");
+    std::cerr << "Child (from CopyNodeListAttributeValueAtIndex): "
+              << child_role << " \"" << child_title << "\"\n";
+    std::vector<std::string> attributes = child.CopyAttributeNames();
+    std::cerr << "Attributes: ";
+    for (std::string& attribute : attributes) {
+      std::cerr << attribute << " ";
+    }
+    std::cerr << "\n\n";
+  }
 }
 
 int main(int argc, char** argv) {

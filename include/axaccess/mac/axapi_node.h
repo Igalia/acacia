@@ -13,10 +13,9 @@ class AXAPIContextImpl;
 
 class AXAPINode {
  public:
-  ~AXAPINode() { CFRelease(ax_ui_element_); }
   AXAPINode();
-  AXAPINode(const AXAPINode& other)
-      : ax_ui_element_((AXUIElementRef)CFRetain(other.ax_ui_element_)) {}
+  AXAPINode(const AXAPINode& other);
+  ~AXAPINode();
 
   static AXAPINode CreateForPID(int pid);
 
