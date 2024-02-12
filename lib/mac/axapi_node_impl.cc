@@ -9,8 +9,6 @@ namespace axa {
 AXAPINodeImpl::AXAPINodeImpl(mac_inspect::AXAPINode axapi_node)
     : axapi_node_(axapi_node) {}
 
-AXAPINodeImpl::~AXAPINodeImpl() {}
-
 std::string AXAPINodeImpl::Name() {
   if (!axapi_node_.HasAttribute("AXTitle"))
     return "";

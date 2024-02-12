@@ -10,7 +10,6 @@ namespace axa {
 class AXAPINodeImpl : public NodeImpl {
  public:
   AXAPINodeImpl(mac_inspect::AXAPINode axapi_node);
-  virtual ~AXAPINodeImpl();
 
   std::string Name() override;
   std::string RoleName() override;
