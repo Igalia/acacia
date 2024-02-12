@@ -7,7 +7,7 @@ add_executable(
 target_include_directories(
   dump_tree
   PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_BINARY_DIR}/include
 )
 
 target_link_libraries(

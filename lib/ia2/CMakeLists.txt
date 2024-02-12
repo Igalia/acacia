@@ -12,8 +12,7 @@ target_include_directories(
   ia2_inspect
 
   PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_BINARY_DIR}/exports  # axa_import.h
+    ${PROJECT_BINARY_DIR}/include
 )
 
 target_compile_definitions(
