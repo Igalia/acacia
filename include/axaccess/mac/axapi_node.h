@@ -17,6 +17,8 @@ class AXAPINode {
   AXAPINode(const AXAPINode& other);
   ~AXAPINode();
 
+  AXAPINode& operator=(AXAPINode other);
+
   static AXAPINode CreateForPID(int pid);
 
   std::vector<std::string> CopyAttributeNames() const;
@@ -35,7 +37,7 @@ class AXAPINode {
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
-  AXUIElementRef ax_ui_element_;
+  AXUIElementRef ax_ui_element_{NULL};
 
   bool HasAttribute(const CFStringRef attribute) const;
 

@@ -11,6 +11,11 @@ using std::cerr;
 
 namespace {
 
+// Container to handle CFRelease-ing CFTypeRefs at the end of a scope. See:
+// https://developer.apple.com/library/archive/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/Concepts/Ownership.html
+//
+// This should be used when a method with "Create" or "Copy" is used to obtain
+// a CFTypeRef, to ensure CFRelease is called appropriately.
 template <typename T>
 class ScopedCFTypeRef {
  public:
@@ -29,6 +34,7 @@ class ScopedCFTypeRef {
     if (ref_)
       CFRelease(ref_);
     ref_ = other.ref_;
+    return *this;
   }
 
  private:
@@ -52,6 +58,9 @@ const std::string CFStringRefToStdString(CFStringRef cf_string) {
   return std::string(chars);
 }
 
+// This returns a ScopedCFTypeRef since the CFStringRef is obtained using
+// CFStringCreateWithCString, meaning we own the CFStringRef and are responsible
+// for releasing it.
 ScopedCFTypeRef<CFStringRef> StdStringToCFStringRef(
     const std::string& std_string) {
   return ScopedCFTypeRef<CFStringRef>(
@@ -82,13 +91,22 @@ namespace mac_inspect {
 AXAPINode::AXAPINode() {}
 
 AXAPINode::AXAPINode(AXUIElementRef ax_ui_element)
-    : ax_ui_element_((AXUIElementRef)CFRetain(ax_ui_element)) {}
+    : ax_ui_element_(ax_ui_element) {}
 
-AXAPINode::AXAPINode(const AXAPINode& other)
-    : ax_ui_element_((AXUIElementRef)CFRetain(other.ax_ui_element_)) {}
+AXAPINode::AXAPINode(const AXAPINode& other) {
+  if (other.ax_ui_element_)
+    ax_ui_element_ = (AXUIElementRef)CFRetain(other.ax_ui_element_);
+}
 
 AXAPINode::~AXAPINode() {
-  CFRelease(ax_ui_element_);
+  if (ax_ui_element_)
+    CFRelease(ax_ui_element_);
+}
+
+AXAPINode& AXAPINode::operator=(AXAPINode other) {
+  if (other.ax_ui_element_)
+    ax_ui_element_ = (AXUIElementRef)CFRetain(other.ax_ui_element_);
+  return *this;
 }
 
 AXAPINode AXAPINode::CreateForPID(int pid) {
@@ -143,6 +161,9 @@ std::string AXAPINode::CopyStringAttributeValue(
   AXError err = AXUIElementCopyAttributeValue(
       ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
 
+  // For some reason, sometimes an AXUIElement lists an attribute which has no
+  // value. Since we can't check for this condition other than getting the
+  // attribute, handle this case quietly.
   if (err == kAXErrorNoValue)
     return "";
 
@@ -199,7 +220,7 @@ std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
     CFTypeRef cf_ith_value =
         (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), i);
     if (CFGetTypeID(cf_ith_value) == AXUIElementGetTypeID()) {
-      value.push_back(AXAPINode((AXUIElementRef)cf_ith_value));
+      value.push_back(AXAPINode((AXUIElementRef)CFRetain(cf_ith_value)));
     }
   }
 
@@ -226,11 +247,11 @@ AXAPINode AXAPINode::CopyNodeListAttributeValueAtIndex(
   }
   CFTypeRef cf_ith_value = (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), 0);
 
-  // TODO: better handling of attributes which return the wrong type
+  // TODO: better handling of attributes which return the wrong type.
   if (CFGetTypeID(cf_ith_value) != AXUIElementGetTypeID())
     return AXAPINode();
 
-  return AXAPINode((AXUIElementRef)cf_ith_value);
+  return AXAPINode((AXUIElementRef)CFRetain(cf_ith_value));
 }
 
 }  // namespace mac_inspect
