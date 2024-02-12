@@ -43,7 +43,8 @@ void logInfoForPID(pid_t pid) {
     std::cerr << "\n\n";
   }
 
-  for (int32_t i = 0; i < children.size(); i++) {
+  int32_t num_children = application.GetListAttributeValueCount("AXChildren");
+  for (int32_t i = 0; i < num_children; i++) {
     AXAPINode child =
         application.CopyNodeListAttributeValueAtIndex("AXChildren", i);
     std::string child_title = child.CopyStringAttributeValue("AXTitle");
