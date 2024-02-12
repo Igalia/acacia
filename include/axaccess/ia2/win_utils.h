@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <string>
-#include "axa_export.h"
+#include "axaccess/export.h"
 
 #include "ia2_node.h"
 
