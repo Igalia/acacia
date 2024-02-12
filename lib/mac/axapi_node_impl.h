@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "include/axaccess/mac/axapi_node.h"
-#include "include/axaccess/node.h"
+#include "axaccess/mac/axapi_node.h"
+#include "axaccess/node.h"
 
 namespace axa {
 

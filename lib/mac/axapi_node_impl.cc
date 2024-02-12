@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "include/axaccess/mac/axapi_node.h"
+#include "axaccess/mac/axapi_node.h"
 
 namespace axa {
 

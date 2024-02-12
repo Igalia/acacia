@@ -21,6 +21,7 @@ target_include_directories(
   mac_inspect
 
   PUBLIC
+    ${PROJECT_BINARY_DIR}/include
     ${PROJECT_SOURCE_DIR}
 )
 
