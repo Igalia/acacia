@@ -114,6 +114,28 @@ std::vector<std::string> AXAPINode::CopyAttributeNames() const {
   return attributes;
 }
 
+bool AXAPINode::HasAttribute(const CFStringRef attribute) const {
+  ScopedCFTypeRef<CFArrayRef> cf_attributes;
+  AXError err =
+      AXUIElementCopyAttributeNames(ax_ui_element_, cf_attributes.get_ptr());
+  if (err) {
+    throw std::invalid_argument(
+        "Attempting to check for presence of attribute " +
+        CFStringRefToStdString(attribute) + " produced error code " +
+        AXErrorToString(err));
+  }
+  CFIndex num_attributes = CFArrayGetCount(cf_attributes.get());
+  if (num_attributes == 0)
+    return false;
+  return CFArrayContainsValue(cf_attributes.get(),
+                              CFRangeMake(0, num_attributes), attribute) == YES;
+}
+
+bool AXAPINode::HasAttribute(const std::string& attribute) const {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  return HasAttribute(cf_attribute.get());
+}
+
 std::string AXAPINode::CopyStringAttributeValue(
     const std::string& attribute) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
@@ -136,6 +158,24 @@ std::string AXAPINode::CopyStringAttributeValue(
     return "";
 
   return CFStringRefToStdString((CFStringRef)cf_value.get());
+}
+
+int32_t AXAPINode::GetListAttributeValueCount(
+    const std::string& attribute) const {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  if (!HasAttribute(cf_attribute.get()))
+    return 0;
+
+  CFIndex count;
+  AXError err = AXUIElementGetAttributeValueCount(ax_ui_element_,
+                                                  cf_attribute.get(), &count);
+  if (err) {
+    throw std::invalid_argument("Attempting to get value count for attribute " +
+                                attribute + " produced error code " +
+                                AXErrorToString(err));
+  }
+
+  return (int32_t)count;
 }
 
 std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(

@@ -21,7 +21,11 @@ class AXAPINode {
 
   std::vector<std::string> CopyAttributeNames() const;
 
+  bool HasAttribute(const std::string& attribute) const;
+
   std::string CopyStringAttributeValue(const std::string& attribute) const;
+
+  int32_t GetListAttributeValueCount(const std::string& attribute) const;
 
   std::vector<AXAPINode> CopyNodeListAttributeValue(
       const std::string& attribute) const;
@@ -32,6 +36,8 @@ class AXAPINode {
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
   AXUIElementRef ax_ui_element_;
+
+  bool HasAttribute(const CFStringRef attribute) const;
 
   friend class AXAPIContextImpl;
 };

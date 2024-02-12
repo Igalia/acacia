@@ -7,12 +7,10 @@
 
 namespace axa {
 
-using mac_inspect::AXAPINode;
-
 class AXAPINodeImpl : public NodeImpl {
  public:
-  AXAPINodeImpl(AXAPINode axapi_node);
-  ~AXAPINodeImpl();
+  AXAPINodeImpl(mac_inspect::AXAPINode axapi_node);
+  virtual ~AXAPINodeImpl();
 
   std::string Name() override;
   std::string RoleName() override;
@@ -20,7 +18,7 @@ class AXAPINodeImpl : public NodeImpl {
   NodePtr ChildAt(const int32_t index) override;
 
  private:
-  AXAPINode axapi_node_;
+  mac_inspect::AXAPINode axapi_node_;
 };
 
 }  // namespace axa
