@@ -28,7 +28,7 @@ target_include_directories(
 target_link_libraries(
   mac_inspect
 
-  PUBLIC
+  PRIVATE
     ${APPLICATION_SERVICES_FRAMEWORK}
     ${FOUNDATION_FRAMEWORK}
 )
@@ -46,8 +46,8 @@ endif()
 if (AXA_PYTHON_MODULE)
   find_package(Python3 COMPONENTS Interpreter Development)
 
-  include_directories(${Python3_INCLUDE_DIRS})
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+  include_directories(${Python3_INCLUDE_DIRS})
 
   set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
 
