@@ -22,6 +22,9 @@ target_link_libraries(
   PRIVATE
     atspi_inspect
 )
+
+add_subdirectory(atspi)
+
 endif(LINUX)
 
 

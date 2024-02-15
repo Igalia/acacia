@@ -46,23 +46,6 @@ target_link_libraries(
     "${ATSPI2_LIBRARIES}"
 )
 
-add_executable(
-  # Name
-  dump_tree_atspi
-
-  # Sources
-  dump_tree_atspi.cc
-)
-
-target_link_libraries(
-  # Target to link (created above)
-  dump_tree_atspi
-
-  # Items to link into the target
-  PRIVATE
-    atspi_inspect
-)
-
 # SWIG Instructions to build library bindings to different languages
 # (only required if at least one binding is ON).
 
