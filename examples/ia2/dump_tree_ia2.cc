@@ -4,7 +4,6 @@
 #include <string>
 
 #include "include/axaccess/ia2/ia2_node.h"
-#include "include/axaccess/ia2/win_utils.h"
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " <pid>\n";
@@ -27,13 +26,18 @@ int main(int argc, char** argv) {
 
   const int pid = std::stoi(pid_string);
   std::cout << "Got PID: " << pid << "\n";
-  IA2NodePtr root = find_root_accessible_from_pid(pid);
-  if (!root) {
-    std::cerr << "No accessible root found at pid " << pid << "\n";
-    return -1;
-  }
+  // IA2NodePtr root = IA2Node::CreateForPID(pid);
+  // if (!root) {
+  //   std::cerr << "No accessible root found at pid " << pid << "\n";
+  //   return -1;
+  // }
+  // 
+  // std::cout << root->get_accRole();
+  // std::cout << " " << root->ia2_role();
+  // std::cout << " (" << root->get_accName() << ")\n";
 
-  std::cout << root->get_accRole();
-  std::cout << " (" << root->get_accName() << ")\n";
+  // Testing
+  IA2Node::DumpRoleTree(pid);
+
   return 0;
 }
