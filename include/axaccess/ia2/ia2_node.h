@@ -12,12 +12,12 @@ typedef std::unique_ptr<IA2Node> IA2NodePtr;
 class AXA_EXPORT IA2Node {
   // We need to have a point to an IA2 node, I assume, here.
 
-  public:
-    IA2Node() {};
-    ~IA2Node() {};
+ public:
+  IA2Node(){};
+  ~IA2Node(){};
 
-    std::string get_accRole();
-    std::string get_accName();
+  std::string get_accRole();
+  std::string get_accName();
 };
 
-#endif // LIB_IA2_IA2_NODE_H_
+#endif  // LIB_IA2_IA2_NODE_H_

@@ -6,7 +6,7 @@
 #include <axaccess/atspi/linux_utils.h>
 
 void print_usage(std::string& program_name) {
-    std::cout << "Usage: "<< program_name << " <pid>\n";
+  std::cout << "Usage: " << program_name << " <pid>\n";
 }
 
 static void print_node(AtspiNodePtr& node, int level) {
@@ -29,29 +29,29 @@ static void print_node(AtspiNodePtr& node, int level) {
 }
 
 int main(int argc, char** argv) {
-    std::string program_name(argv[0]);
+  std::string program_name(argv[0]);
 
-    if (argc != 2) {
-        print_usage(program_name);
-        return 1;
-    }
+  if (argc != 2) {
+    print_usage(program_name);
+    return 1;
+  }
 
-    std::string pid_string(argv[1]);
-    std::regex number_regex("\\d+");
-    if (!std::regex_match(pid_string, number_regex)) {
-        print_usage(program_name);
-        return 1;
-    }
+  std::string pid_string(argv[1]);
+  std::regex number_regex("\\d+");
+  if (!std::regex_match(pid_string, number_regex)) {
+    print_usage(program_name);
+    return 1;
+  }
 
-    const int pid = std::stoi(pid_string);
-    std::cout << "Got PID: " << pid << "\n";
-    AtspiNodePtr root = find_root_accessible_from_pid(pid);
-    if (!root) {
-      std::cerr << "No accessible root found at pid " << pid << "\n";
-      return -1;
-    }
+  const int pid = std::stoi(pid_string);
+  std::cout << "Got PID: " << pid << "\n";
+  AtspiNodePtr root = find_root_accessible_from_pid(pid);
+  if (!root) {
+    std::cerr << "No accessible root found at pid " << pid << "\n";
+    return -1;
+  }
 
-    print_node(root, 0);
+  print_node(root, 0);
 
-    return 0;
+  return 0;
 }

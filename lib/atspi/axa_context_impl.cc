@@ -1,7 +1,7 @@
-#include <assert.h>
 #include "axa_context_impl.h"
-#include "axa_node_impl.h"
+#include <assert.h>
 #include <axaccess/atspi/linux_utils.h>
+#include "axa_node_impl.h"
 
 namespace axa {
 
@@ -23,4 +23,4 @@ NodePtr AtspiContextImpl::GetAccessibleRootByPID(const int pid) {
   return Node::Create(std::move(rootNodeImpl));
 }
 
-} // namespace axa
+}  // namespace axa

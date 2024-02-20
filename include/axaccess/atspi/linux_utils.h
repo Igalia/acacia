@@ -8,4 +8,4 @@
 
 AtspiNodePtr find_root_accessible_from_pid(const int pid);
 
-#endif // LIB_ATSPI_LINUX_UTILS_H_
+#endif  // LIB_ATSPI_LINUX_UTILS_H_

@@ -6,8 +6,8 @@
 
 namespace axa {
 
-class AtspiContextImpl: public ContextImpl {
-public:
+class AtspiContextImpl : public ContextImpl {
+ public:
   static std::unique_ptr<ContextImpl> Create();
   AtspiContextImpl() = default;
   ~AtspiContextImpl() = default;
@@ -16,4 +16,4 @@ public:
   NodePtr GetAccessibleRootByPID(const int pid) override;
 };
 
-} // namespace axa
+}  // namespace axa
