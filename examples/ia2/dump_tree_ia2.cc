@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
       std::cerr << "No accessible root found at pid " << pid << "\n";
       return -1;
     }
-    
+
     std::cout << root->get_accRole();
     std::cout << " (" << root->get_accName() << ")\n";
     return 0;

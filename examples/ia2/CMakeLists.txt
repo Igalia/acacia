@@ -1,4 +1,4 @@
-# Example C++ executable 
+# Example C++ executable
 add_executable(
   # Name
   dump_tree_ia2

@@ -10,7 +10,7 @@
 //#include "third_party/iaccessible2/ia2_api_all.h"
 
 // Windows system libraries, used for pid/windows/hwnd management.
-#include <windows.h>  
+#include <windows.h>
 #include <tlhelp32.h>
 
 #include <vector>
