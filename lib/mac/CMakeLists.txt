@@ -8,6 +8,8 @@ add_library(
 
   # Sources
   axapi_node.mm
+  axapi_node_impl.cc
+  axapi_context_impl.cc
 )
 
 find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices)
@@ -19,13 +21,14 @@ target_include_directories(
   mac_inspect
 
   PUBLIC
+    ${PROJECT_BINARY_DIR}/include
     ${PROJECT_SOURCE_DIR}
 )
 
 target_link_libraries(
   mac_inspect
 
-  PUBLIC
+  PRIVATE
     ${APPLICATION_SERVICES_FRAMEWORK}
     ${FOUNDATION_FRAMEWORK}
 )
@@ -43,8 +46,8 @@ endif()
 if (AXA_PYTHON_MODULE)
   find_package(Python3 COMPONENTS Interpreter Development)
 
-  include_directories(${Python3_INCLUDE_DIRS})
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+  include_directories(${Python3_INCLUDE_DIRS})
 
   set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
 
@@ -98,14 +101,13 @@ if (AXA_NODEJS_MODULE)
     TARGET axapi_inspect.node
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
-      binding.gyp
       ${CMAKE_CURRENT_BINARY_DIR}/build
       axapi_inspect.node
   )
 
   # Generate `binding.gyp` file for node-gyp
   configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/binding.gyp.in binding.gyp
+    binding.gyp.in binding.gyp
   )
 
   # Generate C++ wrapper for NodeJS

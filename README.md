@@ -95,23 +95,39 @@ The outputs will show up at the same relative path under `build/` as the path to
 
 Currently, we build the executable:
 ```
-% build/lib/mac/dump_tree_mac
+% build/examples/mac/dump_tree_mac
 ```
 
 As well as a python module:
 ```
 % cd build/lib/mac/
-% python
+% python3
 >>> import mac_inspect
+>>> app = mac_inspect.AXAPINode.CreateForPID(12345)
+>>> attribute_names = app.CopyAttributeNames()
+>>> role = app.CopyStringAttributeValue('AXRole')
+>>> title = app.CopyStringAttributeValue('AXTitle')
+>>> children_count = app.GetListAttributeValueCount('AXChildren')
+>>> if children_count > 0:
+...   first_child = app.CopyNodeListAttributeValueAtIndex('AXChildren', 0)
+>>> children = CopyNodeListAttributeValue('AXChildren')
+>>> if first_child.HasAttribute('AXRoleDescription)
+...   role_description = first_child.CopyStringAttributeValue('AXRoleDescription')
 ```
 
 And a node C++ add-on:
 ```
 % cd build/lib/mac/
 % node
->>> const axapi_inspect = require("./axapi_inspect");
->>> let node = axapi_inspect.AXAPINode.createForPID(8077)
->>> node.GetRole()
+> const axapi_inspect = require("./axapi_inspect");
+> let app = axapi_inspect.AXAPINode.CreateForPID(12345);
+> const title = app.CopyStringAttributeValue('AXTitle');
+> let children_count = 0;
+> if (app.HasAttribute('AXChildren'))
+... children_count = app.GetListAttributeValueCount('AXChildren');
+> let first_child;
+> if (children_count > 0)
+... first_child = app.CopyNodeListAttributeValueAtIndex('AXChildren', 0);
 ```
 
 ### On Windows

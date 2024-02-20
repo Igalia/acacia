@@ -70,10 +70,15 @@ endif(LINUX)
 if(APPLE)
   target_compile_definitions(
     axaccess
-    PUBLIC -DAXA_API_AXUI
+    PUBLIC -DAXA_API_AXAPI
   )
 
   add_subdirectory(mac)
+  target_link_libraries(
+    axaccess
+    PRIVATE
+      mac_inspect
+  )
 endif(APPLE)
 
 if(WIN32)

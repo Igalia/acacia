@@ -3,32 +3,45 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace mac_inspect {
 
-class AXAPINode;
-typedef std::unique_ptr<AXAPINode> AXAPINodePtr;
+class AXAPIContextImpl;
 
 class AXAPINode {
  public:
-  ~AXAPINode() = default;
+  AXAPINode();
+  AXAPINode(const AXAPINode& other);
+  ~AXAPINode();
 
-  static AXAPINodePtr createForPID(long pid);
+  AXAPINode& operator=(AXAPINode other);
 
-  std::string GetRole();
-  std::string GetTitle();
-  std::vector<std::string> GetAttributeNames();
-  std::string GetStringAttributeValue(std::string& attribute_name);
-  long GetChildCount();
-  AXAPINodePtr GetChildAt(long index);
+  static AXAPINode CreateForPID(int pid);
+
+  std::vector<std::string> CopyAttributeNames() const;
+
+  bool HasAttribute(const std::string& attribute) const;
+
+  std::string CopyStringAttributeValue(const std::string& attribute) const;
+
+  int GetListAttributeValueCount(const std::string& attribute) const;
+
+  std::vector<AXAPINode> CopyNodeListAttributeValue(
+      const std::string& attribute) const;
+
+  AXAPINode CopyNodeListAttributeValueAtIndex(const std::string& attribute,
+                                              int index) const;
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
-  AXUIElementRef ax_ui_element_;
+  AXUIElementRef ax_ui_element_{NULL};
+
+  bool HasAttribute(const CFStringRef attribute) const;
+
+  friend class AXAPIContextImpl;
 };
 
 }  // namespace mac_inspect

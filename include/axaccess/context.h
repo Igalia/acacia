@@ -9,13 +9,14 @@ namespace axa {
 
 enum APIType {
   UNKNOWN,
-  ATSPI,        // Linux
-  AXUI,         // MacOS
-  IACCESSIBLE2, // Windows
+  ATSPI,         // Linux
+  AXAPI,         // MacOS
+  IACCESSIBLE2,  // Windows
 };
 
 class ContextImpl {
-public:
+ public:
+  virtual ~ContextImpl(){};
   virtual enum APIType GetAPIType() = 0;
   virtual NodePtr GetAccessibleRootByPID(int pid) = 0;
 };
