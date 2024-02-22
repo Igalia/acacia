@@ -1,6 +1,8 @@
 #include "axa_context_impl.h"
+
 #include <assert.h>
 #include <axaccess/atspi/linux_utils.h>
+
 #include "axa_node_impl.h"
 
 namespace axa {

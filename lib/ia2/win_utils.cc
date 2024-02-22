@@ -1,6 +1,9 @@
+#include "axaccess/ia2/win_utils.h"
+
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <vector>
 
 // We will need these for windows related things, see the formatter_win.cc in
 // chromium
@@ -14,10 +17,6 @@
 // Windows system libraries, used for pid/windows/hwnd management.
 #include <tlhelp32.h>
 #include <windows.h>
-
-#include <vector>
-
-#include "axaccess/ia2/win_utils.h"
 
 void GetAllWindowsFromProcessID(DWORD dwProcessID, std::vector<HWND>& hwnds) {
   HWND hCurWnd = nullptr;

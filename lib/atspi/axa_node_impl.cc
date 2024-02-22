@@ -1,4 +1,5 @@
 #include "axa_node_impl.h"
+
 #include <assert.h>
 
 namespace axa {

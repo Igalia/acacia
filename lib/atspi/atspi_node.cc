@@ -1,5 +1,6 @@
-#include <assert.h>
 #include <axaccess/atspi/atspi_node.h>
+
+#include <assert.h>
 #include <iostream>
 #include <ostream>
 #include <string>
