@@ -14,6 +14,12 @@ For NodeJS module (optional):
 
 These bindings dependencies are on my default. See *Feature Flags* section below for how to disable them.
 
+For `pre-commit`:
+* `pip install pre-commit`
+* `pip install clang-format`
+* `pre-commit install`
+
+
 #### Build steps
 ```
 % mkdir build
@@ -79,6 +85,11 @@ For the nodeJS bindings, you will need to download and build node-gyp app and pu
 ```
 npm install -g node-gyp
 ```
+
+For `pre-commit`:
+* `pip install pre-commit`
+* `pip install clang-format`
+* `pre-commit install`
 
 #### Build steps
 
