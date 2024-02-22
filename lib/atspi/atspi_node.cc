@@ -1,8 +1,9 @@
+#include <axaccess/atspi/atspi_node.h>
+
 #include <assert.h>
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <axaccess/atspi/atspi_node.h>
 
 AtspiNode::~AtspiNode() {
   assert(accessible_);
@@ -42,13 +43,13 @@ int32_t AtspiNode::accessible_get_child_count() {
     g_error_free(error);
     return -1;
   }
-  return (int32_t) count;
+  return (int32_t)count;
 }
 
 AtspiNodePtr AtspiNode::accessible_get_child_at_index(int32_t index) {
   GError* error = nullptr;
   AtspiAccessible* child =
-    atspi_accessible_get_child_at_index(accessible_, index, &error);
+      atspi_accessible_get_child_at_index(accessible_, index, &error);
   if (error) {
     std::cerr << error->message;
     g_error_free(error);

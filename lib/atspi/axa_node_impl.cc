@@ -1,11 +1,11 @@
-#include <assert.h>
 #include "axa_node_impl.h"
+
+#include <assert.h>
 
 namespace axa {
 
-AtspiNodeImpl::AtspiNodeImpl(AtspiNodePtr& aAtspiNode):
-  atspiNode(std::move(aAtspiNode)) {
-}
+AtspiNodeImpl::AtspiNodeImpl(AtspiNodePtr& aAtspiNode)
+    : atspiNode(std::move(aAtspiNode)) {}
 
 AtspiNodeImpl::~AtspiNodeImpl() {
   atspiNode.reset();
@@ -38,4 +38,4 @@ NodePtr AtspiNodeImpl::ChildAt(const int32_t index) {
   return Node::Create(std::move(nodeImpl));
 }
 
-} // namespace axa
+}  // namespace axa

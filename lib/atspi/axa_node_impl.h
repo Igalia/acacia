@@ -6,8 +6,8 @@
 
 namespace axa {
 
-class AtspiNodeImpl: public NodeImpl {
-public:
+class AtspiNodeImpl : public NodeImpl {
+ public:
   static std::unique_ptr<NodeImpl> Create(AtspiNodePtr& atspiNode);
   AtspiNodeImpl(AtspiNodePtr& atspiNode);
   ~AtspiNodeImpl();
@@ -21,4 +21,4 @@ public:
   AtspiNodePtr atspiNode;
 };
 
-} // namespace axa
+}  // namespace axa

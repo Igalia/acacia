@@ -7,7 +7,7 @@
 #include <axaccess/axaccess.h>
 
 void print_usage(std::string& program_name) {
-    std::cout << "Usage: "<< program_name << " <pid>\n";
+  std::cout << "Usage: " << program_name << " <pid>\n";
 }
 
 static void print_node(axa::NodePtr& node, int level) {

@@ -4,9 +4,7 @@
 
 namespace axa {
 
-Node::Node(std::unique_ptr<NodeImpl> aImpl):
-  impl(std::move(aImpl)) {
-}
+Node::Node(std::unique_ptr<NodeImpl> aImpl) : impl(std::move(aImpl)) {}
 
 Node::~Node() {
   impl.reset();
@@ -33,4 +31,4 @@ NodePtr Node::ChildAt(const int32_t index) {
   return impl->ChildAt(index);
 }
 
-} // namespace axa
+}  // namespace axa
