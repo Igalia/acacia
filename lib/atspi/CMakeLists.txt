@@ -28,6 +28,11 @@ pkg_check_modules(
   # Module name
   "atspi-2")
 
+add_dependencies(
+  atspi_inspect
+  pub_headers
+)
+
 # With this, we can #include "atspi/atspi.h"
 target_include_directories(
   atspi_inspect
