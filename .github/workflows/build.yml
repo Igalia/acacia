@@ -1,0 +1,17 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: sudo apt install cmake libatspi2.0-dev swig python3-dev swig node-gyp
+      - name: Build
+        run: mkdir build && cd build && cmake .. --fresh && make
