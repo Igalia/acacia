@@ -260,22 +260,16 @@ std::string IA2RoleToString(LONG role) {
 }
 
 std::string IA2Node::get_accRole() {
-  VARIANT variant_self;
-  variant_self.intVal = CHILDID_SELF;
-  variant_self.vt = VT_I4;
   VARIANT ia_role_variant;
-  if (SUCCEEDED(root_->get_accRole(variant_self, &ia_role_variant))) {
+  if (SUCCEEDED(root_->get_accRole(child_id_, &ia_role_variant))) {
     return RoleToString(ia_role_variant.lVal);
   }
   return "";
 }
 
 std::string IA2Node::get_accName() {
-  VARIANT variant_self;
-  variant_self.intVal = CHILDID_SELF;
-  variant_self.vt = VT_I4;
   BSTR bstr_name;
-  if (SUCCEEDED(root_->get_accName(variant_self, &bstr_name))) {
+  if (SUCCEEDED(root_->get_accName(child_id_, &bstr_name))) {
     std::string str_name = BstrToString(bstr_name);
     SysFreeString(bstr_name);
     return str_name;
@@ -288,20 +282,11 @@ std::string IA2Node::ia2_role() {
 
   Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
   HRESULT hr = root_->QueryInterface(IID_PPV_ARGS(&service_provider));
+  hr = service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&ia2));
 
-  if (FAILED(hr)) {
-    std::cout << "--Failed QueryInterface--";
-  } else {
-    hr = service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&ia2));
-    if (FAILED(hr)) {
-      std::cout << "--Failed QueryService--";
-    }
-  }
-
-  if (hr == E_INVALIDARG) {
-    std::cout << "--E_INVALIDARG--";
-  }
-
+  // To do: for objects outside of "OBJID_CLIENT", IA2 is not implemented.
+  // We will get hr == E_INVALIDARG. However, we would still like to get
+  // MSAA the role and name. Fail silently for now.
   if (hr == S_OK) {
     LONG role = 0;
     if (SUCCEEDED(ia2->role(&role))) {
@@ -311,116 +296,53 @@ std::string IA2Node::ia2_role() {
   return "";
 }
 
-void printRoles(Microsoft::WRL::ComPtr<IAccessible> root) {
-  // Accname
-  VARIANT variant_self;
-  variant_self.intVal = CHILDID_SELF;
-  variant_self.vt = VT_I4;
-  BSTR bstr_name;
-  if (SUCCEEDED(root->get_accName(variant_self, &bstr_name))) {
-    std::string str_name = BstrToString(bstr_name);
-    SysFreeString(bstr_name);
-    std::cout << str_name;
-  }
-
-  // MSAA role
-  VARIANT ia_role_variant;
-  if (SUCCEEDED(root->get_accRole(variant_self, &ia_role_variant))) {
-    std::cout << " {MSAA: " << RoleToString(ia_role_variant.lVal) << "} ";
-  }
-
-  // Try to get IA2 role
-  std::cout << "{IA2 Role: ";
-  Microsoft::WRL::ComPtr<IAccessible2> ia2;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr = root->QueryInterface(IID_PPV_ARGS(&service_provider));
-  if (FAILED(hr)) {
-    std::cout << "- Failed QueryInterface ";
-  } else {
-    hr = service_provider->QueryService(IID_IAccessible2, IID_PPV_ARGS(&ia2));
-    ;
-    if (FAILED(hr)) {
-      std::cout << "- Failed QueryService ";
-    }
-  }
-  if (hr == E_INVALIDARG) {
-    std::cout << "with E_INVALIDARG";
-  }
-  if (hr == S_OK) {
-    LONG role = 0;
-    if (SUCCEEDED(ia2->role(&role))) {
-      std::cout << IA2RoleToString(role);
-    }
-  }
-  std::cout << "}\n";
-}
-
-// this function is for testing purposes only.
-// https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-accessiblechildren
-void printAllRolesFromTree(Microsoft::WRL::ComPtr<IAccessible> root,
-                           int depth) {
-  long childCount;
-  long returnCount;
+long IA2Node::get_accChildCount() {
+  long child_count;
   HRESULT hr;
 
-  hr = root->get_accChildCount(&childCount);
+  if (child_id_.intVal != CHILDID_SELF) {
+    return 0;
+  }
+
+  hr = root_->get_accChildCount(&child_count);
   if (FAILED(hr)) {
     std::cout << " - get_accChildCount failed.\n";
-    return;
+    return 0;
   }
-  if (childCount == 0) {
-    return;
-  }
-
-  VARIANT* pArray = new VARIANT[childCount];
-  hr = AccessibleChildren(root.Get(), 0L, childCount, pArray, &returnCount);
-  if (FAILED(hr)) {
-    std::cout << " - AccessibleChildren failed.\n";
-  };
-
-  // Iterate through children.
-  for (int x = 0; x < returnCount; x++) {
-    for (int y = 0; y < depth; y++) {
-      printf("  ");
-    }
-    VARIANT vtChild = pArray[x];
-    // If it's an accessible object, get the IAccessible, and recurse.
-    if (vtChild.vt == VT_DISPATCH) {
-      IDispatch* pDisp = vtChild.pdispVal;
-      IAccessible* pChild = NULL;
-      hr = pDisp->QueryInterface(IID_IAccessible, (void**)&pChild);
-      if (hr == S_OK) {
-        printRoles(pChild);
-        printAllRolesFromTree(pChild, depth + 1);
-      }
-      pDisp->Release();
-    }
-    // What is this concept?
-    else {
-      BSTR bstr_name;
-      root->get_accName(vtChild, &bstr_name);
-      std::cout << BstrToString(bstr_name);
-      SysFreeString(bstr_name);
-
-      VARIANT ia_role_variant;
-      root->get_accRole(vtChild, &ia_role_variant);
-      std::cout << " {MSAA: " << RoleToString(ia_role_variant.lVal) << "}\n";
-      VariantClear(&ia_role_variant);
-    }
-  }
-  delete[] pArray;
-  return;
+  return child_count;
 }
 
-// this function is for testing purposes only.
-void IA2Node::DumpRoleTree(const int pid) {
-  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleFromProcessID(pid);
-  if (!root) {
-    return;
+IA2NodePtr IA2Node::AccessibleChildAt(int index) {
+  if (child_id_.intVal != CHILDID_SELF) {
+    return nullptr;
   }
 
-  // JUST A TEST: see if any child implements IAccessible2?
-  printAllRolesFromTree(root, 0);
+  VARIANT* children = new VARIANT[1];
+  HRESULT hr;
+  long returnCount;
+  hr = AccessibleChildren(root_.Get(), index, 1, children, &returnCount);
+  if (returnCount != 1) {
+    std::cerr << "No child";
+    return nullptr;
+  }
+  VARIANT vt_child = children[0];
+
+  if (vt_child.vt == VT_DISPATCH) {
+    IDispatch* pdisp = vt_child.pdispVal;
+    IAccessible* accessible = NULL;
+    hr = pdisp->QueryInterface(IID_IAccessible, (void**)&accessible);
+    pdisp->Release();
+    if (hr == S_OK) {
+      return std::make_unique<IA2Node>(IA2Node(accessible));
+    } else {
+      std::cerr << "No IAccessible2 iterface";
+      return nullptr;
+    }
+  }
+  // This is a "partial child", which can have a name and role but not much else
+  else {
+    return std::make_unique<IA2Node>(IA2Node(root_, vt_child));
+  }
 }
 
 IA2NodePtr IA2Node::CreateForPID(const int pid) {
