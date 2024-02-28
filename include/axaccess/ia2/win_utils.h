@@ -3,16 +3,23 @@
 
 #include <memory>
 #include <string>
+
 #include <oleacc.h>
 #include <wrl/client.h>
 
 #include "axaccess/export.h"
 
-AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleFromProcessID(DWORD dwProcessID);
+namespace win_utils {
+
+AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleFromProcessID(
+    DWORD dwProcessID);
 
 AXA_EXPORT std::string nameFromHwnd(HWND hwnd);
 
 AXA_EXPORT std::string BstrToString(BSTR bstr);
 
+AXA_EXPORT std::string HResultErrorToString(HRESULT err);
+
+}  // namespace win_utils
 
 #endif  // LIB_IA2_WIN_UTILS_H_

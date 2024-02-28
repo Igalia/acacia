@@ -1,13 +1,17 @@
 #include "axaccess/ia2/ia2_node.h"
 
-#include <assert.h>
 #include <iostream>
-#include <ostream>
+#include <stdexcept>
 #include <string>
+
 #include "axaccess/ia2/ia2_api_all.h"
 #include "axaccess/ia2/win_utils.h"
 
-std::string RoleToString(LONG role) {
+using namespace win_utils;
+
+namespace {
+
+std::string MSAARoleToString(LONG role) {
   switch (role) {
     case ROLE_SYSTEM_TITLEBAR:
       return "ROLE_SYSTEM_TITLEBAR";
@@ -143,7 +147,7 @@ std::string RoleToString(LONG role) {
 }
 
 std::string IA2RoleToString(LONG role) {
-  std::string msaa_role = RoleToString(role);
+  std::string msaa_role = MSAARoleToString(role);
   if (!msaa_role.empty()) {
     return msaa_role;
   }
@@ -258,11 +262,21 @@ std::string IA2RoleToString(LONG role) {
       return "";
   }
 }
+}  // Namespace
+
+IA2NodePtr IA2Node::CreateForPID(const int pid) {
+  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleFromProcessID(pid);
+  if (!root) {
+    return nullptr;
+  }
+
+  return std::make_unique<IA2Node>(IA2Node(root));
+}
 
 std::string IA2Node::get_accRole() {
   VARIANT ia_role_variant;
   if (SUCCEEDED(root_->get_accRole(child_id_, &ia_role_variant))) {
-    return RoleToString(ia_role_variant.lVal);
+    return MSAARoleToString(ia_role_variant.lVal);
   }
   return "";
 }
@@ -277,6 +291,8 @@ std::string IA2Node::get_accName() {
   return "";
 }
 
+// TODO: Break these out to it's own IAccessible2 wrapper object. #94
+// Additionally, getting the interface should be it's own utility function.
 std::string IA2Node::ia2_role() {
   Microsoft::WRL::ComPtr<IAccessible2> ia2;
 
@@ -284,7 +300,7 @@ std::string IA2Node::ia2_role() {
   HRESULT hr = root_->QueryInterface(IID_PPV_ARGS(&service_provider));
   hr = service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&ia2));
 
-  // To do: for objects outside of "OBJID_CLIENT", IA2 is not implemented.
+  // TODO: for objects outside of "OBJID_CLIENT", IA2 is not implemented.
   // We will get hr == E_INVALIDARG. However, we would still like to get
   // MSAA the role and name. Fail silently for now.
   if (hr == S_OK) {
@@ -297,17 +313,17 @@ std::string IA2Node::ia2_role() {
 }
 
 long IA2Node::get_accChildCount() {
+  if (child_id_.intVal != CHILDID_SELF)
+    return 0;
+
   long child_count;
   HRESULT hr;
 
-  if (child_id_.intVal != CHILDID_SELF) {
-    return 0;
-  }
-
   hr = root_->get_accChildCount(&child_count);
   if (FAILED(hr)) {
-    std::cout << " - get_accChildCount failed.\n";
-    return 0;
+    throw std::invalid_argument(
+        "Attempting to get accessible child count produced error code " +
+        HResultErrorToString(hr));
   }
   return child_count;
 }
@@ -317,39 +333,32 @@ IA2NodePtr IA2Node::AccessibleChildAt(int index) {
     return nullptr;
   }
 
-  VARIANT* children = new VARIANT[1];
+  std::unique_ptr<VARIANT[]> children(new VARIANT[1]);
   HRESULT hr;
   long returnCount;
-  hr = AccessibleChildren(root_.Get(), index, 1, children, &returnCount);
-  if (returnCount != 1) {
-    std::cerr << "No child";
-    return nullptr;
+  hr = AccessibleChildren(root_.Get(), index, 1, children.get(), &returnCount);
+  if (hr != S_OK) {
+    throw std::invalid_argument(
+        "Attempting to get accessible child at index " + std::to_string(index) +
+        " produced error code " + HResultErrorToString(hr));
   }
   VARIANT vt_child = children[0];
 
-  if (vt_child.vt == VT_DISPATCH) {
-    IDispatch* pdisp = vt_child.pdispVal;
-    IAccessible* accessible = NULL;
-    hr = pdisp->QueryInterface(IID_IAccessible, (void**)&accessible);
-    pdisp->Release();
-    if (hr == S_OK) {
-      return std::make_unique<IA2Node>(IA2Node(accessible));
-    } else {
-      std::cerr << "No IAccessible2 iterface";
-      return nullptr;
-    }
-  }
-  // This is a "partial child", which can have a name and role but not much else
-  else {
+  if (vt_child.vt != VT_DISPATCH) {
+    // This is a "partial child", which can have a name and role but not much
+    // else
     return std::make_unique<IA2Node>(IA2Node(root_, vt_child));
   }
-}
 
-IA2NodePtr IA2Node::CreateForPID(const int pid) {
-  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleFromProcessID(pid);
-  if (!root) {
-    return nullptr;
+  IDispatch* pdisp = vt_child.pdispVal;
+  IAccessible* accessible = NULL;
+  hr = pdisp->QueryInterface(IID_IAccessible, (void**)&accessible);
+  pdisp->Release();
+  if (hr != S_OK) {
+    throw std::invalid_argument(
+        "Attempting to get IAccessible interface for child at index " +
+        std::to_string(index) + " produced error code " +
+        HResultErrorToString(hr));
   }
-
-  return std::make_unique<IA2Node>(IA2Node(root));
+  return std::make_unique<IA2Node>(IA2Node(accessible));
 }

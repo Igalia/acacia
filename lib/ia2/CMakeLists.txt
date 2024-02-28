@@ -30,6 +30,7 @@ target_include_directories(
 
 target_link_libraries(
   ia2_inspect
+
   oleacc
   iaccessible2
 )
@@ -41,4 +42,3 @@ target_compile_definitions(
     # case all AXA_EXPORTS will result in a dllexport statement.
     axaccess_EXPORTS
 )
-

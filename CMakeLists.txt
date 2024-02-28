@@ -6,10 +6,16 @@ include(CMakePrintHelpers)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_OBJCXX_STANDARD 17)
 
+if(WIN32)
+  set(PROJECT_LANGUAGES CXX C)
+else()
+  set(PROJECT_LANGUAGES CXX)
+endif()
+
 project(
   axaccess
   VERSION 1.0
-  LANGUAGES C CXX
+  LANGUAGES ${PROJECT_LANGUAGES}
 )
 
 # Use absolute paths for #includes

@@ -4,21 +4,16 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "axaccess/export.h"
 
 #include <oleacc.h>
 #include <wrl/client.h>
+
+#include "axaccess/export.h"
 
 class IA2Node;
 typedef std::unique_ptr<IA2Node> IA2NodePtr;
 
 class AXA_EXPORT IA2Node {
-  Microsoft::WRL::ComPtr<IAccessible> root_;
-  // This varient is used to recieve IAccessible
-  // information about either the accessible object itsself,
-  // or it's partial child.
-  VARIANT child_id_;
-
  public:
   IA2Node(Microsoft::WRL::ComPtr<IAccessible> root, VARIANT child_id)
       : root_(root), child_id_(child_id){};
@@ -39,6 +34,14 @@ class AXA_EXPORT IA2Node {
 
   long IA2Node::get_accChildCount();
   IA2NodePtr IA2Node::AccessibleChildAt(int index);
+
+ private:
+  Microsoft::WRL::ComPtr<IAccessible> root_;
+  // This variant is used to recieve IAccessible
+  // information about either the accessible object itself,
+  // or its partial child.
+  // TODO: Create own type for partial children. #95
+  VARIANT child_id_;
 };
 
 #endif  // LIB_IA2_IA2_NODE_H_

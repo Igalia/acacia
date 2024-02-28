@@ -1,20 +1,17 @@
 #include "axaccess/ia2/win_utils.h"
 
 #include <stdlib.h>
-#include <tlhelp32.h>
-#include <windows.h>
-#include <winuser.h>
 #include <iostream>
-#include <ostream>
 #include <string>
 #include <vector>
 
+#include <tlhelp32.h>
+#include <windows.h>
+#include <winuser.h>
+
 #include "axaccess/ia2/ia2_api_all.h"
 
-// We will need these for windows related things, see the formatter_win.cc in
-// chromium
-// #include <oleacc.h>
-// #include <wrl/client.h>
+namespace win_utils {
 
 std::string nameFromHwnd(HWND hwnd) {
   int length = ::GetWindowTextLength(hwnd);
@@ -22,8 +19,7 @@ std::string nameFromHwnd(HWND hwnd) {
     return "";
   }
   std::string title(length + 1, '\0');
-  int actual_length =
-      ::GetWindowText(hwnd, (LPSTR)&title.front(), title.size());
+  int actual_length = ::GetWindowText(hwnd, (LPSTR)title.data(), title.size());
   if (length > actual_length)
     title.erase(actual_length);
   return title;
@@ -74,3 +70,32 @@ std::string BstrToString(BSTR bstr) {
                       nullptr);
   return str;
 }
+
+std::string HResultErrorToString(HRESULT err) {
+  switch (err) {
+    case E_NOTIMPL:
+      return "E_NOTIMPL";
+    case E_NOINTERFACE:
+      return "E_NOINTERFACE";
+    case E_POINTER:
+      return "E_POINTER";
+    case E_ABORT:
+      return "E_ABORT";
+    case E_FAIL:
+      return "E_FAIL";
+    case E_UNEXPECTED:
+      return "E_UNEXPECTED";
+    case E_ACCESSDENIED:
+      return "E_ACCESSDENIED";
+    case E_HANDLE:
+      return "E_HANDLE";
+    case E_OUTOFMEMORY:
+      return "E_OUTOFMEMORY";
+    case E_INVALIDARG:
+      return "E_INVALIDARG";
+    // TODO: test this
+    default:
+      return std::to_string(err);
+  }
+}
+}  // namespace win_utils
