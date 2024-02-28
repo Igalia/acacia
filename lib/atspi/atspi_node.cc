@@ -35,7 +35,7 @@ std::string AtspiNode::accessible_get_name() {
   return name;
 }
 
-int32_t AtspiNode::accessible_get_child_count() {
+int AtspiNode::accessible_get_child_count() {
   GError* error = nullptr;
   gint count = atspi_accessible_get_child_count(accessible_, &error);
   if (error) {
@@ -46,7 +46,7 @@ int32_t AtspiNode::accessible_get_child_count() {
   return (int32_t)count;
 }
 
-AtspiNodePtr AtspiNode::accessible_get_child_at_index(int32_t index) {
+AtspiNodePtr AtspiNode::accessible_get_child_at_index(int index) {
   GError* error = nullptr;
   AtspiAccessible* child =
       atspi_accessible_get_child_at_index(accessible_, index, &error);

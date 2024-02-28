@@ -70,6 +70,18 @@ And a NodeJS module `atspi_inspect.node`.
 * Python3 bindings: `-DAXA_PYTHON_MODULE=<ON/OFF>`, ON by default.
 * NodeJS bindings: `-DAXA_NODEJS_MODULE=<ON/OFF>`, ON by default.
 
+#### Examples
+
+An `examples/atspi` folder will be created under the build directory
+containing example programs that show how the API can be used.
+
+* *dump_tree_atspi*: Dumps the accessible tree of a running application given
+                     its process ID. For now it shows only Role and Name of
+                     each node.
+                     If NodeJS bindings feature is enabled, there is also a
+                     `dump_tree_atspi.js` program which can be run as
+                     `nodejs examples/atspi/dump_tree_atspi.js <pid>`.
+
 ### On Mac
 
 #### Dependencies

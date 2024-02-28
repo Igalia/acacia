@@ -19,8 +19,8 @@ class AtspiNode {
 
   std::string accessible_get_role_name();
   std::string accessible_get_name();
-  int32_t accessible_get_child_count();
-  AtspiNodePtr accessible_get_child_at_index(int32_t index);
+  int accessible_get_child_count();
+  AtspiNodePtr accessible_get_child_at_index(int index);
   std::vector<AtspiNodePtr> accessible_get_children();
 };
 
