@@ -191,3 +191,14 @@ Currently produces the following executable:
 ```
 ./build/bin/Release/dump_tree_ia2.exe <pid>
 ```
+
+## Experimental features
+
+### Cross-platform API
+
+This is a native C++ library that will eventually abstract the other, platform-specifc APIs, so that developers can target a single API regardless
+of that provided by the platform. This may be useful for some use-cases (e.g, to dump the accessible tree of an
+application in a cross-platform way).
+
+The feature is governed by the feature flag `AXA_LIBAXACCESS`, currently OFF by default. To enable it,
+simply pass `-DAXA_LIBAXACCESS=ON` to cmake.
