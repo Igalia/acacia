@@ -19,8 +19,18 @@ project(
 )
 
 # Use absolute paths for #includes
-SET(BASEPATH "${CMAKE_SOURCE_DIR}")
-INCLUDE_DIRECTORIES("${BASEPATH}")
+set(BASEPATH "${CMAKE_SOURCE_DIR}")
+include_directories("${BASEPATH}")
+
+# Public headers
+file(
+  COPY ${PROJECT_SOURCE_DIR}/include 
+  DESTINATION ${PROJECT_BINARY_DIR}
+)
+
+include_directories(
+    ${PROJECT_BINARY_DIR}/include
+)
 
 # On windows, put all of the resulting libraries and executables in
 # `build/bin/<CONFIG>` where CONFIG is Debug, Release, etc, because

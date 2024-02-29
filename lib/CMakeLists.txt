@@ -1,20 +1,7 @@
-# Public headers
-
-add_custom_target(
-  pub_headers
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
-  VERBATIM
-)
-
 # Main library (libaxaccess.so)
 add_library(
   axaccess
   SHARED
-)
-
-add_dependencies(
-  axaccess
-  pub_headers
 )
 
 set(
@@ -31,6 +18,7 @@ generate_export_header(
   BASE_NAME axa
   EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/axaccess/export.h
 )
+
 target_compile_definitions(
   axaccess
   PRIVATE
