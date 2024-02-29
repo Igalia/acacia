@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "axaccess/ia2/win_utils.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
@@ -264,41 +265,52 @@ std::string IA2RoleToString(LONG role) {
 }
 }  // Namespace
 
-IA2NodePtr IA2Node::CreateRootForName(const std::string& app_name,
-                                      const int pid) {
+IA2Node IA2Node::CreateRootForName(const std::string& app_name, const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
   if (!root) {
     return nullptr;
   }
 
-  return std::make_unique<IA2Node>(IA2Node(root));
+  return IA2Node(root);
 }
 
-IA2NodePtr IA2Node::CreateRootForPID(const int pid) {
+IA2Node IA2Node::CreateRootForPID(const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
   if (!root) {
     return nullptr;
   }
 
-  return std::make_unique<IA2Node>(IA2Node(root));
+  return IA2Node(root);
+}
+
+bool IA2Node::IsNull() {
+  if (!root_)
+    return true;
+  return false;
 }
 
 std::string IA2Node::get_accRole() {
   VARIANT ia_role_variant;
-  if (SUCCEEDED(root_->get_accRole(child_id_, &ia_role_variant))) {
-    return MSAARoleToString(ia_role_variant.lVal);
+  HRESULT hr = root_->get_accRole(child_id_, &ia_role_variant);
+  if (FAILED(hr)) {
+    throw std::runtime_error(
+        "Attempting to call get_accRole produced error code " +
+        HResultErrorToString(hr));
   }
-  return "";
+  return MSAARoleToString(ia_role_variant.lVal);
 }
 
 std::string IA2Node::get_accName() {
   BSTR bstr_name;
-  if (SUCCEEDED(root_->get_accName(child_id_, &bstr_name))) {
-    std::string str_name = BstrToString(bstr_name);
-    SysFreeString(bstr_name);
-    return str_name;
+  HRESULT hr = root_->get_accName(child_id_, &bstr_name);
+  if (FAILED(hr)) {
+    throw std::runtime_error(
+        "Attempting to call get_accName produced error code " +
+        HResultErrorToString(hr));
   }
-  return "";
+  std::string str_name = BstrToString(bstr_name);
+  SysFreeString(bstr_name);
+  return str_name;
 }
 
 // TODO: Break these out to it's own IAccessible2 wrapper object. #94
@@ -331,44 +343,46 @@ long IA2Node::get_accChildCount() {
 
   hr = root_->get_accChildCount(&child_count);
   if (FAILED(hr)) {
-    throw std::invalid_argument(
+    throw std::runtime_error(
         "Attempting to get accessible child count produced error code " +
         HResultErrorToString(hr));
   }
   return child_count;
 }
 
-IA2NodePtr IA2Node::AccessibleChildAt(int index) {
+IA2Node IA2Node::AccessibleChildAt(int index) {
   if (child_id_.intVal != CHILDID_SELF) {
-    return nullptr;
+    return IA2Node();
   }
 
   std::unique_ptr<VARIANT[]> children(new VARIANT[1]);
   HRESULT hr;
   long returnCount;
-  hr = AccessibleChildren(root_.Get(), index, 1, children.get(), &returnCount);
-  if (hr != S_OK) {
-    throw std::invalid_argument(
-        "Attempting to get accessible child at index " + std::to_string(index) +
-        " produced error code " + HResultErrorToString(hr));
+  hr =
+      ::AccessibleChildren(root_.Get(), index, 1, children.get(), &returnCount);
+  if (FAILED(hr)) {
+    throw std::runtime_error("Attempting to get accessible child at index " +
+                             std::to_string(index) + " produced error code " +
+                             HResultErrorToString(hr));
   }
   VARIANT vt_child = children[0];
 
   if (vt_child.vt != VT_DISPATCH) {
     // This is a "partial child", which can have a name and role but not much
     // else
-    return std::make_unique<IA2Node>(IA2Node(root_, vt_child));
+    return IA2Node(root_, vt_child);
   }
 
   IDispatch* pdisp = vt_child.pdispVal;
-  IAccessible* accessible = NULL;
-  hr = pdisp->QueryInterface(IID_IAccessible, (void**)&accessible);
+  Microsoft::WRL::ComPtr<IAccessible> accessible;
+  hr =
+      pdisp->QueryInterface(IID_IAccessible, (void**)accessible.GetAddressOf());
   pdisp->Release();
-  if (hr != S_OK) {
-    throw std::invalid_argument(
+  if (FAILED(hr)) {
+    throw std::runtime_error(
         "Attempting to get IAccessible interface for child at index " +
         std::to_string(index) + " produced error code " +
         HResultErrorToString(hr));
   }
-  return std::make_unique<IA2Node>(IA2Node(accessible));
+  return IA2Node(accessible);
 }

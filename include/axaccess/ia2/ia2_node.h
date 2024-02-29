@@ -10,11 +10,9 @@
 
 #include "axaccess/export.h"
 
-class IA2Node;
-typedef std::unique_ptr<IA2Node> IA2NodePtr;
-
 class AXA_EXPORT IA2Node {
  public:
+  IA2Node(){};
   IA2Node(Microsoft::WRL::ComPtr<IAccessible> root, VARIANT child_id)
       : root_(root), child_id_(child_id){};
   IA2Node(Microsoft::WRL::ComPtr<IAccessible> root) : root_(root) {
@@ -23,12 +21,10 @@ class AXA_EXPORT IA2Node {
   };
   ~IA2Node(){};
 
-  static IA2NodePtr CreateRootForName(const std::string& name,
-                                      const int pid = 0);
-  static IA2NodePtr CreateRootForPID(const int pid);
+  static IA2Node CreateRootForName(const std::string& name, const int pid = 0);
+  static IA2Node CreateRootForPID(const int pid);
 
-  // testing
-  static void DumpRoleTree(const int pid);
+  bool IsNull();
 
   std::string get_accRole();
   std::string get_accName();
@@ -36,7 +32,7 @@ class AXA_EXPORT IA2Node {
   std::string ia2_role();
 
   long IA2Node::get_accChildCount();
-  IA2NodePtr IA2Node::AccessibleChildAt(int index);
+  IA2Node IA2Node::AccessibleChildAt(int index);
 
  private:
   Microsoft::WRL::ComPtr<IAccessible> root_;

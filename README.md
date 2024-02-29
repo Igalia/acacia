@@ -179,6 +179,14 @@ Through the Visual Studio Installer, install:
 Git for windows (this also installs git bash, very nice to have and used by default in VSCode's terminal):
 - https://git-scm.com/download/win
 
+For package management, you can use scoop: https://scoop.sh/
+
+```
+scoop install swig python
+```
+
+If you are using MSVC to compile, you will need to specify the "release" build, otherwise you will need a debug version of the python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release".
+
 #### Build steps
 
 You can build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
@@ -188,14 +196,27 @@ You can also run the following from a bash terminal:
 % mkdir build
 % cd build
 % cmake ..
-% cmake --build .
+% cmake --build . --config Release
 ```
+
+Note: If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
 
 **OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
 
 Currently produces the following executable:
 ```
 ./build/bin/Release/dump_tree_ia2.exe <pid>
+```
+
+To use the python library, navigate to `build/bin/Release`:
+```
+$ python3
+>>> import ia2_inspect
+>>> app = ia2_inspect.IA2Node.CreateForPID(4956)
+>>> role = app.get_accName()
+>>> child_count = app.get_accChildCount()
+>>> child = app.AccessibleChildAt(0)
+>>> child.get_accRole()
 ```
 
 ## Experimental features

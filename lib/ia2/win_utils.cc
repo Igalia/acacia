@@ -77,6 +77,9 @@ BOOL CALLBACK FindWindow(HWND hwnd, LPARAM lparam) {
 
 Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(const std::string& name,
                                                       DWORD dwProcessID) {
+  // TODO: experiment with where to put coinitialize and couninitialize. #93
+  CoInitialize(nullptr);
+
   Microsoft::WRL::ComPtr<IAccessible> root;
   WindowSearchCriteria criteria;
   criteria.name = name;
@@ -128,7 +131,6 @@ std::string HResultErrorToString(HRESULT err) {
       return "E_OUTOFMEMORY";
     case E_INVALIDARG:
       return "E_INVALIDARG";
-    // TODO: test this
     default:
       return std::to_string(err);
   }
