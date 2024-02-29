@@ -9,7 +9,7 @@
 #include <windows.h>
 #include <winuser.h>
 
-#include "axaccess/ia2/ia2_api_all.h"
+#include "ia2/ia2_api_all.h"
 
 namespace win_utils {
 
