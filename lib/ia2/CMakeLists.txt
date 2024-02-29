@@ -11,7 +11,6 @@ add_library(
 add_dependencies(
   ia2_inspect
 
-  ia2_headers
   iaccessible2
 )
 
