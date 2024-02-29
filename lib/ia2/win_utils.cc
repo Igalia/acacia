@@ -1,42 +1,101 @@
 #include "axaccess/ia2/win_utils.h"
 
+#include <stdlib.h>
 #include <iostream>
-#include <ostream>
 #include <string>
 #include <vector>
 
-// We will need these for windows related things, see the formatter_win.cc in
-// chromium
-// #include <oleacc.h>
-// #include <wrl/client.h>
-
-// TODO: we will probably need to get these from the IAccessible2 git repo, like
-// in Chromium
-// #include "third_party/iaccessible2/ia2_api_all.h"
-
-// Windows system libraries, used for pid/windows/hwnd management.
 #include <tlhelp32.h>
 #include <windows.h>
+#include <winuser.h>
 
-void GetAllWindowsFromProcessID(DWORD dwProcessID, std::vector<HWND>& hwnds) {
-  HWND hCurWnd = nullptr;
+#include "axaccess/ia2/ia2_api_all.h"
+
+namespace win_utils {
+
+std::string nameFromHwnd(HWND hwnd) {
+  int length = ::GetWindowTextLength(hwnd);
+  if (length == 0) {
+    return "";
+  }
+  std::string title(length + 1, '\0');
+  int actual_length = ::GetWindowText(hwnd, (LPSTR)title.data(), title.size());
+  if (length > actual_length)
+    title.erase(actual_length);
+  return title;
+}
+
+// TODO: This is not the right API -- probably we should copy chrome code
+// and find a hwnd by titla alone. Right now this only returns a Google Chrome
+// HWND. But if I don't include PID, then I get other processess with google
+// chrome in name
+Microsoft::WRL::ComPtr<IAccessible> GetAccessibleFromProcessID(
+    DWORD dwProcessID) {
+  Microsoft::WRL::ComPtr<IAccessible> root;
+  HWND hwnd = nullptr;
   do {
-    hCurWnd = FindWindowEx(nullptr, hCurWnd, nullptr, nullptr);
+    hwnd = FindWindowEx(nullptr, hwnd, nullptr, nullptr);
+
     DWORD checkProcessID = 0;
-    GetWindowThreadProcessId(hCurWnd, &checkProcessID);
+    GetWindowThreadProcessId(hwnd, &checkProcessID);
     if (checkProcessID == dwProcessID) {
-      hwnds.push_back(hCurWnd);
-      std::cout << "Found hWnd: " << hCurWnd << "\n";
+      std::string title = nameFromHwnd(hwnd);
+      if (title.find("Google Chrome") != std::string::npos) {
+        break;
+      }
     }
-  } while (hCurWnd != nullptr);
+  } while (hwnd != nullptr);
+
+  if (hwnd == nullptr) {
+    std::cout << "Could not find hwnd\n";
+    return root;
+  }
+  // TODO: Consider using OBJID_CLIENT, but I think we want OBJID_WINDOW
+  HRESULT hr =
+      ::AccessibleObjectFromWindow(hwnd, OBJID_WINDOW, IID_PPV_ARGS(&root));
+  if (FAILED(hr)) {
+    std::cout << "Could not get accessible\n";
+  }
+  return root;
 }
 
-IA2NodePtr find_root_accessible_from_pid(const int pid) {
-  std::vector<HWND> hwnds;
-  GetAllWindowsFromProcessID(pid, hwnds);
-  // TODO: Get the IAccessible2 pointer(s) for each HWND and construct an
-  // IA2Node for each
-  // TODO: Construct a top-level IA2Node with the collection of IA2Nodes as
-  // children
-  return std::make_unique<IA2Node>(IA2Node());
+std::string BstrToString(BSTR bstr) {
+  if (SysStringLen(bstr) == 0)
+    return "";
+  std::wstring wstr(bstr, SysStringLen(bstr));
+  int size = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0,
+                                 nullptr, nullptr);
+  std::string str(size, '\0');
+  WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], size, nullptr,
+                      nullptr);
+  return str;
 }
+
+std::string HResultErrorToString(HRESULT err) {
+  switch (err) {
+    case E_NOTIMPL:
+      return "E_NOTIMPL";
+    case E_NOINTERFACE:
+      return "E_NOINTERFACE";
+    case E_POINTER:
+      return "E_POINTER";
+    case E_ABORT:
+      return "E_ABORT";
+    case E_FAIL:
+      return "E_FAIL";
+    case E_UNEXPECTED:
+      return "E_UNEXPECTED";
+    case E_ACCESSDENIED:
+      return "E_ACCESSDENIED";
+    case E_HANDLE:
+      return "E_HANDLE";
+    case E_OUTOFMEMORY:
+      return "E_OUTOFMEMORY";
+    case E_INVALIDARG:
+      return "E_INVALIDARG";
+    // TODO: test this
+    default:
+      return std::to_string(err);
+  }
+}
+}  // namespace win_utils
