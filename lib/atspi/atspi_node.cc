@@ -10,10 +10,7 @@ AtspiNode::~AtspiNode() {
   g_object_unref(accessible_);
 }
 
-// TODO: Discuss naming convention for these functions.
-// I wanted "atspi_accessible_get_role_name" to be as close to the API
-// as possible, but I get a compilation error.
-std::string AtspiNode::accessible_get_role_name() {
+std::string AtspiNode::get_role_name() {
   GError* error = nullptr;
   char* role_name = atspi_accessible_get_role_name(accessible_, &error);
   if (error) {
@@ -24,7 +21,7 @@ std::string AtspiNode::accessible_get_role_name() {
   return role_name;
 }
 
-std::string AtspiNode::accessible_get_name() {
+std::string AtspiNode::get_name() {
   GError* error = nullptr;
   char* name = atspi_accessible_get_name(accessible_, &error);
   if (error) {
@@ -35,7 +32,7 @@ std::string AtspiNode::accessible_get_name() {
   return name;
 }
 
-int AtspiNode::accessible_get_child_count() {
+int AtspiNode::get_child_count() {
   GError* error = nullptr;
   gint count = atspi_accessible_get_child_count(accessible_, &error);
   if (error) {
@@ -46,7 +43,7 @@ int AtspiNode::accessible_get_child_count() {
   return (int32_t)count;
 }
 
-AtspiNodePtr AtspiNode::accessible_get_child_at_index(int index) {
+AtspiNodePtr AtspiNode::get_child_at_index(int index) {
   GError* error = nullptr;
   AtspiAccessible* child =
       atspi_accessible_get_child_at_index(accessible_, index, &error);
@@ -58,7 +55,7 @@ AtspiNodePtr AtspiNode::accessible_get_child_at_index(int index) {
   return std::make_unique<AtspiNode>(AtspiNode(child));
 }
 
-std::vector<AtspiNodePtr> AtspiNode::accessible_get_children() {
+std::vector<AtspiNodePtr> AtspiNode::get_children() {
   std::vector<AtspiNodePtr> result(0);
 
   GError* error = nullptr;
@@ -72,7 +69,7 @@ std::vector<AtspiNodePtr> AtspiNode::accessible_get_children() {
   result.resize(child_count);
 
   for (auto i = 0; i < child_count; i++) {
-    AtspiNodePtr child_node = accessible_get_child_at_index(i);
+    AtspiNodePtr child_node = get_child_at_index(i);
     if (child_node)
       result[i].swap(child_node);
   }

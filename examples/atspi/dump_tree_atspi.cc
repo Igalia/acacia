@@ -12,18 +12,18 @@ void print_usage(std::string& program_name) {
 static void print_node(AtspiNodePtr& node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
-  std::cout << "> " << node->accessible_get_role_name();
-  std::string node_name = node->accessible_get_name();
+  std::cout << "> " << node->get_role_name();
+  std::string node_name = node->get_name();
   if (!node_name.empty())
     std::cout << " (" << node_name << ")";
   std::cout << "\n";
 
-  int32_t child_count = node->accessible_get_child_count();
+  int32_t child_count = node->get_child_count();
   if (child_count < 0)
     return;
 
   for (auto i = 0; i < child_count; i++) {
-    auto child = node->accessible_get_child_at_index(i);
+    auto child = node->get_child_at_index(i);
     print_node(child, level + 1);
   }
 }

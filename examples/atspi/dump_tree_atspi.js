@@ -23,10 +23,10 @@ function printNode(node, level) {
     let sep = "";
     for (var i = 0; i < level; i++)
         sep += "--";
-    console.log (sep + "> " + node.accessible_get_role_name() + " (" +
-                 node.accessible_get_name() + ")");
-    for (let i = 0; i < node.accessible_get_child_count(); i++) {
-        printNode(node.accessible_get_child_at_index(i), level + 1);
+    console.log (sep + "> " + node.get_role_name() + " (" +
+                 node.get_name() + ")");
+    for (let i = 0; i < node.get_child_count(); i++) {
+        printNode(node.get_child_at_index(i), level + 1);
     }
 }
 
