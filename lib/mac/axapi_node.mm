@@ -114,15 +114,15 @@ AXAPINode AXAPINode::CreateForPID(int pid) {
 
   // Check whether we got an actual AXUIElement or an invalid placeholder.
   ScopedCFTypeRef<CFArrayRef> cf_attributes;
-  AXError err =
-      AXUIElementCopyAttributeNames(ax_ui_element_, cf_attributes.get_ptr());
+  AXError err = AXUIElementCopyAttributeNames(root_ax_ui_element,
+                                              cf_attributes.get_ptr());
   if (err)
     return AXAPINode();
 
   return AXAPINode(root_ax_ui_element);
 }
 
-bool IsNull() {
+bool AXAPINode::IsNull() {
   return ax_ui_element_ == NULL;
 }
 
