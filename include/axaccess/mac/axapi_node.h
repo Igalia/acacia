@@ -21,8 +21,6 @@ class AXAPINode {
 
   static AXAPINode CreateForPID(int pid);
 
-  bool IsNull();
-
   std::vector<std::string> CopyAttributeNames() const;
 
   bool HasAttribute(const std::string& attribute) const;
