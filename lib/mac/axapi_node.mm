@@ -132,7 +132,7 @@ std::vector<std::string> AXAPINode::CopyAttributeNames() const {
       AXUIElementCopyAttributeNames(ax_ui_element_, cf_attributes.get_ptr());
   std::vector<std::string> attributes;
   if (err) {
-    throw std::invalid_argument(
+    throw std::runtime_error(
         "Attempting to copy attribute names produced error code " +
         AXErrorToString(err));
   }
@@ -149,10 +149,9 @@ bool AXAPINode::HasAttribute(const CFStringRef attribute) const {
   AXError err =
       AXUIElementCopyAttributeNames(ax_ui_element_, cf_attributes.get_ptr());
   if (err) {
-    throw std::invalid_argument(
-        "Attempting to check for presence of attribute " +
-        CFStringRefToStdString(attribute) + " produced error code " +
-        AXErrorToString(err));
+    throw std::runtime_error("Attempting to check for presence of attribute " +
+                             CFStringRefToStdString(attribute) +
+                             " produced error code " + AXErrorToString(err));
   }
   CFIndex num_attributes = CFArrayGetCount(cf_attributes.get());
   if (num_attributes == 0)
@@ -180,9 +179,17 @@ std::string AXAPINode::CopyStringAttributeValue(
     return "";
 
   if (err) {
-    throw std::invalid_argument("Attempting to copy value for attribute " +
-                                attribute + " produced error code " +
-                                AXErrorToString(err));
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        throw std::invalid_argument(
+            "Attribute " + attribute +
+            " is not supported on this node. Use HasAttribute() or "
+            "CopyAttributeValues() to check which attributes are available.");
+      default:
+        throw std::runtime_error("Attempting to copy value for attribute " +
+                                 attribute + " produced error code " +
+                                 AXErrorToString(err));
+    }
   }
 
   // TODO: better handling of attributes which return the wrong type.
@@ -196,16 +203,22 @@ std::string AXAPINode::CopyStringAttributeValue(
 int32_t AXAPINode::GetListAttributeValueCount(
     const std::string& attribute) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
-  if (!HasAttribute(cf_attribute.get()))
-    return 0;
 
   CFIndex count;
   AXError err = AXUIElementGetAttributeValueCount(ax_ui_element_,
                                                   cf_attribute.get(), &count);
   if (err) {
-    throw std::invalid_argument("Attempting to get value count for attribute " +
-                                attribute + " produced error code " +
-                                AXErrorToString(err));
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        throw std::invalid_argument(
+            "Attribute " + attribute +
+            " is not supported on this node. Use HasAttribute() or "
+            "CopyAttributeValues() to check which attributes are available.");
+      default:
+        throw std::runtime_error(
+            "Attempting to get value count for attribute " + attribute +
+            " produced error code " + AXErrorToString(err));
+    }
   }
 
   return (int32_t)count;
@@ -219,9 +232,17 @@ std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
       ax_ui_element_, cf_attribute.get(), 0, INT32_MAX, cf_array.get_ptr());
 
   if (err) {
-    throw std::invalid_argument("Attempting to copy value for attribute " +
-                                attribute + " produced error code " +
-                                AXErrorToString(err));
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        throw std::invalid_argument(
+            "Attribute " + attribute +
+            " is not supported on this node. Use HasAttribute() or "
+            "CopyAttributeValues() to check which attributes are available.");
+      default:
+        throw std::runtime_error("Attempting to copy value for attribute " +
+                                 attribute + " produced error code " +
+                                 AXErrorToString(err));
+    }
   }
 
   // TODO: better handling of attributes which return the wrong type.
@@ -241,7 +262,7 @@ std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
 
 AXAPINode AXAPINode::CopyNodeListAttributeValueAtIndex(
     const std::string& attribute,
-    int32_t index) const {
+    int index) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
   ScopedCFTypeRef<CFArrayRef> cf_array;
   AXError err =
@@ -249,9 +270,23 @@ AXAPINode AXAPINode::CopyNodeListAttributeValueAtIndex(
                                      (CFIndex)index, 1l, cf_array.get_ptr());
 
   if (err) {
-    throw std::invalid_argument("Attempting to copy value for attribute " +
-                                attribute + " produced error code " +
-                                AXErrorToString(err));
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        throw std::invalid_argument(
+            "Attribute " + attribute +
+            " is not supported on this node. Use HasAttribute() or "
+            "CopyAttributeValues() to check which attributes are available.");
+      case kAXErrorIllegalArgument:
+        throw std::invalid_argument(
+            "Index " + std::to_string(index) +
+            " is out of bounds, or the value of " + attribute +
+            " is not an array. Use GetListAttributeValueCount() to "
+            "check the number of values.");
+      default:
+        throw std::runtime_error("Attempting to copy value for attribute " +
+                                 attribute + " produced error code " +
+                                 AXErrorToString(err));
+    }
   }
 
   if (CFArrayGetCount(cf_array.get()) != 1l) {
