@@ -61,3 +61,4 @@ endif(WIN32)
 
 add_subdirectory(lib)
 add_subdirectory(examples)
+add_subdirectory(third_party)

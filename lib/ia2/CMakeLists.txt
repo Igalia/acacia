@@ -1,17 +1,4 @@
 add_library(
-  iaccessible2
-  STATIC
-  ia2_api_all_i.c
-)
-
-target_include_directories(
-  iaccessible2
-
-  PUBLIC
-    ${PROJECT_BINARY_DIR}/include/axaccess/ia2
-)
-
-add_library(
   # Name
   ia2_inspect
   SHARED
@@ -21,11 +8,10 @@ add_library(
   win_utils.cc
 )
 
-target_include_directories(
+add_dependencies(
   ia2_inspect
 
-  PUBLIC
-    ${PROJECT_BINARY_DIR}/include
+  iaccessible2
 )
 
 target_link_libraries(

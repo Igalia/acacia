@@ -4,8 +4,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "axaccess/ia2/ia2_api_all.h"
 #include "axaccess/ia2/win_utils.h"
+#include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 using namespace win_utils;
 
