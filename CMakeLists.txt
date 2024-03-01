@@ -25,6 +25,29 @@ include_directories(
   "${BASEPATH}/include"
 )
 
+# Feature flags
+
+## Feature flag for cross-platform library, OFF by default
+option(
+  AXA_LIBAXACCESS
+  "Build cross-platform library (experimental)"
+  OFF
+)
+
+## Feature flag for Python bindings, ON by default
+option(
+  AXA_PYTHON_MODULE
+  "Build Python bindings (requires swig and python3)"
+  ON
+)
+
+## Feature flag for NodeJS bindings, ON by default
+option(
+  AXA_NODEJS_MODULE
+  "Build NodeJS bindings (requires swig and node-gyp)"
+  ON
+)
+
 # On windows, put all of the resulting libraries and executables in
 # `build/bin/<CONFIG>` where CONFIG is Debug, Release, etc, because
 # windows .dll must be in the same directory as the executables unless
