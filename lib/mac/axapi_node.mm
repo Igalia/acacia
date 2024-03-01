@@ -111,7 +111,19 @@ AXAPINode& AXAPINode::operator=(AXAPINode other) {
 
 AXAPINode AXAPINode::CreateForPID(int pid) {
   AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
+
+  // Check whether we got an actual AXUIElement or an invalid placeholder.
+  ScopedCFTypeRef<CFArrayRef> cf_attributes;
+  AXError err = AXUIElementCopyAttributeNames(root_ax_ui_element,
+                                              cf_attributes.get_ptr());
+  if (err)
+    return AXAPINode();
+
   return AXAPINode(root_ax_ui_element);
+}
+
+bool AXAPINode::IsNull() {
+  return ax_ui_element_ == NULL;
 }
 
 std::vector<std::string> AXAPINode::CopyAttributeNames() const {
