@@ -47,9 +47,9 @@ As well as a python module.
 % python
 >>> import atspi_inspect
 >>> node = atspi_inspect.find_root_accessible_from_pid(1244182)
->>> node.accessible_get_role_name()
+>>> node.get_role_name()
 'application'
->>> node.accessible_get_name()
+>>> node.get_name()
 'Google Chrome'
 ```
 
@@ -59,9 +59,9 @@ And a NodeJS module `atspi_inspect.node`.
 % nodejs
 > const atspi_inspect = require("./atspi_inspect");
 > let node = atspi_inspect.find_root_accessible_from_pid(<pid>);
-> node.accessible_get_role_name();
+> node.get_role_name();
 'application'
-> node.accessible_get_name();
+> node.get_name();
 'Chromium'
 ```
 
