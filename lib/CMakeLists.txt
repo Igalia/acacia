@@ -10,15 +10,6 @@ set(
   node.cc
 )
 
-# Generate AXA_EXPORT and AXA_NO_EXPORT axa_exported.h necessary for
-# including dllexport and dllimport statements in .dll source code.
-include(GenerateExportHeader)
-generate_export_header(
-  axaccess
-  BASE_NAME axa
-  EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/axaccess/export.h
-)
-
 target_compile_definitions(
   axaccess
   PRIVATE
