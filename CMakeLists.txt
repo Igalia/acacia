@@ -20,16 +20,9 @@ project(
 
 # Use absolute paths for #includes
 set(BASEPATH "${CMAKE_SOURCE_DIR}")
-include_directories("${BASEPATH}")
-
-# Public headers
-file(
-  COPY ${PROJECT_SOURCE_DIR}/include 
-  DESTINATION ${PROJECT_BINARY_DIR}
-)
-
 include_directories(
-    ${PROJECT_BINARY_DIR}/include
+  "${BASEPATH}"
+  "${BASEPATH}/include"
 )
 
 # On windows, put all of the resulting libraries and executables in

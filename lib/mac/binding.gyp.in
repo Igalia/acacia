@@ -4,7 +4,7 @@
       "target_name": "axapi_inspect",
       "include_dirs": [
         "${CMAKE_SOURCE_DIR}",
-        "${CMAKE_BINARY_DIR}/include",
+        "${CMAKE_SOURCE_DIR}/include",
       ],
       "sources": [
         "../../../lib/mac/axapi_node.mm",
