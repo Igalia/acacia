@@ -32,8 +32,6 @@ For Python3 bindings (optional):
 For NodeJS module (optional):
 * `sudo apt install swig libnode-dev node-gyp`
 
-These bindings dependencies are on my default. See *Feature Flags* section below for how to disable them.
-
 There is a known issue linking the NodeJS module with the Debian default linker. So using the gold linker
 is recommended:
 
