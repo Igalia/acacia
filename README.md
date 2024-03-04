@@ -9,9 +9,9 @@ The pre-submit hook will run clang-format the code in your staging area before c
 
 ## How to build
 
-### Support target languages
+### Supported target languages
 
-This library can build either a Python3 module or a NodeJS c++ addon for any of the currently support accessibility APIs. To control which bindings are build, please provide the following feature flag.
+This library can build either a Python3 module or a NodeJS c++ addon for any of the currently support accessibility APIs (except on windows, remove this parenthetical at the appropriate time). To control which bindings are build, please provide the following feature flag.
 
 * Python3 bindings: `-DAXA_PYTHON_MODULE=<ON/OFF>`, OFF by default.
 * NodeJS bindings: `-DAXA_NODEJS_MODULE=<ON/OFF>`, OFF by default.
