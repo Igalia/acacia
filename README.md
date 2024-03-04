@@ -1,4 +1,22 @@
+## Contribution Guide
+
+Thes project uses clang-format as specified by the .clang-format config file in the root directory. We recommend setting up a pre-commit hook, which requires python and the following steps:
+* `pip install pre-commit`
+* `pip install clang-format`
+* `pre-commit install`
+
+The pre-submit hook will run clang-format the code in your staging area before commiting. The commit will not succeed if a file is reformatted, and you will have to re-add the file with format changes and re-run git commit.
+
 ## How to build
+
+### Support target languages
+
+This library can build either a Python3 module or a NodeJS c++ addon for any of the currently support accessibility APIs. To control which bindings are build, please provide the following feature flag.
+
+* Python3 bindings: `-DAXA_PYTHON_MODULE=<ON/OFF>`, OFF by default.
+* NodeJS bindings: `-DAXA_NODEJS_MODULE=<ON/OFF>`, OFF by default.
+
+If no target language is specified, only the c++ library and examples will be built.
 
 ### On Linux
 
@@ -15,11 +33,6 @@ For NodeJS module (optional):
 * `sudo apt install swig libnode-dev node-gyp`
 
 These bindings dependencies are on my default. See *Feature Flags* section below for how to disable them.
-
-For `pre-commit`:
-* `pip install pre-commit`
-* `pip install clang-format`
-* `pre-commit install`
 
 There is a known issue linking the NodeJS module with the Debian default linker. So using the gold linker
 is recommended:
@@ -64,11 +77,6 @@ And a NodeJS module `atspi_inspect.node`.
 > node.get_name();
 'Chromium'
 ```
-
-#### Feature flags
-
-* Python3 bindings: `-DAXA_PYTHON_MODULE=<ON/OFF>`, ON by default.
-* NodeJS bindings: `-DAXA_NODEJS_MODULE=<ON/OFF>`, ON by default.
 
 #### Examples
 
@@ -116,7 +124,7 @@ For `pre-commit`:
 ```
 % mkdir build
 % cd build
-% cmake .. -G 'Ninja' --fresh
+% cmake <feature-flags> .. -G 'Ninja' --fresh
 % ninja
 ```
 

@@ -34,18 +34,18 @@ option(
   OFF
 )
 
-## Feature flag for Python bindings, ON by default
+## Feature flag for Python bindings, OFF by default
 option(
   AXA_PYTHON_MODULE
   "Build Python bindings (requires swig and python3)"
-  ON
+  OFF
 )
 
-## Feature flag for NodeJS bindings, ON by default
+## Feature flag for NodeJS bindings, OFF by default
 option(
   AXA_NODEJS_MODULE
   "Build NodeJS bindings (requires swig and node-gyp)"
-  ON
+  OFF
 )
 
 # On windows, put all of the resulting libraries and executables in
