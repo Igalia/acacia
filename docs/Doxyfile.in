@@ -1,0 +1,16 @@
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = AXAccess
+OUTPUT_LANGUAGE        = English
+
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@/docs/
+
+INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/axaccess/atspi
+INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/axaccess/mac
+INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/axaccess/ia2
+
+EXCLUDE_PATTERNS       = @DOXY_EXCLUDE@
+
+GENERATE_TREEVIEW      = YES
+
+INPUT                 += @CMAKE_SOURCE_DIR@/README.md
+USE_MDFILE_AS_MAINPAGE = @CMAKE_SOURCE_DIR@/README.md
