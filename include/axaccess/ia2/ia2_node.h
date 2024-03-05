@@ -23,7 +23,8 @@ class AXA_EXPORT IA2Node {
   };
   ~IA2Node(){};
 
-  static IA2NodePtr CreateRootForName(const std::string& name, const int pid);
+  static IA2NodePtr CreateRootForName(const std::string& name,
+                                      const int pid = 0);
   static IA2NodePtr CreateRootForPID(const int pid);
 
   // testing
