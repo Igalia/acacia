@@ -11,7 +11,8 @@
 
 namespace win_utils {
 
-AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleFromProcessID(
+AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(
+    const std::string& name,
     DWORD dwProcessID);
 
 AXA_EXPORT std::string nameFromHwnd(HWND hwnd);

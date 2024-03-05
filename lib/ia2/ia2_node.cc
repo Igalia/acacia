@@ -264,8 +264,18 @@ std::string IA2RoleToString(LONG role) {
 }
 }  // Namespace
 
-IA2NodePtr IA2Node::CreateForPID(const int pid) {
-  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleFromProcessID(pid);
+IA2NodePtr IA2Node::CreateRootForName(const std::string& app_name,
+                                      const int pid) {
+  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
+  if (!root) {
+    return nullptr;
+  }
+
+  return std::make_unique<IA2Node>(IA2Node(root));
+}
+
+IA2NodePtr IA2Node::CreateRootForPID(const int pid) {
+  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
   if (!root) {
     return nullptr;
   }
