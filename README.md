@@ -199,6 +199,18 @@ You can also run the following from a bash terminal:
 % cmake --build . --config Release
 ```
 
+To turn on the python bindings, then run cmake with the following flag:
+```
+% cmake -DAXA_PYTHON_MODULE=ON ..
+```
+
+Or if building from within Visual Studios, add the following to your settings.json:
+```
+    "cmake.configureArgs": [
+        "-DAXA_PYTHON_MODULE=ON"
+    ],
+```
+
 Note: If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
 
 **OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
@@ -210,13 +222,18 @@ Currently produces the following executable:
 
 To use the python library, navigate to `build/bin/Release`:
 ```
-$ python3
+% python3
 >>> import ia2_inspect
->>> app = ia2_inspect.IA2Node.CreateForPID(4956)
+>>> app = ia2_inspect.IA2Node.CreateRootForPID(4956)
 >>> role = app.get_accName()
 >>> child_count = app.get_accChildCount()
 >>> child = app.AccessibleChildAt(0)
 >>> child.get_accRole()
+```
+
+Or run the script:
+```
+% python3 ./dump_tree_ia2.py --name "google chrome"
 ```
 
 ## Experimental features
