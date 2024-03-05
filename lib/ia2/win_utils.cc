@@ -17,7 +17,7 @@
 namespace win_utils {
 
 struct WindowSearchCriteria {
-  std::string name;
+  std::optional<std::string> name;
   std::optional<DWORD> pid;
   HWND match = nullptr;
 };
@@ -41,32 +41,38 @@ std::string lower(const std::string& str) {
   return result;
 }
 
-BOOL CALLBACK FindWindowWithName(HWND hwnd, LPARAM lparam) {
+BOOL CALLBACK FindWindow(HWND hwnd, LPARAM lparam) {
   WindowSearchCriteria* criteria =
       reinterpret_cast<WindowSearchCriteria*>(lparam);
 
-  // If a PID is specified and this HWND lacks it, it's not a match.
-  if (criteria->pid.has_value() && criteria->pid.value()) {
-    DWORD windowPid;
-    GetWindowThreadProcessId(hwnd, &windowPid);
-    if (windowPid != criteria->pid.value()) {
+  bool has_name = criteria->name.has_value() && !criteria->name.value().empty();
+  bool has_pid = criteria->pid.has_value() && criteria->pid.value();
+  if (!has_name && !has_pid) {
+    std::cerr << "ERROR: FindWindow requires a name and/or PID" << std::endl;
+    return FALSE;
+  }
+
+  DWORD window_pid;
+  GetWindowThreadProcessId(hwnd, &window_pid);
+  if (has_pid && window_pid != criteria->pid.value()) {
+    return TRUE;
+  }
+
+  std::string title = lower(nameFromHwnd(hwnd));
+  if (has_name) {
+    std::string name = lower(criteria->name.value());
+    if (title.find(name) == std::string::npos) {
       return TRUE;
     }
   }
 
-  std::string title = lower(nameFromHwnd(hwnd));
-  std::string name = lower(criteria->name);
-  if (title.find(name) != std::string::npos) {
-    std::cout << "Window found: " << title;
-    if (criteria->pid.has_value()) {
-      std::cout << " - PID: " << criteria->pid.value();
-    }
-    std::cout << std::endl;
-    criteria->match = hwnd;
-    return FALSE;
+  std::cout << "Window found: " << nameFromHwnd(hwnd);
+  if (has_pid) {
+    std::cout << " - PID: " << criteria->pid.value();
   }
-
-  return TRUE;
+  std::cout << std::endl;
+  criteria->match = hwnd;
+  return FALSE;
 }
 
 Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(const std::string& name,
@@ -75,7 +81,7 @@ Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(const std::string& name,
   WindowSearchCriteria criteria;
   criteria.name = name;
   criteria.pid = dwProcessID;
-  EnumWindows(FindWindowWithName, reinterpret_cast<LPARAM>(&criteria));
+  EnumWindows(FindWindow, reinterpret_cast<LPARAM>(&criteria));
   if (criteria.match == nullptr) {
     return root;
   }

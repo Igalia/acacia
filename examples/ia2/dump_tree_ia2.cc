@@ -6,8 +6,17 @@
 
 #include "include/axaccess/ia2/ia2_node.h"
 
-void print_usage(std::string& program_name) {
-  std::cout << "Usage: " << program_name << " --name=NAME [--pid=PID]\n";
+void print_usage(std::string& program_path) {
+  std::string program_name = program_path;
+  size_t pos = program_name.find_last_of("\\");
+  if (pos != std::string::npos) {
+    program_name = program_name.substr(pos + 1);
+  }
+
+  std::cout << "Usage:\n";
+  std::cout << "  " << program_name << " --name=NAME\n";
+  std::cout << "  " << program_name << " --pid=PID\n";
+  std::cout << "  " << program_name << " --name=NAME --pid=PID\n";
 }
 
 static void print_node(IA2NodePtr& node, int level) {
@@ -67,10 +76,6 @@ int main(int argc, char** argv) {
   if (args.find("--name") != args.end()) {
     name = args["--name"];
   }
-  if (name.empty()) {
-    print_usage(program_name);
-    return 1;
-  }
 
   int pid = 0;
   if (args.find("--pid") != args.end()) {
@@ -81,16 +86,24 @@ int main(int argc, char** argv) {
     }
   }
 
+  if (name.empty() && !pid) {
+    print_usage(program_name);
+    return 1;
+  }
+
   // TODO: experiment with where to put coinitialize and couninitialize. #93
   CoInitialize(nullptr);
 
-  IA2NodePtr root = IA2Node::CreateRoot(name, pid);
+  IA2NodePtr root = IA2Node::CreateRootForName(name, pid);
   if (!root) {
-    std::cerr << "ERROR: '" << name << "'";
-    if (pid) {
-      std::cerr << " (PID: " << pid << ")";
+    std::cerr << "ERROR: Could not find match for";
+    if (!name.empty()) {
+      std::cerr << " name: '" << name << "'";
     }
-    std::cerr << " not found" << std::endl;
+    if (pid) {
+      std::cerr << " PID: " << pid;
+    }
+    std::cerr << std::endl;
     return -1;
   }
 
