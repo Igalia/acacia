@@ -195,13 +195,13 @@ You can also run the following from a bash terminal:
 ```
 % mkdir build
 % cd build
-% cmake <binding-flags> ..
+% cmake <binding-flags> .. --fresh
 % cmake --build . --config Release
 ```
 
 To turn on the python bindings, run cmake with the following flag:
 ```
-% cmake -DAXA_PYTHON_MODULE=ON ..
+% cmake -DAXA_PYTHON_MODULE=ON .. --fresh
 ```
 
 Or if building from within Visual Studios, add the following to your settings.json:
