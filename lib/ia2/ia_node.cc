@@ -165,18 +165,12 @@ Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
 
 IANode IANode::CreateRootForName(const std::string& app_name, const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
-  if (!root) {
-    return nullptr;
-  }
 
   return IANode(root);
 }
 
 IANode IANode::CreateRootForPID(const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
-  if (!root) {
-    return nullptr;
-  }
 
   return IANode(root);
 }

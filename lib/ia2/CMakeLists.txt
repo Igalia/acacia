@@ -37,15 +37,18 @@ target_compile_definitions(
     axaccess_EXPORTS
 )
 
+
+# SWIG Instructions to build library bindings to different languages
+# (only required if at least one binding is ON).
+
+if (AXA_PYTHON_MODULE OR AXA_NODEJS_MODULE)
+  find_package(SWIG REQUIRED)
+  include(UseSWIG)
+endif()
+
+# Generate a python module called "ia2_inspect"
+
 if (AXA_PYTHON_MODULE)
-
-  # SWIG Instructions to build library bindings to different languages
-  # (only required if at least one binding is ON).
-
-  FIND_PACKAGE(SWIG REQUIRED)
-  INCLUDE(${SWIG_USE_FILE})
-
-  # Generate Python bindings using swig + python3
 
   FIND_PACKAGE(Python3 COMPONENTS Interpreter Development.Module)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
@@ -59,9 +62,7 @@ if (AXA_PYTHON_MODULE)
     TYPE SHARED
     SOURCES ia2_inspect.i
     LANGUAGE python
-    # The "$<CONFIG> assumes we are using the Visual Studio generator
-    # which puts the built files in a Release or Debug folder.
-    OUTPUT_DIR "${WIN_OUTPUT_DIRECTORY}/$<CONFIG>"
+    OUTPUT_DIR "${WIN_OUTPUT_DIRECTORY}"
   )
 
   TARGET_LINK_LIBRARIES(
@@ -77,3 +78,55 @@ if (AXA_PYTHON_MODULE)
   )
 
 endif(AXA_PYTHON_MODULE)
+
+# Generate a NodeJS Module using swig + node-gyp
+
+if (AXA_NODEJS_MODULE)
+  find_program(
+    NODE_GYP "node-gyp"
+    REQUIRED
+  )
+
+  # node-gyp will place output files in the following folder.
+  set(NODE_GYP_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/build/Release")
+
+  add_custom_target(
+    ia2_node_inspect ALL
+    DEPENDS "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node" "${WIN_OUTPUT_DIRECTORY}"
+  )
+
+  # Generate NodeJS module
+  add_custom_command(
+    OUTPUT "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node"
+    DEPENDS ia2_nodejs_inspect_wrap.cxx
+    COMMAND ${NODE_GYP} configure build
+    VERBATIM
+  )
+
+  set_property(
+    TARGET ia2_node_inspect
+    APPEND
+    PROPERTY ADDITIONAL_CLEAN_FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/build
+    )
+
+  # Generate `binding.gyp` file for node-gyp
+  configure_file(
+    binding.gyp.in binding.gyp
+  )
+
+  # Generate C++ wrapper for NodeJS
+  add_custom_command(
+    OUTPUT "ia2_nodejs_inspect_wrap.cxx"
+    COMMAND swig -c++ -javascript -node -o ia2_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/ia2_inspect.i
+    VERBATIM
+  )
+
+    add_dependencies(
+      ia2_node_inspect
+
+      iaccessible2
+    )
+
+endif (AXA_NODEJS_MODULE)
