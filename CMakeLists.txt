@@ -55,8 +55,9 @@ option(
 # We may decide to solve this problem differently in the future, or use
 # the bin for all executables across all platforms.
 if(WIN32)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+  set(WIN_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${WIN_OUTPUT_DIRECTORY}")
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${WIN_OUTPUT_DIRECTORY}")
 endif(WIN32)
 
 add_subdirectory(lib)

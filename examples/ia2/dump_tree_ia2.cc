@@ -19,29 +19,29 @@ void print_usage(std::string& program_path) {
   std::cout << "  " << program_name << " --name=NAME --pid=PID\n";
 }
 
-static void print_node(IA2NodePtr& node, int level) {
+static void print_node(IA2Node node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
   std::cout << "> ";
 
-  std::string msaa_role = node->get_accRole();
-  std::string ia2_role = node->ia2_role();
+  std::string msaa_role = node.get_accRole();
+  std::string ia2_role = node.ia2_role();
   if (ia2_role.empty() || ia2_role == msaa_role)
     std::cout << msaa_role;
   else
     std::cout << ia2_role << " " << msaa_role;
 
-  std::string node_name = node->get_accName();
+  std::string node_name = node.get_accName();
   if (!node_name.empty())
     std::cout << " (" << node_name << ")";
   std::cout << "\n";
 
-  int32_t child_count = node->get_accChildCount();
+  int32_t child_count = node.get_accChildCount();
   if (child_count < 0)
     return;
 
   for (auto i = 0; i < child_count; i++) {
-    auto child = node->AccessibleChildAt(i);
+    auto child = node.AccessibleChildAt(i);
     print_node(child, level + 1);
   }
 }
@@ -92,10 +92,10 @@ int main(int argc, char** argv) {
   }
 
   // TODO: experiment with where to put coinitialize and couninitialize. #93
-  CoInitialize(nullptr);
+  // CoInitialize(nullptr);
 
-  IA2NodePtr root = IA2Node::CreateRootForName(name, pid);
-  if (!root) {
+  IA2Node root = IA2Node::CreateRootForName(name, pid);
+  if (root.IsNull()) {
     std::cerr << "ERROR: Could not find match for";
     if (!name.empty()) {
       std::cerr << " name: '" << name << "'";
@@ -107,7 +107,11 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  print_node(root, 0);
+  try {
+    print_node(root, 0);
+  } catch (const std::exception& err) {
+    std::cerr << err.what();
+  }
 
   // TODO: experiment with where to put coinitialize and couninitialize.
   // Calling CoUninitialize here causes a seg fault because there is still a
