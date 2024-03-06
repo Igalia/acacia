@@ -195,11 +195,11 @@ You can also run the following from a bash terminal:
 ```
 % mkdir build
 % cd build
-% cmake ..
+% cmake <binding-flags> ..
 % cmake --build . --config Release
 ```
 
-To turn on the python bindings, then run cmake with the following flag:
+To turn on the python bindings, run cmake with the following flag:
 ```
 % cmake -DAXA_PYTHON_MODULE=ON ..
 ```
@@ -224,16 +224,16 @@ To use the python library, navigate to `build/bin/Release`:
 ```
 % python3
 >>> import ia2_inspect
->>> app = ia2_inspect.IA2Node.CreateRootForPID(4956)
->>> role = app.get_accName()
+>>> app = ia2_inspect.IA2Node.CreateRootForName("firefox")
+>>> print(app.get_accRole())
 >>> child_count = app.get_accChildCount()
 >>> child = app.AccessibleChildAt(0)
->>> child.get_accRole()
+>>> print(child.get_accRole())
 ```
 
 Or run the script:
 ```
-% python3 ./dump_tree_ia2.py --name "google chrome"
+% python3 ./dump_tree_ia2.py --name chrome
 ```
 
 ## Experimental features

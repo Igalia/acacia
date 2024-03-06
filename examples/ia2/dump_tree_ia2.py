@@ -19,13 +19,14 @@ def print_tree(node, level):
     print()
 
   count = node.get_accChildCount()
-  for i in range(0, count-1):
+  for i in range(count):
     child = node.AccessibleChildAt(i)
     print_tree(child, level+1)
   return
 
 def main():
-    parser = argparse.ArgumentParser(description='Dumps the IA2 accessibility tree for an application specified by PID')
+    parser = argparse.ArgumentParser(
+      description='Dumps the IA2 accessibility tree for an application specified by PID')
     parser.add_argument('--pid', type=int)
     parser.add_argument('--name', type=str)
     args = parser.parse_args()
@@ -41,7 +42,7 @@ def main():
 
     if (app.IsNull()):
       print("Couldn't find application")
-      sys.ext()
+      sys.exit()
 
     print_tree(app, 0)
 
