@@ -64,7 +64,6 @@ std::map<std::string, std::string> parse_arguments(int argc, char** argv) {
       }
     }
   }
-
   return argument_map;
 }
 
@@ -91,9 +90,6 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  // TODO: experiment with where to put coinitialize and couninitialize. #93
-  // CoInitialize(nullptr);
-
   IA2Node root = IA2Node::CreateRootForName(name, pid);
   if (root.IsNull()) {
     std::cerr << "ERROR: Could not find match for";
@@ -113,8 +109,5 @@ int main(int argc, char** argv) {
     std::cerr << err.what();
   }
 
-  // TODO: experiment with where to put coinitialize and couninitialize.
-  // Calling CoUninitialize here causes a seg fault because there is still a
-  // reference to a interface on the stack. CoUninitialize();
   return 0;
 }
