@@ -2,9 +2,13 @@
 #include <map>
 #include <ostream>
 #include <regex>
+#include <stdexcept>
 #include <string>
 
 #include "include/axaccess/ia2/ia2_node.h"
+#include "include/axaccess/ia2/win_utils.h"
+
+using namespace win_utils;
 
 void print_usage(std::string& program_path) {
   std::string program_name = program_path;
@@ -91,11 +95,16 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  // TODO: experiment with where to put coinitialize and couninitialize. #93
-  CoInitialize(nullptr);
+  HRESULT hr = CoInitialize(nullptr);
+  if (FAILED(hr)) {
+    throw std::runtime_error("CoInitialize failed with error code: " +
+                             HResultErrorToString(hr));
+  }
 
-  IA2NodePtr root = IA2Node::CreateRootForName(name, pid);
-  if (!root) {
+  int exit_code = 0;
+  if (IA2NodePtr root = IA2Node::CreateRootForName(name, pid)) {
+    print_node(root, 0);
+  } else {
     std::cerr << "ERROR: Could not find match for";
     if (!name.empty()) {
       std::cerr << " name: '" << name << "'";
@@ -104,13 +113,9 @@ int main(int argc, char** argv) {
       std::cerr << " PID: " << pid;
     }
     std::cerr << std::endl;
-    return -1;
+    exit_code = -1;
   }
 
-  print_node(root, 0);
-
-  // TODO: experiment with where to put coinitialize and couninitialize.
-  // Calling CoUninitialize here causes a seg fault because there is still a
-  // reference to a interface on the stack. CoUninitialize();
-  return 0;
+  CoUninitialize();
+  return exit_code;
 }
