@@ -224,7 +224,7 @@ To use the python library, navigate to `build/bin/Release`:
 ```
 % python3
 >>> import ia2_inspect
->>> app = ia2_inspect.IA2Node.CreateRootForName("firefox")
+>>> app = ia2_inspect.IANode.CreateRootForName("firefox")
 >>> print(app.get_accRole())
 >>> child_count = app.get_accChildCount()
 >>> child = app.AccessibleChildAt(0)

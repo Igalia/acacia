@@ -10,19 +10,19 @@
 
 #include "axaccess/export.h"
 
-class AXA_EXPORT IA2Node {
+class AXA_EXPORT IANode {
  public:
-  IA2Node(){};
-  IA2Node(Microsoft::WRL::ComPtr<IAccessible> root, VARIANT child_id)
+  IANode(){};
+  IANode(Microsoft::WRL::ComPtr<IAccessible> root, VARIANT child_id)
       : root_(root), child_id_(child_id){};
-  IA2Node(Microsoft::WRL::ComPtr<IAccessible> root) : root_(root) {
+  IANode(Microsoft::WRL::ComPtr<IAccessible> root) : root_(root) {
     child_id_.intVal = CHILDID_SELF;
     child_id_.vt = VT_I4;
   };
-  ~IA2Node(){};
+  ~IANode(){};
 
-  static IA2Node CreateRootForName(const std::string& name, const int pid = 0);
-  static IA2Node CreateRootForPID(const int pid);
+  static IANode CreateRootForName(const std::string& name, const int pid = 0);
+  static IANode CreateRootForPID(const int pid);
 
   bool IsNull();
 
@@ -31,8 +31,8 @@ class AXA_EXPORT IA2Node {
 
   std::string ia2_role();
 
-  long IA2Node::get_accChildCount();
-  IA2Node IA2Node::AccessibleChildAt(int index);
+  long IANode::get_accChildCount();
+  IANode IANode::AccessibleChildAt(int index);
 
  private:
   Microsoft::WRL::ComPtr<IAccessible> root_;

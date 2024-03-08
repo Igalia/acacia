@@ -1,4 +1,4 @@
-#include "axaccess/ia2/ia2_node.h"
+#include "axaccess/ia2/ia_node.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -265,31 +265,31 @@ std::string IA2RoleToString(LONG role) {
 }
 }  // Namespace
 
-IA2Node IA2Node::CreateRootForName(const std::string& app_name, const int pid) {
+IANode IANode::CreateRootForName(const std::string& app_name, const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
   if (!root) {
     return nullptr;
   }
 
-  return IA2Node(root);
+  return IANode(root);
 }
 
-IA2Node IA2Node::CreateRootForPID(const int pid) {
+IANode IANode::CreateRootForPID(const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
   if (!root) {
     return nullptr;
   }
 
-  return IA2Node(root);
+  return IANode(root);
 }
 
-bool IA2Node::IsNull() {
+bool IANode::IsNull() {
   if (!root_)
     return true;
   return false;
 }
 
-std::string IA2Node::get_accRole() {
+std::string IANode::get_accRole() {
   VARIANT ia_role_variant;
   HRESULT hr = root_->get_accRole(child_id_, &ia_role_variant);
   if (FAILED(hr)) {
@@ -300,7 +300,7 @@ std::string IA2Node::get_accRole() {
   return MSAARoleToString(ia_role_variant.lVal);
 }
 
-std::string IA2Node::get_accName() {
+std::string IANode::get_accName() {
   BSTR bstr_name;
   HRESULT hr = root_->get_accName(child_id_, &bstr_name);
   if (FAILED(hr)) {
@@ -315,7 +315,7 @@ std::string IA2Node::get_accName() {
 
 // TODO: Break these out to it's own IAccessible2 wrapper object. #94
 // Additionally, getting the interface should be it's own utility function.
-std::string IA2Node::ia2_role() {
+std::string IANode::ia2_role() {
   Microsoft::WRL::ComPtr<IAccessible2> ia2;
 
   Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
@@ -334,7 +334,7 @@ std::string IA2Node::ia2_role() {
   return "";
 }
 
-long IA2Node::get_accChildCount() {
+long IANode::get_accChildCount() {
   if (child_id_.intVal != CHILDID_SELF)
     return 0;
 
@@ -350,9 +350,9 @@ long IA2Node::get_accChildCount() {
   return child_count;
 }
 
-IA2Node IA2Node::AccessibleChildAt(int index) {
+IANode IANode::AccessibleChildAt(int index) {
   if (child_id_.intVal != CHILDID_SELF) {
-    return IA2Node();
+    return IANode();
   }
 
   std::unique_ptr<VARIANT[]> children(new VARIANT[1]);
@@ -370,7 +370,7 @@ IA2Node IA2Node::AccessibleChildAt(int index) {
   if (vt_child.vt != VT_DISPATCH) {
     // This is a "partial child", which can have a name and role but not much
     // else
-    return IA2Node(root_, vt_child);
+    return IANode(root_, vt_child);
   }
 
   IDispatch* pdisp = vt_child.pdispVal;
@@ -384,5 +384,5 @@ IA2Node IA2Node::AccessibleChildAt(int index) {
         std::to_string(index) + " produced error code " +
         HResultErrorToString(hr));
   }
-  return IA2Node(accessible);
+  return IANode(accessible);
 }

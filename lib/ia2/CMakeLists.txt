@@ -4,7 +4,7 @@ add_library(
   SHARED
 
   # Sources
-  ia2_node.cc
+  ia_node.cc
   win_utils.cc
 )
 

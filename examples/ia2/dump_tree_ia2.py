@@ -36,9 +36,9 @@ def main():
       sys.exit()
 
     if (args.name):
-      app = ia2_inspect.IA2Node.CreateRootForName(args.name)
+      app = ia2_inspect.IANode.CreateRootForName(args.name)
     else:
-      app = ia2_inspect.IA2Node.CreateRootForPID(args.pid)
+      app = ia2_inspect.IANode.CreateRootForPID(args.pid)
 
     if (app.IsNull()):
       print("Couldn't find application")

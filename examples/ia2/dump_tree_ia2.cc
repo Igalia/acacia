@@ -4,7 +4,7 @@
 #include <regex>
 #include <string>
 
-#include "include/axaccess/ia2/ia2_node.h"
+#include "include/axaccess/ia2/ia_node.h"
 
 void print_usage(std::string& program_path) {
   std::string program_name = program_path;
@@ -19,7 +19,7 @@ void print_usage(std::string& program_path) {
   std::cout << "  " << program_name << " --name=NAME --pid=PID\n";
 }
 
-static void print_node(IA2Node node, int level) {
+static void print_node(IANode node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
   std::cout << "> ";
@@ -94,7 +94,7 @@ int main(int argc, char** argv) {
   // TODO: experiment with where to put coinitialize and couninitialize. #93
   // CoInitialize(nullptr);
 
-  IA2Node root = IA2Node::CreateRootForName(name, pid);
+  IANode root = IANode::CreateRootForName(name, pid);
   if (root.IsNull()) {
     std::cerr << "ERROR: Could not find match for";
     if (!name.empty()) {
