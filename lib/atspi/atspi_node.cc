@@ -14,9 +14,9 @@ std::string AtspiNode::get_role_name() {
   GError* error = nullptr;
   char* role_name = atspi_accessible_get_role_name(accessible_, &error);
   if (error) {
-    std::cerr << error->message;
+    std::string err_msg = error->message;
     g_error_free(error);
-    return "";
+    throw(err_msg);
   }
   return role_name;
 }
@@ -25,9 +25,9 @@ std::string AtspiNode::get_name() {
   GError* error = nullptr;
   char* name = atspi_accessible_get_name(accessible_, &error);
   if (error) {
-    std::cerr << error->message;
+    std::string err_msg = error->message;
     g_error_free(error);
-    return "";
+    throw(err_msg);
   }
   return name;
 }
@@ -36,11 +36,11 @@ int AtspiNode::get_child_count() {
   GError* error = nullptr;
   gint count = atspi_accessible_get_child_count(accessible_, &error);
   if (error) {
-    std::cerr << error->message;
+    std::string err_msg = error->message;
     g_error_free(error);
-    return -1;
+    throw(err_msg);
   }
-  return (int32_t)count;
+  return (int)count;
 }
 
 AtspiNodePtr AtspiNode::get_child_at_index(int index) {
@@ -48,9 +48,9 @@ AtspiNodePtr AtspiNode::get_child_at_index(int index) {
   AtspiAccessible* child =
       atspi_accessible_get_child_at_index(accessible_, index, &error);
   if (error) {
-    std::cerr << error->message;
+    std::string err_msg = error->message;
     g_error_free(error);
-    return nullptr;
+    throw(err_msg);
   }
   return std::make_unique<AtspiNode>(AtspiNode(child));
 }
@@ -61,9 +61,9 @@ std::vector<AtspiNodePtr> AtspiNode::get_children() {
   GError* error = nullptr;
   gint child_count = atspi_accessible_get_child_count(accessible_, &error);
   if (error) {
-    std::cerr << error->message;
+    std::string err_msg = error->message;
     g_error_free(error);
-    return result;
+    throw(err_msg);
   }
 
   result.resize(child_count);
