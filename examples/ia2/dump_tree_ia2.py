@@ -14,9 +14,11 @@ def print_tree(node, level):
 
   name = node.get_accName()
   if name:
-    print(" (" + name + ")")
-  else:
-    print()
+    print(" (" + name + ")", end="")
+  states = node.GetStates()
+  if states:
+      print(f" {states}", end="")
+  print()
 
   count = node.get_accChildCount()
   for i in range(count):

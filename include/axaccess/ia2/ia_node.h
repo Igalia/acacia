@@ -34,6 +34,9 @@ class AXA_EXPORT IANode {
   long IANode::get_accChildCount();
   IANode IANode::AccessibleChildAt(int index);
 
+  long IANode::get_accState();
+  std::string IANode::GetStates();
+
  private:
   Microsoft::WRL::ComPtr<IAccessible> root_;
   // This variant is used to recieve IAccessible

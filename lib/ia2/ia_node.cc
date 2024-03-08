@@ -386,3 +386,126 @@ IANode IANode::AccessibleChildAt(int index) {
   }
   return IANode(accessible);
 }
+
+long IANode::get_accState() {
+  HRESULT hr;
+  VARIANT state;
+  VARIANT child;
+  child.vt = VT_I4;
+  child.lVal = V_I4(&child_id_);
+  hr = root_->get_accState(child, &state);
+  if (FAILED(hr)) {
+    throw std::runtime_error(
+        "Attempting to get accessible state produced error code " +
+        HResultErrorToString(hr));
+  }
+  return V_I4(&state);
+}
+
+std::string IANode::GetStates() {
+  long states = get_accState();
+  std::vector<std::string> state_strings;
+  if (states & STATE_SYSTEM_ALERT_HIGH) {
+    state_strings.push_back("ALERT_HIGH");
+  }
+  if (states & STATE_SYSTEM_ALERT_MEDIUM) {
+    state_strings.push_back("ALERT_MEDIUM");
+  }
+  if (states & STATE_SYSTEM_ALERT_LOW) {
+    state_strings.push_back("ALERT_LOW");
+  }
+  if (states & STATE_SYSTEM_ANIMATED) {
+    state_strings.push_back("ANIMATED");
+  }
+  if (states & STATE_SYSTEM_BUSY) {
+    state_strings.push_back("BUSY");
+  }
+  if (states & STATE_SYSTEM_CHECKED) {
+    state_strings.push_back("CHECKED");
+  }
+  if (states & STATE_SYSTEM_COLLAPSED) {
+    state_strings.push_back("COLLAPSED");
+  }
+  if (states & STATE_SYSTEM_DEFAULT) {
+    state_strings.push_back("DEFAULT");
+  }
+  if (states & STATE_SYSTEM_EXPANDED) {
+    state_strings.push_back("EXPANDED");
+  }
+  if (states & STATE_SYSTEM_EXTSELECTABLE) {
+    state_strings.push_back("EXTSELECTABLE");
+  }
+  if (states & STATE_SYSTEM_FLOATING) {
+    state_strings.push_back("FLOATING");
+  }
+  if (states & STATE_SYSTEM_FOCUSABLE) {
+    state_strings.push_back("FOCUSABLE");
+  }
+  if (states & STATE_SYSTEM_FOCUSED) {
+    state_strings.push_back("FOCUSED");
+  }
+  if (states & STATE_SYSTEM_HASPOPUP) {
+    state_strings.push_back("HASPOPUP");
+  }
+  if (states & STATE_SYSTEM_HOTTRACKED) {
+    state_strings.push_back("HOTTRACKED");
+  }
+  if (states & STATE_SYSTEM_INVISIBLE) {
+    state_strings.push_back("INVISIBLE");
+  }
+  if (states & STATE_SYSTEM_LINKED) {
+    state_strings.push_back("LINKED");
+  }
+  if (states & STATE_SYSTEM_MARQUEED) {
+    state_strings.push_back("MARQUEED");
+  }
+  if (states & STATE_SYSTEM_MIXED) {
+    state_strings.push_back("MIXED");
+  }
+  if (states & STATE_SYSTEM_MOVEABLE) {
+    state_strings.push_back("MOVEABLE");
+  }
+  if (states & STATE_SYSTEM_MULTISELECTABLE) {
+    state_strings.push_back("MULTISELECTABLE");
+  }
+  if (states & STATE_SYSTEM_OFFSCREEN) {
+    state_strings.push_back("OFFSCREEN");
+  }
+  if (states & STATE_SYSTEM_PRESSED) {
+    state_strings.push_back("PRESSED");
+  }
+  if (states & STATE_SYSTEM_PROTECTED) {
+    state_strings.push_back("PROTECTED");
+  }
+  if (states & STATE_SYSTEM_READONLY) {
+    state_strings.push_back("READONLY");
+  }
+  if (states & STATE_SYSTEM_SELECTABLE) {
+    state_strings.push_back("SELECTABLE");
+  }
+  if (states & STATE_SYSTEM_SELECTED) {
+    state_strings.push_back("SELECTED");
+  }
+  if (states & STATE_SYSTEM_SELFVOICING) {
+    state_strings.push_back("SELFVOICING");
+  }
+  if (states & STATE_SYSTEM_SIZEABLE) {
+    state_strings.push_back("SIZEABLE");
+  }
+  if (states & STATE_SYSTEM_TRAVERSED) {
+    state_strings.push_back("TRAVERSED");
+  }
+  if (states & STATE_SYSTEM_UNAVAILABLE) {
+    state_strings.push_back("UNAVAILABLE");
+  }
+  std::string result;
+  for (const auto& state_string : state_strings) {
+    result += state_string + " ";
+  }
+
+  if (!result.empty()) {
+    result.erase(result.length() - 1);
+  }
+
+  return result;
+}

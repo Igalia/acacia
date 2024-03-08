@@ -34,6 +34,10 @@ static void print_node(IANode node, int level) {
   std::string node_name = node.get_accName();
   if (!node_name.empty())
     std::cout << " (" << node_name << ")";
+
+  std::string states = node.GetStates();
+  if (!states.empty())
+    std::cout << " " << states;
   std::cout << "\n";
 
   int32_t child_count = node.get_accChildCount();

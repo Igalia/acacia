@@ -8,7 +8,9 @@
 %catches(std::runtime_error) IANode::get_accRole();
 %catches(std::runtime_error) IANode::get_accName();
 %catches(std::runtime_error) IANode::get_accChildCount();
+%catches(std::runtime_error) IANode::get_accState();
 %catches(std::runtime_error) IANode::AccessibleChildAt(int index);
+%catches(std::runtime_error) IANode::GetStates();
 
 #define AXA_EXPORT
 %include <axaccess/ia2/ia_node.h>
