@@ -402,7 +402,7 @@ long IANode::get_accState() {
   return V_I4(&state);
 }
 
-std::string IANode::GetStates() {
+std::vector<std::string> IANode::GetStates() {
   long states = get_accState();
   std::vector<std::string> state_strings;
   if (states & STATE_SYSTEM_ALERT_HIGH) {
@@ -498,14 +498,6 @@ std::string IANode::GetStates() {
   if (states & STATE_SYSTEM_UNAVAILABLE) {
     state_strings.push_back("UNAVAILABLE");
   }
-  std::string result;
-  for (const auto& state_string : state_strings) {
-    result += state_string + " ";
-  }
 
-  if (!result.empty()) {
-    result.erase(result.length() - 1);
-  }
-
-  return result;
+  return state_strings;
 }

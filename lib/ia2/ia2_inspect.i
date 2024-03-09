@@ -4,6 +4,11 @@
 %}
 
 %include <std_string.i>
+%include <std_vector.i>
+
+namespace std {
+  %template(StringVector) vector<string>;
+};
 
 %catches(std::runtime_error) IANode::get_accRole();
 %catches(std::runtime_error) IANode::get_accName();
