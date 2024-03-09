@@ -100,12 +100,13 @@ Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(const std::string& name,
 std::string BstrToString(BSTR bstr) {
   if (SysStringLen(bstr) == 0)
     return "";
-  std::wstring wstr(bstr, SysStringLen(bstr));
+  std::wstring wstr(bstr);
   int size = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0,
                                  nullptr, nullptr);
   std::string str(size, '\0');
   WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], size, nullptr,
                       nullptr);
+  str.resize(size - 1);
   return str;
 }
 
@@ -131,6 +132,8 @@ std::string HResultErrorToString(HRESULT err) {
       return "E_OUTOFMEMORY";
     case E_INVALIDARG:
       return "E_INVALIDARG";
+    case DISP_E_MEMBERNOTFOUND:
+      return "DISP_E_MEMBERNOTFOUND";
     default:
       return std::to_string(err);
   }

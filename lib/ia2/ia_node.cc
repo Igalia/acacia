@@ -313,6 +313,22 @@ std::string IANode::get_accName() {
   return str_name;
 }
 
+std::string IANode::get_accDescription() {
+  VARIANT child;
+  child.vt = VT_I4;
+  child.lVal = V_I4(&child_id_);
+  BSTR bstr_description;
+  HRESULT hr = root_->get_accDescription(child, &bstr_description);
+  if (FAILED(hr) && hr != DISP_E_MEMBERNOTFOUND) {
+    throw std::runtime_error(
+        "Attempting to call get_accDescription produced error code " +
+        HResultErrorToString(hr));
+  }
+  std::string str_description = BstrToString(bstr_description);
+  SysFreeString(bstr_description);
+  return str_description;
+}
+
 // TODO: Break these out to it's own IAccessible2 wrapper object. #94
 // Additionally, getting the interface should be it's own utility function.
 std::string IANode::ia2_role() {

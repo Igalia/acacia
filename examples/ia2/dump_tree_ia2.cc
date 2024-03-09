@@ -31,15 +31,19 @@ static void print_node(IANode node, int level) {
   else
     std::cout << ia2_role << " " << msaa_role;
 
-  std::string node_name = node.get_accName();
-  if (!node_name.empty())
-    std::cout << " (" << node_name << ")";
+  std::cout << " Name='" << node.get_accName() << "',";
+  std::cout << " Description='" << node.get_accDescription() << "',";
 
   std::vector<std::string> states = node.GetStates();
+  std::string states_string;
   for (auto state : states) {
-    std::cout << " " << state;
+    states_string += state + ", ";
   }
-  std::cout << "\n";
+  size_t pos = states_string.find_last_not_of(", ");
+  if (pos != std::string::npos) {
+    states_string = states_string.substr(0, pos + 1);
+  }
+  std::cout << " States=(" << states_string << ")\n";
 
   int32_t child_count = node.get_accChildCount();
   if (child_count < 0)

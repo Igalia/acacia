@@ -12,13 +12,10 @@ def print_tree(node, level):
   else:
     print(ia2_role + " " + msaa_role, end="")
 
-  name = node.get_accName()
-  if name:
-    print(" (" + name + ")", end="")
-  states = node.GetStates()
-  for state in states:
-      print(f" {state}", end="")
-  print()
+  print(
+      f" Name='{node.get_accName()}',"
+      f" Description='{node.get_accDescription()}',",
+      f" States={node.GetStates()}")
 
   count = node.get_accChildCount()
   for i in range(count):

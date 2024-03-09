@@ -28,6 +28,7 @@ class AXA_EXPORT IANode {
 
   std::string get_accRole();
   std::string get_accName();
+  std::string get_accDescription();
 
   std::string ia2_role();
 

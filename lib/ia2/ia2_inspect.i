@@ -12,6 +12,7 @@ namespace std {
 
 %catches(std::runtime_error) IANode::get_accRole();
 %catches(std::runtime_error) IANode::get_accName();
+%catches(std::runtime_error) IANode::get_accDescription();
 %catches(std::runtime_error) IANode::get_accChildCount();
 %catches(std::runtime_error) IANode::get_accState();
 %catches(std::runtime_error) IANode::AccessibleChildAt(int index);
