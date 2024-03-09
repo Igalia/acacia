@@ -1,5 +1,5 @@
-#ifndef LIB_IA2_IA2_NODE_H_
-#define LIB_IA2_IA2_NODE_H_
+#ifndef LIB_IA2_IA_NODE_H_
+#define LIB_IA2_IA_NODE_H_
 
 #include <memory>
 #include <string>
@@ -47,4 +47,4 @@ class AXA_EXPORT IANode {
   VARIANT child_id_;
 };
 
-#endif  // LIB_IA2_IA2_NODE_H_
+#endif  // LIB_IA2_IA_NODE_H_
