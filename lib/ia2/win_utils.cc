@@ -138,4 +138,31 @@ std::string HResultErrorToString(HRESULT err) {
       return std::to_string(err);
   }
 }
+
+std::string VariantToString(VARIANT variant) {
+  switch (variant.vt) {
+    case VT_BSTR:
+      return BstrToString(variant.bstrVal);
+    case VT_I1:
+    case VT_I2:
+    case VT_I4:
+    case VT_I8:
+      return std::to_string(variant.lVal);
+    case VT_UI1:
+    case VT_UI2:
+    case VT_UI4:
+    case VT_UI8:
+      return std::to_string(variant.ulVal);
+    case VT_R4:
+      return std::to_string(variant.fltVal);
+    case VT_R8:
+      return std::to_string(variant.dblVal);
+    case VT_BOOL:
+      return variant.boolVal == VARIANT_TRUE ? "true" : "false";
+    case VT_ERROR:
+      return "Error code: " + std::to_string(variant.scode);
+    default:
+      return "Unsupported type";
+  }
+}
 }  // namespace win_utils

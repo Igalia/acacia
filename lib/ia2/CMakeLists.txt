@@ -4,7 +4,11 @@ add_library(
   SHARED
 
   # Sources
+  ia_2.cc
+  ia_action.cc
+  ia_component.cc
   ia_node.cc
+  ia_value.cc
   win_utils.cc
 )
 

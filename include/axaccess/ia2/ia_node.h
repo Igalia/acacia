@@ -30,13 +30,13 @@ class AXA_EXPORT IANode {
   std::string get_accName();
   std::string get_accDescription();
 
-  std::string ia2_role();
-
   long get_accChildCount();
   IANode AccessibleChildAt(int index);
 
   long get_accState();
   std::vector<std::string> GetStates();
+
+  Microsoft::WRL::ComPtr<IAccessible> GetIAccessible() { return root_; }
 
  private:
   Microsoft::WRL::ComPtr<IAccessible> root_;

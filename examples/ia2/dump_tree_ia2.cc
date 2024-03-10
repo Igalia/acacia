@@ -4,7 +4,11 @@
 #include <regex>
 #include <string>
 
+#include "include/axaccess/ia2/ia_2.h"
+#include "include/axaccess/ia2/ia_action.h"
+#include "include/axaccess/ia2/ia_component.h"
 #include "include/axaccess/ia2/ia_node.h"
+#include "include/axaccess/ia2/ia_value.h"
 
 void print_usage(std::string& program_path) {
   std::string program_name = program_path;
@@ -25,7 +29,8 @@ static void print_node(IANode node, int level) {
   std::cout << "> ";
 
   std::string msaa_role = node.get_accRole();
-  std::string ia2_role = node.ia2_role();
+  IA2 ia2 = IA2(node);
+  std::string ia2_role = ia2.role();
   if (ia2_role.empty() || ia2_role == msaa_role)
     std::cout << msaa_role;
   else
@@ -35,6 +40,9 @@ static void print_node(IANode node, int level) {
   std::cout << " Description='" << node.get_accDescription() << "',";
 
   std::vector<std::string> states = node.GetStates();
+  std::vector<std::string> ia2_states = ia2.GetStates();
+  states.insert(states.end(), ia2_states.begin(), ia2_states.end());
+  std::sort(states.begin(), states.end());
   std::string states_string;
   for (auto state : states) {
     states_string += state + ", ";
@@ -44,6 +52,31 @@ static void print_node(IANode node, int level) {
     states_string = states_string.substr(0, pos + 1);
   }
   std::cout << " States=(" << states_string << ")\n";
+
+  std::string indent(level * 2, ' ');
+
+  std::string properties = ia2.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IAAction action = IAAction(node);
+  properties = action.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IAComponent component = IAComponent(node);
+  properties = component.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IAValue value = IAValue(node);
+  properties = value.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
 
   int32_t child_count = node.get_accChildCount();
   if (child_count < 0)

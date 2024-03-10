@@ -225,10 +225,17 @@ To use the python library, navigate to `build/bin/Release`:
 % python3
 >>> import ia2_inspect
 >>> app = ia2_inspect.IANode.CreateRootForName("firefox")
->>> print(app.get_accRole())
->>> child_count = app.get_accChildCount()
->>> child = app.AccessibleChildAt(0)
->>> print(child.get_accRole())
+>>> app.get_accRole()
+>>> app.get_accChildCount()
+>>> child = app.AccessibleChildAt(3)
+>>> child.get_accRole()
+>>> action = ia2_inspect.IAAction(child)
+>>> action.nActions()
+>>> action.get_name(0)
+>>> component = ia2_inspect.IAComponent(child)
+>>> component.get_locationInParent()
+>>> ia2 = ia2_inspect.IA2(child)
+>>> ia2.get_attributes()
 ```
 
 Or run the script:

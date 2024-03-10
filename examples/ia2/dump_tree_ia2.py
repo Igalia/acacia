@@ -6,7 +6,8 @@ import ia2_inspect
 def print_tree(node, level):
   print(("--" * level) + "> ", end="")
   msaa_role = node.get_accRole()
-  ia2_role = node.ia2_role()
+  ia2 = ia2_inspect.IA2(node)
+  ia2_role = ia2.role()
   if (not ia2_role or msaa_role == ia2_role):
     print(msaa_role, end="")
   else:
@@ -15,7 +16,26 @@ def print_tree(node, level):
   print(
       f" Name='{node.get_accName()}',"
       f" Description='{node.get_accDescription()}',",
-      f" States={node.GetStates()}")
+      f" States={tuple(sorted(node.GetStates() + ia2.GetStates()))}")
+
+  properties = ia2.GetProperties()
+  if properties:
+      print("  " * level + "* "+ properties)
+
+  action = ia2_inspect.IAAction(node)
+  properties = action.GetProperties()
+  if properties:
+      print("  " * level + "* "+ properties)
+
+  component = ia2_inspect.IAComponent(node)
+  properties = component.GetProperties()
+  if properties:
+      print("  " * level + "* "+ properties)
+
+  value = ia2_inspect.IAValue(node)
+  properties = value.GetProperties()
+  if properties:
+      print("  " * level + "* "+ properties)
 
   count = node.get_accChildCount()
   for i in range(count):
