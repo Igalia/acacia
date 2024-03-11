@@ -15,7 +15,7 @@ class AXA_EXPORT IAComponent {
   std::string GetProperties();
   std::string get_background();
   std::string get_foreground();
-  std::pair<long, long> IAComponent::get_locationInParent();
+  std::pair<long, long> get_locationInParent();
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleComponent> QueryInterface();

@@ -141,6 +141,8 @@ std::string HResultErrorToString(HRESULT err) {
 
 std::string VariantToString(VARIANT variant) {
   switch (variant.vt) {
+    case VT_EMPTY:
+      return "";
     case VT_BSTR:
       return BstrToString(variant.bstrVal);
     case VT_I1:
@@ -162,7 +164,7 @@ std::string VariantToString(VARIANT variant) {
     case VT_ERROR:
       return "Error code: " + std::to_string(variant.scode);
     default:
-      return "Unsupported type";
+      return "Unsupported type: " + std::to_string(variant.vt);
   }
 }
 }  // namespace win_utils

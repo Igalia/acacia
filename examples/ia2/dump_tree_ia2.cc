@@ -7,6 +7,7 @@
 #include "include/axaccess/ia2/ia_2.h"
 #include "include/axaccess/ia2/ia_action.h"
 #include "include/axaccess/ia2/ia_component.h"
+#include "include/axaccess/ia2/ia_hyperlink.h"
 #include "include/axaccess/ia2/ia_node.h"
 #include "include/axaccess/ia2/ia_table2.h"
 #include "include/axaccess/ia2/ia_table_cell.h"
@@ -71,6 +72,12 @@ static void print_node(IANode node, int level) {
 
   IAComponent component = IAComponent(node);
   properties = component.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IAHyperlink hyperlink = IAHyperlink(node);
+  properties = hyperlink.GetProperties();
   if (!properties.empty()) {
     std::cout << indent << "* " << properties << "\n";
   }

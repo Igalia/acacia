@@ -7,6 +7,7 @@ add_library(
   ia_2.cc
   ia_action.cc
   ia_component.cc
+  ia_hyperlink.cc
   ia_node.cc
   ia_table2.cc
   ia_table_cell.cc

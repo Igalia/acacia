@@ -3,6 +3,7 @@
 #include <include/axaccess/ia2/ia_2.h>
 #include <include/axaccess/ia2/ia_action.h>
 #include <include/axaccess/ia2/ia_component.h>
+#include <include/axaccess/ia2/ia_hyperlink.h>
 #include <include/axaccess/ia2/ia_node.h>
 #include <include/axaccess/ia2/ia_table2.h>
 #include <include/axaccess/ia2/ia_table_cell.h>
@@ -55,6 +56,12 @@ namespace std {
 %catches(std::runtime_error) IAComponent::get_locationInParent();
 %catches(std::runtime_error) IAComponent::GetProperties();
 
+%catches(std::runtime_error) IAHyperlink::IAHyperlink(IANode node);
+%catches(std::runtime_error) IAHyperlink::get_startIndex();
+%catches(std::runtime_error) IAHyperlink::get_endIndex();
+%catches(std::runtime_error) IAHyperlink::get_anchorTarget(long index);
+%catches(std::runtime_error) IAHyperlink::GetProperties();
+
 %catches(std::runtime_error) IATable2::IATable2();
 %catches(std::runtime_error) IATable2::get_nColumns();
 %catches(std::runtime_error) IATable2::get_nRows();
@@ -83,6 +90,7 @@ namespace std {
 %include <axaccess/ia2/ia_2.h>
 %include <axaccess/ia2/ia_action.h>
 %include <axaccess/ia2/ia_component.h>
+%include <axaccess/ia2/ia_hyperlink.h>
 %include <axaccess/ia2/ia_node.h>
 %include <axaccess/ia2/ia_table2.h>
 %include <axaccess/ia2/ia_table_cell.h>
