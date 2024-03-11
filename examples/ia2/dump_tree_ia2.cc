@@ -8,6 +8,8 @@
 #include "include/axaccess/ia2/ia_action.h"
 #include "include/axaccess/ia2/ia_component.h"
 #include "include/axaccess/ia2/ia_node.h"
+#include "include/axaccess/ia2/ia_table2.h"
+#include "include/axaccess/ia2/ia_table_cell.h"
 #include "include/axaccess/ia2/ia_value.h"
 
 void print_usage(std::string& program_path) {
@@ -68,6 +70,18 @@ static void print_node(IANode node, int level) {
 
   IAComponent component = IAComponent(node);
   properties = component.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IATable2 table2 = IATable2(node);
+  properties = table2.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IATableCell table_cell = IATableCell(node);
+  properties = table_cell.GetProperties();
   if (!properties.empty()) {
     std::cout << indent << "* " << properties << "\n";
   }
