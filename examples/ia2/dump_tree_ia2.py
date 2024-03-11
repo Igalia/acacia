@@ -20,42 +20,42 @@ def print_tree(node, level):
 
   properties = ia2.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   action = ia2_inspect.IAAction(node)
   properties = action.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   component = ia2_inspect.IAComponent(node)
   properties = component.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   hyperlink = ia2_inspect.IAHyperlink(node)
   properties = hyperlink.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   table2 = ia2_inspect.IATable2(node)
   properties = table2.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   table_cell = ia2_inspect.IATableCell(node)
   properties = table_cell.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   text = ia2_inspect.IAText(node)
   properties = text.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   value = ia2_inspect.IAValue(node)
   properties = value.GetProperties()
   if properties:
-      print("  " * level + "* "+ properties)
+      print("  " * level + "* " + properties)
 
   count = node.get_accChildCount()
   for i in range(count):
