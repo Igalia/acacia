@@ -6,6 +6,7 @@
 #include <include/axaccess/ia2/ia_node.h>
 #include <include/axaccess/ia2/ia_table2.h>
 #include <include/axaccess/ia2/ia_table_cell.h>
+#include <include/axaccess/ia2/ia_text.h>
 #include <include/axaccess/ia2/ia_value.h>
 %}
 
@@ -66,6 +67,12 @@ namespace std {
 %catches(std::runtime_error) IATableCell::get_rowIndex();
 %catches(std::runtime_error) IATableCell::GetProperties();
 
+%catches(std::runtime_error) IAText::IAText(IANode node);
+%catches(std::runtime_error) IAText::get_caretOffset();
+%catches(std::runtime_error) IAText::get_nCharacters();
+%catches(std::runtime_error) IAText::get_text(long start_offset, long end_offset);
+%catches(std::runtime_error) IAText::GetProperties();
+
 %catches(std::runtime_error) IAValue::IAValue(IANode node);
 %catches(std::runtime_error) IAValue::get_currentValue();
 %catches(std::runtime_error) IAValue::get_maximumValue();
@@ -79,4 +86,5 @@ namespace std {
 %include <axaccess/ia2/ia_node.h>
 %include <axaccess/ia2/ia_table2.h>
 %include <axaccess/ia2/ia_table_cell.h>
+%include <axaccess/ia2/ia_text.h>
 %include <axaccess/ia2/ia_value.h>

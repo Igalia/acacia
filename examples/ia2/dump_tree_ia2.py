@@ -42,6 +42,11 @@ def print_tree(node, level):
   if properties:
       print("  " * level + "* "+ properties)
 
+  text = ia2_inspect.IAText(node)
+  properties = text.GetProperties()
+  if properties:
+      print("  " * level + "* "+ properties)
+
   value = ia2_inspect.IAValue(node)
   properties = value.GetProperties()
   if properties:

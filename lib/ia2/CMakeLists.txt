@@ -10,6 +10,7 @@ add_library(
   ia_node.cc
   ia_table2.cc
   ia_table_cell.cc
+  ia_text.cc
   ia_value.cc
   win_utils.cc
 )

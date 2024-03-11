@@ -10,6 +10,7 @@
 #include "include/axaccess/ia2/ia_node.h"
 #include "include/axaccess/ia2/ia_table2.h"
 #include "include/axaccess/ia2/ia_table_cell.h"
+#include "include/axaccess/ia2/ia_text.h"
 #include "include/axaccess/ia2/ia_value.h"
 
 void print_usage(std::string& program_path) {
@@ -82,6 +83,12 @@ static void print_node(IANode node, int level) {
 
   IATableCell table_cell = IATableCell(node);
   properties = table_cell.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IAText text = IAText(node);
+  properties = text.GetProperties();
   if (!properties.empty()) {
     std::cout << indent << "* " << properties << "\n";
   }
