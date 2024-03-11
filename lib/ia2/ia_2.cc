@@ -125,7 +125,28 @@ std::string IA2::GetProperties() {
     return std::string();
   }
 
-  std::string result = "Attributes=" + get_attributes();
+  std::string result;
+  GroupPosition group_position = get_groupPosition();
+  if (!group_position.IsEmpty()) {
+    result += "Position=" + std::to_string(group_position.position) + ", " +
+              "Setsize=" + std::to_string(group_position.setsize) + ", " +
+              "Level=" + std::to_string(group_position.level) + "; ";
+  }
+
+  std::vector<std::string> relations = GetRelations();
+  if (!relations.empty()) {
+    result += "Relations=";
+    for (auto relation : relations) {
+      result += relation + ", ";
+    }
+    size_t pos = result.find_last_not_of(", ");
+    if (pos != std::string::npos) {
+      result = result.substr(0, pos + 1);
+    }
+    result += "; ";
+  }
+
+  result += "Attributes=" + get_attributes();
   return result;
 }
 
@@ -140,6 +161,42 @@ std::string IA2::get_attributes() {
   }
 
   return std::string();
+}
+
+GroupPosition IA2::get_groupPosition() {
+  if (auto iface = QueryInterface()) {
+    GroupPosition result;
+    long level, setsize, position;
+    if SUCCEEDED (iface->get_groupPosition(&level, &setsize, &position)) {
+      return GroupPosition(level, setsize, position);
+    }
+  }
+  return GroupPosition();
+}
+
+std::vector<std::string> IA2::GetRelations() {
+  std::vector<std::string> relation_strings;
+  auto iface = QueryInterface();
+  if (!iface) {
+    return relation_strings;
+  }
+
+  long count;
+  if (FAILED(iface->get_nRelations(&count))) {
+    return relation_strings;
+  }
+
+  for (long i = 0; i < count; ++i) {
+    Microsoft::WRL::ComPtr<IAccessibleRelation> relation;
+    if (SUCCEEDED(iface->get_relation(i, &relation))) {
+      BSTR bstr_type;
+      if (SUCCEEDED(relation->get_relationType(&bstr_type))) {
+        relation_strings.push_back(BstrToString(bstr_type));
+        SysFreeString(bstr_type);
+      }
+    }
+  }
+  return relation_strings;
 }
 
 std::string IA2::role() {

@@ -236,6 +236,7 @@ To use the python library, navigate to `build/bin/Release`:
 >>> component.get_locationInParent()
 >>> ia2 = ia2_inspect.IA2(child)
 >>> ia2.get_attributes()
+>>> ia2.GetRelations()
 ```
 
 Or run the script:
