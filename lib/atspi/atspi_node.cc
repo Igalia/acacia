@@ -16,7 +16,8 @@ std::string AtspiNode::get_role_name() {
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
-    throw(err_msg);
+    throw std::runtime_error(err_msg);
+    return "";
   }
   return role_name;
 }
@@ -27,7 +28,8 @@ std::string AtspiNode::get_name() {
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
-    throw(err_msg);
+    throw std::runtime_error(err_msg);
+    return "";
   }
   return name;
 }
@@ -38,7 +40,8 @@ int AtspiNode::get_child_count() {
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
-    throw(err_msg);
+    throw std::runtime_error(err_msg);
+    return -1;
   }
   return (int)count;
 }
@@ -50,7 +53,8 @@ AtspiNodePtr AtspiNode::get_child_at_index(int index) {
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
-    throw(err_msg);
+    throw std::runtime_error(err_msg);
+    return nullptr;
   }
   return std::make_unique<AtspiNode>(AtspiNode(child));
 }
@@ -63,7 +67,8 @@ std::vector<AtspiNodePtr> AtspiNode::get_children() {
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
-    throw(err_msg);
+    throw std::runtime_error(err_msg);
+    return result;
   }
 
   result.resize(child_count);

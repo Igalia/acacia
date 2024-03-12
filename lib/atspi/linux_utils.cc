@@ -40,5 +40,6 @@ AtspiNodePtr find_root_accessible_from_pid(const int pid) {
  handle_gerror:
   std::string err_msg = error->message;
   g_error_free(error);
-  throw(err_msg);
+  throw std::runtime_error(err_msg);
+  return nullptr;
 }
