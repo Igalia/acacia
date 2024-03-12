@@ -22,6 +22,19 @@ struct WindowSearchCriteria {
   HWND match = nullptr;
 };
 
+class CCoInitialize {
+ public:
+  CCoInitialize() { hr_ = CoInitialize(NULL); }
+  ~CCoInitialize() {
+    if (SUCCEEDED(hr_))
+      CoUninitialize();
+  }
+  HRESULT result() const { return hr_; }
+  HRESULT hr_;
+};
+
+CCoInitialize init;
+
 std::string nameFromHwnd(HWND hwnd) {
   int length = ::GetWindowTextLength(hwnd);
   if (length == 0) {
@@ -77,9 +90,11 @@ BOOL CALLBACK FindWindow(HWND hwnd, LPARAM lparam) {
 
 Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(const std::string& name,
                                                       DWORD dwProcessID) {
-  // TODO: experiment with where to put coinitialize and couninitialize. #93
-  CoInitialize(nullptr);
-
+  if (FAILED(init.result())) {
+    throw std::runtime_error(
+        "Could not initialize the COM library, CoInitialize returned: " +
+        HResultErrorToString(init.result()));
+  }
   Microsoft::WRL::ComPtr<IAccessible> root;
   WindowSearchCriteria criteria;
   criteria.name = name;
@@ -88,9 +103,9 @@ Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(const std::string& name,
   if (criteria.match == nullptr) {
     return root;
   }
-  // TODO: Consider using OBJID_CLIENT, but I think we want OBJID_WINDOW
   HRESULT hr = ::AccessibleObjectFromWindow(criteria.match, OBJID_WINDOW,
                                             IID_PPV_ARGS(&root));
+  // TODO: Should we throw here?
   if (FAILED(hr)) {
     std::cout << "Could not get accessible\n";
   }
