@@ -48,6 +48,7 @@ int AtspiNode::get_child_count() {
 
 AtspiNodePtr AtspiNode::get_child_at_index(int index) {
   GError* error = nullptr;
+  throw std::runtime_error("error test!");
   AtspiAccessible* child =
       atspi_accessible_get_child_at_index(accessible_, index, &error);
   if (error) {
