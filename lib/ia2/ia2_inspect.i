@@ -36,6 +36,7 @@ namespace std {
 %catches(std::runtime_error) IANode::GetStates();
 
 %catches(std::runtime_error) IA2::IA2(IANode node);
+%catches(std::runtime_error) IA2::IsNull();
 %catches(std::runtime_error) IA2::get_attributes();
 %catches(std::runtime_error) IA2::get_groupPosition();
 %catches(std::runtime_error) IA2::role();
@@ -45,29 +46,34 @@ namespace std {
 %catches(std::runtime_error) IA2::GetStates();
 
 %catches(std::runtime_error) IAAction::IAAction(IANode node);
+%catches(std::runtime_error) IAAction::IsNull();
 %catches(std::runtime_error) IAAction::nActions();
 %catches(std::runtime_error) IAAction::get_description(int index);
 %catches(std::runtime_error) IAAction::get_name(int index);
 %catches(std::runtime_error) IAAction::GetProperties();
 
 %catches(std::runtime_error) IAComponent::IAComponent(IANode node);
+%catches(std::runtime_error) IAComponent::IsNull();
 %catches(std::runtime_error) IAComponent::get_background();
 %catches(std::runtime_error) IAComponent::get_foreground();
 %catches(std::runtime_error) IAComponent::get_locationInParent();
 %catches(std::runtime_error) IAComponent::GetProperties();
 
 %catches(std::runtime_error) IAHyperlink::IAHyperlink(IANode node);
+%catches(std::runtime_error) IAHyperlink::IsNull();
 %catches(std::runtime_error) IAHyperlink::get_startIndex();
 %catches(std::runtime_error) IAHyperlink::get_endIndex();
 %catches(std::runtime_error) IAHyperlink::get_anchorTarget(long index);
 %catches(std::runtime_error) IAHyperlink::GetProperties();
 
-%catches(std::runtime_error) IATable2::IATable2();
+%catches(std::runtime_error) IATable2::IATable2(IANode node);
+%catches(std::runtime_error) IATable2::IsNull();
 %catches(std::runtime_error) IATable2::get_nColumns();
 %catches(std::runtime_error) IATable2::get_nRows();
 %catches(std::runtime_error) IATable2::GetProperties();
 
-%catches(std::runtime_error) IATableCell::IATableCell();
+%catches(std::runtime_error) IATableCell::IATableCell(IANode node);
+%catches(std::runtime_error) IATableCell::IsNull();
 %catches(std::runtime_error) IATableCell::get_columnExtent();
 %catches(std::runtime_error) IATableCell::get_columnIndex();
 %catches(std::runtime_error) IATableCell::get_rowExtent();
@@ -75,12 +81,14 @@ namespace std {
 %catches(std::runtime_error) IATableCell::GetProperties();
 
 %catches(std::runtime_error) IAText::IAText(IANode node);
+%catches(std::runtime_error) IAText::IsNull();
 %catches(std::runtime_error) IAText::get_caretOffset();
 %catches(std::runtime_error) IAText::get_nCharacters();
 %catches(std::runtime_error) IAText::get_text(long start_offset, long end_offset);
 %catches(std::runtime_error) IAText::GetProperties();
 
 %catches(std::runtime_error) IAValue::IAValue(IANode node);
+%catches(std::runtime_error) IAValue::IsNull();
 %catches(std::runtime_error) IAValue::get_currentValue();
 %catches(std::runtime_error) IAValue::get_maximumValue();
 %catches(std::runtime_error) IAValue::get_minimumValue();

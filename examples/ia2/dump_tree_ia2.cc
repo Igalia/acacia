@@ -59,51 +59,45 @@ static void print_node(IANode node, int level) {
 
   std::string indent(level * 2, ' ');
 
+  // For the purpose of this example, dump properties even if null.
   std::string properties = ia2.GetProperties();
   if (!properties.empty()) {
     std::cout << indent << "* " << properties << "\n";
   }
 
   IAAction action = IAAction(node);
-  properties = action.GetProperties();
-  if (!properties.empty()) {
-    std::cout << indent << "* " << properties << "\n";
+  if (!action.IsNull()) {
+    std::cout << indent << "* " << action.GetProperties() << "\n";
   }
 
   IAComponent component = IAComponent(node);
-  properties = component.GetProperties();
-  if (!properties.empty()) {
-    std::cout << indent << "* " << properties << "\n";
+  if (!component.IsNull()) {
+    std::cout << indent << "* " << component.GetProperties() << "\n";
   }
 
   IAHyperlink hyperlink = IAHyperlink(node);
-  properties = hyperlink.GetProperties();
-  if (!properties.empty()) {
-    std::cout << indent << "* " << properties << "\n";
+  if (!hyperlink.IsNull()) {
+    std::cout << indent << "* " << hyperlink.GetProperties() << "\n";
   }
 
   IATable2 table2 = IATable2(node);
-  properties = table2.GetProperties();
-  if (!properties.empty()) {
-    std::cout << indent << "* " << properties << "\n";
+  if (!table2.IsNull()) {
+    std::cout << indent << "* " << table2.GetProperties() << "\n";
   }
 
   IATableCell table_cell = IATableCell(node);
-  properties = table_cell.GetProperties();
-  if (!properties.empty()) {
-    std::cout << indent << "* " << properties << "\n";
+  if (!table_cell.IsNull()) {
+    std::cout << indent << "* " << table_cell.GetProperties() << "\n";
   }
 
   IAText text = IAText(node);
-  properties = text.GetProperties();
-  if (!properties.empty()) {
-    std::cout << indent << "* " << properties << "\n";
+  if (!text.IsNull()) {
+    std::cout << indent << "* " << text.GetProperties() << "\n";
   }
 
   IAValue value = IAValue(node);
-  properties = value.GetProperties();
-  if (!properties.empty()) {
-    std::cout << indent << "* " << properties << "\n";
+  if (!value.IsNull()) {
+    std::cout << indent << "* " << value.GetProperties() << "\n";
   }
 
   int32_t child_count = node.get_accChildCount();

@@ -12,6 +12,7 @@ class AXA_EXPORT IAAction {
   IAAction(IANode node);
   ~IAAction(){};
 
+  bool IsNull() { return !iface_; }
   std::string GetProperties();
   long nActions();
   std::string get_description(int index);

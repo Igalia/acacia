@@ -126,11 +126,11 @@ IA2::IA2(IANode node) {
 }
 
 std::string IA2::GetProperties() {
-  if (!iface_) {
-    return std::string();
+  if (IsNull()) {
+    return "IAccessible2: Not implemented";
   }
 
-  std::string result;
+  std::string result = "IAccessible2: ";
   GroupPosition group_position = get_groupPosition();
   if (!group_position.IsEmpty()) {
     result += "Position=" + std::to_string(group_position.position) + ", " +

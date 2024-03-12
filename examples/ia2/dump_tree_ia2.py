@@ -18,44 +18,38 @@ def print_tree(node, level):
       f" Description='{node.get_accDescription()}',",
       f" States={tuple(sorted(node.GetStates() + ia2.GetStates()))}")
 
+  # For the purpose of this example, dump properties even if null.
   properties = ia2.GetProperties()
   if properties:
-      print("  " * level + "* " + properties)
+    print("  " * level + "* " + properties)
 
   action = ia2_inspect.IAAction(node)
-  properties = action.GetProperties()
-  if properties:
-      print("  " * level + "* " + properties)
+  if not action.IsNull():
+    print("  " * level + "* " + action.GetProperties())
 
   component = ia2_inspect.IAComponent(node)
-  properties = component.GetProperties()
-  if properties:
-      print("  " * level + "* " + properties)
+  if not component.IsNull():
+    print("  " * level + "* " + component.GetProperties())
 
   hyperlink = ia2_inspect.IAHyperlink(node)
-  properties = hyperlink.GetProperties()
-  if properties:
-      print("  " * level + "* " + properties)
+  if not hyperlink.IsNull():
+    print("  " * level + "* " + hyperlink.GetProperties())
 
   table2 = ia2_inspect.IATable2(node)
-  properties = table2.GetProperties()
-  if properties:
-      print("  " * level + "* " + properties)
+  if not table2.IsNull():
+    print("  " * level + "* " + table2.GetProperties())
 
   table_cell = ia2_inspect.IATableCell(node)
-  properties = table_cell.GetProperties()
-  if properties:
-      print("  " * level + "* " + properties)
+  if not table_cell.IsNull():
+    print("  " * level + "* " + table_cell.GetProperties())
 
   text = ia2_inspect.IAText(node)
-  properties = text.GetProperties()
-  if properties:
-      print("  " * level + "* " + properties)
+  if not text.IsNull():
+    print("  " * level + "* " + text.GetProperties())
 
   value = ia2_inspect.IAValue(node)
-  properties = value.GetProperties()
-  if properties:
-      print("  " * level + "* " + properties)
+  if not value.IsNull():
+    print("  " * level + "* " + value.GetProperties())
 
   count = node.get_accChildCount()
   for i in range(count):

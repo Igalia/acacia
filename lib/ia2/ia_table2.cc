@@ -7,8 +7,8 @@ IATable2::IATable2(IANode node) {
 }
 
 std::string IATable2::GetProperties() {
-  if (!iface_) {
-    return std::string();
+  if (IsNull()) {
+    return "Table2: Not implemented";
   }
 
   std::string result = "Table: rows=" + std::to_string(get_nRows()) +

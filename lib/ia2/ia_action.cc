@@ -11,11 +11,11 @@ IAAction::IAAction(IANode node) {
 }
 
 std::string IAAction::GetProperties() {
-  long count = nActions();
-  if (!count) {
-    return std::string();
+  if (IsNull()) {
+    return "Action: Not implemented";
   }
 
+  long count = nActions();
   std::string result = "Action:";
   for (int i = 0; i < count; ++i) {
     std::string name = get_name(i);

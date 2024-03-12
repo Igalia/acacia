@@ -12,6 +12,7 @@ class AXA_EXPORT IAText {
   IAText(IANode node);
   ~IAText(){};
 
+  bool IsNull() { return !iface_; }
   std::string GetProperties();
   long get_caretOffset();
   long get_nCharacters();

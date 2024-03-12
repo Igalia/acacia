@@ -26,8 +26,8 @@ IAText::IAText(IANode node) {
 }
 
 std::string IAText::GetProperties() {
-  if (!iface_) {
-    return std::string();
+  if (IsNull()) {
+    return "Text: Not implemented";
   }
 
   std::string result = "Text: ";

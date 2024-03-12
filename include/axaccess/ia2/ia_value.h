@@ -12,6 +12,7 @@ class AXA_EXPORT IAValue {
   IAValue(IANode node);
   ~IAValue(){};
 
+  bool IsNull() { return !iface_; }
   std::string GetProperties();
   std::string get_currentValue();
   std::string get_maximumValue();

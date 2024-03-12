@@ -7,8 +7,8 @@ IATableCell::IATableCell(IANode node) {
 }
 
 std::string IATableCell::GetProperties() {
-  if (!iface_) {
-    return std::string();
+  if (IsNull()) {
+    return "Table Cell: Not implemented";
   }
 
   std::string result = "Table Cell: row=" + std::to_string(get_rowIndex()) +

@@ -12,6 +12,7 @@ class AXA_EXPORT IAComponent {
   IAComponent(IANode node);
   ~IAComponent(){};
 
+  bool IsNull() { return !iface_; }
   std::string GetProperties();
   std::string get_background();
   std::string get_foreground();

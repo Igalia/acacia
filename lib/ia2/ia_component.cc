@@ -17,8 +17,8 @@ IAComponent::IAComponent(IANode node) {
 }
 
 std::string IAComponent::GetProperties() {
-  if (!iface_) {
-    return std::string();
+  if (IsNull()) {
+    return "Component: Not implemented";
   }
 
   std::string result = "Component:";

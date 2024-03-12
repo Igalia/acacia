@@ -11,8 +11,8 @@ IAHyperlink::IAHyperlink(IANode node) {
 }
 
 std::string IAHyperlink::GetProperties() {
-  if (!iface_) {
-    return std::string();
+  if (IsNull()) {
+    return "Hyperlink: Not implemented";
   }
 
   // Typically there is one target, at least in the Linux equivalent API.

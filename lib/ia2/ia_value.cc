@@ -11,8 +11,8 @@ IAValue::IAValue(IANode node) {
 }
 
 std::string IAValue::GetProperties() {
-  if (!iface_) {
-    return std::string();
+  if (IsNull()) {
+    return "Value: Not implemented";
   }
 
   std::string result = "Value: " + get_currentValue() +

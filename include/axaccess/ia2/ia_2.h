@@ -25,6 +25,7 @@ class AXA_EXPORT IA2 {
   IA2(IANode node);
   ~IA2(){};
 
+  bool IsNull() { return !iface_; }
   std::string GetProperties();
   std::string get_attributes();
   GroupPosition get_groupPosition();

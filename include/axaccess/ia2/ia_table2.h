@@ -12,6 +12,7 @@ class AXA_EXPORT IATable2 {
   IATable2(IANode node);
   ~IATable2(){};
 
+  bool IsNull() { return !iface_; }
   std::string GetProperties();
   long get_nColumns();
   long get_nRows();

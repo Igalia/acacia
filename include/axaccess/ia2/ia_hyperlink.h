@@ -12,6 +12,7 @@ class AXA_EXPORT IAHyperlink {
   IAHyperlink(IANode node);
   ~IAHyperlink(){};
 
+  bool IsNull() { return !iface_; }
   std::string GetProperties();
   long get_startIndex();
   long get_endIndex();
