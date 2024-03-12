@@ -1,5 +1,11 @@
 #include "axaccess/ia2/ia_table_cell.h"
 
+#include <stdexcept>
+
+#include "axaccess/ia2/win_utils.h"
+
+using namespace win_utils;
+
 IATableCell::IATableCell(IANode node) {
   if (auto service_provider = node.GetServiceProvider()) {
     service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
@@ -21,9 +27,12 @@ std::string IATableCell::GetProperties() {
 long IATableCell::get_columnExtent() {
   if (iface_) {
     long span = 0;
-    if (SUCCEEDED(iface_->get_columnExtent(&span))) {
-      return span;
+    HRESULT hr = iface_->get_columnExtent(&span);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_columnExtent failed: " +
+                               HResultErrorToString(hr));
     }
+    return span;
   }
   return 0;
 }
@@ -31,9 +40,12 @@ long IATableCell::get_columnExtent() {
 long IATableCell::get_columnIndex() {
   if (iface_) {
     long index = 0;
-    if (SUCCEEDED(iface_->get_columnIndex(&index))) {
-      return index;
+    HRESULT hr = iface_->get_columnIndex(&index);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_columnIndex failed: " +
+                               HResultErrorToString(hr));
     }
+    return index;
   }
   return -1;
 }
@@ -41,9 +53,12 @@ long IATableCell::get_columnIndex() {
 long IATableCell::get_rowExtent() {
   if (iface_) {
     long span = 0;
-    if (SUCCEEDED(iface_->get_rowExtent(&span))) {
-      return span;
+    HRESULT hr = iface_->get_rowExtent(&span);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_rowExtent failed: " +
+                               HResultErrorToString(hr));
     }
+    return span;
   }
   return 0;
 }
@@ -51,9 +66,12 @@ long IATableCell::get_rowExtent() {
 long IATableCell::get_rowIndex() {
   if (iface_) {
     long index = 0;
-    if (SUCCEEDED(iface_->get_rowIndex(&index))) {
-      return index;
+    HRESULT hr = iface_->get_rowIndex(&index);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_rowIndex failed: " +
+                               HResultErrorToString(hr));
     }
+    return index;
   }
   return -1;
 }

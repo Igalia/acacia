@@ -1,6 +1,10 @@
 #include "axaccess/ia2/ia_text.h"
 
+#include <stdexcept>
+
 #include "axaccess/ia2/win_utils.h"
+
+using namespace win_utils;
 
 namespace {
 std::string ToPrintableString(std::string str) {
@@ -16,8 +20,6 @@ std::string ToPrintableString(std::string str) {
 }
 
 }  // namespace
-
-using namespace win_utils;
 
 IAText::IAText(IANode node) {
   if (auto service_provider = node.GetServiceProvider()) {
@@ -45,9 +47,12 @@ std::string IAText::GetProperties() {
 long IAText::get_caretOffset() {
   if (iface_) {
     long offset;
-    if (SUCCEEDED(iface_->get_caretOffset(&offset))) {
-      return offset;
+    HRESULT hr = iface_->get_caretOffset(&offset);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_caretOffset failed: " +
+                               HResultErrorToString(hr));
     }
+    return offset;
   }
   return -1;
 }
@@ -55,9 +60,12 @@ long IAText::get_caretOffset() {
 long IAText::get_nCharacters() {
   if (iface_) {
     long count;
-    if (SUCCEEDED(iface_->get_nCharacters(&count))) {
-      return count;
+    HRESULT hr = iface_->get_nCharacters(&count);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_nCharacters failed: " +
+                               HResultErrorToString(hr));
     }
+    return count;
   }
   return 0;
 }
@@ -65,11 +73,13 @@ long IAText::get_nCharacters() {
 std::string IAText::get_text(long start_offset, long end_offset) {
   if (iface_) {
     BSTR bstr_result;
-    if (SUCCEEDED(iface_->get_text(start_offset, end_offset, &bstr_result))) {
+    HRESULT hr = iface_->get_text(start_offset, end_offset, &bstr_result);
+    if (SUCCEEDED(hr)) {
       std::string str_result = BstrToString(bstr_result);
       SysFreeString(bstr_result);
       return str_result;
     }
+    return "ERROR: get_text failed: " + HResultErrorToString(hr);
   }
   return std::string();
 }

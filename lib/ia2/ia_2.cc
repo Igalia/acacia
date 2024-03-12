@@ -1,5 +1,7 @@
 #include "axaccess/ia2/ia_2.h"
 
+#include <stdexcept>
+
 #include "axaccess/ia2/win_utils.h"
 
 namespace {
@@ -158,11 +160,13 @@ std::string IA2::GetProperties() {
 std::string IA2::get_attributes() {
   if (iface_) {
     BSTR bstr_result;
-    if SUCCEEDED (iface_->get_attributes(&bstr_result)) {
+    HRESULT hr = iface_->get_attributes(&bstr_result);
+    if SUCCEEDED (hr) {
       std::string str_result = BstrToString(bstr_result);
       SysFreeString(bstr_result);
       return str_result;
     }
+    return "ERROR: get_attributes failed: " + HResultErrorToString(hr);
   }
 
   return std::string();
@@ -186,18 +190,29 @@ std::vector<std::string> IA2::GetRelations() {
   }
 
   long count;
-  if (FAILED(iface_->get_nRelations(&count))) {
+  HRESULT hr = iface_->get_nRelations(&count);
+  if (FAILED(hr)) {
+    relation_strings.push_back("ERROR: get_nRelations failed: " +
+                               HResultErrorToString(hr));
     return relation_strings;
   }
 
   for (long i = 0; i < count; ++i) {
     Microsoft::WRL::ComPtr<IAccessibleRelation> relation;
-    if (SUCCEEDED(iface_->get_relation(i, &relation))) {
+    hr = iface_->get_relation(i, &relation);
+    if (SUCCEEDED(hr)) {
       BSTR bstr_type;
-      if (SUCCEEDED(relation->get_relationType(&bstr_type))) {
+      hr = relation->get_relationType(&bstr_type);
+      if (SUCCEEDED(hr)) {
         relation_strings.push_back(BstrToString(bstr_type));
         SysFreeString(bstr_type);
+      } else {
+        relation_strings.push_back("ERROR: get_relationType failed: " +
+                                   HResultErrorToString(hr));
       }
+    } else {
+      relation_strings.push_back("ERROR: get_relation failed: " +
+                                 HResultErrorToString(hr));
     }
   }
   return relation_strings;
@@ -206,9 +221,11 @@ std::vector<std::string> IA2::GetRelations() {
 std::string IA2::role() {
   if (iface_) {
     LONG role = 0;
-    if (SUCCEEDED(iface_->role(&role))) {
+    HRESULT hr = iface_->role(&role);
+    if (SUCCEEDED(hr)) {
       return RoleToString(role);
     }
+    return "ERROR: role failed: " + HResultErrorToString(hr);
   }
   return "";
 }
@@ -216,9 +233,12 @@ std::string IA2::role() {
 long IA2::get_states() {
   if (iface_) {
     long result;
-    if SUCCEEDED (iface_->get_states(&result)) {
-      return result;
+    HRESULT hr = iface_->get_states(&result);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_states failed: " +
+                               HResultErrorToString(hr));
     }
+    return result;
   }
   return 0;
 }

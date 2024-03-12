@@ -1,5 +1,7 @@
 #include "axaccess/ia2/ia_action.h"
 
+#include <stdexcept>
+
 #include "axaccess/ia2/win_utils.h"
 
 using namespace win_utils;
@@ -27,9 +29,12 @@ std::string IAAction::GetProperties() {
 long IAAction::nActions() {
   if (iface_) {
     long count = 0;
-    if (SUCCEEDED(iface_->nActions(&count))) {
-      return count;
+    HRESULT hr = iface_->nActions(&count);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: nActions failed: " +
+                               HResultErrorToString(hr));
     }
+    return count;
   }
   return 0;
 }
@@ -37,11 +42,13 @@ long IAAction::nActions() {
 std::string IAAction::get_description(int index) {
   if (iface_) {
     BSTR bstr_result;
-    if (SUCCEEDED(iface_->get_description(index, &bstr_result))) {
+    HRESULT hr = iface_->get_description(index, &bstr_result);
+    if (SUCCEEDED(hr)) {
       std::string str_result = BstrToString(bstr_result);
       SysFreeString(bstr_result);
       return str_result;
     }
+    return "ERROR: get_description failed: " + HResultErrorToString(hr);
   }
   return std::string();
 }
@@ -49,11 +56,13 @@ std::string IAAction::get_description(int index) {
 std::string IAAction::get_name(int index) {
   if (iface_) {
     BSTR bstr_result;
-    if (SUCCEEDED(iface_->get_name(index, &bstr_result))) {
+    HRESULT hr = iface_->get_name(index, &bstr_result);
+    if (SUCCEEDED(hr)) {
       std::string str_result = BstrToString(bstr_result);
       SysFreeString(bstr_result);
       return str_result;
     }
+    return "ERROR: get_name failed: " + HResultErrorToString(hr);
   }
   return std::string();
 }

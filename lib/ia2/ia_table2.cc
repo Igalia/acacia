@@ -1,5 +1,11 @@
 #include "axaccess/ia2/ia_table2.h"
 
+#include <stdexcept>
+
+#include "axaccess/ia2/win_utils.h"
+
+using namespace win_utils;
+
 IATable2::IATable2(IANode node) {
   if (auto service_provider = node.GetServiceProvider()) {
     service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
@@ -19,9 +25,12 @@ std::string IATable2::GetProperties() {
 long IATable2::get_nColumns() {
   if (iface_) {
     long count = 0;
-    if (SUCCEEDED(iface_->get_nColumns(&count))) {
-      return count;
+    HRESULT hr = iface_->get_nColumns(&count);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_nColumns failed: " +
+                               HResultErrorToString(hr));
     }
+    return count;
   }
   return 0;
 }
@@ -29,9 +38,12 @@ long IATable2::get_nColumns() {
 long IATable2::get_nRows() {
   if (iface_) {
     long count = 0;
-    if (SUCCEEDED(iface_->get_nRows(&count))) {
-      return count;
+    HRESULT hr = iface_->get_nRows(&count);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_nRows failed: " +
+                               HResultErrorToString(hr));
     }
+    return count;
   }
   return 0;
 }

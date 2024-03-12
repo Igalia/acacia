@@ -1,5 +1,7 @@
 #include "axaccess/ia2/ia_hyperlink.h"
 
+#include <stdexcept>
+
 #include "axaccess/ia2/win_utils.h"
 
 using namespace win_utils;
@@ -26,9 +28,12 @@ std::string IAHyperlink::GetProperties() {
 long IAHyperlink::get_startIndex() {
   if (iface_) {
     long index;
-    if (SUCCEEDED(iface_->get_startIndex(&index))) {
-      return index;
+    HRESULT hr = iface_->get_startIndex(&index);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_startIndex failed: " +
+                               HResultErrorToString(hr));
     }
+    return index;
   }
   return -1;
 }
@@ -36,9 +41,12 @@ long IAHyperlink::get_startIndex() {
 long IAHyperlink::get_endIndex() {
   if (iface_) {
     long index;
-    if (SUCCEEDED(iface_->get_endIndex(&index))) {
-      return index;
+    HRESULT hr = iface_->get_endIndex(&index);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_endIndex failed: " +
+                               HResultErrorToString(hr));
     }
+    return index;
   }
   return -1;
 }
@@ -46,11 +54,13 @@ long IAHyperlink::get_endIndex() {
 std::string IAHyperlink::get_anchorTarget(long index) {
   if (iface_) {
     VARIANT variant_result;
-    if (SUCCEEDED(iface_->get_anchorTarget(index, &variant_result))) {
+    HRESULT hr = iface_->get_anchorTarget(index, &variant_result);
+    if (SUCCEEDED(hr)) {
       std::string str_result = VariantToString(variant_result);
       VariantClear(&variant_result);
       return str_result;
     }
+    return "ERROR: get_anchorTarget failed: " + HResultErrorToString(hr);
   }
   return std::string();
 }
