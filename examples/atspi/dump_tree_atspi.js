@@ -33,5 +33,8 @@ function printNode(node, level) {
 try {
     printNode(root, 0);
 } catch(e) {
-    console.log ("Error: " + e.what());
+    console.log(e);
 }
+
+// TODO: delete this line, for testing errors
+console.log("Executing the rest of the program.");
