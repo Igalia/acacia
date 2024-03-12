@@ -1,7 +1,13 @@
 #include "axaccess/ia2/ia_table2.h"
 
+IATable2::IATable2(IANode node) {
+  if (auto service_provider = node.GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
+  }
+}
+
 std::string IATable2::GetProperties() {
-  if (!QueryInterface()) {
+  if (!iface_) {
     return std::string();
   }
 
@@ -11,9 +17,9 @@ std::string IATable2::GetProperties() {
 }
 
 long IATable2::get_nColumns() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long count = 0;
-    if (SUCCEEDED(iface->get_nColumns(&count))) {
+    if (SUCCEEDED(iface_->get_nColumns(&count))) {
       return count;
     }
   }
@@ -21,26 +27,11 @@ long IATable2::get_nColumns() {
 }
 
 long IATable2::get_nRows() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long count = 0;
-    if (SUCCEEDED(iface->get_nRows(&count))) {
+    if (SUCCEEDED(iface_->get_nRows(&count))) {
       return count;
     }
   }
   return 0;
-}
-
-Microsoft::WRL::ComPtr<IAccessibleTable2> IATable2::QueryInterface() {
-  if (node_.IsNull() || !node_.GetIAccessible()) {
-    return nullptr;
-  }
-
-  Microsoft::WRL::ComPtr<IAccessibleTable2> iface;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr =
-      node_.GetIAccessible()->QueryInterface(IID_PPV_ARGS(&service_provider));
-  return SUCCEEDED(service_provider->QueryService(IID_IAccessible,
-                                                  IID_PPV_ARGS(&iface)))
-             ? iface
-             : nullptr;
 }

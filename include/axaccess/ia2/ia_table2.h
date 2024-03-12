@@ -9,7 +9,7 @@
 
 class AXA_EXPORT IATable2 {
  public:
-  IATable2(IANode node) : node_(node){};
+  IATable2(IANode node);
   ~IATable2(){};
 
   std::string GetProperties();
@@ -17,8 +17,7 @@ class AXA_EXPORT IATable2 {
   long get_nRows();
 
  private:
-  Microsoft::WRL::ComPtr<IAccessibleTable2> QueryInterface();
-  IANode node_;
+  Microsoft::WRL::ComPtr<IAccessibleTable2> iface_;
 };
 
 #endif  // LIB_IA2_IA_TABLE2_H_

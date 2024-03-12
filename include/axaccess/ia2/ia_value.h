@@ -9,7 +9,7 @@
 
 class AXA_EXPORT IAValue {
  public:
-  IAValue(IANode node) : node_(node){};
+  IAValue(IANode node);
   ~IAValue(){};
 
   std::string GetProperties();
@@ -18,8 +18,7 @@ class AXA_EXPORT IAValue {
   std::string get_minimumValue();
 
  private:
-  Microsoft::WRL::ComPtr<IAccessibleValue> QueryInterface();
-  IANode node_;
+  Microsoft::WRL::ComPtr<IAccessibleValue> iface_;
 };
 
 #endif  // LIB_IA2_IA_VALUE_H_

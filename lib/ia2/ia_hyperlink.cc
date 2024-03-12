@@ -4,9 +4,14 @@
 
 using namespace win_utils;
 
+IAHyperlink::IAHyperlink(IANode node) {
+  if (auto service_provider = node.GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
+  }
+}
+
 std::string IAHyperlink::GetProperties() {
-  auto iface = QueryInterface();
-  if (!iface) {
+  if (!iface_) {
     return std::string();
   }
 
@@ -19,9 +24,9 @@ std::string IAHyperlink::GetProperties() {
 }
 
 long IAHyperlink::get_startIndex() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long index;
-    if (SUCCEEDED(iface->get_startIndex(&index))) {
+    if (SUCCEEDED(iface_->get_startIndex(&index))) {
       return index;
     }
   }
@@ -29,9 +34,9 @@ long IAHyperlink::get_startIndex() {
 }
 
 long IAHyperlink::get_endIndex() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long index;
-    if (SUCCEEDED(iface->get_endIndex(&index))) {
+    if (SUCCEEDED(iface_->get_endIndex(&index))) {
       return index;
     }
   }
@@ -39,28 +44,13 @@ long IAHyperlink::get_endIndex() {
 }
 
 std::string IAHyperlink::get_anchorTarget(long index) {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     VARIANT variant_result;
-    if (SUCCEEDED(iface->get_anchorTarget(index, &variant_result))) {
+    if (SUCCEEDED(iface_->get_anchorTarget(index, &variant_result))) {
       std::string str_result = VariantToString(variant_result);
       VariantClear(&variant_result);
       return str_result;
     }
   }
   return std::string();
-}
-
-Microsoft::WRL::ComPtr<IAccessibleHyperlink> IAHyperlink::QueryInterface() {
-  if (node_.IsNull() || !node_.GetIAccessible()) {
-    return nullptr;
-  }
-
-  Microsoft::WRL::ComPtr<IAccessibleHyperlink> iface;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr =
-      node_.GetIAccessible()->QueryInterface(IID_PPV_ARGS(&service_provider));
-  return SUCCEEDED(service_provider->QueryService(IID_IAccessible,
-                                                  IID_PPV_ARGS(&iface)))
-             ? iface
-             : nullptr;
 }

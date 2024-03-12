@@ -149,6 +149,21 @@ std::string MSAARoleToString(LONG role) {
 
 }  // Namespace
 
+Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
+  // TODO: Is it safe to do this work once in the constructor?
+  if (IsNull()) {
+    return nullptr;
+  }
+  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
+  HRESULT hr = root_->QueryInterface(IID_PPV_ARGS(&service_provider));
+  if (FAILED(hr)) {
+    throw std::runtime_error(
+        "Attempting to get service provider produced error code " +
+        HResultErrorToString(hr));
+  }
+  return service_provider;
+}
+
 IANode IANode::CreateRootForName(const std::string& app_name, const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
   if (!root) {

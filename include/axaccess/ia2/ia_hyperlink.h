@@ -9,7 +9,7 @@
 
 class AXA_EXPORT IAHyperlink {
  public:
-  IAHyperlink(IANode node) : node_(node){};
+  IAHyperlink(IANode node);
   ~IAHyperlink(){};
 
   std::string GetProperties();
@@ -18,8 +18,7 @@ class AXA_EXPORT IAHyperlink {
   std::string get_anchorTarget(long index);
 
  private:
-  Microsoft::WRL::ComPtr<IAccessibleHyperlink> QueryInterface();
-  IANode node_;
+  Microsoft::WRL::ComPtr<IAccessibleHyperlink> iface_;
 };
 
 #endif  // LIB_IA2_IA_HYPERLINK_H_

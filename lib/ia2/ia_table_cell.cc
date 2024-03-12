@@ -1,7 +1,13 @@
 #include "axaccess/ia2/ia_table_cell.h"
 
+IATableCell::IATableCell(IANode node) {
+  if (auto service_provider = node.GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
+  }
+}
+
 std::string IATableCell::GetProperties() {
-  if (!QueryInterface()) {
+  if (!iface_) {
     return std::string();
   }
 
@@ -13,9 +19,9 @@ std::string IATableCell::GetProperties() {
 }
 
 long IATableCell::get_columnExtent() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long span = 0;
-    if (SUCCEEDED(iface->get_columnExtent(&span))) {
+    if (SUCCEEDED(iface_->get_columnExtent(&span))) {
       return span;
     }
   }
@@ -23,9 +29,9 @@ long IATableCell::get_columnExtent() {
 }
 
 long IATableCell::get_columnIndex() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long index = 0;
-    if (SUCCEEDED(iface->get_columnIndex(&index))) {
+    if (SUCCEEDED(iface_->get_columnIndex(&index))) {
       return index;
     }
   }
@@ -33,9 +39,9 @@ long IATableCell::get_columnIndex() {
 }
 
 long IATableCell::get_rowExtent() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long span = 0;
-    if (SUCCEEDED(iface->get_rowExtent(&span))) {
+    if (SUCCEEDED(iface_->get_rowExtent(&span))) {
       return span;
     }
   }
@@ -43,26 +49,11 @@ long IATableCell::get_rowExtent() {
 }
 
 long IATableCell::get_rowIndex() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long index = 0;
-    if (SUCCEEDED(iface->get_rowIndex(&index))) {
+    if (SUCCEEDED(iface_->get_rowIndex(&index))) {
       return index;
     }
   }
   return -1;
-}
-
-Microsoft::WRL::ComPtr<IAccessibleTableCell> IATableCell::QueryInterface() {
-  if (node_.IsNull() || !node_.GetIAccessible()) {
-    return nullptr;
-  }
-
-  Microsoft::WRL::ComPtr<IAccessibleTableCell> iface;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr =
-      node_.GetIAccessible()->QueryInterface(IID_PPV_ARGS(&service_provider));
-  return SUCCEEDED(service_provider->QueryService(IID_IAccessible,
-                                                  IID_PPV_ARGS(&iface)))
-             ? iface
-             : nullptr;
 }

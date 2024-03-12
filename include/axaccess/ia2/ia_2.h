@@ -22,7 +22,7 @@ struct GroupPosition {
 
 class AXA_EXPORT IA2 {
  public:
-  IA2(IANode node) : node_(node){};
+  IA2(IANode node);
   ~IA2(){};
 
   std::string GetProperties();
@@ -34,8 +34,7 @@ class AXA_EXPORT IA2 {
   std::vector<std::string> GetStates();
 
  private:
-  Microsoft::WRL::ComPtr<IAccessible2> QueryInterface();
-  IANode node_;
+  Microsoft::WRL::ComPtr<IAccessible2> iface_;
 };
 
 #endif  // LIB_IA2_IA_2_H_

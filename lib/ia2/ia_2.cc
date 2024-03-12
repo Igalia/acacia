@@ -119,9 +119,14 @@ std::string RoleToString(LONG role) {
 
 using namespace win_utils;
 
+IA2::IA2(IANode node) {
+  if (auto service_provider = node.GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
+  }
+}
+
 std::string IA2::GetProperties() {
-  auto iface = QueryInterface();
-  if (!iface) {
+  if (!iface_) {
     return std::string();
   }
 
@@ -151,9 +156,9 @@ std::string IA2::GetProperties() {
 }
 
 std::string IA2::get_attributes() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     BSTR bstr_result;
-    if SUCCEEDED (iface->get_attributes(&bstr_result)) {
+    if SUCCEEDED (iface_->get_attributes(&bstr_result)) {
       std::string str_result = BstrToString(bstr_result);
       SysFreeString(bstr_result);
       return str_result;
@@ -164,10 +169,10 @@ std::string IA2::get_attributes() {
 }
 
 GroupPosition IA2::get_groupPosition() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     GroupPosition result;
     long level, setsize, position;
-    if SUCCEEDED (iface->get_groupPosition(&level, &setsize, &position)) {
+    if SUCCEEDED (iface_->get_groupPosition(&level, &setsize, &position)) {
       return GroupPosition(level, setsize, position);
     }
   }
@@ -176,19 +181,18 @@ GroupPosition IA2::get_groupPosition() {
 
 std::vector<std::string> IA2::GetRelations() {
   std::vector<std::string> relation_strings;
-  auto iface = QueryInterface();
-  if (!iface) {
+  if (!iface_) {
     return relation_strings;
   }
 
   long count;
-  if (FAILED(iface->get_nRelations(&count))) {
+  if (FAILED(iface_->get_nRelations(&count))) {
     return relation_strings;
   }
 
   for (long i = 0; i < count; ++i) {
     Microsoft::WRL::ComPtr<IAccessibleRelation> relation;
-    if (SUCCEEDED(iface->get_relation(i, &relation))) {
+    if (SUCCEEDED(iface_->get_relation(i, &relation))) {
       BSTR bstr_type;
       if (SUCCEEDED(relation->get_relationType(&bstr_type))) {
         relation_strings.push_back(BstrToString(bstr_type));
@@ -200,9 +204,9 @@ std::vector<std::string> IA2::GetRelations() {
 }
 
 std::string IA2::role() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     LONG role = 0;
-    if (SUCCEEDED(iface->role(&role))) {
+    if (SUCCEEDED(iface_->role(&role))) {
       return RoleToString(role);
     }
   }
@@ -210,9 +214,9 @@ std::string IA2::role() {
 }
 
 long IA2::get_states() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long result;
-    if SUCCEEDED (iface->get_states(&result)) {
+    if SUCCEEDED (iface_->get_states(&result)) {
       return result;
     }
   }
@@ -284,19 +288,4 @@ std::vector<std::string> IA2::GetStates() {
   }
 
   return state_strings;
-}
-
-Microsoft::WRL::ComPtr<IAccessible2> IA2::QueryInterface() {
-  if (node_.IsNull() || !node_.GetIAccessible()) {
-    return nullptr;
-  }
-
-  Microsoft::WRL::ComPtr<IAccessible2> iface;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr =
-      node_.GetIAccessible()->QueryInterface(IID_PPV_ARGS(&service_provider));
-  return SUCCEEDED(service_provider->QueryService(IID_IAccessible,
-                                                  IID_PPV_ARGS(&iface)))
-             ? iface
-             : nullptr;
 }

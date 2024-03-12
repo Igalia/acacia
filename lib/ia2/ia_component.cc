@@ -10,9 +10,14 @@ std::string ColorToString(IA2Color color) {
 }
 }  // namespace
 
+IAComponent::IAComponent(IANode node) {
+  if (auto service_provider = node.GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
+  }
+}
+
 std::string IAComponent::GetProperties() {
-  auto iface = QueryInterface();
-  if (!iface) {
+  if (!iface_) {
     return std::string();
   }
 
@@ -27,9 +32,9 @@ std::string IAComponent::GetProperties() {
 }
 
 std::string IAComponent::get_background() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     IA2Color color;
-    if (SUCCEEDED(iface->get_background(&color))) {
+    if (SUCCEEDED(iface_->get_background(&color))) {
       return ColorToString(color);
     }
   }
@@ -37,9 +42,9 @@ std::string IAComponent::get_background() {
 }
 
 std::string IAComponent::get_foreground() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     IA2Color color;
-    if (SUCCEEDED(iface->get_foreground(&color))) {
+    if (SUCCEEDED(iface_->get_foreground(&color))) {
       return ColorToString(color);
     }
   }
@@ -47,26 +52,11 @@ std::string IAComponent::get_foreground() {
 }
 
 std::pair<long, long> IAComponent::get_locationInParent() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     LONG x, y;
-    if (SUCCEEDED(iface->get_locationInParent(&x, &y))) {
+    if (SUCCEEDED(iface_->get_locationInParent(&x, &y))) {
       return std::make_pair(x, y);
     }
   }
   return std::make_pair(-1, -1);
-}
-
-Microsoft::WRL::ComPtr<IAccessibleComponent> IAComponent::QueryInterface() {
-  if (node_.IsNull() || !node_.GetIAccessible()) {
-    return nullptr;
-  }
-
-  Microsoft::WRL::ComPtr<IAccessibleComponent> iface;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr =
-      node_.GetIAccessible()->QueryInterface(IID_PPV_ARGS(&service_provider));
-  return SUCCEEDED(service_provider->QueryService(IID_IAccessible,
-                                                  IID_PPV_ARGS(&iface)))
-             ? iface
-             : nullptr;
 }

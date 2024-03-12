@@ -9,7 +9,7 @@
 
 class AXA_EXPORT IAComponent {
  public:
-  IAComponent(IANode node) : node_(node){};
+  IAComponent(IANode node);
   ~IAComponent(){};
 
   std::string GetProperties();
@@ -18,8 +18,7 @@ class AXA_EXPORT IAComponent {
   std::pair<long, long> get_locationInParent();
 
  private:
-  Microsoft::WRL::ComPtr<IAccessibleComponent> QueryInterface();
-  IANode node_;
+  Microsoft::WRL::ComPtr<IAccessibleComponent> iface_;
 };
 
 #endif  // LIB_IA2_IA_COMPONENT_H_

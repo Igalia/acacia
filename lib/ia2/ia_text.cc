@@ -19,9 +19,14 @@ std::string ToPrintableString(std::string str) {
 
 using namespace win_utils;
 
+IAText::IAText(IANode node) {
+  if (auto service_provider = node.GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
+  }
+}
+
 std::string IAText::GetProperties() {
-  auto iface = QueryInterface();
-  if (!iface) {
+  if (!iface_) {
     return std::string();
   }
 
@@ -38,9 +43,9 @@ std::string IAText::GetProperties() {
 }
 
 long IAText::get_caretOffset() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long offset;
-    if (SUCCEEDED(iface->get_caretOffset(&offset))) {
+    if (SUCCEEDED(iface_->get_caretOffset(&offset))) {
       return offset;
     }
   }
@@ -48,9 +53,9 @@ long IAText::get_caretOffset() {
 }
 
 long IAText::get_nCharacters() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     long count;
-    if (SUCCEEDED(iface->get_nCharacters(&count))) {
+    if (SUCCEEDED(iface_->get_nCharacters(&count))) {
       return count;
     }
   }
@@ -58,28 +63,13 @@ long IAText::get_nCharacters() {
 }
 
 std::string IAText::get_text(long start_offset, long end_offset) {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     BSTR bstr_result;
-    if (SUCCEEDED(iface->get_text(start_offset, end_offset, &bstr_result))) {
+    if (SUCCEEDED(iface_->get_text(start_offset, end_offset, &bstr_result))) {
       std::string str_result = BstrToString(bstr_result);
       SysFreeString(bstr_result);
       return str_result;
     }
   }
   return std::string();
-}
-
-Microsoft::WRL::ComPtr<IAccessibleText> IAText::QueryInterface() {
-  if (node_.IsNull() || !node_.GetIAccessible()) {
-    return nullptr;
-  }
-
-  Microsoft::WRL::ComPtr<IAccessibleText> iface;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr =
-      node_.GetIAccessible()->QueryInterface(IID_PPV_ARGS(&service_provider));
-  return SUCCEEDED(service_provider->QueryService(IID_IAccessible,
-                                                  IID_PPV_ARGS(&iface)))
-             ? iface
-             : nullptr;
 }

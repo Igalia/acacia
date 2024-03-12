@@ -4,9 +4,14 @@
 
 using namespace win_utils;
 
+IAValue::IAValue(IANode node) {
+  if (auto service_provider = node.GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
+  }
+}
+
 std::string IAValue::GetProperties() {
-  auto iface = QueryInterface();
-  if (!iface) {
+  if (!iface_) {
     return std::string();
   }
 
@@ -17,9 +22,9 @@ std::string IAValue::GetProperties() {
 }
 
 std::string IAValue::get_currentValue() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     VARIANT variant_result;
-    if (SUCCEEDED(iface->get_currentValue(&variant_result))) {
+    if (SUCCEEDED(iface_->get_currentValue(&variant_result))) {
       std::string str_result = VariantToString(variant_result);
       VariantClear(&variant_result);
       return str_result;
@@ -29,9 +34,9 @@ std::string IAValue::get_currentValue() {
 }
 
 std::string IAValue::get_maximumValue() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     VARIANT variant_result;
-    if (SUCCEEDED(iface->get_maximumValue(&variant_result))) {
+    if (SUCCEEDED(iface_->get_maximumValue(&variant_result))) {
       std::string str_result = VariantToString(variant_result);
       VariantClear(&variant_result);
       return str_result;
@@ -41,28 +46,13 @@ std::string IAValue::get_maximumValue() {
 }
 
 std::string IAValue::get_minimumValue() {
-  if (auto iface = QueryInterface()) {
+  if (iface_) {
     VARIANT variant_result;
-    if (SUCCEEDED(iface->get_minimumValue(&variant_result))) {
+    if (SUCCEEDED(iface_->get_minimumValue(&variant_result))) {
       std::string str_result = VariantToString(variant_result);
       VariantClear(&variant_result);
       return str_result;
     }
   }
   return std::string();
-}
-
-Microsoft::WRL::ComPtr<IAccessibleValue> IAValue::QueryInterface() {
-  if (node_.IsNull() || !node_.GetIAccessible()) {
-    return nullptr;
-  }
-
-  Microsoft::WRL::ComPtr<IAccessibleValue> iface;
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr =
-      node_.GetIAccessible()->QueryInterface(IID_PPV_ARGS(&service_provider));
-  return SUCCEEDED(service_provider->QueryService(IID_IAccessible,
-                                                  IID_PPV_ARGS(&iface)))
-             ? iface
-             : nullptr;
 }

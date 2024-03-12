@@ -9,7 +9,7 @@
 
 class AXA_EXPORT IAText {
  public:
-  IAText(IANode node) : node_(node){};
+  IAText(IANode node);
   ~IAText(){};
 
   std::string GetProperties();
@@ -18,8 +18,7 @@ class AXA_EXPORT IAText {
   std::string get_text(long start_offset, long end_offset);
 
  private:
-  Microsoft::WRL::ComPtr<IAccessibleText> QueryInterface();
-  IANode node_;
+  Microsoft::WRL::ComPtr<IAccessibleText> iface_;
 };
 
 #endif  // LIB_IA2_IA_TEXT_H_
