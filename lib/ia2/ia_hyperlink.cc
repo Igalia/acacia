@@ -6,12 +6,6 @@
 
 using namespace win_utils;
 
-IAHyperlink::IAHyperlink(IANode node) {
-  if (auto service_provider = node.GetServiceProvider()) {
-    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
-  }
-}
-
 std::string IAHyperlink::GetProperties() {
   if (IsNull()) {
     return "Hyperlink: Not implemented";

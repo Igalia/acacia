@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 
+#include <wrl/client.h>
+
 #include "axaccess/export.h"
-#include "axaccess/ia2/ia_node.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 struct GroupPosition {
@@ -22,7 +23,7 @@ struct GroupPosition {
 
 class AXA_EXPORT IA2 {
  public:
-  IA2(IANode node);
+  IA2(Microsoft::WRL::ComPtr<IAccessible2> iface) : iface_(iface) {}
   ~IA2(){};
 
   bool IsNull() { return !iface_; }

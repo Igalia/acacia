@@ -6,7 +6,7 @@ import ia2_inspect
 def print_tree(node, level):
   print(("--" * level) + "> ", end="")
   msaa_role = node.get_accRole()
-  ia2 = ia2_inspect.IA2(node)
+  ia2 = node.QueryIA2()
   ia2_role = ia2.role()
   if (not ia2_role or msaa_role == ia2_role):
     print(msaa_role, end="")
@@ -23,31 +23,31 @@ def print_tree(node, level):
   if properties:
     print("  " * level + "* " + properties)
 
-  action = ia2_inspect.IAAction(node)
+  action = node.QueryAction()
   if not action.IsNull():
     print("  " * level + "* " + action.GetProperties())
 
-  component = ia2_inspect.IAComponent(node)
+  component = node.QueryComponent()
   if not component.IsNull():
     print("  " * level + "* " + component.GetProperties())
 
-  hyperlink = ia2_inspect.IAHyperlink(node)
+  hyperlink = node.QueryHyperlink()
   if not hyperlink.IsNull():
     print("  " * level + "* " + hyperlink.GetProperties())
 
-  table2 = ia2_inspect.IATable2(node)
+  table2 = node.QueryTable2()
   if not table2.IsNull():
     print("  " * level + "* " + table2.GetProperties())
 
-  table_cell = ia2_inspect.IATableCell(node)
+  table_cell = node.QueryTableCell()
   if not table_cell.IsNull():
     print("  " * level + "* " + table_cell.GetProperties())
 
-  text = ia2_inspect.IAText(node)
+  text = node.QueryText()
   if not text.IsNull():
     print("  " * level + "* " + text.GetProperties())
 
-  value = ia2_inspect.IAValue(node)
+  value = node.QueryValue()
   if not value.IsNull():
     print("  " * level + "* " + value.GetProperties())
 

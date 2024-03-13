@@ -15,12 +15,6 @@ std::string ColorToString(IA2Color color) {
 }
 }  // namespace
 
-IAComponent::IAComponent(IANode node) {
-  if (auto service_provider = node.GetServiceProvider()) {
-    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
-  }
-}
-
 std::string IAComponent::GetProperties() {
   if (IsNull()) {
     return "Component: Not implemented";

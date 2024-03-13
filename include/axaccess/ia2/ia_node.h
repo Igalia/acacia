@@ -9,6 +9,14 @@
 #include <wrl/client.h>
 
 #include "axaccess/export.h"
+#include "axaccess/ia2/ia_2.h"
+#include "axaccess/ia2/ia_action.h"
+#include "axaccess/ia2/ia_component.h"
+#include "axaccess/ia2/ia_hyperlink.h"
+#include "axaccess/ia2/ia_table2.h"
+#include "axaccess/ia2/ia_table_cell.h"
+#include "axaccess/ia2/ia_text.h"
+#include "axaccess/ia2/ia_value.h"
 
 class AXA_EXPORT IANode {
  public:
@@ -23,6 +31,15 @@ class AXA_EXPORT IANode {
 
   static IANode CreateRootForName(const std::string& name, const int pid = 0);
   static IANode CreateRootForPID(const int pid);
+
+  IA2 QueryIA2();
+  IAAction QueryAction();
+  IAComponent QueryComponent();
+  IAHyperlink QueryHyperlink();
+  IATableCell QueryTableCell();
+  IATable2 QueryTable2();
+  IAText QueryText();
+  IAValue QueryValue();
 
   bool IsNull();
 

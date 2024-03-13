@@ -6,12 +6,6 @@
 
 using namespace win_utils;
 
-IATableCell::IATableCell(IANode node) {
-  if (auto service_provider = node.GetServiceProvider()) {
-    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
-  }
-}
-
 std::string IATableCell::GetProperties() {
   if (IsNull()) {
     return "Table Cell: Not implemented";

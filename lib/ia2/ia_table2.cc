@@ -6,12 +6,6 @@
 
 using namespace win_utils;
 
-IATable2::IATable2(IANode node) {
-  if (auto service_provider = node.GetServiceProvider()) {
-    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
-  }
-}
-
 std::string IATable2::GetProperties() {
   if (IsNull()) {
     return "Table2: Not implemented";

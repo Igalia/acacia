@@ -33,7 +33,7 @@ static void print_node(IANode node, int level) {
   std::cout << "> ";
 
   std::string msaa_role = node.get_accRole();
-  IA2 ia2 = IA2(node);
+  IA2 ia2 = node.QueryIA2();
   std::string ia2_role = ia2.role();
   if (ia2_role.empty() || ia2_role == msaa_role)
     std::cout << msaa_role;
@@ -65,37 +65,37 @@ static void print_node(IANode node, int level) {
     std::cout << indent << "* " << properties << "\n";
   }
 
-  IAAction action = IAAction(node);
+  IAAction action = node.QueryAction();
   if (!action.IsNull()) {
     std::cout << indent << "* " << action.GetProperties() << "\n";
   }
 
-  IAComponent component = IAComponent(node);
+  IAComponent component = node.QueryComponent();
   if (!component.IsNull()) {
     std::cout << indent << "* " << component.GetProperties() << "\n";
   }
 
-  IAHyperlink hyperlink = IAHyperlink(node);
+  IAHyperlink hyperlink = node.QueryHyperlink();
   if (!hyperlink.IsNull()) {
     std::cout << indent << "* " << hyperlink.GetProperties() << "\n";
   }
 
-  IATable2 table2 = IATable2(node);
+  IATable2 table2 = node.QueryTable2();
   if (!table2.IsNull()) {
     std::cout << indent << "* " << table2.GetProperties() << "\n";
   }
 
-  IATableCell table_cell = IATableCell(node);
+  IATableCell table_cell = node.QueryTableCell();
   if (!table_cell.IsNull()) {
     std::cout << indent << "* " << table_cell.GetProperties() << "\n";
   }
 
-  IAText text = IAText(node);
+  IAText text = node.QueryText();
   if (!text.IsNull()) {
     std::cout << indent << "* " << text.GetProperties() << "\n";
   }
 
-  IAValue value = IAValue(node);
+  IAValue value = node.QueryValue();
   if (!value.IsNull()) {
     std::cout << indent << "* " << value.GetProperties() << "\n";
   }

@@ -3,13 +3,14 @@
 
 #include <string>
 
+#include <wrl/client.h>
+
 #include "axaccess/export.h"
-#include "axaccess/ia2/ia_node.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 class AXA_EXPORT IAText {
  public:
-  IAText(IANode node);
+  IAText(Microsoft::WRL::ComPtr<IAccessibleText> iface) : iface_(iface) {}
   ~IAText(){};
 
   bool IsNull() { return !iface_; }

@@ -182,6 +182,70 @@ IANode IANode::CreateRootForPID(const int pid) {
   return IANode(root);
 }
 
+IA2 IANode::QueryIA2() {
+  Microsoft::WRL::ComPtr<IAccessible2> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IA2(iface);
+}
+
+IAAction IANode::QueryAction() {
+  Microsoft::WRL::ComPtr<IAccessibleAction> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAAction(iface);
+}
+
+IAComponent IANode::QueryComponent() {
+  Microsoft::WRL::ComPtr<IAccessibleComponent> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAComponent(iface);
+}
+
+IAHyperlink IANode::QueryHyperlink() {
+  Microsoft::WRL::ComPtr<IAccessibleHyperlink> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAHyperlink(iface);
+}
+
+IATableCell IANode::QueryTableCell() {
+  Microsoft::WRL::ComPtr<IAccessibleTableCell> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IATableCell(iface);
+}
+
+IATable2 IANode::QueryTable2() {
+  Microsoft::WRL::ComPtr<IAccessibleTable2> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IATable2(iface);
+}
+
+IAText IANode::QueryText() {
+  Microsoft::WRL::ComPtr<IAccessibleText> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAText(iface);
+}
+
+IAValue IANode::QueryValue() {
+  Microsoft::WRL::ComPtr<IAccessibleValue> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAValue(iface);
+}
+
 bool IANode::IsNull() {
   if (!root_)
     return true;

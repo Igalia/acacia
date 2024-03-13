@@ -121,12 +121,6 @@ std::string RoleToString(LONG role) {
 
 using namespace win_utils;
 
-IA2::IA2(IANode node) {
-  if (auto service_provider = node.GetServiceProvider()) {
-    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
-  }
-}
-
 std::string IA2::GetProperties() {
   if (IsNull()) {
     return "IAccessible2: Not implemented";

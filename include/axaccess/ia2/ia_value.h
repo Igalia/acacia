@@ -3,13 +3,14 @@
 
 #include <string>
 
+#include <wrl/client.h>
+
 #include "axaccess/export.h"
-#include "axaccess/ia2/ia_node.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 class AXA_EXPORT IAValue {
  public:
-  IAValue(IANode node);
+  IAValue(Microsoft::WRL::ComPtr<IAccessibleValue> iface) : iface_(iface) {}
   ~IAValue(){};
 
   bool IsNull() { return !iface_; }

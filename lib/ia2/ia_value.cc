@@ -6,12 +6,6 @@
 
 using namespace win_utils;
 
-IAValue::IAValue(IANode node) {
-  if (auto service_provider = node.GetServiceProvider()) {
-    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
-  }
-}
-
 std::string IAValue::GetProperties() {
   if (IsNull()) {
     return "Value: Not implemented";

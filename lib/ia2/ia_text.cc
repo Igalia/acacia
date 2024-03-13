@@ -21,12 +21,6 @@ std::string ToPrintableString(std::string str) {
 
 }  // namespace
 
-IAText::IAText(IANode node) {
-  if (auto service_provider = node.GetServiceProvider()) {
-    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface_));
-  }
-}
-
 std::string IAText::GetProperties() {
   if (IsNull()) {
     return "Text: Not implemented";
