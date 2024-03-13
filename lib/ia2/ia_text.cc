@@ -74,12 +74,13 @@ std::string IAText::get_text(long start_offset, long end_offset) {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_text(start_offset, end_offset, &bstr_result);
-    if (SUCCEEDED(hr)) {
-      std::string str_result = BstrToString(bstr_result);
-      SysFreeString(bstr_result);
-      return str_result;
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_background failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: get_text failed: " + HResultErrorToString(hr);
+    std::string str_result = BstrToString(bstr_result);
+    SysFreeString(bstr_result);
+    return str_result;
   }
   return std::string();
 }

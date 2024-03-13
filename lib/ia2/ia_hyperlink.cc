@@ -55,12 +55,13 @@ std::string IAHyperlink::get_anchorTarget(long index) {
   if (iface_) {
     VARIANT variant_result;
     HRESULT hr = iface_->get_anchorTarget(index, &variant_result);
-    if (SUCCEEDED(hr)) {
-      std::string str_result = VariantToString(variant_result);
-      VariantClear(&variant_result);
-      return str_result;
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_anchorTarget failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: get_anchorTarget failed: " + HResultErrorToString(hr);
+    std::string str_result = VariantToString(variant_result);
+    VariantClear(&variant_result);
+    return str_result;
   }
   return std::string();
 }

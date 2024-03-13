@@ -161,14 +161,14 @@ std::string IA2::get_attributes() {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_attributes(&bstr_result);
-    if SUCCEEDED (hr) {
-      std::string str_result = BstrToString(bstr_result);
-      SysFreeString(bstr_result);
-      return str_result;
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_attributes failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: get_attributes failed: " + HResultErrorToString(hr);
+    std::string str_result = BstrToString(bstr_result);
+    SysFreeString(bstr_result);
+    return str_result;
   }
-
   return std::string();
 }
 
@@ -176,9 +176,12 @@ GroupPosition IA2::get_groupPosition() {
   if (iface_) {
     GroupPosition result;
     long level, setsize, position;
-    if SUCCEEDED (iface_->get_groupPosition(&level, &setsize, &position)) {
-      return GroupPosition(level, setsize, position);
+    HRESULT hr = iface_->get_groupPosition(&level, &setsize, &position);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_groupPosition failed: " +
+                               HResultErrorToString(hr));
     }
+    return GroupPosition(level, setsize, position);
   }
   return GroupPosition();
 }
@@ -200,20 +203,19 @@ std::vector<std::string> IA2::GetRelations() {
   for (long i = 0; i < count; ++i) {
     Microsoft::WRL::ComPtr<IAccessibleRelation> relation;
     hr = iface_->get_relation(i, &relation);
-    if (SUCCEEDED(hr)) {
-      BSTR bstr_type;
-      hr = relation->get_relationType(&bstr_type);
-      if (SUCCEEDED(hr)) {
-        relation_strings.push_back(BstrToString(bstr_type));
-        SysFreeString(bstr_type);
-      } else {
-        relation_strings.push_back("ERROR: get_relationType failed: " +
-                                   HResultErrorToString(hr));
-      }
-    } else {
-      relation_strings.push_back("ERROR: get_relation failed: " +
-                                 HResultErrorToString(hr));
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_relation failed: " +
+                               HResultErrorToString(hr));
     }
+    BSTR bstr_type;
+    hr = relation->get_relationType(&bstr_type);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_relationType failed: " +
+                               HResultErrorToString(hr));
+    }
+
+    relation_strings.push_back(BstrToString(bstr_type));
+    SysFreeString(bstr_type);
   }
   return relation_strings;
 }
@@ -222,10 +224,11 @@ std::string IA2::role() {
   if (iface_) {
     LONG role = 0;
     HRESULT hr = iface_->role(&role);
-    if (SUCCEEDED(hr)) {
-      return RoleToString(role);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: role failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: role failed: " + HResultErrorToString(hr);
+    return RoleToString(role);
   }
   return "";
 }

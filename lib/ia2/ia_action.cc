@@ -43,12 +43,13 @@ std::string IAAction::get_description(int index) {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_description(index, &bstr_result);
-    if (SUCCEEDED(hr)) {
-      std::string str_result = BstrToString(bstr_result);
-      SysFreeString(bstr_result);
-      return str_result;
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_description failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: get_description failed: " + HResultErrorToString(hr);
+    std::string str_result = BstrToString(bstr_result);
+    SysFreeString(bstr_result);
+    return str_result;
   }
   return std::string();
 }
@@ -57,12 +58,13 @@ std::string IAAction::get_name(int index) {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_name(index, &bstr_result);
-    if (SUCCEEDED(hr)) {
-      std::string str_result = BstrToString(bstr_result);
-      SysFreeString(bstr_result);
-      return str_result;
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_name failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: get_name failed: " + HResultErrorToString(hr);
+    std::string str_result = BstrToString(bstr_result);
+    SysFreeString(bstr_result);
+    return str_result;
   }
   return std::string();
 }

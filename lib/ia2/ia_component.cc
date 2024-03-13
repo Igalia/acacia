@@ -40,10 +40,11 @@ std::string IAComponent::get_background() {
   if (iface_) {
     IA2Color color;
     HRESULT hr = iface_->get_background(&color);
-    if (SUCCEEDED(hr)) {
-      return ColorToString(color);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_background failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: get_background failed: " + HResultErrorToString(hr);
+    return ColorToString(color);
   }
   return std::string();
 }
@@ -52,10 +53,11 @@ std::string IAComponent::get_foreground() {
   if (iface_) {
     IA2Color color;
     HRESULT hr = iface_->get_foreground(&color);
-    if (SUCCEEDED(hr)) {
-      return ColorToString(color);
+    if (FAILED(hr)) {
+      throw std::runtime_error("ERROR: get_foreground failed: " +
+                               HResultErrorToString(hr));
     }
-    return "ERROR: get_foreground failed: " + HResultErrorToString(hr);
+    return ColorToString(color);
   }
   return std::string();
 }
