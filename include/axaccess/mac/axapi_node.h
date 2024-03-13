@@ -7,10 +7,20 @@
 #include <string>
 #include <vector>
 
+/** @defgroup axapi AX-API (MacOS)
+ *  Accessiblity API for MacOS
+ *  @{
+ */
+/** @} */ // end of axapi group
+
 namespace mac_inspect {
 
 class AXAPIContextImpl;
 
+/**
+ * Represents a node in the accessibility tree.
+ * @ingroup axapi
+ */
 class AXAPINode {
  public:
   AXAPINode();

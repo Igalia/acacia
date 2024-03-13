@@ -8,8 +8,17 @@
 #include <atspi/atspi.h>
 
 class AtspiNode;
+
+/**
+ * A unique pointer wrapping an AtspiNode.
+ * @ingroup atspi
+ */
 typedef std::unique_ptr<AtspiNode> AtspiNodePtr;
 
+/**
+ * Represents a node in the accessibility tree.
+ * @ingroup atspi
+ */
 class AtspiNode {
   AtspiAccessible* accessible_;
 

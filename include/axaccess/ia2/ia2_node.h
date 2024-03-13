@@ -10,6 +10,16 @@
 
 #include "axaccess/export.h"
 
+/** @defgroup ia2 IA2 API (Windows)
+ *  IA2 Accessiblity API for Windows
+ *  @{
+ */
+/** @} */ // end of axapi group
+
+/**
+ * Represents a node in the accessibility tree.
+ * @ingroup ia2
+ */
 class AXA_EXPORT IA2Node {
  public:
   IA2Node(){};

@@ -236,6 +236,12 @@ Or run the script:
 % python3 ./dump_tree_ia2.py --name chrome
 ```
 
+## Documentation
+
+Documentation for the different backend APIs can be automatically generated from source code via [Doxygen](https://www.doxygen.nl/download.html), which must be install locally. It is off by default; to enable it, pass `-DAXA_BUILD_DOC=ON` to cmake.
+
+The resulting documentation can be found in: `build/docs/docs/html`
+
 ## Experimental features
 
 ### Cross-platform API

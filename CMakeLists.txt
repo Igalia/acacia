@@ -48,6 +48,17 @@ option(
   OFF
 )
 
+option(
+  AXA_BUILD_DOC
+  "Build documentation"
+  OFF
+)
+
+
+if (AXA_BUILD_DOC)
+  add_subdirectory(docs)
+endif (AXA_BUILD_DOC)
+
 # On windows, put all of the resulting libraries and executables in
 # `build/bin/<CONFIG>` where CONFIG is Debug, Release, etc, because
 # windows .dll must be in the same directory as the executables unless
