@@ -18,6 +18,16 @@
 #include "axaccess/ia2/ia_text.h"
 #include "axaccess/ia2/ia_value.h"
 
+/** @defgroup ia2 IA2 API (Windows)
+ *  IA2 Accessiblity API for Windows
+ *  @{
+ */
+/** @} */  // end of axapi group
+
+/**
+ * Represents a node in the accessibility tree.
+ * @ingroup ia2
+ */
 class AXA_EXPORT IANode {
  public:
   IANode(){};
