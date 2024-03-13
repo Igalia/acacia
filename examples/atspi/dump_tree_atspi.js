@@ -35,6 +35,3 @@ try {
 } catch(e) {
     console.log(e);
 }
-
-// TODO: delete this line, for testing errors
-console.log("Executing the rest of the program.");

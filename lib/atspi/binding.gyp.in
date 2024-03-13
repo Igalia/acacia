@@ -13,10 +13,6 @@
       ],
       "cflags": [
         "<!@(pkg-config \"atspi-2\" --cflags)",
-        "-fexceptions",
-      ],
-      "cflags_cc": [
-        "-fexceptions",
       ],
       "cflags_cc!": [
         "-fno-exceptions",
