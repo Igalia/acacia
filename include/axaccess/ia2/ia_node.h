@@ -53,9 +53,9 @@ class AXA_EXPORT IANode {
   long get_accState();
   std::vector<std::string> GetStates();
 
+ private:
   Microsoft::WRL::ComPtr<IServiceProvider> GetServiceProvider();
 
- private:
   Microsoft::WRL::ComPtr<IAccessible> root_;
   // This variant is used to recieve IAccessible
   // information about either the accessible object itself,

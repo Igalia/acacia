@@ -150,7 +150,6 @@ std::string MSAARoleToString(LONG role) {
 }  // Namespace
 
 Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
-  // TODO: Is it safe to do this work once in the constructor?
   if (IsNull()) {
     return nullptr;
   }
