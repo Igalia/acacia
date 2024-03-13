@@ -14,7 +14,7 @@ if (!pid || typeof(pid) != "number") {
 const atspi = require("../../lib/atspi/atspi_inspect");
 
 const root = atspi.find_root_accessible_from_pid(pid);
-if (!root) {
+if (root.is_null()) {
     console.log("Error: no accessible application found for pid '" + pid + "'.");
     process.exit();
 }

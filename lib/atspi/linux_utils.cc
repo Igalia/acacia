@@ -4,14 +4,7 @@
 
 #include <axaccess/atspi/linux_utils.h>
 
-#define CHECK_ATSPI_ERROR_NULLPTR(error) \
-  if (error) {                           \
-    std::cerr << error->message;         \
-    g_clear_error(&error);               \
-    return nullptr;                      \
-  }
-
-AtspiNodePtr find_root_accessible_from_pid(const int pid) {
+AtspiNode find_root_accessible_from_pid(const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);
 
   GError* error = nullptr;
@@ -30,16 +23,15 @@ AtspiNodePtr find_root_accessible_from_pid(const int pid) {
       goto handle_gerror;
 
     if (pid == application_pid) {
-      return std::make_unique<AtspiNode>(AtspiNode(child));
+      return AtspiNode(child);
     }
 
     g_object_unref(child);
   }
-  return nullptr;
+  return AtspiNode();
 
  handle_gerror:
   std::string err_msg = error->message;
   g_error_free(error);
   throw std::runtime_error(err_msg);
-  return nullptr;
 }
