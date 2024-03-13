@@ -11,6 +11,16 @@
 
 namespace win_utils {
 
+/**
+ * Returns the root node of the accessiblity tree of a running
+ * application referenced by name and process ID.
+ * @ingroup ia2
+ *
+ * @param name: The name of the application.
+ * @param dwProcessID: process ID.
+ *
+ * @returns Pointer to the node.
+ */
 AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(
     const std::string& name,
     DWORD dwProcessID);

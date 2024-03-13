@@ -19,9 +19,6 @@ static void print_node(AtspiNodePtr& node, int level) {
   std::cout << "\n";
 
   int32_t child_count = node->get_child_count();
-  if (child_count < 0)
-    return;
-
   for (auto i = 0; i < child_count; i++) {
     auto child = node->get_child_at_index(i);
     print_node(child, level + 1);
@@ -51,7 +48,12 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  print_node(root, 0);
+  try {
+    print_node(root, 0);
+  } catch(std::exception e) {
+    std::cerr << e.what();
+    return -1;
+  }
 
   return 0;
 }

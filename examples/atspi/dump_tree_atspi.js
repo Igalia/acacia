@@ -30,4 +30,8 @@ function printNode(node, level) {
     }
 }
 
-printNode(root, 0);
+try {
+    printNode(root, 0);
+} catch(e) {
+    console.log(e);
+}
