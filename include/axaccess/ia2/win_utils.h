@@ -29,6 +29,8 @@ AXA_EXPORT std::string nameFromHwnd(HWND hwnd);
 
 AXA_EXPORT std::string BstrToString(BSTR bstr);
 
+AXA_EXPORT std::string VariantToString(VARIANT variant);
+
 AXA_EXPORT std::string HResultErrorToString(HRESULT err);
 
 }  // namespace win_utils

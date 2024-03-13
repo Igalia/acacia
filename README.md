@@ -224,11 +224,22 @@ To use the python library, navigate to `build/bin/Release`:
 ```
 % python3
 >>> import ia2_inspect
->>> app = ia2_inspect.IA2Node.CreateRootForName("firefox")
->>> print(app.get_accRole())
->>> child_count = app.get_accChildCount()
->>> child = app.AccessibleChildAt(0)
->>> print(child.get_accRole())
+>>> app = ia2_inspect.IANode.CreateRootForName("firefox")
+>>> app.get_accRole()
+>>> app.get_accChildCount()
+>>> child = app.AccessibleChildAt(3)
+>>> child.get_accRole()
+>>> action = child.QueryAction()
+>>> action.nActions()
+>>> action.get_name(0)
+>>> component = child.QueryComponent()
+>>> component.get_locationInParent()
+>>> text = child.queryText()
+>>> text.get_nCharacters()
+>>> text.get_text(0, -1)
+>>> ia2 = child.queryIA2()
+>>> ia2.get_attributes()
+>>> ia2.GetRelations()
 ```
 
 Or run the script:

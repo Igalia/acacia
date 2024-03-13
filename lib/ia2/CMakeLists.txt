@@ -4,7 +4,15 @@ add_library(
   SHARED
 
   # Sources
-  ia2_node.cc
+  ia_2.cc
+  ia_action.cc
+  ia_component.cc
+  ia_hyperlink.cc
+  ia_node.cc
+  ia_table2.cc
+  ia_table_cell.cc
+  ia_text.cc
+  ia_value.cc
   win_utils.cc
 )
 

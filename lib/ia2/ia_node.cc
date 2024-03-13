@@ -1,4 +1,4 @@
-#include "axaccess/ia2/ia2_node.h"
+#include "axaccess/ia2/ia_node.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -147,149 +147,111 @@ std::string MSAARoleToString(LONG role) {
   }
 }
 
-std::string IA2RoleToString(LONG role) {
-  std::string msaa_role = MSAARoleToString(role);
-  if (!msaa_role.empty()) {
-    return msaa_role;
-  }
-  switch (role) {
-    case IA2_ROLE_CANVAS:
-      return "IA2_ROLE_CANVAS";
-    case IA2_ROLE_CAPTION:
-      return "IA2_ROLE_CAPTION";
-    case IA2_ROLE_CHECK_MENU_ITEM:
-      return "IA2_ROLE_CHECK_MENU_ITEM";
-    case IA2_ROLE_COLOR_CHOOSER:
-      return "IA2_ROLE_COLOR_CHOOSER";
-    case IA2_ROLE_DATE_EDITOR:
-      return "IA2_ROLE_DATE_EDITOR";
-    case IA2_ROLE_DESKTOP_ICON:
-      return "IA2_ROLE_DESKTOP_ICON";
-    case IA2_ROLE_DESKTOP_PANE:
-      return "IA2_ROLE_DESKTOP_PANE";
-    case IA2_ROLE_DIRECTORY_PANE:
-      return "IA2_ROLE_DIRECTORY_PANE";
-    case IA2_ROLE_EDITBAR:
-      return "IA2_ROLE_EDITBAR";
-    case IA2_ROLE_EMBEDDED_OBJECT:
-      return "IA2_ROLE_EMBEDDED_OBJECT";
-    case IA2_ROLE_ENDNOTE:
-      return "IA2_ROLE_ENDNOTE";
-    case IA2_ROLE_FILE_CHOOSER:
-      return "IA2_ROLE_FILE_CHOOSER";
-    case IA2_ROLE_FONT_CHOOSER:
-      return "IA2_ROLE_FONT_CHOOSER";
-    case IA2_ROLE_FOOTER:
-      return "IA2_ROLE_FOOTER";
-    case IA2_ROLE_FOOTNOTE:
-      return "IA2_ROLE_FOOTNOTE";
-    case IA2_ROLE_FORM:
-      return "IA2_ROLE_FORM";
-    case IA2_ROLE_FRAME:
-      return "IA2_ROLE_FRAME";
-    case IA2_ROLE_GLASS_PANE:
-      return "IA2_ROLE_GLASS_PANE";
-    case IA2_ROLE_HEADER:
-      return "IA2_ROLE_HEADER";
-    case IA2_ROLE_HEADING:
-      return "IA2_ROLE_HEADING";
-    case IA2_ROLE_ICON:
-      return "IA2_ROLE_ICON";
-    case IA2_ROLE_IMAGE_MAP:
-      return "IA2_ROLE_IMAGE_MAP";
-    case IA2_ROLE_INPUT_METHOD_WINDOW:
-      return "IA2_ROLE_INPUT_METHOD_WINDOW";
-    case IA2_ROLE_INTERNAL_FRAME:
-      return "IA2_ROLE_INTERNAL_FRAME";
-    case IA2_ROLE_LABEL:
-      return "IA2_ROLE_LABEL";
-    case IA2_ROLE_LAYERED_PANE:
-      return "IA2_ROLE_LAYERED_PANE";
-    case IA2_ROLE_NOTE:
-      return "IA2_ROLE_NOTE";
-    case IA2_ROLE_OPTION_PANE:
-      return "IA2_ROLE_OPTION_PANE";
-    case IA2_ROLE_PAGE:
-      return "IA2_ROLE_PAGE";
-    case IA2_ROLE_PARAGRAPH:
-      return "IA2_ROLE_PARAGRAPH";
-    case IA2_ROLE_RADIO_MENU_ITEM:
-      return "IA2_ROLE_RADIO_MENU_ITEM";
-    case IA2_ROLE_REDUNDANT_OBJECT:
-      return "IA2_ROLE_REDUNDANT_OBJECT";
-    case IA2_ROLE_ROOT_PANE:
-      return "IA2_ROLE_ROOT_PANE";
-    case IA2_ROLE_RULER:
-      return "IA2_ROLE_RULER";
-    case IA2_ROLE_SCROLL_PANE:
-      return "IA2_ROLE_SCROLL_PANE";
-    case IA2_ROLE_SECTION:
-      return "IA2_ROLE_SECTION";
-    case IA2_ROLE_SHAPE:
-      return "IA2_ROLE_SHAPE";
-    case IA2_ROLE_SPLIT_PANE:
-      return "IA2_ROLE_SPLIT_PANE";
-    case IA2_ROLE_TEAR_OFF_MENU:
-      return "IA2_ROLE_TEAR_OFF_MENU";
-    case IA2_ROLE_TERMINAL:
-      return "IA2_ROLE_TERMINAL";
-    case IA2_ROLE_TEXT_FRAME:
-      return "IA2_ROLE_TEXT_FRAME";
-    case IA2_ROLE_TOGGLE_BUTTON:
-      return "IA2_ROLE_TOGGLE_BUTTON";
-    case IA2_ROLE_UNKNOWN:
-      return "IA2_ROLE_UNKNOWN";
-    case IA2_ROLE_VIEW_PORT:
-      return "IA2_ROLE_VIEW_PORT";
-    case IA2_ROLE_COMPLEMENTARY_CONTENT:
-      return "IA2_ROLE_COMPLEMENTARY_CONTENT";
-    case IA2_ROLE_LANDMARK:
-      return "IA2_ROLE_LANDMARK";
-    case IA2_ROLE_LEVEL_BAR:
-      return "IA2_ROLE_LEVEL_BAR";
-    case IA2_ROLE_CONTENT_DELETION:
-      return "IA2_ROLE_CONTENT_DELETION";
-    case IA2_ROLE_CONTENT_INSERTION:
-      return "IA2_ROLE_CONTENT_INSERTION";
-    case IA2_ROLE_BLOCK_QUOTE:
-      return "IA2_ROLE_BLOCK_QUOTE";
-    case IA2_ROLE_MARK:
-      return "IA2_ROLE_MARK";
-    case IA2_ROLE_SUGGESTION:
-      return "IA2_ROLE_SUGGESTION";
-    case IA2_ROLE_COMMENT:
-      return "IA2_ROLE_COMMENT";
-    default:
-      return "";
-  }
-}
 }  // Namespace
 
-IA2Node IA2Node::CreateRootForName(const std::string& app_name, const int pid) {
+Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
+  if (IsNull()) {
+    return nullptr;
+  }
+  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
+  HRESULT hr = root_->QueryInterface(IID_PPV_ARGS(&service_provider));
+  if (FAILED(hr)) {
+    throw std::runtime_error(
+        "Attempting to get service provider produced error code " +
+        HResultErrorToString(hr));
+  }
+  return service_provider;
+}
+
+IANode IANode::CreateRootForName(const std::string& app_name, const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
   if (!root) {
     return nullptr;
   }
 
-  return IA2Node(root);
+  return IANode(root);
 }
 
-IA2Node IA2Node::CreateRootForPID(const int pid) {
+IANode IANode::CreateRootForPID(const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
   if (!root) {
     return nullptr;
   }
 
-  return IA2Node(root);
+  return IANode(root);
 }
 
-bool IA2Node::IsNull() {
+IA2 IANode::QueryIA2() {
+  Microsoft::WRL::ComPtr<IAccessible2> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IA2(iface);
+}
+
+IAAction IANode::QueryAction() {
+  Microsoft::WRL::ComPtr<IAccessibleAction> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAAction(iface);
+}
+
+IAComponent IANode::QueryComponent() {
+  Microsoft::WRL::ComPtr<IAccessibleComponent> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAComponent(iface);
+}
+
+IAHyperlink IANode::QueryHyperlink() {
+  Microsoft::WRL::ComPtr<IAccessibleHyperlink> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAHyperlink(iface);
+}
+
+IATableCell IANode::QueryTableCell() {
+  Microsoft::WRL::ComPtr<IAccessibleTableCell> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IATableCell(iface);
+}
+
+IATable2 IANode::QueryTable2() {
+  Microsoft::WRL::ComPtr<IAccessibleTable2> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IATable2(iface);
+}
+
+IAText IANode::QueryText() {
+  Microsoft::WRL::ComPtr<IAccessibleText> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAText(iface);
+}
+
+IAValue IANode::QueryValue() {
+  Microsoft::WRL::ComPtr<IAccessibleValue> iface;
+  if (auto service_provider = GetServiceProvider()) {
+    service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&iface));
+  }
+  return IAValue(iface);
+}
+
+bool IANode::IsNull() {
   if (!root_)
     return true;
   return false;
 }
 
-std::string IA2Node::get_accRole() {
+std::string IANode::get_accRole() {
   VARIANT ia_role_variant;
   HRESULT hr = root_->get_accRole(child_id_, &ia_role_variant);
   if (FAILED(hr)) {
@@ -300,7 +262,7 @@ std::string IA2Node::get_accRole() {
   return MSAARoleToString(ia_role_variant.lVal);
 }
 
-std::string IA2Node::get_accName() {
+std::string IANode::get_accName() {
   BSTR bstr_name;
   HRESULT hr = root_->get_accName(child_id_, &bstr_name);
   if (FAILED(hr)) {
@@ -313,28 +275,23 @@ std::string IA2Node::get_accName() {
   return str_name;
 }
 
-// TODO: Break these out to it's own IAccessible2 wrapper object. #94
-// Additionally, getting the interface should be it's own utility function.
-std::string IA2Node::ia2_role() {
-  Microsoft::WRL::ComPtr<IAccessible2> ia2;
-
-  Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
-  HRESULT hr = root_->QueryInterface(IID_PPV_ARGS(&service_provider));
-  hr = service_provider->QueryService(IID_IAccessible, IID_PPV_ARGS(&ia2));
-
-  // TODO: for objects outside of "OBJID_CLIENT", IA2 is not implemented.
-  // We will get hr == E_INVALIDARG. However, we would still like to get
-  // MSAA the role and name. Fail silently for now.
-  if (hr == S_OK) {
-    LONG role = 0;
-    if (SUCCEEDED(ia2->role(&role))) {
-      return IA2RoleToString(role);
-    }
+std::string IANode::get_accDescription() {
+  VARIANT child;
+  child.vt = VT_I4;
+  child.lVal = V_I4(&child_id_);
+  BSTR bstr_description;
+  HRESULT hr = root_->get_accDescription(child, &bstr_description);
+  if (FAILED(hr) && hr != DISP_E_MEMBERNOTFOUND) {
+    throw std::runtime_error(
+        "Attempting to call get_accDescription produced error code " +
+        HResultErrorToString(hr));
   }
-  return "";
+  std::string str_description = BstrToString(bstr_description);
+  SysFreeString(bstr_description);
+  return str_description;
 }
 
-long IA2Node::get_accChildCount() {
+long IANode::get_accChildCount() {
   if (child_id_.intVal != CHILDID_SELF)
     return 0;
 
@@ -350,9 +307,9 @@ long IA2Node::get_accChildCount() {
   return child_count;
 }
 
-IA2Node IA2Node::AccessibleChildAt(int index) {
+IANode IANode::AccessibleChildAt(int index) {
   if (child_id_.intVal != CHILDID_SELF) {
-    return IA2Node();
+    return IANode();
   }
 
   std::unique_ptr<VARIANT[]> children(new VARIANT[1]);
@@ -370,7 +327,7 @@ IA2Node IA2Node::AccessibleChildAt(int index) {
   if (vt_child.vt != VT_DISPATCH) {
     // This is a "partial child", which can have a name and role but not much
     // else
-    return IA2Node(root_, vt_child);
+    return IANode(root_, vt_child);
   }
 
   IDispatch* pdisp = vt_child.pdispVal;
@@ -384,5 +341,120 @@ IA2Node IA2Node::AccessibleChildAt(int index) {
         std::to_string(index) + " produced error code " +
         HResultErrorToString(hr));
   }
-  return IA2Node(accessible);
+  return IANode(accessible);
+}
+
+long IANode::get_accState() {
+  HRESULT hr;
+  VARIANT state;
+  VARIANT child;
+  child.vt = VT_I4;
+  child.lVal = V_I4(&child_id_);
+  hr = root_->get_accState(child, &state);
+  if (FAILED(hr)) {
+    throw std::runtime_error(
+        "Attempting to get accessible state produced error code " +
+        HResultErrorToString(hr));
+  }
+  return V_I4(&state);
+}
+
+std::vector<std::string> IANode::GetStates() {
+  long states = get_accState();
+  std::vector<std::string> state_strings;
+  if (states & STATE_SYSTEM_ALERT_HIGH) {
+    state_strings.push_back("ALERT_HIGH");
+  }
+  if (states & STATE_SYSTEM_ALERT_MEDIUM) {
+    state_strings.push_back("ALERT_MEDIUM");
+  }
+  if (states & STATE_SYSTEM_ALERT_LOW) {
+    state_strings.push_back("ALERT_LOW");
+  }
+  if (states & STATE_SYSTEM_ANIMATED) {
+    state_strings.push_back("ANIMATED");
+  }
+  if (states & STATE_SYSTEM_BUSY) {
+    state_strings.push_back("BUSY");
+  }
+  if (states & STATE_SYSTEM_CHECKED) {
+    state_strings.push_back("CHECKED");
+  }
+  if (states & STATE_SYSTEM_COLLAPSED) {
+    state_strings.push_back("COLLAPSED");
+  }
+  if (states & STATE_SYSTEM_DEFAULT) {
+    state_strings.push_back("DEFAULT");
+  }
+  if (states & STATE_SYSTEM_EXPANDED) {
+    state_strings.push_back("EXPANDED");
+  }
+  if (states & STATE_SYSTEM_EXTSELECTABLE) {
+    state_strings.push_back("EXTSELECTABLE");
+  }
+  if (states & STATE_SYSTEM_FLOATING) {
+    state_strings.push_back("FLOATING");
+  }
+  if (states & STATE_SYSTEM_FOCUSABLE) {
+    state_strings.push_back("FOCUSABLE");
+  }
+  if (states & STATE_SYSTEM_FOCUSED) {
+    state_strings.push_back("FOCUSED");
+  }
+  if (states & STATE_SYSTEM_HASPOPUP) {
+    state_strings.push_back("HASPOPUP");
+  }
+  if (states & STATE_SYSTEM_HOTTRACKED) {
+    state_strings.push_back("HOTTRACKED");
+  }
+  if (states & STATE_SYSTEM_INVISIBLE) {
+    state_strings.push_back("INVISIBLE");
+  }
+  if (states & STATE_SYSTEM_LINKED) {
+    state_strings.push_back("LINKED");
+  }
+  if (states & STATE_SYSTEM_MARQUEED) {
+    state_strings.push_back("MARQUEED");
+  }
+  if (states & STATE_SYSTEM_MIXED) {
+    state_strings.push_back("MIXED");
+  }
+  if (states & STATE_SYSTEM_MOVEABLE) {
+    state_strings.push_back("MOVEABLE");
+  }
+  if (states & STATE_SYSTEM_MULTISELECTABLE) {
+    state_strings.push_back("MULTISELECTABLE");
+  }
+  if (states & STATE_SYSTEM_OFFSCREEN) {
+    state_strings.push_back("OFFSCREEN");
+  }
+  if (states & STATE_SYSTEM_PRESSED) {
+    state_strings.push_back("PRESSED");
+  }
+  if (states & STATE_SYSTEM_PROTECTED) {
+    state_strings.push_back("PROTECTED");
+  }
+  if (states & STATE_SYSTEM_READONLY) {
+    state_strings.push_back("READONLY");
+  }
+  if (states & STATE_SYSTEM_SELECTABLE) {
+    state_strings.push_back("SELECTABLE");
+  }
+  if (states & STATE_SYSTEM_SELECTED) {
+    state_strings.push_back("SELECTED");
+  }
+  if (states & STATE_SYSTEM_SELFVOICING) {
+    state_strings.push_back("SELFVOICING");
+  }
+  if (states & STATE_SYSTEM_SIZEABLE) {
+    state_strings.push_back("SIZEABLE");
+  }
+  if (states & STATE_SYSTEM_TRAVERSED) {
+    state_strings.push_back("TRAVERSED");
+  }
+  if (states & STATE_SYSTEM_UNAVAILABLE) {
+    state_strings.push_back("UNAVAILABLE");
+  }
+
+  return state_strings;
 }

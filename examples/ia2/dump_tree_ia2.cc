@@ -4,7 +4,15 @@
 #include <regex>
 #include <string>
 
-#include "include/axaccess/ia2/ia2_node.h"
+#include "include/axaccess/ia2/ia_2.h"
+#include "include/axaccess/ia2/ia_action.h"
+#include "include/axaccess/ia2/ia_component.h"
+#include "include/axaccess/ia2/ia_hyperlink.h"
+#include "include/axaccess/ia2/ia_node.h"
+#include "include/axaccess/ia2/ia_table2.h"
+#include "include/axaccess/ia2/ia_table_cell.h"
+#include "include/axaccess/ia2/ia_text.h"
+#include "include/axaccess/ia2/ia_value.h"
 
 void print_usage(std::string& program_path) {
   std::string program_name = program_path;
@@ -19,22 +27,78 @@ void print_usage(std::string& program_path) {
   std::cout << "  " << program_name << " --name=NAME --pid=PID\n";
 }
 
-static void print_node(IA2Node node, int level) {
+static void print_node(IANode node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
   std::cout << "> ";
 
   std::string msaa_role = node.get_accRole();
-  std::string ia2_role = node.ia2_role();
+  IA2 ia2 = node.QueryIA2();
+  std::string ia2_role = ia2.role();
   if (ia2_role.empty() || ia2_role == msaa_role)
     std::cout << msaa_role;
   else
     std::cout << ia2_role << " " << msaa_role;
 
-  std::string node_name = node.get_accName();
-  if (!node_name.empty())
-    std::cout << " (" << node_name << ")";
-  std::cout << "\n";
+  std::cout << " Name='" << node.get_accName() << "',";
+  std::cout << " Description='" << node.get_accDescription() << "',";
+
+  std::vector<std::string> states = node.GetStates();
+  std::vector<std::string> ia2_states = ia2.GetStates();
+  states.insert(states.end(), ia2_states.begin(), ia2_states.end());
+  std::sort(states.begin(), states.end());
+  std::string states_string;
+  for (auto state : states) {
+    states_string += state + ", ";
+  }
+  size_t pos = states_string.find_last_not_of(", ");
+  if (pos != std::string::npos) {
+    states_string = states_string.substr(0, pos + 1);
+  }
+  std::cout << " States=(" << states_string << ")\n";
+
+  std::string indent(level * 2, ' ');
+
+  // For the purpose of this example, dump properties even if null.
+  std::string properties = ia2.GetProperties();
+  if (!properties.empty()) {
+    std::cout << indent << "* " << properties << "\n";
+  }
+
+  IAAction action = node.QueryAction();
+  if (!action.IsNull()) {
+    std::cout << indent << "* " << action.GetProperties() << "\n";
+  }
+
+  IAComponent component = node.QueryComponent();
+  if (!component.IsNull()) {
+    std::cout << indent << "* " << component.GetProperties() << "\n";
+  }
+
+  IAHyperlink hyperlink = node.QueryHyperlink();
+  if (!hyperlink.IsNull()) {
+    std::cout << indent << "* " << hyperlink.GetProperties() << "\n";
+  }
+
+  IATable2 table2 = node.QueryTable2();
+  if (!table2.IsNull()) {
+    std::cout << indent << "* " << table2.GetProperties() << "\n";
+  }
+
+  IATableCell table_cell = node.QueryTableCell();
+  if (!table_cell.IsNull()) {
+    std::cout << indent << "* " << table_cell.GetProperties() << "\n";
+  }
+
+  IAText text = node.QueryText();
+  if (!text.IsNull()) {
+    std::cout << indent << "* " << text.GetProperties() << "\n";
+  }
+
+  IAValue value = node.QueryValue();
+  if (!value.IsNull()) {
+    std::cout << indent << "* " << value.GetProperties() << "\n";
+  }
 
   int32_t child_count = node.get_accChildCount();
   if (child_count < 0)
@@ -90,7 +154,7 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  IA2Node root = IA2Node::CreateRootForName(name, pid);
+  IANode root = IANode::CreateRootForName(name, pid);
   if (root.IsNull()) {
     std::cerr << "ERROR: Could not find match for";
     if (!name.empty()) {
