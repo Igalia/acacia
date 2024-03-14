@@ -11,7 +11,6 @@ bool AtspiNode::is_null() const {
 }
 
 std::string AtspiNode::get_role_name() const {
-  throw std::runtime_error("whooooo!");
   GError* error = nullptr;
   char* role_name = atspi_accessible_get_role_name(accessible_, &error);
   if (error) {
