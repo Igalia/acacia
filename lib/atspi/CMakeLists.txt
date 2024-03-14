@@ -100,22 +100,6 @@ if (AXA_NODEJS_MODULE)
     REQUIRED
   )
 
-  ## Final cmake target and proper destination for the NodeJS module
-  add_custom_target(
-    atspi_inspect.node ALL
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/build/Release/atspi_inspect.node"
-    COMMAND cp "./build/Release/atspi_inspect.node" .
-  )
-
-  set_property(
-    TARGET atspi_inspect.node
-    APPEND
-    PROPERTY ADDITIONAL_CLEAN_FILES
-      binding.gyp
-      ${CMAKE_CURRENT_BINARY_DIR}/build
-      atspi_inspect.node
-  )
-
   ## Generate `binding.gyp` file for node-gyp
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/binding.gyp.in binding.gyp
@@ -123,16 +107,39 @@ if (AXA_NODEJS_MODULE)
 
   ## Generate C++ wrapper for NodeJS
   add_custom_command(
-    OUTPUT "atspi_nodejs_inspect_wrap.cxx"
-    COMMAND swig -c++ -javascript -node -o atspi_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/atspi_inspect.i
+    OUTPUT atspi_nodejs_inspect_wrap.cxx
+    DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/atspi_inspect.i
+    COMMAND
+      swig -c++ -javascript -node -o atspi_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/atspi_inspect.i
     VERBATIM
   )
 
-  ## Generate NodeJS module
   add_custom_command(
-    OUTPUT "build/Release/atspi_inspect.node"
-    DEPENDS atspi_nodejs_inspect_wrap.cxx
-    COMMAND ${NODE_GYP} configure build
+    OUTPUT atspi_inspect.node
+    DEPENDS
+      libatspi_inspect.so
+      binding.gyp
+      atspi_nodejs_inspect_wrap.cxx
+    COMMAND
+      ${NODE_GYP} configure build
+      COMMAND cp "./build/Release/atspi_inspect.node" .
     VERBATIM
+  )
+
+  add_custom_target(
+    atspi_inspect_module ALL
+    DEPENDS
+      atspi_inspect
+      atspi_inspect.node
+  )
+
+  set_property(
+    TARGET atspi_inspect_module
+    APPEND
+    PROPERTY ADDITIONAL_CLEAN_FILES
+      binding.gyp
+      ${CMAKE_CURRENT_BINARY_DIR}/build
+      atspi_inspect.node
   )
 endif (AXA_NODEJS_MODULE)
