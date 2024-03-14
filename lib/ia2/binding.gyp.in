@@ -7,8 +7,16 @@
         "${CMAKE_SOURCE_DIR}/include",
       ],
       "sources": [
-        "../../../lib/ia2/ia2_node.cc",
+        "../../../lib/ia2/ia_node.cc",
         "../../../lib/ia2/win_utils.cc",
+        "../../../lib/ia2/ia_2.cc",
+        "../../../lib/ia2/ia_action.cc",
+        "../../../lib/ia2/ia_component.cc",
+        "../../../lib/ia2/ia_hyperlink.cc",
+        "../../../lib/ia2/ia_table_cell.cc",
+        "../../../lib/ia2/ia_table2.cc",
+        "../../../lib/ia2/ia_text.cc",
+        "../../../lib/ia2/ia_value.cc",
         "./ia2_nodejs_inspect_wrap.cxx",
       ],
       'link_settings': {

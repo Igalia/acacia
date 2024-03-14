@@ -27,7 +27,7 @@ if (!name.length) {
   process.exit();
 }
 
-const root = ia2_inspect.IA2Node.CreateRootForName(name, pid);
+const root = ia2_inspect.IANode.CreateRootForName(name, pid);
 if (root.IsNull()) {
   let errormsg = 'Error: no accessible application found for name: ' + name;
   if (pid)
@@ -37,11 +37,25 @@ if (root.IsNull()) {
 }
 
 function printNode(node, level) {
-  let sep = '';
-  for (var i = 0; i < level; i++)
-    sep += '--';
-  console.log(
-      sep + '> ' + node.get_accRole() + ' (' + node.get_accName() + ')');
+  let output = '--'.repeat(level) + '>';
+
+  let msaa_role = node.get_accRole();
+  let ia2 = node.QueryIA2();
+  let ia2_role = ia2.role();
+
+  if (!ia2_role.length || msaa_role === ia2_role) {
+    output += msaa_role;
+  } else {
+    output += ia2_role + ' ' + msaa_role;
+  }
+
+  output += ` Name='${node.get_accName()}',`;
+  output += ` Description='${node.get_accDescription()}',`;
+
+  // TODO: doesn't work, investigate
+  // let states = node.GetStates().join(", ") + ", " + ia2.GetStates().join(",
+  // "); output += ` States=[${states}],`;
+
   for (let i = 0; i < node.get_accChildCount(); i++) {
     printNode(node.AccessibleChildAt(i), level + 1);
   }

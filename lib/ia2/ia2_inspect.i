@@ -20,12 +20,12 @@ namespace std {
   %template(PairLongLong) pair<long, long>;
 };
 
-%typemap(out) GroupPosition {
-    $result = PyDict_New();
-    PyDict_SetItemString($result, "level", PyLong_FromLong($1.level));
-    PyDict_SetItemString($result, "setsize", PyLong_FromLong($1.setsize));
-    PyDict_SetItemString($result, "position", PyLong_FromLong($1.position));
-}
+//%typemap(out) GroupPosition {
+//    $result = PyDict_New();
+//    PyDict_SetItemString($result, "level", PyLong_FromLong($1.level));
+//    PyDict_SetItemString($result, "setsize", PyLong_FromLong($1.setsize));
+//    PyDict_SetItemString($result, "position", PyLong_FromLong($1.position));
+//}
 
 %catches(std::runtime_error) IANode::get_accRole();
 %catches(std::runtime_error) IANode::get_accName();
