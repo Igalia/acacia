@@ -1,4 +1,4 @@
-%module mac_inspect
+%module axapi_inspect
 
 %{
 #include <include/axaccess/mac/axapi_node.h>

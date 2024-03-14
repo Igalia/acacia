@@ -128,14 +128,14 @@ if (AXA_NODEJS_MODULE)
   )
 
   add_custom_target(
-    atspi_inspect_module ALL
+    atspi_inspect_nodejs_module ALL
     DEPENDS
       atspi_inspect
       atspi_inspect.node
   )
 
   set_property(
-    TARGET atspi_inspect_module
+    TARGET atspi_inspect_nodejs_module
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
       binding.gyp

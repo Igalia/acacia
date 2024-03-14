@@ -15,7 +15,7 @@ if (AXA_NODEJS_MODULE)
     ALL
     DEPENDS
       atspi_inspect
-      atspi_inspect_module
+      atspi_inspect_nodejs_module
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_atspi.js ${CMAKE_CURRENT_BINARY_DIR}/
   )

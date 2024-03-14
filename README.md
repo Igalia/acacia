@@ -139,8 +139,8 @@ As well as a python module:
 ```
 % cd build/lib/mac/
 % python3
->>> import mac_inspect
->>> app = mac_inspect.AXAPINode.CreateForPID(12345)
+>>> import axapi_inspect
+>>> app = axapi_inspect.AXAPINode.CreateForPID(12345)
 >>> attribute_names = app.CopyAttributeNames()
 >>> role = app.CopyStringAttributeValue('AXRole')
 >>> title = app.CopyStringAttributeValue('AXTitle')
