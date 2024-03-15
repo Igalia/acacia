@@ -9,18 +9,18 @@ void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " <pid>\n";
 }
 
-static void print_node(AtspiNodePtr& node, int level) {
+static void print_node(AtspiNode node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
-  std::cout << "> " << node->get_role_name();
-  std::string node_name = node->get_name();
+  std::cout << "> " << node.get_role_name();
+  std::string node_name = node.get_name();
   if (!node_name.empty())
     std::cout << " (" << node_name << ")";
   std::cout << "\n";
 
-  int32_t child_count = node->get_child_count();
+  int32_t child_count = node.get_child_count();
   for (auto i = 0; i < child_count; i++) {
-    auto child = node->get_child_at_index(i);
+    auto child = node.get_child_at_index(i);
     print_node(child, level + 1);
   }
 }
@@ -42,8 +42,8 @@ int main(int argc, char** argv) {
 
   const int pid = std::stoi(pid_string);
   std::cout << "Got PID: " << pid << "\n";
-  AtspiNodePtr root = find_root_accessible_from_pid(pid);
-  if (!root) {
+  AtspiNode root = find_root_accessible_from_pid(pid);
+  if (root.is_null()) {
     std::cerr << "No accessible root found at pid " << pid << "\n";
     return -1;
   }
