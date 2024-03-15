@@ -65,6 +65,16 @@ function printNode(node, level) {
   }
 
   output += ` States=[${states.slice(0, -2)}],`;
+
+  let pos = ia2.get_groupPosition();
+
+  if (!pos.IsEmpty()) {
+    output += '\n' +
+        '  '.repeat(level + 1) + 'Group position: ' +
+        `{level: ${pos.level}, setsize: ${pos.setsize}, position: ${
+                  pos.position}}`;
+  }
+
   console.log(output);
 
   for (let i = 0; i < node.get_accChildCount(); i++) {
