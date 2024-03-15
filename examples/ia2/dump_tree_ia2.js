@@ -52,9 +52,20 @@ function printNode(node, level) {
   output += ` Name='${node.get_accName()}',`;
   output += ` Description='${node.get_accDescription()}',`;
 
-  // TODO: doesn't work, investigate
-  // let states = node.GetStates().join(", ") + ", " + ia2.GetStates().join(",
-  // "); output += ` States=[${states}],`;
+  // Note: C++ vectors are not wrapped as javascript array primatives.
+  // See README for more information.
+  let states = '';
+  let ia_states = node.GetStates();
+  for (let i = 0; i < ia_states.size(); i++) {
+    states += ia_states.get(i) + ', ';
+  }
+  let ia2_states = ia2.GetStates();
+  for (let i = 0; i < ia2_states.size(); i++) {
+    states += ia2_states.get(i) + ', ';
+  }
+
+  output += ` States=[${states.slice(0, -2)}],`;
+  console.log(output);
 
   for (let i = 0; i < node.get_accChildCount(); i++) {
     printNode(node.AccessibleChildAt(i), level + 1);

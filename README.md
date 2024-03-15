@@ -18,6 +18,20 @@ This library can build either a Python3 module or a NodeJS c++ addon for any of 
 
 If no target language is specified, only the c++ library and examples will be built.
 
+#### Notes on NodeJS bindings
+
+At present, an arrays returned by the underlaying c++ functions are not implemented as native javascript array objects. They are objects with the follow accessor functions:
+* `equals`
+* `size`
+* `capacity`
+* `reserve`
+* `isEmpty`
+* `clear`
+* `add`
+* `get`
+* `set`
+* `constructor`
+
 ### On Linux
 
 #### Dependencies
