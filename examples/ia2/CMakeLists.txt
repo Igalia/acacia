@@ -33,7 +33,7 @@ if (AXA_NODEJS_MODULE)
     ALL
     DEPENDS
       ia2_inspect
-      ia2_node_inspect
+      ia2_inspect_node_module
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_ia2.js "${WIN_OUTPUT_DIRECTORY}"
   )

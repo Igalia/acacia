@@ -91,25 +91,29 @@ if (AXA_NODEJS_MODULE)
   set(NODE_GYP_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/build/Release")
 
   add_custom_target(
-    ia2_node_inspect ALL
-    DEPENDS "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node" "${WIN_OUTPUT_DIRECTORY}"
+    ia2_inspect_node_module ALL
+    DEPENDS
+      ia2_inspect
+      ia2_inspect.node
   )
 
-  # Generate NodeJS module
   add_custom_command(
-    OUTPUT "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node"
-    DEPENDS ia2_nodejs_inspect_wrap.cxx
-    COMMAND ${NODE_GYP} configure build
+    OUTPUT ia2_inspect.node
+    DEPENDS
+    "${CMAKE_CURRENT_BINARY_DIR}/ia2_nodejs_inspect_wrap.cxx"
+    COMMAND
+      ${NODE_GYP} configure build
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node" "${WIN_OUTPUT_DIRECTORY}"
     VERBATIM
   )
 
   set_property(
-    TARGET ia2_node_inspect
+    TARGET ia2_inspect_node_module
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
       ${CMAKE_CURRENT_BINARY_DIR}/build
-    )
+      ia2_inspect.node
+  )
 
   # Generate `binding.gyp` file for node-gyp
   configure_file(
@@ -118,15 +122,16 @@ if (AXA_NODEJS_MODULE)
 
   # Generate C++ wrapper for NodeJS
   add_custom_command(
-    OUTPUT "ia2_nodejs_inspect_wrap.cxx"
-    COMMAND swig -c++ -javascript -node -o ia2_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/ia2_inspect.i
+    OUTPUT ia2_nodejs_inspect_wrap.cxx
+    COMMAND
+      swig -c++ -javascript -node -o ia2_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/ia2_inspect.i
     VERBATIM
   )
 
-    add_dependencies(
-      ia2_node_inspect
+  add_dependencies(
+    ia2_inspect_node_module
 
-      iaccessible2
-    )
+    iaccessible2
+  )
 
 endif (AXA_NODEJS_MODULE)
