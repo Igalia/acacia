@@ -232,49 +232,53 @@ For package management, you can use scoop (https://scoop.sh/) or the windows pac
 IMPORTANT: This project was not designed for a multi-configuration generator, like Visual Studios. Instead, please use a single configuration generator. The recommended generator is [Ninja](https://ninja-build.org/) and the following instructions will assume Ninja will be used. You can install `ninja` through scoop.
 
 [SWIG](https://www.swig.org/) and python3 are also necessary to build both the nodejs and python3 bindings.
-
 ```
 scoop install swig python ninja
 ```
 
-##### Notes for building Python bindings
-
-If you are using MSVC to compile, you will need to specify the "release" build, otherwise you will need a debug version of the python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release". If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
-
-##### Notes for building NodeJS bindings
-
 For the nodeJS bindings, you will need to download and build node-gyp app and put the executable on your path. One way to do this is through npm:
-
 ```
 npm install -g node-gyp
 ```
 
 #### Build steps
 
-You can build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
+##### VS Code
 
-You can also run the following from Windows `Developer PowerShell for VS 2022`:
-```
-% mkdir build
-% cd build
-% cmake <binding-flags> .. -G "Ninja" --fresh
-% cmake --build . --config Release
-```
-
-Note: `--config Release` is only necessary if you are building the python library and linking against the release version of python.
-
-To turn on the Python3 and NodeJS bindings, run cmake with the following flags:
-```
-% cmake -DAXA_PYTHON_MODULE=ON -DAXA_NODEJS_MODULE=ON .. -G "Ninja" --fresh
-```
-
-Or, if building from within Visual Studios, add the following to your settings.json:
+Add the following to your settings.json:
 ```
     "cmake.configureArgs": [
         "-DAXA_PYTHON_MODULE=ON"
         "-DAXA_NODEJS_MODULE=ON"
     ],
     "cmake.generator": "Ninja",
+```
+
+If you are using MSVC to compile, you will need to specify the "release" build, otherwise you will need a debug version of the python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release". If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
+
+You can then build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
+
+##### Powershell
+
+To build from PowerShell, first you have to import and run the DevShell module:
+```
+Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+Enter-VsDevShell -arch amd64  -VsInstallPath "C:\Program Files\Microsoft Visual Studio\2022\Community\"
+```
+
+Then, to build:
+```
+% mkdir build
+% cd build
+% cmake -DCMAKE_BUILD_TYPE=Release <binding-flags> .. -G "Ninja" --fresh
+% ninja
+```
+
+Note: `-DCMAKE_BUILD_TYPE=Release` is necessary if you are using msvc and only have the Release version of Python.
+
+To turn on the Python3 and NodeJS bindings, run cmake with the following flags:
+```
+% cmake -DCMAKE_BUILD_TYPE=Release -DAXA_PYTHON_MODULE=ON -DAXA_NODEJS_MODULE=ON .. -G "Ninja" --fresh
 ```
 
 **OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
