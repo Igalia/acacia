@@ -20,7 +20,7 @@ If no target language is specified, only the c++ library and examples will be bu
 
 #### Notes on NodeJS bindings
 
-At present, an arrays returned by the underlaying c++ functions are not implemented as native javascript array objects. They are objects with the follow accessor functions:
+At present, arrays returned by the underlaying c++ functions are not implemented as native javascript array objects. They are objects with the follow accessor functions:
 * `equals`
 * `size`
 * `capacity`
@@ -222,6 +222,8 @@ Through the Visual Studio Installer, install:
 - Under individual components: C++/CLI support for v143 build tools (latest)
    - This is only necessary for buildings NodeJS bindings
 
+Through the Microsoft Store, download Python.
+
 Git for windows (this also installs git bash, very nice to have and used by default in VSCode's terminal):
 - https://git-scm.com/download/win
 
@@ -235,13 +237,23 @@ IMPORTANT: This project was not designed for a multi-configuration generator, li
 scoop install swig python ninja
 ```
 
+##### Notes for building Python bindings
+
 If you are using MSVC to compile, you will need to specify the "release" build, otherwise you will need a debug version of the python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release". If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
+
+##### Notes for building NodeJS bindings
+
+For the nodeJS bindings, you will need to download and build node-gyp app and put the executable on your path. One way to do this is through npm:
+
+```
+npm install -g node-gyp
+```
 
 #### Build steps
 
 You can build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
 
-You can also run the following from a bash terminal:
+You can also run the following from Windows `Developer PowerShell for VS 2022`:
 ```
 % mkdir build
 % cd build
@@ -249,9 +261,11 @@ You can also run the following from a bash terminal:
 % cmake --build . --config Release
 ```
 
+Note: `--config Release` is only necessary if you are building the python library and linking against the release version of python.
+
 To turn on the Python3 and NodeJS bindings, run cmake with the following flags:
 ```
-% cmake -DAXA_PYTHON_MODULE=ON -DAXA_NODEJS_MODULE=ON .. --fresh
+% cmake -DAXA_PYTHON_MODULE=ON -DAXA_NODEJS_MODULE=ON .. -G "Ninja" --fresh
 ```
 
 Or, if building from within Visual Studios, add the following to your settings.json:
