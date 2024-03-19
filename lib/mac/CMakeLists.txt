@@ -8,9 +8,16 @@ add_library(
 
   # Sources
   axapi_node.mm
-  axapi_node_impl.cc
-  axapi_context_impl.cc
 )
+
+if (AXA_LIBAXACCESS)
+  target_sources(
+    mac_inspect
+    PRIVATE
+      axapi_context_impl.cc
+      axapi_node_impl.cc
+  )
+endif (AXA_LIBAXACCESS)
 
 find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices)
 cmake_print_variables(APPLICATION_SERVICES_FRAMEWORK)
@@ -90,19 +97,28 @@ if (AXA_NODEJS_MODULE)
     REQUIRED
   )
 
+  # node-gyp will place output files in the following folder.
+  set(NODE_GYP_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/build/Release")
+
+
   # Final cmake target and proper destination for the NodeJS module
   add_custom_target(
-    axapi_inspect.node ALL
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/build/Release/axapi_inspect.node"
-    COMMAND cp "./build/Release/axapi_inspect.node" .
+    mac_inspect.node ALL
+    DEPENDS
+      "${CMAKE_CURRENT_BINARY_DIR}/mac_nodejs_inspect_wrap.cxx"
+    COMMAND
+      ${NODE_GYP} configure build
+    COMMAND
+      ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/mac_inspect.node" .
+    VERBATIM
   )
 
   set_property(
-    TARGET axapi_inspect.node
+    TARGET mac_inspect.node
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
       ${CMAKE_CURRENT_BINARY_DIR}/build
-      axapi_inspect.node
+      mac_inspect.node
   )
 
   # Generate `binding.gyp` file for node-gyp
@@ -112,16 +128,11 @@ if (AXA_NODEJS_MODULE)
 
   # Generate C++ wrapper for NodeJS
   add_custom_command(
-    OUTPUT "axapi_nodejs_inspect_wrap.cxx"
-    COMMAND swig -c++ -javascript -node -o axapi_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/mac_inspect.i
+    OUTPUT mac_nodejs_inspect_wrap.cxx
+    DEPENDS mac_inspect
+    COMMAND
+      swig -c++ -javascript -node -o mac_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/mac_inspect.i
     VERBATIM
   )
 
-  # Generate NodeJS module
-  add_custom_command(
-    OUTPUT "build/Release/axapi_inspect.node"
-    DEPENDS axapi_nodejs_inspect_wrap.cxx
-    COMMAND ${NODE_GYP} configure build
-    VERBATIM
-  )
 endif (AXA_NODEJS_MODULE)

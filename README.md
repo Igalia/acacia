@@ -156,8 +156,8 @@ And a node C++ add-on:
 ```
 % cd build/lib/mac/
 % node
-> const axapi_inspect = require("./axapi_inspect");
-> let app = axapi_inspect.AXAPINode.CreateForPID(12345);
+> const mac_inspect = require("./mac_inspect");
+> let app = mac_inspect.AXAPINode.CreateForPID(12345);
 > const title = app.CopyStringAttributeValue('AXTitle');
 > let children_count = 0;
 > if (app.HasAttribute('AXChildren'))
