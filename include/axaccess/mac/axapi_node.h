@@ -17,7 +17,20 @@ namespace mac_inspect {
 
 class AXAPIContextImpl;
 
-enum class ValueType { STRING, INT, NODE_LIST, OTHER, NOT_PRESENT };
+enum class ValueType {
+  NOT_PRESENT,
+  UNKNOWN,
+  BOOLEAN,
+  INT,
+  FLOAT,
+  STRING,
+  NODE,
+  STRING_LIST,
+  NODE_LIST,
+  EMPTY_LIST
+};
+
+std::string ValueTypeToString(ValueType value_type);
 
 /**
  * Represents a node in the accessibility tree.

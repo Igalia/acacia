@@ -22,6 +22,7 @@ class ScopedCFTypeRef {
  public:
   ScopedCFTypeRef() = default;
   ScopedCFTypeRef(T ref) : ref_(ref) {}
+  ScopedCFTypeRef(ScopedCFTypeRef& other) : ref_(other.ref_) { CFRetain(ref_); }
 
   ~ScopedCFTypeRef() {
     if (ref_)
@@ -85,9 +86,87 @@ std::string AXErrorToString(AXError err) {
       return std::to_string(err);
   }
 }
+
+using mac_inspect::ValueType;
+using mac_inspect::ValueTypeToString;
+ValueType TypeIDToValueType(CFTypeID type_id,
+                            ScopedCFTypeRef<CFTypeRef> cf_value,
+                            const std::string& attribute = "") {
+  if (type_id == CFBooleanGetTypeID())
+    return ValueType::BOOLEAN;
+
+  if (type_id == CFNumberGetTypeID()) {
+    if (CFNumberIsFloatType((CFNumberRef)cf_value.get()))
+      return ValueType::FLOAT;
+
+    return ValueType::INT;
+  }
+
+  if (type_id == CFStringGetTypeID())
+    return ValueType::STRING;
+
+  if (type_id == AXUIElementGetTypeID())
+    return ValueType::NODE;
+
+  if (type_id == CFArrayGetTypeID()) {
+    if (CFArrayGetCount((CFArrayRef)cf_value.get()) == 0) {
+      // Can't determine the list type of an empty list, so it gets its own type
+      return ValueType::EMPTY_LIST;
+    }
+
+    CFTypeRef cf_first_value =
+        (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0);
+    CFTypeID first_value_type_id = CFGetTypeID(cf_first_value);
+
+    if (first_value_type_id == AXUIElementGetTypeID())
+      return ValueType::NODE_LIST;
+
+    if (first_value_type_id == CFStringGetTypeID())
+      return ValueType::STRING_LIST;
+
+    cerr << "Unsupported array type: " << first_value_type_id << " ("
+         << ValueTypeToString(TypeIDToValueType(first_value_type_id, cf_value))
+         << ")"
+         << " for attribute " << attribute << "\n";
+
+    return ValueType::UNKNOWN;
+  }
+
+  if (attribute != "") {
+    cerr << "Unknown type: " << type_id << " for attribute " << attribute
+         << "\n";
+  }
+  return ValueType::UNKNOWN;
+}
+
 }  // namespace
 
 namespace mac_inspect {
+
+std::string ValueTypeToString(ValueType value_type) {
+  switch (value_type) {
+    case ValueType::NOT_PRESENT:
+      return "NOT_PRESENT";
+    case ValueType::UNKNOWN:
+      return "UNKNOWN";
+    case ValueType::BOOLEAN:
+      return "BOOLEAN";
+    case ValueType::INT:
+      return "INT";
+    case ValueType::FLOAT:
+      return "FLOAT";
+    case ValueType::STRING:
+      return "STRING";
+    case ValueType::NODE:
+      return "NODE";
+    case ValueType::NODE_LIST:
+      return "NODE_LIST";
+    case ValueType::STRING_LIST:
+      return "STRING_LIST";
+    case ValueType::EMPTY_LIST:
+      return "EMPTY_LIST";
+  }
+}
 
 AXAPINode::AXAPINode() {}
 
@@ -167,7 +246,23 @@ bool AXAPINode::HasAttribute(const std::string& attribute) const {
 }
 
 ValueType AXAPINode::GetAttributeValueType(const std::string& attribute) const {
-  return ValueType::OTHER;
+  if (!HasAttribute(attribute))
+    return ValueType::NOT_PRESENT;
+
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFTypeRef> cf_value;
+  AXError err = AXUIElementCopyAttributeValue(
+      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+
+  if (err) {
+    if (err == kAXErrorNoValue || err == kAXErrorAttributeUnsupported)
+      return ValueType::NOT_PRESENT;
+
+    return ValueType::UNKNOWN;
+  }
+
+  CFTypeID type_id = CFGetTypeID(cf_value.get());
+  return TypeIDToValueType(type_id, cf_value, attribute);
 }
 
 std::string AXAPINode::CopyStringAttributeValue(
