@@ -8,7 +8,6 @@ add_library(
 
   # Sources
   axapi_node.mm
-  axapi_constants.mm
   axapi_node_impl.cc
   axapi_context_impl.cc
 )

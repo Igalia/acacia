@@ -11,11 +11,13 @@
  *  Accessiblity API for MacOS
  *  @{
  */
-/** @} */ // end of axapi group
+/** @} */  // end of axapi group
 
 namespace mac_inspect {
 
 class AXAPIContextImpl;
+
+enum class ValueType { STRING, INT, NODE_LIST, OTHER, NOT_PRESENT };
 
 /**
  * Represents a node in the accessibility tree.
@@ -36,6 +38,8 @@ class AXAPINode {
   std::vector<std::string> CopyAttributeNames() const;
 
   bool HasAttribute(const std::string& attribute) const;
+
+  ValueType GetAttributeValueType(const std::string& attribute) const;
 
   std::string CopyStringAttributeValue(const std::string& attribute) const;
 

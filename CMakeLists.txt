@@ -38,7 +38,7 @@ option(
 option(
   AXA_PYTHON_MODULE
   "Build Python bindings (requires swig and python3)"
-  OFF
+  ON
 )
 
 ## Feature flag for NodeJS bindings, OFF by default

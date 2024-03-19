@@ -166,6 +166,10 @@ bool AXAPINode::HasAttribute(const std::string& attribute) const {
   return HasAttribute(cf_attribute.get());
 }
 
+ValueType AXAPINode::GetAttributeValueType(const std::string& attribute) const {
+  return ValueType::OTHER;
+}
+
 std::string AXAPINode::CopyStringAttributeValue(
     const std::string& attribute) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
