@@ -12,10 +12,10 @@ add_library(
 
 if (AXA_LIBAXACCESS)
   target_sources(
-    axapi_inspect
+    mac_inspect
     PRIVATE
-      axa_context_impl.cc
-      axa_node_impl.cc
+      axapi_context_impl.cc
+      axapi_node_impl.cc
   )
 endif (AXA_LIBAXACCESS)
 
