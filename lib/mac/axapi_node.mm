@@ -1,6 +1,5 @@
 #include "include/axaccess/mac/axapi_node.h"
 
-#import <ApplicationServices/ApplicationServices.h>
 #import <Foundation/Foundation.h>
 
 #include <cstdlib>
