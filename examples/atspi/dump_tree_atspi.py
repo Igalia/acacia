@@ -19,7 +19,7 @@ except:
 
 root = atspi_inspect.find_root_accessible_from_pid(int(pid))
 if root.is_null():
-    print(f"Error: no accessible application found for pid '{str(pid)}'.");
+    print(f"Error: no accessible application found for pid '{pid}'.");
     sys.exit()
 
 def printNode(node, level):
