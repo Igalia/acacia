@@ -23,4 +23,17 @@
  */
 AtspiNode find_root_accessible_from_pid(const int pid);
 
+/**
+ * Returns the root node of the accessible tree of a running application
+ * referenced by the application's accessible name.
+ * @ingroup atspi
+ *
+ * @param name: The accessible name (or substring thereof) to search for.
+ * @param pid: Optional. The process id to search for.
+ *
+ * @returns A unique pointer wrapping an AtspiNode.
+ */
+AtspiNode find_root_accessible_from_name(const std::string& name,
+                                         const int pid = 0);
+
 #endif  // LIB_ATSPI_LINUX_UTILS_H_
