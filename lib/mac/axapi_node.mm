@@ -94,6 +94,8 @@ std::string AXErrorToString(AXError err) {
 
 using mac_inspect::ValueType;
 using mac_inspect::ValueTypeToString;
+
+// Pass attribute name to enable debug logging
 ValueType DeduceValueType(ScopedCFTypeRef<CFTypeRef> cf_value,
                           const std::string& attribute = "") {
   CFTypeID type_id = CFGetTypeID(cf_value.get());
