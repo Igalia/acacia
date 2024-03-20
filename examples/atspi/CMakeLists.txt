@@ -9,6 +9,23 @@ target_link_libraries(
     atspi_inspect
 )
 
+if (AXA_PYTHON_MODULE)
+  add_custom_target(
+    dump_tree_atspi.py
+    ALL
+    DEPENDS
+      atspi_inspect
+      atspi_python_inspect
+    COMMAND
+      ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_atspi.py ${CMAKE_CURRENT_BINARY_DIR}/
+    COMMAND
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/_atspi_python_inspect.so ${CMAKE_CURRENT_BINARY_DIR}/_atspi_python_inspect.so
+    COMMAND
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/atspi_inspect.py ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.py
+    VERBATIM
+  )
+endif (AXA_PYTHON_MODULE)
+
 if (AXA_NODEJS_MODULE)
   add_custom_target(
     dump_tree_atspi.js

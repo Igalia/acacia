@@ -87,6 +87,10 @@ containing example programs that show how the API can be used.
                      If NodeJS bindings feature is enabled, there is also a
                      `dump_tree_atspi.js` program which can be run as
                      `nodejs examples/atspi/dump_tree_atspi.js <pid>`.
+                     Similarly, if Python bindings feature is enabled, there
+                     is also a `dump_tree_atspi.py` program that can be run as
+                     `python examples/atspi/dump_tree_atspi.py <pid>`.
+
 
 ### On Mac
 
