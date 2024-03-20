@@ -51,6 +51,7 @@ int main(int argc, char** argv) {
   try {
     print_node(root, 0);
   } catch(std::exception e) {
+    // Log exception.
     std::cerr << e.what();
     return -1;
   }
