@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "lib/mac/scoped_cf_type_ref.h"
+
 /** @defgroup axapi AX-API (MacOS)
  *  Accessiblity API for MacOS
  *  @{
@@ -63,9 +65,9 @@ class AXAPINode {
 
   ValueType GetListAttributeElementType(const std::string& attribute) const;
 
-  std::string CopyStringAttributeValue(const std::string& attribute) const;
-
   int GetListAttributeValueCount(const std::string& attribute) const;
+
+  std::string CopyStringAttributeValue(const std::string& attribute) const;
 
   std::vector<AXAPINode> CopyNodeListAttributeValue(
       const std::string& attribute) const;
@@ -78,6 +80,9 @@ class AXAPINode {
   AXUIElementRef ax_ui_element_{NULL};
 
   bool HasAttribute(const CFStringRef attribute) const;
+
+  ScopedCFTypeRef<CFTypeRef> CopyRawAttributeValue(
+      const std::string& attribute) const;
 
   friend class AXAPIContextImpl;
 };
