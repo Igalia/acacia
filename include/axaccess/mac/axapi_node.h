@@ -67,6 +67,12 @@ class AXAPINode {
 
   int GetListAttributeValueCount(const std::string& attribute) const;
 
+  bool CopyBooleanAttributeValue(const std::string& attribute) const;
+
+  int CopyIntAttributeValue(const std::string& attribute) const;
+
+  float CopyFloatAttributeValue(const std::string& attribute) const;
+
   std::string CopyStringAttributeValue(const std::string& attribute) const;
 
   std::vector<AXAPINode> CopyNodeListAttributeValue(

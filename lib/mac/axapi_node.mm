@@ -370,6 +370,56 @@ ScopedCFTypeRef<CFTypeRef> AXAPINode::CopyRawAttributeValue(
   return cf_value;
 }
 
+bool AXAPINode::CopyBooleanAttributeValue(const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value = CopyRawAttributeValue(attribute);
+
+  if (CFGetTypeID(cf_value.get()) != CFBooleanGetTypeID()) {
+    ValueType type = DeduceValueType(cf_value);
+    throw std::invalid_argument("Value for " + attribute + " is a " +
+                                ValueTypeToString(type) + ".");
+  }
+
+  return CFBooleanGetValue((CFBooleanRef)cf_value.get());
+}
+
+int AXAPINode::CopyIntAttributeValue(const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value = CopyRawAttributeValue(attribute);
+
+  ValueType type = DeduceValueType(cf_value);
+  if (type != ValueType::INT) {
+    throw std::invalid_argument("Value for " + attribute + " is a " +
+                                ValueTypeToString(type) + ".");
+  }
+
+  int int_value;
+  if (!CFNumberGetValue((CFNumberRef)cf_value.get(),
+                        CFNumberGetType((CFNumberRef)cf_value.get()),
+                        &int_value)) {
+    throw std::runtime_error("Couldn't get int value for " + attribute);
+  }
+
+  return int_value;
+}
+
+float AXAPINode::CopyFloatAttributeValue(const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value = CopyRawAttributeValue(attribute);
+
+  ValueType type = DeduceValueType(cf_value);
+  if (type != ValueType::FLOAT) {
+    throw std::invalid_argument("Value for " + attribute + " is a " +
+                                ValueTypeToString(type) + ".");
+  }
+
+  float float_value;
+  if (!CFNumberGetValue((CFNumberRef)cf_value.get(),
+                        CFNumberGetType((CFNumberRef)cf_value.get()),
+                        &float_value)) {
+    throw std::runtime_error("Couldn't get float value for " + attribute);
+  }
+
+  return float_value;
+}
+
 std::string AXAPINode::CopyStringAttributeValue(
     const std::string& attribute) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
