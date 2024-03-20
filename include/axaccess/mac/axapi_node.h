@@ -11,7 +11,7 @@
  *  Accessiblity API for MacOS
  *  @{
  */
-/** @} */ // end of axapi group
+/** @} */  // end of axapi group
 
 namespace mac_inspect {
 

@@ -14,7 +14,7 @@ AtspiNode find_root_accessible_from_pid(const int pid) {
 
   for (int i = 0; i < child_count; i++) {
     AtspiAccessible* child =
-      atspi_accessible_get_child_at_index(desktop, i, &error);
+        atspi_accessible_get_child_at_index(desktop, i, &error);
     if (error)
       goto handle_gerror;
 
@@ -30,7 +30,7 @@ AtspiNode find_root_accessible_from_pid(const int pid) {
   }
   return AtspiNode();
 
- handle_gerror:
+handle_gerror:
   std::string err_msg = error->message;
   g_error_free(error);
   throw std::runtime_error(err_msg);
