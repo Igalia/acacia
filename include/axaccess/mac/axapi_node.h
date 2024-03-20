@@ -24,10 +24,13 @@ enum class ValueType {
   INT,
   FLOAT,
   STRING,
+  URL,
   NODE,
-  STRING_LIST,
-  NODE_LIST,
-  EMPTY_LIST
+  POINT,
+  SIZE,
+  RECT,
+  RANGE,
+  LIST
 };
 
 std::string ValueTypeToString(ValueType value_type);
@@ -53,6 +56,8 @@ class AXAPINode {
   bool HasAttribute(const std::string& attribute) const;
 
   ValueType GetAttributeValueType(const std::string& attribute) const;
+
+  ValueType GetListAttributeElementType(const std::string& attribute) const;
 
   std::string CopyStringAttributeValue(const std::string& attribute) const;
 

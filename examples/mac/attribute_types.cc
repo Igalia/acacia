@@ -19,7 +19,7 @@ void print_usage(std::string& program_name) {
 }
 
 void CollectAttributeTypes(AXAPINode node,
-                           map<string, ValueType>& attribute_types) {
+                           map<string, string>& attribute_types) {
   vector<string> attributes = node.CopyAttributeNames();
   for (const string& attribute : attributes) {
     if (attribute_types.count(attribute) > 0)
@@ -27,8 +27,16 @@ void CollectAttributeTypes(AXAPINode node,
 
     ValueType type = node.GetAttributeValueType(attribute);
 
-    if (type != ValueType::NOT_PRESENT && type != ValueType::EMPTY_LIST)
-      attribute_types[attribute] = node.GetAttributeValueType(attribute);
+    if (type != ValueType::NOT_PRESENT) {
+      if (type == ValueType::LIST) {
+        ValueType element_type = node.GetListAttributeElementType(attribute);
+        string list_type = ValueTypeToString(type) + "<" +
+                           ValueTypeToString(element_type) + ">";
+        attribute_types[attribute] = list_type;
+      } else {
+        attribute_types[attribute] = ValueTypeToString(type);
+      }
+    }
   }
 
   if (!node.HasAttribute("AXChildren"))
@@ -44,13 +52,13 @@ void CollectAttributeTypes(AXAPINode node,
 
 void LogAllAttributeValueTypes(pid_t pid) {
   AXAPINode application = AXAPINode::CreateForPID(pid);
-  map<string, ValueType> attribute_types;
+  map<string, string> attribute_types;
 
   CollectAttributeTypes(application, attribute_types);
 
   std::cout << "\n\nAttributes:\n-----------\n";
   for (const auto& [attribute, type] : attribute_types)
-    std::cout << attribute << ": " << ValueTypeToString(type) << "\n";
+    std::cout << attribute << ": " << type << "\n";
 }
 
 int main(int argc, char** argv) {

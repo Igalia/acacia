@@ -105,36 +105,22 @@ ValueType TypeIDToValueType(CFTypeID type_id,
   if (type_id == CFStringGetTypeID())
     return ValueType::STRING;
 
+  if (type_id == CFURLGetTypeID())
+    return ValueType::URL;
+
   if (type_id == AXUIElementGetTypeID())
     return ValueType::NODE;
 
-  if (type_id == CFArrayGetTypeID()) {
-    if (CFArrayGetCount((CFArrayRef)cf_value.get()) == 0) {
-      // Can't determine the list type of an empty list, so it gets its own type
-      return ValueType::EMPTY_LIST;
-    }
+  if (type_id == CFArrayGetTypeID())
+    return ValueType::LIST;
 
-    CFTypeRef cf_first_value =
-        (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0);
-    CFTypeID first_value_type_id = CFGetTypeID(cf_first_value);
-
-    if (first_value_type_id == AXUIElementGetTypeID())
-      return ValueType::NODE_LIST;
-
-    if (first_value_type_id == CFStringGetTypeID())
-      return ValueType::STRING_LIST;
-
-    cerr << "Unsupported array type: " << first_value_type_id << " ("
-         << ValueTypeToString(TypeIDToValueType(first_value_type_id, cf_value))
-         << ")"
-         << " for attribute " << attribute << "\n";
-
-    return ValueType::UNKNOWN;
-  }
+  CGPoint point = CGPointMake(0, 0);
 
   if (attribute != "") {
-    cerr << "Unknown type: " << type_id << " for attribute " << attribute
-         << "\n";
+    CFStringRef description = CFCopyTypeIDDescription(type_id);
+    cerr << "Unknown type: " << type_id << " ("
+         << CFStringRefToStdString(description) << ") for attribute "
+         << attribute << "\n";
   }
   return ValueType::UNKNOWN;
 }
@@ -157,14 +143,20 @@ std::string ValueTypeToString(ValueType value_type) {
       return "FLOAT";
     case ValueType::STRING:
       return "STRING";
+    case ValueType::URL:
+      return "URL";
     case ValueType::NODE:
       return "NODE";
-    case ValueType::NODE_LIST:
-      return "NODE_LIST";
-    case ValueType::STRING_LIST:
-      return "STRING_LIST";
-    case ValueType::EMPTY_LIST:
-      return "EMPTY_LIST";
+    case ValueType::POINT:
+      return "POINT";
+    case ValueType::SIZE:
+      return "SIZE";
+    case ValueType::RECT:
+      return "RECT";
+    case ValueType::RANGE:
+      return "RANGE";
+    case ValueType::LIST:
+      return "LIST";
   }
 }
 
@@ -263,6 +255,31 @@ ValueType AXAPINode::GetAttributeValueType(const std::string& attribute) const {
 
   CFTypeID type_id = CFGetTypeID(cf_value.get());
   return TypeIDToValueType(type_id, cf_value, attribute);
+}
+
+ValueType AXAPINode::GetListAttributeElementType(
+    const std::string& attribute) const {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFTypeRef> cf_value;
+  AXError err = AXUIElementCopyAttributeValue(
+      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+
+  if (err) {
+    if (err == kAXErrorNoValue || err == kAXErrorAttributeUnsupported)
+      return ValueType::NOT_PRESENT;
+
+    return ValueType::UNKNOWN;
+  }
+  if (CFArrayGetCount((CFArrayRef)cf_value.get()) == 0) {
+    // Can't determine the list type of an empty list, so it gets its own type
+    return ValueType::UNKNOWN;
+  }
+
+  ScopedCFTypeRef<CFTypeRef> cf_first_value(
+      (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0));
+  CFRetain(cf_first_value.get());
+  CFTypeID first_value_type_id = CFGetTypeID(cf_first_value.get());
+  return TypeIDToValueType(first_value_type_id, cf_first_value, attribute);
 }
 
 std::string AXAPINode::CopyStringAttributeValue(
