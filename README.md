@@ -47,9 +47,13 @@ $ sudo ln -sf /usr/bin/ld.gold /usr/bin/ld
 % make
 ```
 
-This will produce the executable:
+This will produce the executable `build/lib/atspi/dump_tree_atspi` which can be used with either the
+PID of the browser, its name or substring thereof, or both:
+
 ```
-% build/lib/atspi/dump_tree_atspi
+% build/lib/atspi/dump_tree_atspi --pid=49500
+% build/lib/atspi/dump_tree_atspi --name=firefox
+% build/lib/atspi/dump_tree_atspi --name=chrom --pid=50319
 ```
 
 As well as a python module.
@@ -89,7 +93,8 @@ containing example programs that show how the API can be used.
                      `nodejs examples/atspi/dump_tree_atspi.js <pid>`.
                      Similarly, if Python bindings feature is enabled, there
                      is also a `dump_tree_atspi.py` program that can be run as
-                     `python examples/atspi/dump_tree_atspi.py <pid>`.
+                     `python examples/atspi/dump_tree_atspi.py` using the same
+                     arguments as the excutable.
 
 
 ### On Mac
