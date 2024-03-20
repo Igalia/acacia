@@ -90,7 +90,7 @@ containing example programs that show how the API can be used.
                      each node.
                      If NodeJS bindings feature is enabled, there is also a
                      `dump_tree_atspi.js` program which can be run as
-                     `nodejs examples/atspi/dump_tree_atspi.js <pid>`.
+                     `node examples/atspi/dump_tree_atspi.js <pid>`.
                      Similarly, if Python bindings feature is enabled, there
                      is also a `dump_tree_atspi.py` program that can be run as
                      `python examples/atspi/dump_tree_atspi.py` using the same
@@ -243,10 +243,10 @@ To use the python library, navigate to `build/bin/Release`:
 >>> action.get_name(0)
 >>> component = child.QueryComponent()
 >>> component.get_locationInParent()
->>> text = child.queryText()
+>>> text = child.QueryText()
 >>> text.get_nCharacters()
 >>> text.get_text(0, -1)
->>> ia2 = child.queryIA2()
+>>> ia2 = child.QueryIA2()
 >>> ia2.get_attributes()
 >>> ia2.GetRelations()
 ```

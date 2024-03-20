@@ -19,7 +19,7 @@ def main():
     name = args.name or ""
     pid = 0
     if args.pid is not None:
-        pid = int(args.pid)
+        pid = args.pid
 
     if not (pid or name):
       parser.print_help()
