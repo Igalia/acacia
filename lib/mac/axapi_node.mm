@@ -114,7 +114,21 @@ ValueType TypeIDToValueType(CFTypeID type_id,
   if (type_id == CFArrayGetTypeID())
     return ValueType::LIST;
 
-  CGPoint point = CGPointMake(0, 0);
+  if (type_id == AXValueGetTypeID()) {
+    AXValueType ax_value_type = AXValueGetType((AXValueRef)cf_value.get());
+    switch (ax_value_type) {
+      case kAXValueCGPointType:
+        return ValueType::POINT;
+      case kAXValueCGSizeType:
+        return ValueType::SIZE;
+      case kAXValueCGRectType:
+        return ValueType::RECT;
+      case kAXValueCFRangeType:
+        return ValueType::RANGE;
+      default:
+        return ValueType::UNKNOWN;
+    }
+  }
 
   if (attribute != "") {
     CFStringRef description = CFCopyTypeIDDescription(type_id);
