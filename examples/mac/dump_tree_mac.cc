@@ -7,78 +7,98 @@
 #include "include/axaccess/mac/axapi_node.h"
 
 using mac_inspect::AXAPINode;
+using mac_inspect::ValueType;
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " <pid>\n";
 }
 
-void logInfoForPID(pid_t pid) {
-  AXAPINode application = AXAPINode::CreateForPID(pid);
+static void print_node(AXAPINode node, int level) {
+  if (!node.HasAttribute("AXRole"))
+    return;
 
-  std::vector<std::string> attributes = application.CopyAttributeNames();
-  std::cerr << "Attributes: ";
-  for (std::string& attribute : attributes) {
-    std::cerr << attribute << " ";
-  }
-  std::cerr << "\n";
+  for (auto i = 0; i < level; i++)
+    std::cout << "--";
 
-  std::string title = application.CopyStringAttributeValue("AXTitle");
-  std::cerr << "Title: " << title << "\n";
-  std::string role = application.CopyStringAttributeValue("AXRole");
-  std::cerr << "Role: " << role << "\n";
+  std::cout << "> " << node.CopyStringAttributeValue("AXRole");
 
-  std::cerr << "\n";
-
-  std::vector<AXAPINode> children =
-      application.CopyNodeListAttributeValue("AXChildren");
-  for (AXAPINode& child : children) {
-    std::string child_title = child.CopyStringAttributeValue("AXTitle");
-    std::string child_role = child.CopyStringAttributeValue("AXRole");
-    std::cerr << "Child: " << child_role << " \"" << child_title << "\"\n";
-    std::vector<std::string> attributes = child.CopyAttributeNames();
-    std::cerr << "Attributes: ";
-    for (std::string& attribute : attributes) {
-      std::cerr << attribute << " ";
-    }
-    std::cerr << "\n\n";
+  if (node.HasAttribute("AXTitle")) {
+    std::string title = node.CopyStringAttributeValue("AXTitle");
+    if (!title.empty())
+      std::cout << " (" << node.CopyStringAttributeValue("AXTitle") << ")";
   }
 
-  int32_t num_children = application.GetListAttributeValueCount("AXChildren");
-  for (int32_t i = 0; i < num_children; i++) {
-    AXAPINode child =
-        application.CopyNodeListAttributeValueAtIndex("AXChildren", i);
-    std::string child_title = child.CopyStringAttributeValue("AXTitle");
-    std::string child_role = child.CopyStringAttributeValue("AXRole");
-    std::cerr << "Child (from CopyNodeListAttributeValueAtIndex): "
-              << child_role << " \"" << child_title << "\"\n";
-    std::vector<std::string> attributes = child.CopyAttributeNames();
-    std::cerr << "Attributes: ";
-    for (std::string& attribute : attributes) {
-      std::cerr << attribute << " ";
+  // Some sample attributes of each other type
+  if (node.HasAttribute("AXFocused")) {
+    if (node.CopyBooleanAttributeValue("AXFocused"))
+      std::cout << " FOCUSED";
+  }
+
+  if (node.HasAttribute("AXValue")) {
+    ValueType value_type = node.GetAttributeValueType("AXValue");
+    switch (value_type) {
+      case ValueType::STRING:
+        std::cout << " AXValue: \"" << node.CopyStringAttributeValue("AXValue")
+                  << "\"";
+        break;
+      case ValueType::INT:
+        std::cout << " AXValue: "
+                  << std::to_string(node.CopyIntAttributeValue("AXValue"));
+        break;
+      case ValueType::FLOAT:
+        std::cout << " AXValue: "
+                  << std::to_string(node.CopyFloatAttributeValue("AXValue"));
+        break;
+      default:
+        break;
     }
-    std::cerr << "\n\n";
+  }
+
+  std::cout << "\n";
+
+  if (!node.HasAttribute("AXChildren"))
+    return;
+  int32_t child_count = node.GetListAttributeValueCount("AXChildren");
+  for (auto i = 0; i < child_count; i++) {
+    try {
+      auto child = node.CopyNodeListAttributeValueAtIndex("AXChildren", i);
+      print_node(child, level + 1);
+    } catch (std::runtime_error e) {
+      // Sometimes getting a child produces kAXErrorFailure for totally opaque
+      // reasons, yay
+      continue;
+    }
   }
 }
 
 int main(int argc, char** argv) {
-  std::string program_name(argv[0]);
+    std::string program_name(argv[0]);
 
-  if (argc != 2) {
-    print_usage(program_name);
-    return 1;
+    if (argc != 2) {
+        print_usage(program_name);
+        return 1;
+    }
+
+    std::string pid_string(argv[1]);
+    std::regex number_regex("\\d+");
+    if (!std::regex_match(pid_string, number_regex)) {
+        print_usage(program_name);
+        return 1;
+    }
+
+    const int pid = std::stoi(pid_string);
+    std::cerr << "Got PID: " << pid << "\n";
+
+  AXAPINode root = AXAPINode::CreateForPID(pid);
+  try {
+    print_node(root, 0);
+  } catch (std::runtime_error e) {
+    std::cerr << e.what();
+    return -1;
+  } catch (std::invalid_argument e) {
+    std::cerr << e.what();
+    return -1;
   }
 
-  std::string pid_string(argv[1]);
-  std::regex number_regex("\\d+");
-  if (!std::regex_match(pid_string, number_regex)) {
-    print_usage(program_name);
-    return 1;
-  }
-
-  const int pid = std::stoi(pid_string);
-  std::cerr << "Got PID: " << pid << "\n";
-
-  logInfoForPID((pid_t)pid);
-
-  return 0;
+    return 0;
 }
