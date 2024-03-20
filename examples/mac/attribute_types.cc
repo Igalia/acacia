@@ -30,9 +30,11 @@ void CollectAttributeTypes(AXAPINode node,
     if (type != ValueType::NOT_PRESENT) {
       if (type == ValueType::LIST) {
         ValueType element_type = node.GetListAttributeElementType(attribute);
-        string list_type = ValueTypeToString(type) + "<" +
-                           ValueTypeToString(element_type) + ">";
-        attribute_types[attribute] = list_type;
+        if (element_type != ValueType::UNKNOWN) {
+          string list_type = ValueTypeToString(type) + "<" +
+                             ValueTypeToString(element_type) + ">";
+          attribute_types[attribute] = list_type;
+        }
       } else {
         attribute_types[attribute] = ValueTypeToString(type);
       }

@@ -17,6 +17,9 @@ namespace {
 //
 // This should be used when a method with "Create" or "Copy" is used to obtain
 // a CFTypeRef, to ensure CFRelease is called appropriately.
+//
+// It can also be used when a method with "Get" is used, as long as Retain() is
+// called immediately after construction.
 template <typename T>
 class ScopedCFTypeRef {
  public:
@@ -31,6 +34,8 @@ class ScopedCFTypeRef {
 
   T get() { return ref_; }
   T* get_ptr() { return &ref_; }
+
+  void Retain() { CFRetain(ref_); }
 
   ScopedCFTypeRef& operator=(ScopedCFTypeRef other) {
     if (ref_)
@@ -89,9 +94,10 @@ std::string AXErrorToString(AXError err) {
 
 using mac_inspect::ValueType;
 using mac_inspect::ValueTypeToString;
-ValueType TypeIDToValueType(CFTypeID type_id,
-                            ScopedCFTypeRef<CFTypeRef> cf_value,
-                            const std::string& attribute = "") {
+ValueType DeduceValueType(ScopedCFTypeRef<CFTypeRef> cf_value,
+                          const std::string& attribute = "") {
+  CFTypeID type_id = CFGetTypeID(cf_value.get());
+
   if (type_id == CFBooleanGetTypeID())
     return ValueType::BOOLEAN;
 
@@ -130,6 +136,23 @@ ValueType TypeIDToValueType(CFTypeID type_id,
     }
   }
 
+  if (type_id == AXTextMarkerGetTypeID())
+    return ValueType::TEXTMARKER;
+
+  if (type_id == AXTextMarkerRangeGetTypeID())
+    return ValueType::TEXTMARKERRANGE;
+
+  if (type_id == CFDataGetTypeID())
+    return ValueType::DATA;
+
+  if (type_id == CFDictionaryGetTypeID()) {
+    if (attribute != "") {
+      cerr << "Dictionary found for attribute " << attribute << ": "
+           << CFStringRefToStdString(CFCopyDescription(cf_value.get())) << "\n";
+    }
+    return ValueType::DICTIONARY;
+  }
+
   if (attribute != "") {
     CFStringRef description = CFCopyTypeIDDescription(type_id);
     cerr << "Unknown type: " << type_id << " ("
@@ -149,6 +172,8 @@ std::string ValueTypeToString(ValueType value_type) {
       return "NOT_PRESENT";
     case ValueType::UNKNOWN:
       return "UNKNOWN";
+    case ValueType::LIST:
+      return "LIST";
     case ValueType::BOOLEAN:
       return "BOOLEAN";
     case ValueType::INT:
@@ -169,8 +194,14 @@ std::string ValueTypeToString(ValueType value_type) {
       return "RECT";
     case ValueType::RANGE:
       return "RANGE";
-    case ValueType::LIST:
-      return "LIST";
+    case ValueType::DICTIONARY:
+      return "DICTIONARY";
+    case ValueType::DATA:
+      return "DATA";
+    case ValueType::TEXTMARKER:
+      return "TEXTMARKER";
+    case ValueType::TEXTMARKERRANGE:
+      return "TEXTMARKERRANGE";
   }
 }
 
@@ -267,8 +298,7 @@ ValueType AXAPINode::GetAttributeValueType(const std::string& attribute) const {
     return ValueType::UNKNOWN;
   }
 
-  CFTypeID type_id = CFGetTypeID(cf_value.get());
-  return TypeIDToValueType(type_id, cf_value, attribute);
+  return DeduceValueType(cf_value);
 }
 
 ValueType AXAPINode::GetListAttributeElementType(
@@ -279,21 +309,26 @@ ValueType AXAPINode::GetListAttributeElementType(
       ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
 
   if (err) {
+    // Handle errors quietly here.
     if (err == kAXErrorNoValue || err == kAXErrorAttributeUnsupported)
       return ValueType::NOT_PRESENT;
 
     return ValueType::UNKNOWN;
   }
   if (CFArrayGetCount((CFArrayRef)cf_value.get()) == 0) {
-    // Can't determine the list type of an empty list, so it gets its own type
+    // Can't determine the list type of an empty list.
     return ValueType::UNKNOWN;
   }
 
   ScopedCFTypeRef<CFTypeRef> cf_first_value(
       (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0));
-  CFRetain(cf_first_value.get());
-  CFTypeID first_value_type_id = CFGetTypeID(cf_first_value.get());
-  return TypeIDToValueType(first_value_type_id, cf_first_value, attribute);
+  // Since we used "Get" above, we need to manually retain this value to avoid
+  // it going out of scope. The ScopedCFTypeRef wrapper will still handle
+  // calling CFRelease().
+  cf_first_value.Retain();
+
+  ValueType type = DeduceValueType(cf_first_value);
+  return type;
 }
 
 std::string AXAPINode::CopyStringAttributeValue(

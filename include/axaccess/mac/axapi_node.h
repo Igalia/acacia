@@ -20,6 +20,7 @@ class AXAPIContextImpl;
 enum class ValueType {
   NOT_PRESENT,
   UNKNOWN,
+  LIST,
   BOOLEAN,
   INT,
   FLOAT,
@@ -30,7 +31,10 @@ enum class ValueType {
   SIZE,
   RECT,
   RANGE,
-  LIST
+  DICTIONARY,
+  DATA,
+  TEXTMARKER,
+  TEXTMARKERRANGE,
 };
 
 std::string ValueTypeToString(ValueType value_type);
