@@ -19,7 +19,7 @@ static void print_attributes(AXAPINode node) {
   if (node.HasAttribute("AXTitle")) {
     std::string title = node.CopyStringAttributeValue("AXTitle");
     if (!title.empty())
-      std::cout << " (" << node.CopyStringAttributeValue("AXTitle") << ")";
+      std::cout << " \"" << node.CopyStringAttributeValue("AXTitle") << "\"";
   }
 
   // Some sample attributes of each other type
@@ -53,15 +53,15 @@ static void print_attributes(AXAPINode node) {
     std::cout << " AXURL: \"" << url << "\"";
   }
 
-  // if (node.HasAttribute("AXTitleUIElement")) {
-  //   std::cout << " AXTitleUIElement";
-  //   AXAPINode title_node = node.CopyNodeAttributeValue("AXTitleUIElement");
-  //   if (title_node.HasAttribute("AXTitle")) {
-  //     std::string title_node_title =
-  //         title_node.CopyStringAttributeValue("AXTitle");
-  //     std::cout << ": \"" << title_node_title << "\"";
-  //   }
-  // }
+  if (node.HasAttribute("AXTitleUIElement")) {
+    std::cout << " AXTitleUIElement";
+    AXAPINode title_node = node.CopyNodeAttributeValue("AXTitleUIElement");
+    if (title_node.HasAttribute("AXTitle")) {
+      std::string title_node_title =
+          title_node.CopyStringAttributeValue("AXTitle");
+      std::cout << ": \"" << title_node_title << "\"";
+    }
+  }
 
   std::cout << "\n";
 }
@@ -77,8 +77,8 @@ static void print_node(AXAPINode node, int level) {
 
   try {
     print_attributes(node);
-  } catch (...) {
-    std::cout << " (error)\n";
+  } catch (std::runtime_error e) {
+    std::cout << " (error: " << e.what() << ")\n";
   }
 
   if (!node.HasAttribute("AXChildren"))

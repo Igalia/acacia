@@ -7,14 +7,20 @@
 // This should be used when a method with "Create" or "Copy" is used to obtain
 // a CFTypeRef, to ensure CFRelease is called appropriately.
 //
-// It can also be used when a method with "Get" is used, as long as Retain() is
-// called immediately after construction.
+// Use CreateFromUnownedRef() for references obtained using methods with "Get"
+// in the name.
 template <typename T>
 class ScopedCFTypeRef {
  public:
   ScopedCFTypeRef() = default;
-  ScopedCFTypeRef(T ref) : ref_(ref) {}
   ScopedCFTypeRef(ScopedCFTypeRef& other) : ref_(other.ref_) { CFRetain(ref_); }
+
+  explicit ScopedCFTypeRef(T ref) : ref_(ref) {}
+
+  static ScopedCFTypeRef CreateFromUnownedRef(T ref) {
+    CFRetain(ref);
+    return ScopedCFTypeRef(ref);
+  }
 
   ~ScopedCFTypeRef() {
     if (ref_)
@@ -24,7 +30,9 @@ class ScopedCFTypeRef {
   T get() { return ref_; }
   T* get_ptr() { return &ref_; }
 
-  void Retain() { CFRetain(ref_); }
+  // If you need to pass the reference to something else which should retain it,
+  // use this rather than get().
+  T Retain() { return CFRetain(ref_); }
 
   ScopedCFTypeRef& operator=(ScopedCFTypeRef other) {
     if (ref_)
