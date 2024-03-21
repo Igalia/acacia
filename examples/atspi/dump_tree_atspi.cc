@@ -80,6 +80,9 @@ static void print_node(AtspiNode node, int level) {
               << ")\n";
   }
 
+  AtspiComponentInterface component = node.query_component();
+  std::cout << indent << "* Component: " << component.to_string() << "\n";
+
   int32_t child_count = node.get_child_count();
   for (auto i = 0; i < child_count; i++) {
     auto child = node.get_child_at_index(i);

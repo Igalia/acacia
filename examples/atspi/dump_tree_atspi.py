@@ -18,6 +18,10 @@ def printNode(node, level):
     if relations:
         print(f"{'  ' * level}* Relations={tuple(sorted(relations))}")
 
+    # We don't check if this is null because pretty much everything implements it.
+    component = node.query_component()
+    print(f"{'  ' * level}* Component: {component.to_string()}")
+
     for i in range(node.get_child_count()):
          printNode(node.get_child_at_index(i), level + 1)
 

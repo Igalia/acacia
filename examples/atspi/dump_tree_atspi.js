@@ -80,6 +80,11 @@ function printNode(node, level) {
         '* Relations=' + vectorToString(node.get_relations()));
   }
 
+  // We don't check if this is null because pretty much everything implements
+  // it.
+  component = node.query_component();
+  console.log('  '.repeat(level) + '* Component:' + component.to_string());
+
   for (let i = 0; i < node.get_child_count(); i++) {
     printNode(node.get_child_at_index(i), level + 1);
   }

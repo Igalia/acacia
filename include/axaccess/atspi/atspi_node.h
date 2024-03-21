@@ -6,6 +6,8 @@
 
 #include <atspi/atspi.h>
 
+#include "axaccess/atspi/atspi_component_interface.h"
+
 /**
  * Represents a node in the accessibility tree.
  * @ingroup atspi
@@ -30,6 +32,8 @@ class AtspiNode {
   int get_child_count() const;
   AtspiNode get_child_at_index(int index) const;
   std::vector<AtspiNode> get_children() const;
+
+  AtspiComponentInterface query_component() const;
 };
 
 #endif  // LIB_ATSPI_ATSPI_NODE_H_

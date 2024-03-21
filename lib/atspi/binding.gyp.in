@@ -8,6 +8,7 @@
       ],
       "sources": [
         "../../../lib/atspi/linux_utils.cc",
+        "../../../lib/atspi/atspi_component_interface.cc",
         "../../../lib/atspi/atspi_node.cc",
         "./atspi_nodejs_inspect_wrap.cxx",
       ],

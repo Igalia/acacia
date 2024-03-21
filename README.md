@@ -71,6 +71,9 @@ As well as a python module.
 ('ATSPI_STATE_ENABLED', 'ATSPI_STATE_SENSITIVE', 'ATSPI_STATE_SHOWING', 'ATSPI_STATE_VISIBLE')
 >>> child.get_relations()
 ('ATSPI_RELATION_EMBEDS',)
+>>> component = child.query_component()
+>>> component.get_size()
+(3840, 2160)
 ```
 
 And a NodeJS module `atspi_inspect.node`.
@@ -95,6 +98,9 @@ And a NodeJS module `atspi_inspect.node`.
 'ATSPI_RELATION_NODE_CHILD_OF'
 > relations.get(1)
 'ATSPI_RELATION_EMBEDS'
+> component = child.query_component()
+> component.get_size()
+_exports_AtspiPairIntInt { second: 2098, first: 3840 }
 ```
 
 #### Examples
