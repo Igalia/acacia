@@ -16,7 +16,7 @@ class AtspiNode {
  public:
   AtspiNode(AtspiAccessible* accessible) : accessible_(accessible){};
   AtspiNode() : accessible_(nullptr){};
-  ~AtspiNode() {};
+  ~AtspiNode(){};
 
   bool is_null() const;
 

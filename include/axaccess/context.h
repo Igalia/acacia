@@ -9,9 +9,9 @@ namespace axa {
 
 enum APIType {
   UNKNOWN,
-  ATSPI,        // Linux
+  ATSPI,         // Linux
   AXAPI,         // MacOS
-  IACCESSIBLE2, // Windows
+  IACCESSIBLE2,  // Windows
 };
 
 class ContextImpl {
@@ -37,4 +37,4 @@ class AXA_EXPORT Context {
   std::unique_ptr<ContextImpl> impl;
 };
 
-} // namespace axa
+}  // namespace axa

@@ -23,7 +23,7 @@ void logInfoForPID(pid_t pid) {
   std::cerr << "\n";
 
   std::string title = application.CopyStringAttributeValue("AXTitle");
-  std::cerr <<  "Title: " << title << "\n";
+  std::cerr << "Title: " << title << "\n";
   std::string role = application.CopyStringAttributeValue("AXRole");
   std::cerr << "Role: " << role << "\n";
 
@@ -61,24 +61,24 @@ void logInfoForPID(pid_t pid) {
 }
 
 int main(int argc, char** argv) {
-    std::string program_name(argv[0]);
+  std::string program_name(argv[0]);
 
-    if (argc != 2) {
-        print_usage(program_name);
-        return 1;
-    }
+  if (argc != 2) {
+    print_usage(program_name);
+    return 1;
+  }
 
-    std::string pid_string(argv[1]);
-    std::regex number_regex("\\d+");
-    if (!std::regex_match(pid_string, number_regex)) {
-        print_usage(program_name);
-        return 1;
-    }
+  std::string pid_string(argv[1]);
+  std::regex number_regex("\\d+");
+  if (!std::regex_match(pid_string, number_regex)) {
+    print_usage(program_name);
+    return 1;
+  }
 
-    const int pid = std::stoi(pid_string);
-    std::cerr << "Got PID: " << pid << "\n";
+  const int pid = std::stoi(pid_string);
+  std::cerr << "Got PID: " << pid << "\n";
 
-    logInfoForPID((pid_t)pid);
+  logInfoForPID((pid_t)pid);
 
-    return 0;
+  return 0;
 }

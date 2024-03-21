@@ -20,7 +20,6 @@ class NodeImpl {
   virtual NodePtr ChildAt(const int32_t index) = 0;
 };
 
-
 class AXA_EXPORT Node {
  public:
   static NodePtr Create(std::unique_ptr<NodeImpl> impl);
@@ -36,4 +35,4 @@ class AXA_EXPORT Node {
   std::unique_ptr<NodeImpl> impl;
 };
 
-} // namespace axa
+}  // namespace axa

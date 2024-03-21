@@ -10,7 +10,7 @@
  *  AT-SPI based API for Linux
  *  @{
  */
-/** @} */ // end of atspi group
+/** @} */  // end of atspi group
 
 /**
  * Returns the root node of the accessible tree of a running application
