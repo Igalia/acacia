@@ -26,12 +26,13 @@ def main():
       sys.exit()
 
     if name:
-        root = atspi_inspect.find_root_accessible_from_name(name, pid)
-        msg = f"Searching for app with name '{name}'"
+        msg = f"Searching for application with name '{name}'"
         if pid:
             msg += f" and pid {pid}"
         print(f"{msg}.")
+        root = atspi_inspect.find_root_accessible_from_name(name, pid)
     else:
+        print(f"Searching for application with pid {pid}.")
         root = atspi_inspect.find_root_accessible_from_pid(pid)
     if root.is_null():
         print("Error: Application not found.")
