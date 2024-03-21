@@ -46,11 +46,40 @@ if (root.is_null()) {
   process.exit();
 }
 
+// C++ vectors are not wrapped as JavaScript array primitives.
+function vectorToString(vector) {
+  let string = '';
+  for (let i = 0; i < vector.size(); i++) {
+    string += vector.get(i) + ', ';
+  }
+  return string.slice(0, -2);
+}
+
 function printNode(node, level) {
   let sep = '';
   for (var i = 0; i < level; i++)
     sep += '--';
-  console.log(sep + '> ' + node.get_role_name() + ' (' + node.get_name() + ')');
+  console.log(
+      sep + '> ' + node.get_role_name() + ' Name=\'' + node.get_name() +
+      '\' Description=\'' + node.get_description() + '\'');
+
+  console.log(
+      '  '.repeat(level) + '* States=' + vectorToString(node.get_states()));
+  console.log(
+      '  '.repeat(level) +
+      '* Interfaces=' + vectorToString(node.get_interfaces()));
+  console.log(
+      '  '.repeat(level) +
+      '* Attributes=' + vectorToString(node.get_attributes()));
+
+  relations = node.get_relations();
+  // We dump this conditionally because most objects lack relations.
+  if (relations.size() > 0) {
+    console.log(
+        '  '.repeat(level) +
+        '* Relations=' + vectorToString(node.get_relations()));
+  }
+
   for (let i = 0; i < node.get_child_count(); i++) {
     printNode(node.get_child_at_index(i), level + 1);
   }
