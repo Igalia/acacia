@@ -47,9 +47,13 @@ $ sudo ln -sf /usr/bin/ld.gold /usr/bin/ld
 % make
 ```
 
-This will produce the executable:
+This will produce the executable `build/lib/atspi/dump_tree_atspi` which can be used with either the
+PID of the browser, its name or substring thereof, or both:
+
 ```
-% build/lib/atspi/dump_tree_atspi
+% build/lib/atspi/dump_tree_atspi --pid=49500
+% build/lib/atspi/dump_tree_atspi --name=firefox
+% build/lib/atspi/dump_tree_atspi --name=chrom --pid=50319
 ```
 
 As well as a python module.
@@ -81,15 +85,14 @@ And a NodeJS module `atspi_inspect.node`.
 An `examples/atspi` folder will be created under the build directory
 containing example programs that show how the API can be used.
 
-* *dump_tree_atspi*: Dumps the accessible tree of a running application given
-                     its process ID. For now it shows only Role and Name of
-                     each node.
-                     If NodeJS bindings feature is enabled, there is also a
-                     `dump_tree_atspi.js` program which can be run as
-                     `nodejs examples/atspi/dump_tree_atspi.js <pid>`.
-                     Similarly, if Python bindings feature is enabled, there
-                     is also a `dump_tree_atspi.py` program that can be run as
-                     `python examples/atspi/dump_tree_atspi.py <pid>`.
+* `dump_tree_atspi`: Dumps the accessible tree of a running application given
+                     its process ID and/or name as shown in the build steps.
+* `dump_tree_atspi.js`: If the NodeJS bindings feature is enabled, this program
+                     can be run using the same arguments as the executable via
+                     `node examples/atspi/dump_tree_atspi.js`.
+* `dump_tree_atspi.py`: If the Python bindings feature is enabled, this program
+                     can be run using the same arguments as the executable via
+                     `python examples/atspi/dump_tree_atspi.py`.
 
 
 ### On Mac
@@ -238,10 +241,10 @@ To use the python library, navigate to `build/bin/Release`:
 >>> action.get_name(0)
 >>> component = child.QueryComponent()
 >>> component.get_locationInParent()
->>> text = child.queryText()
+>>> text = child.QueryText()
 >>> text.get_nCharacters()
 >>> text.get_text(0, -1)
->>> ia2 = child.queryIA2()
+>>> ia2 = child.QueryIA2()
 >>> ia2.get_attributes()
 >>> ia2.GetRelations()
 ```
