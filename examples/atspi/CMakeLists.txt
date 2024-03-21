@@ -35,5 +35,8 @@ if (AXA_NODEJS_MODULE)
       atspi_inspect_module
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_atspi.js ${CMAKE_CURRENT_BINARY_DIR}/
+    COMMAND
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/atspi_inspect.node ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.node
+    VERBATIM
   )
 endif (AXA_NODEJS_MODULE)

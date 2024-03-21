@@ -14,7 +14,7 @@ if (!pid || typeof (pid) != 'number') {
   process.exit();
 }
 
-const atspi = require('../../lib/atspi/atspi_inspect');
+const atspi = require('./atspi_inspect');
 
 const root = atspi.find_root_accessible_from_pid(pid);
 if (root.is_null()) {
