@@ -89,8 +89,6 @@ class AXAPINode {
   explicit AXAPINode(AXUIElementRef ax_element);
   AXUIElementRef ax_ui_element_{NULL};
 
-  bool HasAttribute(const CFStringRef attribute) const;
-
   ScopedCFTypeRef<CFTypeRef> CopyRawAttributeValue(
       const std::string& attribute,
       ValueType expected_type) const;
