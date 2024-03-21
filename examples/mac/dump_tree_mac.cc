@@ -13,14 +13,8 @@ void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " <pid>\n";
 }
 
-static void print_node(AXAPINode node, int level) {
-  if (!node.HasAttribute("AXRole"))
-    return;
-
-  for (auto i = 0; i < level; i++)
-    std::cout << "--";
-
-  std::cout << "> " << node.CopyStringAttributeValue("AXRole");
+static void print_attributes(AXAPINode node) {
+  std::cout << node.CopyStringAttributeValue("AXRole");
 
   if (node.HasAttribute("AXTitle")) {
     std::string title = node.CopyStringAttributeValue("AXTitle");
@@ -54,16 +48,48 @@ static void print_node(AXAPINode node, int level) {
     }
   }
 
+  if (node.HasAttribute("AXURL")) {
+    std::string url = node.CopyURLAttributeValue("AXURL");
+    std::cout << " AXURL: \"" << url << "\"";
+  }
+
+  // if (node.HasAttribute("AXTitleUIElement")) {
+  //   std::cout << " AXTitleUIElement";
+  //   AXAPINode title_node = node.CopyNodeAttributeValue("AXTitleUIElement");
+  //   if (title_node.HasAttribute("AXTitle")) {
+  //     std::string title_node_title =
+  //         title_node.CopyStringAttributeValue("AXTitle");
+  //     std::cout << ": \"" << title_node_title << "\"";
+  //   }
+  // }
+
   std::cout << "\n";
+}
+
+static void print_node(AXAPINode node, int level) {
+  if (!node.HasAttribute("AXRole"))
+    return;
+
+  for (auto i = 0; i < level; i++)
+    std::cout << "--";
+
+  std::cout << "> ";
+
+  try {
+    print_attributes(node);
+  } catch (...) {
+    std::cout << " (error)\n";
+  }
 
   if (!node.HasAttribute("AXChildren"))
     return;
+
   int32_t child_count = node.GetListAttributeValueCount("AXChildren");
   for (auto i = 0; i < child_count; i++) {
     try {
       auto child = node.CopyNodeListAttributeValueAtIndex("AXChildren", i);
       print_node(child, level + 1);
-    } catch (std::runtime_error e) {
+    } catch (...) {
       // Sometimes getting a child produces kAXErrorFailure for totally opaque
       // reasons, yay
       continue;
@@ -93,10 +119,10 @@ int main(int argc, char** argv) {
   try {
     print_node(root, 0);
   } catch (std::runtime_error e) {
-    std::cerr << e.what();
+    std::cerr << "\n\n" << e.what();
     return -1;
   } catch (std::invalid_argument e) {
-    std::cerr << e.what();
+    std::cerr << "\n\n" << e.what();
     return -1;
   }
 
