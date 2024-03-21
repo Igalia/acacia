@@ -341,17 +341,12 @@ int32_t AXAPINode::GetListAttributeValueCount(
 }
 
 ScopedCFTypeRef<CFTypeRef> AXAPINode::CopyRawAttributeValue(
-    const std::string& attribute) const {
+    const std::string& attribute,
+    ValueType expected_type) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
   ScopedCFTypeRef<CFTypeRef> cf_value;
   AXError err = AXUIElementCopyAttributeValue(
       ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
-
-  // For some reason, sometimes an AXUIElement lists an attribute which has no
-  // value. Since we can't check for this condition other than getting the
-  // attribute, handle this case quietly.
-  if (err == kAXErrorNoValue)
-    return "";
 
   if (err) {
     switch (err) {
@@ -367,29 +362,26 @@ ScopedCFTypeRef<CFTypeRef> AXAPINode::CopyRawAttributeValue(
     }
   }
 
+  ValueType type = DeduceValueType(cf_value);
+  if (type != expected_type) {
+    throw std::invalid_argument("Value for " + attribute + " is a " +
+                                ValueTypeToString(type) + ", not a " +
+                                ValueTypeToString(expected_type) + ".");
+  }
+
   return cf_value;
 }
 
 bool AXAPINode::CopyBooleanAttributeValue(const std::string& attribute) const {
-  ScopedCFTypeRef<CFTypeRef> cf_value = CopyRawAttributeValue(attribute);
-
-  if (CFGetTypeID(cf_value.get()) != CFBooleanGetTypeID()) {
-    ValueType type = DeduceValueType(cf_value);
-    throw std::invalid_argument("Value for " + attribute + " is a " +
-                                ValueTypeToString(type) + ".");
-  }
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::BOOLEAN);
 
   return CFBooleanGetValue((CFBooleanRef)cf_value.get());
 }
 
 int AXAPINode::CopyIntAttributeValue(const std::string& attribute) const {
-  ScopedCFTypeRef<CFTypeRef> cf_value = CopyRawAttributeValue(attribute);
-
-  ValueType type = DeduceValueType(cf_value);
-  if (type != ValueType::INT) {
-    throw std::invalid_argument("Value for " + attribute + " is a " +
-                                ValueTypeToString(type) + ".");
-  }
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::INT);
 
   int int_value;
   if (!CFNumberGetValue((CFNumberRef)cf_value.get(),
@@ -402,13 +394,8 @@ int AXAPINode::CopyIntAttributeValue(const std::string& attribute) const {
 }
 
 float AXAPINode::CopyFloatAttributeValue(const std::string& attribute) const {
-  ScopedCFTypeRef<CFTypeRef> cf_value = CopyRawAttributeValue(attribute);
-
-  ValueType type = DeduceValueType(cf_value);
-  if (type != ValueType::FLOAT) {
-    throw std::invalid_argument("Value for " + attribute + " is a " +
-                                ValueTypeToString(type) + ".");
-  }
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::FLOAT);
 
   float float_value;
   if (!CFNumberGetValue((CFNumberRef)cf_value.get(),
@@ -427,9 +414,9 @@ std::string AXAPINode::CopyStringAttributeValue(
   AXError err = AXUIElementCopyAttributeValue(
       ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
 
-  // For some reason, sometimes an AXUIElement lists an attribute which has no
-  // value. Since we can't check for this condition other than getting the
-  // attribute, handle this case quietly.
+  // For some reason, sometimes an AXUIElement lists a string attribute which
+  // has no value. Since we can't check for this condition other than getting
+  // the attribute, handle this case quietly.
   if (err == kAXErrorNoValue)
     return "";
 
@@ -450,10 +437,26 @@ std::string AXAPINode::CopyStringAttributeValue(
   if (CFGetTypeID(cf_value.get()) != CFStringGetTypeID()) {
     ValueType type = DeduceValueType(cf_value);
     throw std::invalid_argument("Value for " + attribute + " is a " +
-                                ValueTypeToString(type) + ".");
+                                ValueTypeToString(type) + ", not a " +
+                                ValueTypeToString(ValueType::STRING) + ".");
   }
 
   return CFStringRefToStdString((CFStringRef)cf_value.get());
+}
+
+std::string AXAPINode::CopyURLAttributeValue(
+    const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::URL);
+
+  CFStringRef cf_url_string = CFURLGetString((CFURLRef)cf_value.get());
+
+  return CFStringRefToStdString(cf_url_string);
+}
+
+AXAPINode AXAPINode::CopyNodeAttributeValue(
+    const std::string& attribute) const {
+  return AXAPINode();
 }
 
 std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(

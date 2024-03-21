@@ -58,8 +58,18 @@ void LogAllAttributeValueTypes(pid_t pid) {
 
   CollectAttributeTypes(application, attribute_types);
 
-  std::cout << "\n\nAttributes:\n-----------\n";
+  std::cout << "\n\nAttributes in name order:\n"
+            << "------------------------\n";
   for (const auto& [attribute, type] : attribute_types)
+    std::cout << attribute << ": " << type << "\n";
+
+  std::cout << "\n\nAttributes sorted by type:\n"
+            << "-------------------------\n";
+  std::vector<std::pair<string, string>> attribute_types_vector(
+      attribute_types.begin(), attribute_types.end());
+  std::sort(attribute_types_vector.begin(), attribute_types_vector.end(),
+            [](auto& left, auto& right) { return left.second < right.second; });
+  for (const auto& [attribute, type] : attribute_types_vector)
     std::cout << attribute << ": " << type << "\n";
 }
 

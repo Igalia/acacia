@@ -75,6 +75,10 @@ class AXAPINode {
 
   std::string CopyStringAttributeValue(const std::string& attribute) const;
 
+  std::string CopyURLAttributeValue(const std::string& attribute) const;
+
+  AXAPINode CopyNodeAttributeValue(const std::string& attribute) const;
+
   std::vector<AXAPINode> CopyNodeListAttributeValue(
       const std::string& attribute) const;
 
@@ -88,7 +92,8 @@ class AXAPINode {
   bool HasAttribute(const CFStringRef attribute) const;
 
   ScopedCFTypeRef<CFTypeRef> CopyRawAttributeValue(
-      const std::string& attribute) const;
+      const std::string& attribute,
+      ValueType expected_type) const;
 
   friend class AXAPIContextImpl;
 };
