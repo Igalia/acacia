@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "include/axaccess/mac/mac_data_types.h"
 #include "lib/mac/scoped_cf_type_ref.h"
 
 using std::cerr;
@@ -29,6 +30,8 @@ const std::string CFStringRefToStdString(CFStringRef cf_string) {
   }
   return std::string(chars);
 }
+
+using mac_inspect::ScopedCFTypeRef;
 
 // This returns a ScopedCFTypeRef since the CFStringRef is obtained using
 // CFStringCreateWithCString, meaning we own the CFStringRef and are responsible
@@ -437,6 +440,67 @@ AXAPINode AXAPINode::CopyNodeAttributeValue(
       CopyRawAttributeValue(attribute, ValueType::NODE);
 
   return AXAPINode((AXUIElementRef)(cf_value.Retain()));
+}
+
+Point AXAPINode::CopyPointAttributeValue(const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::POINT);
+
+  CGPoint cg_point;
+  if (!AXValueGetValue((AXValueRef)cf_value.get(),
+                       (AXValueType)kAXValueCGPointType, &cg_point)) {
+    throw std::runtime_error("Could not get " +
+                             ValueTypeToString(ValueType::POINT) +
+                             " value for " + attribute);
+  }
+
+  return Point(cg_point.x, cg_point.y);
+}
+
+Size AXAPINode::CopySizeAttributeValue(const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::SIZE);
+
+  CGSize cg_size;
+  if (!AXValueGetValue((AXValueRef)cf_value.get(),
+                       (AXValueType)kAXValueCGSizeType, &cg_size)) {
+    throw std::runtime_error("Could not get " +
+                             ValueTypeToString(ValueType::SIZE) +
+                             " value for " + attribute);
+  }
+
+  return Size(cg_size.width, cg_size.height);
+}
+
+Rect AXAPINode::CopyRectAttributeValue(const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::RECT);
+
+  CGRect cg_rect;
+  if (!AXValueGetValue((AXValueRef)cf_value.get(),
+                       (AXValueType)kAXValueCGRectType, &cg_rect)) {
+    throw std::runtime_error("Could not get " +
+                             ValueTypeToString(ValueType::RECT) +
+                             " value for " + attribute);
+  }
+  CGPoint& cg_origin = cg_rect.origin;
+  CGSize& cg_size = cg_rect.size;
+  return Rect(cg_origin.x, cg_origin.y, cg_size.width, cg_size.height);
+}
+
+Range AXAPINode::CopyRangeAttributeValue(const std::string& attribute) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawAttributeValue(attribute, ValueType::RANGE);
+
+  CFRange cf_range;
+  if (!AXValueGetValue((AXValueRef)cf_value.get(),
+                       (AXValueType)kAXValueCFRangeType, &cf_range)) {
+    throw std::runtime_error("Could not get " +
+                             ValueTypeToString(ValueType::RANGE) +
+                             " value for " + attribute);
+  }
+
+  return Range(cf_range.length, cf_range.location);
 }
 
 std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(

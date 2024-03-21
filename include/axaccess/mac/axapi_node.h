@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 
-#include "lib/mac/scoped_cf_type_ref.h"
-
 /** @defgroup axapi AX-API (MacOS)
  *  Accessiblity API for MacOS
  *  @{
@@ -18,6 +16,14 @@
 namespace mac_inspect {
 
 class AXAPIContextImpl;
+
+template <typename T>
+class ScopedCFTypeRef;
+
+class Point;
+class Size;
+class Rect;
+class Range;
 
 enum class ValueType {
   NOT_PRESENT,
@@ -78,6 +84,14 @@ class AXAPINode {
   std::string CopyURLAttributeValue(const std::string& attribute) const;
 
   AXAPINode CopyNodeAttributeValue(const std::string& attribute) const;
+
+  Point CopyPointAttributeValue(const std::string& attribute) const;
+
+  Size CopySizeAttributeValue(const std::string& attribute) const;
+
+  Rect CopyRectAttributeValue(const std::string& attribute) const;
+
+  Range CopyRangeAttributeValue(const std::string& attribute) const;
 
   std::vector<AXAPINode> CopyNodeListAttributeValue(
       const std::string& attribute) const;
