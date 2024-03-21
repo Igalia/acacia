@@ -1,6 +1,7 @@
-%module mac_inspect
+%module axapi_inspect
 
 %{
+#include <include/axaccess/mac/mac_data_types.h>
 #include <include/axaccess/mac/axapi_node.h>
 %}
 
@@ -19,4 +20,5 @@ namespace std {
 %catches(std::runtime_error, std::invalid_argument) mac_inspect::AXAPINode::CopyNodeListAttributeValue(const std::string& attribute) const;
 %catches(std::runtime_error, std::invalid_argument) mac_inspect::AXAPINode::CopyNodeListAttributeValueAtIndex(const std::string& attribute, int index) const;
 
+#include <include/axaccess/mac/mac_data_types.h>
 %include <include/axaccess/mac/axapi_node.h>

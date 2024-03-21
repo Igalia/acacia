@@ -9,7 +9,11 @@ class AXAPINode;
 
 class Point {
  public:
-  Point(Point& other) : x_(other.x_), y_(other.y_) {}
+  Point() {}
+  Point(const Point&) = default;
+  Point(Point&&) = default;
+  Point& operator=(const Point&) = default;
+  Point& operator=(Point&) = default;
 
   float x() { return x_; }
   float y() { return y_; }
@@ -30,7 +34,11 @@ class Point {
 
 class Size {
  public:
-  Size(Size& other) : width_(other.width_), height_(other.height_) {}
+  Size() {}
+  Size(const Size&) = default;
+  Size(Size&&) = default;
+  Size& operator=(const Size&) = default;
+  Size& operator=(Size&) = default;
 
   float width() { return width_; }
   float height() { return height_; }
@@ -51,7 +59,11 @@ class Size {
 
 class Rect {
  public:
-  Rect(Rect& other) : origin_(other.origin_), size_(other.size_) {}
+  Rect() {}
+  Rect(const Rect&) = default;
+  Rect(Rect&&) = default;
+  Rect& operator=(const Rect&) = default;
+  Rect& operator=(Rect&) = default;
 
   Point& origin() { return origin_; }
   Size& size() { return size_; }
@@ -71,7 +83,11 @@ class Rect {
 
 class Range {
  public:
-  Range(Range& other) : length_(other.length_), location_(other.location_) {}
+  Range() {}
+  Range(const Range&) = default;
+  Range(Range&&) = default;
+  Range& operator=(const Range&) = default;
+  Range& operator=(Range&) = default;
 
   int length() { return length_; }
   int location() { return location_; }
