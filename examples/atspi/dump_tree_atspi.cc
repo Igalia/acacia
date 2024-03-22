@@ -57,7 +57,7 @@ static void print_node(AtspiNode node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
   std::cout << "> " << node.get_role_name();
-  std::cout << " Name='" << node.get_name();
+  std::cout << " Name='" << node.get_name() << "'";
   std::cout << " Description='" << node.get_description() << "'\n";
 
   std::string indent(level * 2, ' ');

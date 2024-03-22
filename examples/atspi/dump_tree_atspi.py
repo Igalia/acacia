@@ -7,7 +7,7 @@ def printNode(node, level):
     sep = "--" * level
     print(
         f"{sep}> {node.get_role_name()} Name='{node.get_name()}' "
-        f"Description='{node.get_description()}\n"
+        f"Description='{node.get_description()}'\n"
         f"{'  ' * level}* States={tuple(sorted(node.get_states()))}\n"
         f"{'  ' * level}* Interfaces={tuple(sorted(node.get_interfaces()))}\n"
         f"{'  ' * level}* Attributes={tuple(sorted(node.get_attributes()))}"

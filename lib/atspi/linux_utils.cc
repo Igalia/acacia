@@ -60,10 +60,12 @@ AtspiNode find_root_accessible_from_name(const std::string& name,
     if (error)
       goto handle_gerror;
 
-    std::string app_name = lower(atspi_accessible_get_name(child, &error));
+    char* child_name = atspi_accessible_get_name(child, &error);
     if (error)
       goto handle_gerror;
 
+    std::string app_name = lower(child_name);
+    g_free(child_name);
     if (app_name.find(lower_name) != std::string::npos) {
       if (!pid) {
         return AtspiNode(child);

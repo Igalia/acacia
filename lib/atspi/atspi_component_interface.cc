@@ -36,8 +36,9 @@ std::pair<int, int> AtspiComponentInterface::get_position() const {
     g_error_free(error);
     throw std::runtime_error(err_msg);
   }
-
-  return std::make_pair(position->x, position->y);
+  std::pair<int, int> result = std::make_pair(position->x, position->y);
+  g_free(position);
+  return result;
 }
 
 std::pair<int, int> AtspiComponentInterface::get_size() const {
@@ -54,5 +55,7 @@ std::pair<int, int> AtspiComponentInterface::get_size() const {
   }
 
   // In the context of size, x holds width; y height.
-  return std::make_pair(size->x, size->y);
+  std::pair<int, int> result = std::make_pair(size->x, size->y);
+  g_free(size);
+  return result;
 }

@@ -7,7 +7,7 @@
 #include <string>
 
 namespace {
-std::string state_type_to_string(AtspiStateType state) {
+static const std::string state_type_to_string(const AtspiStateType state) {
   switch (state) {
     case ATSPI_STATE_INVALID:
       return "ATSPI_STATE_INVALID";
@@ -102,7 +102,8 @@ std::string state_type_to_string(AtspiStateType state) {
   }
 }
 
-std::string relation_type_to_string(AtspiRelationType relation) {
+static const std::string relation_type_to_string(
+    const AtspiRelationType relation) {
   switch (relation) {
     case ATSPI_RELATION_NULL:
       return "ATSPI_RELATION_NULL";
@@ -170,7 +171,9 @@ std::string AtspiNode::get_role_name() const {
     throw std::runtime_error(err_msg);
     return "";
   }
-  return role_name;
+  std::string result(role_name);
+  g_free(role_name);
+  return result;
 }
 
 std::string AtspiNode::get_name() const {
@@ -181,7 +184,9 @@ std::string AtspiNode::get_name() const {
     g_error_free(error);
     throw std::runtime_error(err_msg);
   }
-  return name;
+  std::string result(name);
+  g_free(name);
+  return result;
 }
 
 std::string AtspiNode::get_description() const {
@@ -192,7 +197,9 @@ std::string AtspiNode::get_description() const {
     g_error_free(error);
     throw std::runtime_error(err_msg);
   }
-  return description;
+  std::string result(description);
+  g_free(description);
+  return result;
 }
 
 std::vector<std::string> AtspiNode::get_attributes() const {
@@ -223,7 +230,9 @@ std::vector<std::string> AtspiNode::get_interfaces() const {
   GArray* interface_array = atspi_accessible_get_interfaces(accessible_);
   std::vector<std::string> interfaces;
   for (unsigned i = 0; i < interface_array->len; i++) {
-    interfaces.push_back(g_array_index(interface_array, char*, i));
+    char* interface = g_array_index(interface_array, char*, i);
+    interfaces.push_back(interface);
+    g_free(interface);
   }
   g_array_free(interface_array, TRUE);
   return interfaces;
