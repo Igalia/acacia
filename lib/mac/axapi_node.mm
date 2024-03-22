@@ -146,13 +146,8 @@ ValueType DeduceValueType(ScopedCFTypeRef<CFTypeRef> cf_value,
   if (type_id == CFDataGetTypeID())
     return ValueType::DATA;
 
-  if (type_id == CFDictionaryGetTypeID()) {
-    if (attribute != "") {
-      cerr << "Dictionary found for attribute " << attribute << ": "
-           << CFStringRefToStdString(CFCopyDescription(cf_value.get())) << "\n";
-    }
+  if (type_id == CFDictionaryGetTypeID())
     return ValueType::DICTIONARY;
-  }
 
   if (attribute != "") {
     CFStringRef description = CFCopyTypeIDDescription(type_id);
