@@ -242,12 +242,19 @@ std::vector<std::string> AtspiNode::get_relations() const {
   GError* error = nullptr;
   GArray* relation_array =
       atspi_accessible_get_relation_set(accessible_, &error);
+  if (error) {
+    std::string err_msg = error->message;
+    g_error_free(error);
+    throw std::runtime_error(err_msg);
+  }
+
   std::vector<std::string> relations;
   for (unsigned i = 0; i < relation_array->len; i++) {
     AtspiRelation* relation = g_array_index(relation_array, AtspiRelation*, i);
     AtspiRelationType relation_type =
         atspi_relation_get_relation_type(relation);
     relations.push_back(relation_type_to_string(relation_type));
+    g_free(relation);
   }
   g_array_free(relation_array, TRUE);
   return relations;

@@ -40,7 +40,7 @@ std::map<std::string, std::string> parse_arguments(int argc, char** argv) {
   return argument_map;
 }
 
-std::string string_vector_to_string(std::vector<std::string> strings) {
+static std::string string_vector_to_string(std::vector<std::string> strings) {
   std::sort(strings.begin(), strings.end());
   std::string result;
   for (auto string : strings) {

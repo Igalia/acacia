@@ -48,11 +48,11 @@ if (root.is_null()) {
 
 // C++ vectors are not wrapped as JavaScript array primitives.
 function vectorToString(vector) {
-  let string = '';
+  let string = '(';
   for (let i = 0; i < vector.size(); i++) {
     string += vector.get(i) + ', ';
   }
-  return string.slice(0, -2);
+  return string.slice(0, -2) + ')';
 }
 
 function printNode(node, level) {
