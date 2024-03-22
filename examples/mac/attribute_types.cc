@@ -22,6 +22,8 @@ void CollectAttributeTypes(AXAPINode node,
                            map<string, string>& attribute_types) {
   vector<string> attributes = node.CopyAttributeNames();
   for (const string& attribute : attributes) {
+    // TODO: Some attributes map to *multiple* types. This should map to a
+    // vector of string, and only skip if we've already logged the type.
     if (attribute_types.count(attribute) > 0)
       continue;
 

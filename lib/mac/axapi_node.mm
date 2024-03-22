@@ -324,8 +324,8 @@ ValueType AXAPINode::GetListAttributeElementType(
   ScopedCFTypeRef<CFTypeRef> cf_first_value(
       (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0));
   // Since we used "Get" above, we need to manually retain this value to avoid
-  // it going out of scope. The ScopedCFTypeRef wrapper will still handle
-  // calling CFRelease().
+  // it being unexpectedly disposed of. The ScopedCFTypeRef wrapper will still
+  // handle calling CFRelease().
   cf_first_value.Retain();
 
   ValueType type = DeduceValueType(cf_first_value);
