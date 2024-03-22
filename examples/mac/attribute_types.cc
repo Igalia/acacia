@@ -28,6 +28,7 @@ static std::set<ValueType> supported_types = {
 
 static std::set<ValueType> supported_list_types = {
     ValueType::NODE,
+    ValueType::STRING,
 };
 
 void AddListValueExample(ValueType type,
@@ -43,7 +44,23 @@ void AddListValueExample(ValueType type,
   switch (list_type) {
     case ValueType::NODE: {
       int num_elements = node.GetListAttributeValueCount(attribute);
-      value_string = "[" + std::to_string(num_elements) + " nodes]";
+      value_string = "[" + std::to_string(num_elements) + " node" +
+                     (num_elements == 1 ? "" : "s") + "]";
+      break;
+    }
+    case ValueType::STRING: {
+      vector<string> values = node.CopyStringListAttributeValue(attribute);
+      if (values.empty()) {
+        value_string = "[]";
+        break;
+      }
+      value_string = "[";
+      for (int i = 0; i < values.size() - 1; i++) {
+        value_string += values[i];
+        value_string += ", ";
+      }
+      value_string += values.back();
+      value_string += "]";
       break;
     }
     default:

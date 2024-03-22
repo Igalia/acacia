@@ -82,15 +82,15 @@ using mac_inspect::ValueType;
 using mac_inspect::ValueTypeToString;
 
 // Pass attribute name to enable debug logging
-ValueType DeduceValueType(ScopedCFTypeRef<CFTypeRef> cf_value,
+ValueType DeduceValueType(CFTypeRef cf_value,
                           const std::string& attribute = "") {
-  CFTypeID type_id = CFGetTypeID(cf_value.get());
+  CFTypeID type_id = CFGetTypeID(cf_value);
 
   if (type_id == CFBooleanGetTypeID())
     return ValueType::BOOLEAN;
 
   if (type_id == CFNumberGetTypeID()) {
-    if (CFNumberIsFloatType((CFNumberRef)cf_value.get()))
+    if (CFNumberIsFloatType((CFNumberRef)cf_value))
       return ValueType::FLOAT;
 
     return ValueType::INT;
@@ -109,7 +109,7 @@ ValueType DeduceValueType(ScopedCFTypeRef<CFTypeRef> cf_value,
     return ValueType::LIST;
 
   if (type_id == AXValueGetTypeID()) {
-    AXValueType ax_value_type = AXValueGetType((AXValueRef)cf_value.get());
+    AXValueType ax_value_type = AXValueGetType((AXValueRef)cf_value);
     switch (ax_value_type) {
       case kAXValueCGPointType:
         return ValueType::POINT;
@@ -263,7 +263,7 @@ ValueType AXAPINode::GetAttributeValueType(const std::string& attribute) const {
     return ValueType::UNKNOWN;
   }
 
-  return DeduceValueType(cf_value);
+  return DeduceValueType(cf_value.get());
 }
 
 ValueType AXAPINode::GetListAttributeElementType(
@@ -285,13 +285,8 @@ ValueType AXAPINode::GetListAttributeElementType(
     return ValueType::UNKNOWN;
   }
 
-  auto cf_first_value = ScopedCFTypeRef<CFTypeRef>::CreateFromUnownedRef(
-      (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0));
-  // Since we used "Get" above, we need to manually retain this value to avoid
-  // it being unexpectedly disposed of. The ScopedCFTypeRef wrapper will still
-  // handle calling CFRelease().
-  cf_first_value.Retain();
-
+  CFTypeRef cf_first_value =
+      (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0);
   ValueType type = DeduceValueType(cf_first_value);
   return type;
 }
@@ -339,17 +334,87 @@ ScopedCFTypeRef<CFTypeRef> AXAPINode::CopyRawAttributeValue(
         throw std::runtime_error(
             "Attempting to copy " + ValueTypeToString(expected_type) +
             " value for attribute " + attribute + " produced error code " +
-                                 AXErrorToString(err));
+            AXErrorToString(err));
     }
   }
 
-  ValueType type = DeduceValueType(cf_value);
+  ValueType type = DeduceValueType(cf_value.get());
   if (type != expected_type) {
     throw std::invalid_argument("Value for " + attribute + " is a " +
                                 ValueTypeToString(type) + ", not a " +
                                 ValueTypeToString(expected_type) + ".");
   }
 
+  return cf_value;
+}
+
+ScopedCFTypeRef<CFArrayRef> AXAPINode::CopyRawArrayAttributeValue(
+    const std::string& attribute) const {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFArrayRef> cf_array;
+  AXError err = AXUIElementCopyAttributeValues(
+      ax_ui_element_, cf_attribute.get(), 0, INT32_MAX, cf_array.get_ptr());
+
+  if (err) {
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        throw std::invalid_argument(
+            "Attribute " + attribute +
+            " is not supported on this node. Use HasAttribute() or "
+            "CopyAttributeValues() to check which attributes are available.");
+      default:
+        throw std::runtime_error("Attempting to copy value for attribute " +
+                                 attribute + " produced error code " +
+                                 AXErrorToString(err));
+    }
+  }
+
+  return cf_array;
+}
+
+ScopedCFTypeRef<CFTypeRef> AXAPINode::CopyRawArrayAttributeValueAtIndex(
+    const std::string& attribute,
+    int index,
+    ValueType expected_type) const {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFArrayRef> cf_array;
+  AXError err =
+      AXUIElementCopyAttributeValues(ax_ui_element_, cf_attribute.get(),
+                                     (CFIndex)index, 1l, cf_array.get_ptr());
+
+  if (err) {
+    switch (err) {
+      case kAXErrorAttributeUnsupported:
+        throw std::invalid_argument(
+            "Attribute " + attribute +
+            " is not supported on this node. Use HasAttribute() or "
+            "CopyAttributeValues() to check which attributes are available.");
+      case kAXErrorIllegalArgument:
+        throw std::invalid_argument(
+            "Index " + std::to_string(index) +
+            " is out of bounds, or the value of " + attribute +
+            " is not an array. Use GetListAttributeValueCount() to "
+            "check the number of values.");
+      default:
+        int32_t count = GetListAttributeValueCount(attribute);
+        throw std::runtime_error(
+            "Attempting to copy value at index " + std::to_string(index) +
+            " (count is " + std::to_string(count) + ") for attribute " +
+            attribute + " produced error code " + AXErrorToString(err));
+    }
+  }
+
+  if (CFArrayGetCount(cf_array.get()) != 1l)
+    throw std::runtime_error("Couldn't get array");
+
+  auto cf_value = ScopedCFTypeRef<CFTypeRef>::CreateFromUnownedRef(
+      (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), 0));
+  if (CFGetTypeID(cf_value.get()) != AXUIElementGetTypeID()) {
+    ValueType type = DeduceValueType(cf_value.get());
+    throw std::invalid_argument("Value for " + attribute + " is a " +
+                                ValueTypeToString(type) + ", not a " +
+                                ValueTypeToString(ValueType::NODE) + ".");
+  }
   return cf_value;
 }
 
@@ -415,7 +480,7 @@ std::string AXAPINode::CopyStringAttributeValue(
   }
 
   if (CFGetTypeID(cf_value.get()) != CFStringGetTypeID()) {
-    ValueType type = DeduceValueType(cf_value);
+    ValueType type = DeduceValueType(cf_value.get());
     throw std::invalid_argument("Value for " + attribute + " is a " +
                                 ValueTypeToString(type) + ", not a " +
                                 ValueTypeToString(ValueType::STRING) + ".");
@@ -505,35 +570,21 @@ Range AXAPINode::CopyRangeAttributeValue(const std::string& attribute) const {
 
 std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
     const std::string& attribute) const {
-  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
-  ScopedCFTypeRef<CFArrayRef> cf_array;
-  AXError err = AXUIElementCopyAttributeValues(
-      ax_ui_element_, cf_attribute.get(), 0, INT32_MAX, cf_array.get_ptr());
+  ScopedCFTypeRef<CFArrayRef> cf_array = CopyRawArrayAttributeValue(attribute);
 
-  if (err) {
-    switch (err) {
-      case kAXErrorAttributeUnsupported:
-        throw std::invalid_argument(
-            "Attribute " + attribute +
-            " is not supported on this node. Use HasAttribute() or "
-            "CopyAttributeValues() to check which attributes are available.");
-      default:
-        throw std::runtime_error("Attempting to copy value for attribute " +
-                                 attribute + " produced error code " +
-                                 AXErrorToString(err));
-    }
-  }
-
-  // TODO: better handling of attributes which return the wrong type.
-  // Should throw a useful exception if not an array, or (any?) element is not
-  // an AXUIElement.
   std::vector<AXAPINode> value;
   for (CFIndex i = 0; i < CFArrayGetCount(cf_array.get()); ++i) {
     CFTypeRef cf_ith_value =
         (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), i);
-    if (CFGetTypeID(cf_ith_value) == AXUIElementGetTypeID()) {
-      value.push_back(AXAPINode((AXUIElementRef)CFRetain(cf_ith_value)));
+
+    if (CFGetTypeID(cf_ith_value) != AXUIElementGetTypeID()) {
+      ValueType value_type = DeduceValueType(cf_ith_value);
+      throw std::invalid_argument("Value for " + attribute + " is a list of " +
+                                  ValueTypeToString(value_type) + ", not a " +
+                                  ValueTypeToString(ValueType::NODE) + ".");
     }
+
+    value.push_back(AXAPINode((AXUIElementRef)CFRetain(cf_ith_value)));
   }
 
   return value;
@@ -542,47 +593,41 @@ std::vector<AXAPINode> AXAPINode::CopyNodeListAttributeValue(
 AXAPINode AXAPINode::CopyNodeListAttributeValueAtIndex(
     const std::string& attribute,
     int index) const {
-  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
-  ScopedCFTypeRef<CFArrayRef> cf_array;
-  AXError err =
-      AXUIElementCopyAttributeValues(ax_ui_element_, cf_attribute.get(),
-                                     (CFIndex)index, 1l, cf_array.get_ptr());
-
-  if (err) {
-    switch (err) {
-      case kAXErrorAttributeUnsupported:
-        throw std::invalid_argument(
-            "Attribute " + attribute +
-            " is not supported on this node. Use HasAttribute() or "
-            "CopyAttributeValues() to check which attributes are available.");
-      case kAXErrorIllegalArgument:
-        throw std::invalid_argument(
-            "Index " + std::to_string(index) +
-            " is out of bounds, or the value of " + attribute +
-            " is not an array. Use GetListAttributeValueCount() to "
-            "check the number of values.");
-      default:
-        int32_t count = GetListAttributeValueCount(attribute);
-        throw std::runtime_error(
-            "Attempting to copy value at index " + std::to_string(index) +
-            " (count is " + std::to_string(count) + ") for attribute " +
-            attribute + " produced error code " + AXErrorToString(err));
-    }
-  }
-
-  if (CFArrayGetCount(cf_array.get()) != 1l)
-    throw std::runtime_error("Couldn't get array");
-  auto cf_value = ScopedCFTypeRef<CFTypeRef>::CreateFromUnownedRef(
-      CFArrayGetValueAtIndex(cf_array.get(), 0));
-
-  ValueType type = DeduceValueType(cf_value);
-  if (type != ValueType::NODE) {
-    throw std::invalid_argument("Value for " + attribute + " is a " +
-                                ValueTypeToString(type) + ", not a " +
-                                ValueTypeToString(ValueType::NODE) + ".");
-  }
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawArrayAttributeValueAtIndex(attribute, index, ValueType::NODE);
 
   return AXAPINode((AXUIElementRef)cf_value.Retain());
+}
+
+std::vector<std::string> AXAPINode::CopyStringListAttributeValue(
+    std::string& attribute) const {
+  ScopedCFTypeRef<CFArrayRef> cf_array = CopyRawArrayAttributeValue(attribute);
+
+  std::vector<std::string> value;
+  for (CFIndex i = 0; i < CFArrayGetCount(cf_array.get()); ++i) {
+    CFTypeRef cf_ith_value =
+        (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), i);
+
+    if (CFGetTypeID(cf_ith_value) != CFStringGetTypeID()) {
+      ValueType value_type = DeduceValueType(cf_ith_value);
+      throw std::invalid_argument("Value for " + attribute + " is a list of " +
+                                  ValueTypeToString(value_type) + ", not a " +
+                                  ValueTypeToString(ValueType::STRING) + ".");
+    }
+
+    value.push_back(CFStringRefToStdString((CFStringRef)cf_ith_value));
+  }
+
+  return value;
+}
+
+std::string AXAPINode::CopyStringListAttributeValueAtIndex(
+    std::string& attribute,
+    int index) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawArrayAttributeValueAtIndex(attribute, index, ValueType::STRING);
+
+  return CFStringRefToStdString((CFStringRef)cf_value.Retain());
 }
 
 }  // namespace mac_inspect

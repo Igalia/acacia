@@ -99,13 +99,26 @@ class AXAPINode {
   AXAPINode CopyNodeListAttributeValueAtIndex(const std::string& attribute,
                                               int index) const;
 
+  std::vector<std::string> CopyStringListAttributeValue(
+      std::string& attribute) const;
+
+  std::string CopyStringListAttributeValueAtIndex(std::string& attribute,
+                                                  int index) const;
+
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
-  AXUIElementRef ax_ui_element_{NULL};
 
   ScopedCFTypeRef<CFTypeRef> CopyRawAttributeValue(
       const std::string& attribute,
       ValueType expected_type) const;
+  ScopedCFTypeRef<CFArrayRef> CopyRawArrayAttributeValue(
+      const std::string& attribute) const;
+  ScopedCFTypeRef<CFTypeRef> CopyRawArrayAttributeValueAtIndex(
+      const std::string& attribute,
+      int index,
+      ValueType expected_type) const;
+
+  AXUIElementRef ax_ui_element_{NULL};
 
   friend class AXAPIContextImpl;
 };
