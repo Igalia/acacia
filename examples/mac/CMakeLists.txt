@@ -15,3 +15,19 @@ target_link_libraries(
   # Items to link into the target
   PRIVATE mac_inspect
 )
+
+add_executable(
+  # Name
+  attribute_types
+
+  # Sources
+  attribute_types.cc
+)
+
+target_link_libraries(
+  # Target to link (created above)
+  attribute_types
+
+  # Items to link into the target
+  PRIVATE mac_inspect
+)

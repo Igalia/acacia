@@ -17,6 +17,28 @@ namespace mac_inspect {
 
 class AXAPIContextImpl;
 
+enum class ValueType {
+  NOT_PRESENT,
+  UNKNOWN,
+  LIST,
+  BOOLEAN,
+  INT,
+  FLOAT,
+  STRING,
+  URL,
+  NODE,
+  POINT,
+  SIZE,
+  RECT,
+  RANGE,
+  DICTIONARY,
+  DATA,
+  TEXTMARKER,
+  TEXTMARKERRANGE,
+};
+
+std::string ValueTypeToString(ValueType value_type);
+
 /**
  * Represents a node in the accessibility tree.
  * @ingroup axapi
@@ -36,6 +58,10 @@ class AXAPINode {
   std::vector<std::string> CopyAttributeNames() const;
 
   bool HasAttribute(const std::string& attribute) const;
+
+  ValueType GetAttributeValueType(const std::string& attribute) const;
+
+  ValueType GetListAttributeElementType(const std::string& attribute) const;
 
   std::string CopyStringAttributeValue(const std::string& attribute) const;
 

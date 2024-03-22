@@ -16,11 +16,15 @@ namespace {
 //
 // This should be used when a method with "Create" or "Copy" is used to obtain
 // a CFTypeRef, to ensure CFRelease is called appropriately.
+//
+// It can also be used when a method with "Get" is used, as long as Retain() is
+// called immediately after construction.
 template <typename T>
 class ScopedCFTypeRef {
  public:
   ScopedCFTypeRef() = default;
   ScopedCFTypeRef(T ref) : ref_(ref) {}
+  ScopedCFTypeRef(ScopedCFTypeRef& other) : ref_(other.ref_) { CFRetain(ref_); }
 
   ~ScopedCFTypeRef() {
     if (ref_)
@@ -29,6 +33,8 @@ class ScopedCFTypeRef {
 
   T get() { return ref_; }
   T* get_ptr() { return &ref_; }
+
+  void Retain() { CFRetain(ref_); }
 
   ScopedCFTypeRef& operator=(ScopedCFTypeRef other) {
     if (ref_)
@@ -84,9 +90,116 @@ std::string AXErrorToString(AXError err) {
       return std::to_string(err);
   }
 }
+
+using mac_inspect::ValueType;
+using mac_inspect::ValueTypeToString;
+
+// Pass attribute name to enable debug logging
+ValueType DeduceValueType(ScopedCFTypeRef<CFTypeRef> cf_value,
+                          const std::string& attribute = "") {
+  CFTypeID type_id = CFGetTypeID(cf_value.get());
+
+  if (type_id == CFBooleanGetTypeID())
+    return ValueType::BOOLEAN;
+
+  if (type_id == CFNumberGetTypeID()) {
+    if (CFNumberIsFloatType((CFNumberRef)cf_value.get()))
+      return ValueType::FLOAT;
+
+    return ValueType::INT;
+  }
+
+  if (type_id == CFStringGetTypeID())
+    return ValueType::STRING;
+
+  if (type_id == CFURLGetTypeID())
+    return ValueType::URL;
+
+  if (type_id == AXUIElementGetTypeID())
+    return ValueType::NODE;
+
+  if (type_id == CFArrayGetTypeID())
+    return ValueType::LIST;
+
+  if (type_id == AXValueGetTypeID()) {
+    AXValueType ax_value_type = AXValueGetType((AXValueRef)cf_value.get());
+    switch (ax_value_type) {
+      case kAXValueCGPointType:
+        return ValueType::POINT;
+      case kAXValueCGSizeType:
+        return ValueType::SIZE;
+      case kAXValueCGRectType:
+        return ValueType::RECT;
+      case kAXValueCFRangeType:
+        return ValueType::RANGE;
+      default:
+        return ValueType::UNKNOWN;
+    }
+  }
+
+  if (type_id == AXTextMarkerGetTypeID())
+    return ValueType::TEXTMARKER;
+
+  if (type_id == AXTextMarkerRangeGetTypeID())
+    return ValueType::TEXTMARKERRANGE;
+
+  if (type_id == CFDataGetTypeID())
+    return ValueType::DATA;
+
+  if (type_id == CFDictionaryGetTypeID())
+    return ValueType::DICTIONARY;
+
+  if (attribute != "") {
+    CFStringRef description = CFCopyTypeIDDescription(type_id);
+    cerr << "Unknown type: " << type_id << " ("
+         << CFStringRefToStdString(description) << ") for attribute "
+         << attribute << "\n";
+  }
+  return ValueType::UNKNOWN;
+}
+
 }  // namespace
 
 namespace mac_inspect {
+
+std::string ValueTypeToString(ValueType value_type) {
+  switch (value_type) {
+    case ValueType::NOT_PRESENT:
+      return "NOT_PRESENT";
+    case ValueType::UNKNOWN:
+      return "UNKNOWN";
+    case ValueType::LIST:
+      return "LIST";
+    case ValueType::BOOLEAN:
+      return "BOOLEAN";
+    case ValueType::INT:
+      return "INT";
+    case ValueType::FLOAT:
+      return "FLOAT";
+    case ValueType::STRING:
+      return "STRING";
+    case ValueType::URL:
+      return "URL";
+    case ValueType::NODE:
+      return "NODE";
+    case ValueType::POINT:
+      return "POINT";
+    case ValueType::SIZE:
+      return "SIZE";
+    case ValueType::RECT:
+      return "RECT";
+    case ValueType::RANGE:
+      return "RANGE";
+    case ValueType::DICTIONARY:
+      return "DICTIONARY";
+    case ValueType::DATA:
+      return "DATA";
+    case ValueType::TEXTMARKER:
+      return "TEXTMARKER";
+    case ValueType::TEXTMARKERRANGE:
+      return "TEXTMARKERRANGE";
+  }
+}
 
 AXAPINode::AXAPINode() {}
 
@@ -163,6 +276,55 @@ bool AXAPINode::HasAttribute(const CFStringRef attribute) const {
 bool AXAPINode::HasAttribute(const std::string& attribute) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
   return HasAttribute(cf_attribute.get());
+}
+
+ValueType AXAPINode::GetAttributeValueType(const std::string& attribute) const {
+  if (!HasAttribute(attribute))
+    return ValueType::NOT_PRESENT;
+
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFTypeRef> cf_value;
+  AXError err = AXUIElementCopyAttributeValue(
+      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+
+  if (err) {
+    if (err == kAXErrorNoValue || err == kAXErrorAttributeUnsupported)
+      return ValueType::NOT_PRESENT;
+
+    return ValueType::UNKNOWN;
+  }
+
+  return DeduceValueType(cf_value);
+}
+
+ValueType AXAPINode::GetListAttributeElementType(
+    const std::string& attribute) const {
+  ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
+  ScopedCFTypeRef<CFTypeRef> cf_value;
+  AXError err = AXUIElementCopyAttributeValue(
+      ax_ui_element_, cf_attribute.get(), cf_value.get_ptr());
+
+  if (err) {
+    // Handle errors quietly here.
+    if (err == kAXErrorNoValue || err == kAXErrorAttributeUnsupported)
+      return ValueType::NOT_PRESENT;
+
+    return ValueType::UNKNOWN;
+  }
+  if (CFArrayGetCount((CFArrayRef)cf_value.get()) == 0) {
+    // Can't determine the list type of an empty list.
+    return ValueType::UNKNOWN;
+  }
+
+  ScopedCFTypeRef<CFTypeRef> cf_first_value(
+      (CFTypeRef)CFArrayGetValueAtIndex((CFArrayRef)cf_value.get(), 0));
+  // Since we used "Get" above, we need to manually retain this value to avoid
+  // it being unexpectedly disposed of. The ScopedCFTypeRef wrapper will still
+  // handle calling CFRelease().
+  cf_first_value.Retain();
+
+  ValueType type = DeduceValueType(cf_first_value);
+  return type;
 }
 
 std::string AXAPINode::CopyStringAttributeValue(
