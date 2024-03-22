@@ -11,12 +11,26 @@ The pre-submit hook will run clang-format the code in your staging area before c
 
 ### Supported target languages
 
-This library can build either a Python3 module or a NodeJS c++ addon for any of the currently support accessibility APIs (except on windows, remove this parenthetical at the appropriate time). To control which bindings are build, please provide the following feature flag.
+This library can build either a Python3 module or a NodeJS c++ addon for any of the currently support accessibility APIs. To control which bindings are build, please provide the following feature flag.
 
 * Python3 bindings: `-DAXA_PYTHON_MODULE=<ON/OFF>`, OFF by default.
 * NodeJS bindings: `-DAXA_NODEJS_MODULE=<ON/OFF>`, OFF by default.
 
 If no target language is specified, only the c++ library and examples will be built.
+
+#### Notes on NodeJS bindings
+
+At present, arrays returned by the underlaying c++ functions are not implemented as native javascript array objects. They are objects with the follow accessor functions:
+* `equals`
+* `size`
+* `capacity`
+* `reserve`
+* `isEmpty`
+* `clear`
+* `add`
+* `get`
+* `set`
+* `constructor`
 
 ### On Linux
 
@@ -205,52 +219,76 @@ First, install Visual Studios to get the Visual Studio installer. You can then f
 
 Through the Visual Studio Installer, install:
 - Under workloads: Desktop Development
+- Under individual components: C++/CLI support for v143 build tools (latest)
+   - This is only necessary for buildings NodeJS bindings
+
+Through the Microsoft Store, download Python.
 
 Git for windows (this also installs git bash, very nice to have and used by default in VSCode's terminal):
 - https://git-scm.com/download/win
 
-For package management, you can use scoop: https://scoop.sh/
+For package management, you can use scoop (https://scoop.sh/) or the windows package manager of your choice.
 
+IMPORTANT: This project was not designed for a multi-configuration generator, like Visual Studios. Instead, please use a single configuration generator. The recommended generator is [Ninja](https://ninja-build.org/) and the following instructions will assume Ninja will be used. You can install `ninja` through scoop.
+
+[SWIG](https://www.swig.org/) and python3 are also necessary to build both the nodejs and python3 bindings.
 ```
-scoop install swig python
+scoop install swig python ninja
 ```
 
-If you are using MSVC to compile, you will need to specify the "release" build, otherwise you will need a debug version of the python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release".
+For the nodeJS bindings, you will need to download and build node-gyp app and put the executable on your path. One way to do this is through npm:
+```
+npm install -g node-gyp
+```
 
 #### Build steps
 
-You can build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
+##### VS Code
 
-You can also run the following from a bash terminal:
-```
-% mkdir build
-% cd build
-% cmake <binding-flags> .. --fresh
-% cmake --build . --config Release
-```
-
-To turn on the python bindings, run cmake with the following flag:
-```
-% cmake -DAXA_PYTHON_MODULE=ON .. --fresh
-```
-
-Or if building from within Visual Studios, add the following to your settings.json:
+Add the following to your settings.json:
 ```
     "cmake.configureArgs": [
         "-DAXA_PYTHON_MODULE=ON"
+        "-DAXA_NODEJS_MODULE=ON"
     ],
+    "cmake.generator": "Ninja",
 ```
 
-Note: If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
+If you are using MSVC to compile, you will need to specify the "release" build, otherwise you will need a debug version of the python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release". If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
+
+You can then build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
+
+##### Powershell
+
+To build from PowerShell, first you have to import and run the DevShell module:
+```
+Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+Enter-VsDevShell -arch amd64  -VsInstallPath "C:\Program Files\Microsoft Visual Studio\2022\Community\"
+```
+
+Then, to build:
+```
+% mkdir build
+% cd build
+% cmake -DCMAKE_BUILD_TYPE=Release <binding-flags> .. -G "Ninja" --fresh
+% ninja
+```
+
+Note: `-DCMAKE_BUILD_TYPE=Release` is necessary if you are using msvc and only have the Release version of Python.
+
+To turn on the Python3 and NodeJS bindings, run cmake with the following flags:
+```
+% cmake -DCMAKE_BUILD_TYPE=Release -DAXA_PYTHON_MODULE=ON -DAXA_NODEJS_MODULE=ON .. -G "Ninja" --fresh
+```
 
 **OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
 
 Currently produces the following executable:
 ```
-./build/bin/Release/dump_tree_ia2.exe <pid>
+./build/bin/dump_tree_ia2.exe <pid>
 ```
 
-To use the python library, navigate to `build/bin/Release`:
+To use the python library, navigate to `build/bin`:
 ```
 % python3
 >>> import ia2_inspect
@@ -275,6 +313,11 @@ To use the python library, navigate to `build/bin/Release`:
 Or run the script:
 ```
 % python3 ./dump_tree_ia2.py --name chrome
+```
+
+NodeJS also has an example dump tree which can be run from the bin folder:
+```
+% node ./dump_tree_ia2.js --name chrome
 ```
 
 ## Documentation
