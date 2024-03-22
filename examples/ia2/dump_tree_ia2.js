@@ -9,25 +9,30 @@ while (i < process.argv.length) {
     name = process.argv[i + 1];
     i += 2;
   } else if (process.argv[i] == '--pid') {
-    pid = process.argv[i + 1];
+    pid = Number(process.argv[i + 1]);
     i += 2;
   } else {
     i++
   }
 }
 
-if (!name.length) {
+if (!name.length && pid === 0) {
   console.log(
       'Usage: \n' +
-      '  nodejs dump_tree_atspi.js' +
+      '  node dump_tree_ia2.js' +
       ' --name <name-of-program>' +
-      ' (--pid <pid>)\n');
+      ' --pid <pid>\n');
 
-  console.log('Error: name argument mandatory argument.');
+  console.log('Error: name or pid argument mandatory argument.');
   process.exit();
 }
 
-const root = ia2_inspect.IANode.CreateRootForName(name, pid);
+let root;
+if (name) {
+  root = ia2_inspect.IANode.CreateRootForName(name, pid);
+} else {
+  root = ia2_inspect.IANode.CreateRootForPID(pid);
+}
 if (root.IsNull()) {
   let errormsg = 'Error: no accessible application found for name: ' + name;
   if (pid)
