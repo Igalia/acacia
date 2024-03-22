@@ -66,18 +66,41 @@ As well as a python module.
 'application'
 >>> node.get_name()
 'Google Chrome'
+>>> child = node.get_child_at_index(0)
+>>> child.get_states()
+('ATSPI_STATE_ENABLED', 'ATSPI_STATE_SENSITIVE', 'ATSPI_STATE_SHOWING', 'ATSPI_STATE_VISIBLE')
+>>> child.get_relations()
+('ATSPI_RELATION_EMBEDS',)
+>>> component = child.query_component()
+>>> component.get_size()
+(3840, 2160)
 ```
 
 And a NodeJS module `atspi_inspect.node`.
 ```
 % cd build/lib/atspi/
-% nodejs
+% node
 > const atspi_inspect = require("./atspi_inspect");
-> let node = atspi_inspect.find_root_accessible_from_pid(<pid>);
+> let node = atspi_inspect.find_root_accessible_from_pid(49500);
 > node.get_role_name();
 'application'
 > node.get_name();
-'Chromium'
+'Firefox'
+> let child = node.get_child_at_index(0);
+> let states = child.get_states();
+> states.get_size()
+> states.get(0)
+'ATSPI_STATE_ENABLED'
+> let relations = child.get_relations();
+> relations.size()
+2
+> relations.get(0)
+'ATSPI_RELATION_NODE_CHILD_OF'
+> relations.get(1)
+'ATSPI_RELATION_EMBEDS'
+> component = child.query_component()
+> component.get_size()
+_exports_AtspiPairIntInt { second: 2098, first: 3840 }
 ```
 
 #### Examples

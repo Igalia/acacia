@@ -9,6 +9,7 @@ add_library(
 
   # Sources
   atspi_node.cc
+  atspi_component_interface.cc
   linux_utils.cc
 )
 

@@ -40,14 +40,48 @@ std::map<std::string, std::string> parse_arguments(int argc, char** argv) {
   return argument_map;
 }
 
+static std::string string_vector_to_string(std::vector<std::string> strings) {
+  std::sort(strings.begin(), strings.end());
+  std::string result;
+  for (auto string : strings) {
+    result += string + ", ";
+  }
+  size_t pos = result.find_last_not_of(", ");
+  if (pos != std::string::npos) {
+    result = result.substr(0, pos + 1);
+  }
+  return result;
+}
+
 static void print_node(AtspiNode node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
   std::cout << "> " << node.get_role_name();
-  std::string node_name = node.get_name();
-  if (!node_name.empty())
-    std::cout << " (" << node_name << ")";
-  std::cout << "\n";
+  std::cout << " Name='" << node.get_name() << "'";
+  std::cout << " Description='" << node.get_description() << "'\n";
+
+  std::string indent(level * 2, ' ');
+  std::vector<std::string> states = node.get_states();
+  std::cout << indent << "* States=(" << string_vector_to_string(states)
+            << ")\n";
+
+  std::vector<std::string> interfaces = node.get_interfaces();
+  std::cout << indent << "* Interfaces=(" << string_vector_to_string(interfaces)
+            << ")\n";
+
+  std::vector<std::string> attributes = node.get_attributes();
+  std::cout << indent << "* Attributes=(" << string_vector_to_string(attributes)
+            << ")\n";
+
+  std::vector<std::string> relations = node.get_relations();
+  // We dump this conditionally because most objects lack relations.
+  if (!relations.empty()) {
+    std::cout << indent << "* Relations=(" << string_vector_to_string(relations)
+              << ")\n";
+  }
+
+  AtspiComponentInterface component = node.query_component();
+  std::cout << indent << "* Component: " << component.to_string() << "\n";
 
   int32_t child_count = node.get_child_count();
   for (auto i = 0; i < child_count; i++) {

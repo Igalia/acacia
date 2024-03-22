@@ -5,7 +5,23 @@ import atspi_inspect
 
 def printNode(node, level):
     sep = "--" * level
-    print(f"{sep}> {node.get_role_name()} ({node.get_name()})")
+    print(
+        f"{sep}> {node.get_role_name()} Name='{node.get_name()}' "
+        f"Description='{node.get_description()}'\n"
+        f"{'  ' * level}* States={tuple(sorted(node.get_states()))}\n"
+        f"{'  ' * level}* Interfaces={tuple(sorted(node.get_interfaces()))}\n"
+        f"{'  ' * level}* Attributes={tuple(sorted(node.get_attributes()))}"
+    )
+
+    relations = node.get_relations()
+    # We dump this conditionally because most objects lack relations.
+    if relations:
+        print(f"{'  ' * level}* Relations={tuple(sorted(relations))}")
+
+    # We don't check if this is null because pretty much everything implements it.
+    component = node.query_component()
+    print(f"{'  ' * level}* Component: {component.to_string()}")
+
     for i in range(node.get_child_count()):
          printNode(node.get_child_at_index(i), level + 1)
 
