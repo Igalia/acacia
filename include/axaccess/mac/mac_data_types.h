@@ -3,12 +3,33 @@
 
 #include <ostream>
 
+#include <ApplicationServices/ApplicationServices.h>
+
 namespace mac_inspect {
 
 class AXAPINode;
 
-// TODO: make each of these types a wrapper around the relevent CG/CF type
-// instead.
+enum class ValueType {
+  NOT_PRESENT,
+  UNKNOWN,
+  LIST,
+  BOOLEAN,
+  INT,
+  FLOAT,
+  STRING,
+  URL,
+  NODE,
+  POINT,
+  SIZE,
+  RECT,
+  RANGE,
+  DICTIONARY,
+  DATA,
+  TEXTMARKER,
+  TEXTMARKERRANGE,
+};
+
+std::string ValueTypeToString(ValueType value_type);
 
 class Point {
  public:
@@ -21,9 +42,7 @@ class Point {
   float x() { return x_; }
   float y() { return y_; }
 
-  std::string ToString() {
-    return "(" + std::to_string(x_) + ", " + std::to_string(y_) + ")";
-  }
+  std::string ToString();
 
  private:
   Point(float x, float y) : x_(x), y_(y) {}
@@ -46,9 +65,7 @@ class Size {
   float width() { return width_; }
   float height() { return height_; }
 
-  std::string ToString() {
-    return "[" + std::to_string(width_) + ", " + std::to_string(height_) + "]";
-  }
+  std::string ToString();
 
  private:
   Size(float width, float height) : width_(width), height_(height) {}
@@ -71,7 +88,7 @@ class Rect {
   Point& origin() { return origin_; }
   Size& size() { return size_; }
 
-  std::string ToString() { return origin_.ToString() + "/" + size_.ToString(); }
+  std::string ToString();
 
  private:
   Rect(Point origin, Size size) : origin_(origin), size_(size) {}
@@ -95,15 +112,37 @@ class Range {
   int length() { return length_; }
   int location() { return location_; }
 
-  std::string ToString() {
-    return "[" + std::to_string(length_) + ", " + std::to_string(location_) +
-           "]";
-  }
+  std::string ToString();
 
  private:
   Range(int length, int location) : length_(length), location_(location) {}
   int length_;
   int location_;
+
+  friend class AXAPINode;
+};
+
+class Dictionary {
+ public:
+  Dictionary() {}
+  Dictionary(const Dictionary&) = default;
+  Dictionary(Dictionary&&) = default;
+  Dictionary& operator=(const Dictionary&) = default;
+  Dictionary& operator=(Dictionary&) = default;
+
+  ~Dictionary();
+
+  std::vector<std::string> keys();
+  ValueType getValueType(const std::string& key);
+
+  std::string getStringValue(const std::string& key);
+  AXAPINode getNodeValue(const std::string& node);
+
+ private:
+  Dictionary(const CFDictionaryRef cf_dictionary)
+      : cf_dictionary_(cf_dictionary) {}
+
+  CFDictionaryRef cf_dictionary_{NULL};
 
   friend class AXAPINode;
 };

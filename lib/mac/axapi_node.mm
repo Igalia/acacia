@@ -8,185 +8,12 @@
 #include <vector>
 
 #include "include/axaccess/mac/mac_data_types.h"
+#include "lib/mac/mac_helper_functions.h"
 #include "lib/mac/scoped_cf_type_ref.h"
 
 using std::cerr;
 
-namespace {
-
-const std::string CFStringRefToStdString(CFStringRef cf_string) {
-  if (cf_string == nullptr)
-    return "";
-
-  const char* chars =
-      CFStringGetCStringPtr(cf_string, CFStringGetSystemEncoding());
-  if (!chars) {
-    // CFStringRef can secretly be an NSString, in which case
-    // CFStringGetCStringPtr doesn't work.
-    NSString* ns_string = (__bridge NSString*)cf_string;
-    const char* ns_chars =
-        [ns_string cStringUsingEncoding:[NSString defaultCStringEncoding]];
-    chars = ns_chars ? ns_chars : "";
-  }
-  return std::string(chars);
-}
-
-using mac_inspect::ScopedCFTypeRef;
-
-// This returns a ScopedCFTypeRef since the CFStringRef is obtained using
-// CFStringCreateWithCString, meaning we own the CFStringRef and are responsible
-// for releasing it.
-ScopedCFTypeRef<CFStringRef> StdStringToCFStringRef(
-    const std::string& std_string) {
-  return ScopedCFTypeRef<CFStringRef>(
-      CFStringCreateWithCString(kCFAllocatorDefault, std_string.c_str(),
-                                [NSString defaultCStringEncoding]));
-}
-
-std::string AXErrorToString(AXError err) {
-  switch (err) {
-    case kAXErrorAPIDisabled:
-      return "kAXErrorAPIDisabled";
-    case kAXErrorActionUnsupported:
-      return "kAXErrorActionUnsupported";
-    case kAXErrorAttributeUnsupported:
-      return "kAXErrorAttributeUnsupported";
-    case kAXErrorCannotComplete:
-      return "kAXErrorCannotComplete";
-    case kAXErrorFailure:
-      return "kAXErrorFailure";
-    case kAXErrorIllegalArgument:
-      return "kAXErrorIllegalArgument";
-    case kAXErrorInvalidUIElement:
-      return "kAXErrorInvalidUIElement";
-    case kAXErrorInvalidUIElementObserver:
-      return "kAXErrorInvalidUIElementObserver";
-    case kAXErrorNoValue:
-      return "kAXErrorNoValue";
-    case kAXErrorNotEnoughPrecision:
-      return "kAXErrorNotEnoughPrecision";
-    case kAXErrorNotImplemented:
-      return "kAXErrorNotImplemented";
-    case kAXErrorNotificationAlreadyRegistered:
-      return "kAXErrorNotificationAlreadyRegistered";
-    case kAXErrorNotificationNotRegistered:
-      return "kAXErrorNotificationNotRegistered";
-    case kAXErrorNotificationUnsupported:
-      return "kAXErrorNotificationUnsupported";
-    default:
-      return std::to_string(err);
-  }
-}
-
-using mac_inspect::ValueType;
-using mac_inspect::ValueTypeToString;
-
-// Pass attribute name to enable debug logging
-ValueType DeduceValueType(CFTypeRef cf_value,
-                          const std::string& attribute = "") {
-  CFTypeID type_id = CFGetTypeID(cf_value);
-
-  if (type_id == CFBooleanGetTypeID())
-    return ValueType::BOOLEAN;
-
-  if (type_id == CFNumberGetTypeID()) {
-    if (CFNumberIsFloatType((CFNumberRef)cf_value))
-      return ValueType::FLOAT;
-
-    return ValueType::INT;
-  }
-
-  if (type_id == CFStringGetTypeID())
-    return ValueType::STRING;
-
-  if (type_id == CFURLGetTypeID())
-    return ValueType::URL;
-
-  if (type_id == AXUIElementGetTypeID())
-    return ValueType::NODE;
-
-  if (type_id == CFArrayGetTypeID())
-    return ValueType::LIST;
-
-  if (type_id == AXValueGetTypeID()) {
-    AXValueType ax_value_type = AXValueGetType((AXValueRef)cf_value);
-    switch (ax_value_type) {
-      case kAXValueCGPointType:
-        return ValueType::POINT;
-      case kAXValueCGSizeType:
-        return ValueType::SIZE;
-      case kAXValueCGRectType:
-        return ValueType::RECT;
-      case kAXValueCFRangeType:
-        return ValueType::RANGE;
-      default:
-        return ValueType::UNKNOWN;
-    }
-  }
-
-  if (type_id == AXTextMarkerGetTypeID())
-    return ValueType::TEXTMARKER;
-
-  if (type_id == AXTextMarkerRangeGetTypeID())
-    return ValueType::TEXTMARKERRANGE;
-
-  if (type_id == CFDataGetTypeID())
-    return ValueType::DATA;
-
-  if (type_id == CFDictionaryGetTypeID())
-    return ValueType::DICTIONARY;
-
-  if (attribute != "") {
-    CFStringRef description = CFCopyTypeIDDescription(type_id);
-    cerr << "Unknown type: " << type_id << " ("
-         << CFStringRefToStdString(description) << ") for attribute "
-         << attribute << "\n";
-  }
-  return ValueType::UNKNOWN;
-}
-
-}  // namespace
-
 namespace mac_inspect {
-
-std::string ValueTypeToString(ValueType value_type) {
-  switch (value_type) {
-    case ValueType::NOT_PRESENT:
-      return "NOT_PRESENT";
-    case ValueType::UNKNOWN:
-      return "UNKNOWN";
-    case ValueType::LIST:
-      return "LIST";
-    case ValueType::BOOLEAN:
-      return "BOOLEAN";
-    case ValueType::INT:
-      return "INT";
-    case ValueType::FLOAT:
-      return "FLOAT";
-    case ValueType::STRING:
-      return "STRING";
-    case ValueType::URL:
-      return "URL";
-    case ValueType::NODE:
-      return "NODE";
-    case ValueType::POINT:
-      return "POINT";
-    case ValueType::SIZE:
-      return "SIZE";
-    case ValueType::RECT:
-      return "RECT";
-    case ValueType::RANGE:
-      return "RANGE";
-    case ValueType::DICTIONARY:
-      return "DICTIONARY";
-    case ValueType::DATA:
-      return "DATA";
-    case ValueType::TEXTMARKER:
-      return "TEXTMARKER";
-    case ValueType::TEXTMARKERRANGE:
-      return "TEXTMARKERRANGE";
-  }
-}
 
 AXAPINode::AXAPINode() {
   cerr << "Default constructor called\n";
@@ -409,11 +236,12 @@ ScopedCFTypeRef<CFTypeRef> AXAPINode::CopyRawArrayAttributeValueAtIndex(
 
   auto cf_value = ScopedCFTypeRef<CFTypeRef>::CreateFromUnownedRef(
       (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), 0));
-  if (CFGetTypeID(cf_value.get()) != AXUIElementGetTypeID()) {
-    ValueType type = DeduceValueType(cf_value.get());
-    throw std::invalid_argument("Value for " + attribute + " is a " +
+  ValueType type = DeduceValueType(cf_value.get());
+  if (type != expected_type) {
+    throw std::invalid_argument("List value for " + attribute + " at " +
+                                std::to_string(index) + " is a " +
                                 ValueTypeToString(type) + ", not a " +
-                                ValueTypeToString(ValueType::NODE) + ".");
+                                ValueTypeToString(expected_type) + ".");
   }
   return cf_value;
 }
@@ -672,6 +500,40 @@ Range AXAPINode::CopyRangeListAttributeValueAtIndex(std::string& attribute,
                              " value for " + attribute);
   }
   return Range(cf_range.length, cf_range.location);
+}
+
+std::vector<Dictionary> AXAPINode::CopyDictionaryListAttributeValue(
+    std::string& attribute) const {
+  ScopedCFTypeRef<CFArrayRef> cf_array = CopyRawArrayAttributeValue(attribute);
+
+  std::vector<Dictionary> value;
+  for (CFIndex i = 0; i < CFArrayGetCount(cf_array.get()); ++i) {
+    CFTypeRef cf_ith_value =
+        (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), i);
+
+    if (CFGetTypeID(cf_ith_value) == CFDictionaryGetTypeID()) {
+      ValueType value_type = DeduceValueType(cf_ith_value);
+      throw std::invalid_argument("Value for " + attribute + " is a list of " +
+                                  ValueTypeToString(value_type) + ", not a " +
+                                  ValueTypeToString(ValueType::DICTIONARY) +
+                                  ".");
+    }
+
+    CFDictionaryRef cf_dictionary;
+
+    value.push_back(Dictionary((CFDictionaryRef)CFRetain(cf_dictionary)));
+  }
+
+  return value;
+}
+
+Dictionary AXAPINode::CopyDictionaryListAttributeValueAtIndex(
+    std::string& attribute,
+    int index) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value = CopyRawArrayAttributeValueAtIndex(
+      attribute, index, ValueType::DICTIONARY);
+
+  return Dictionary((CFDictionaryRef)cf_value.Retain());
 }
 
 }  // namespace mac_inspect

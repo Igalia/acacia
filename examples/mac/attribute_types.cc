@@ -30,6 +30,7 @@ static std::set<ValueType> supported_list_types = {
     ValueType::NODE,
     ValueType::STRING,
     ValueType::RANGE,
+    ValueType::DICTIONARY,
 };
 
 void AddListValueExample(ValueType type,
@@ -78,6 +79,37 @@ void AddListValueExample(ValueType type,
       }
       value_string += values.back().ToString();
       value_string += "]";
+      break;
+    }
+    case ValueType::DICTIONARY: {
+      mac_inspect::Dictionary dict =
+          node.CopyDictionaryListAttributeValueAtIndex(attribute, 0);
+      vector<string> keys = dict.keys();
+      value_string = "first value: {\n";
+      for (string& key : keys) {
+        ValueType type = dict.getValueType(key);
+        switch (type) {
+          case ValueType::STRING: {
+            std::string value = dict.getStringValue(key);
+            value_string += "  \"" + key + "\": \"" + value + "\"\n";
+            break;
+          }
+          case ValueType::NODE: {
+            AXAPINode value = dict.getNodeValue(key);
+            value_string += "  \"" + key + "\": ";
+            if (value.HasAttribute("AXTitle"))
+              value_string +=
+                  "(" + value.CopyStringAttributeValue("AXTitle") + ")";
+            else
+              value_string += "[unnamed node]";
+            value_string += "\n";
+            break;
+          }
+          default:
+            break;
+        }
+      }
+      value_string += "}";
       break;
     }
     default:
@@ -134,7 +166,7 @@ void AddValueExample(ValueType type,
       break;
     }
     case ValueType::URL: {
-      value_string = "\"" + node.CopyURLAttributeValue(attribute) = "\"";
+      value_string = "\"" + node.CopyURLAttributeValue(attribute) + "\"";
       break;
     }
     case ValueType::NODE: {
@@ -181,28 +213,36 @@ void CollectAttributeTypes(AXAPINode node,
                            map<string, map<string, string>>& examples) {
   vector<string> attributes = node.CopyAttributeNames();
   for (const string& attribute : attributes) {
-    // TODO: Some attributes map to *multiple* types. This should map to a
-    // vector of string, and only skip if we've already logged the type.
-    if (attribute_types.count(attribute) > 0)
-      continue;
+    try {
+      // TODO: Some attributes map to *multiple* types. This should map to a
+      // vector of string, and only skip if we've already logged the type.
+      if (attribute_types.count(attribute) > 0)
+        continue;
 
-    ValueType type = node.GetAttributeValueType(attribute);
+      ValueType type = node.GetAttributeValueType(attribute);
 
-    std::string type_string;
-    if (type != ValueType::NOT_PRESENT) {
-      if (type == ValueType::LIST) {
-        ValueType list_type = node.GetListAttributeElementType(attribute);
-        if (list_type != ValueType::UNKNOWN) {
-          type_string = ValueTypeToString(type) + "<" +
-                        ValueTypeToString(list_type) + ">";
-          AddValueExample(type, type_string, attribute, node, examples,
-                          list_type);
+      std::string type_string;
+      if (type != ValueType::NOT_PRESENT) {
+        if (type == ValueType::LIST) {
+          ValueType list_type = node.GetListAttributeElementType(attribute);
+          if (list_type != ValueType::UNKNOWN) {
+            type_string = ValueTypeToString(type) + "<" +
+                          ValueTypeToString(list_type) + ">";
+            AddValueExample(type, type_string, attribute, node, examples,
+                            list_type);
+          }
+        } else {
+          type_string = ValueTypeToString(type);
+          AddValueExample(type, type_string, attribute, node, examples);
         }
-      } else {
-        type_string = ValueTypeToString(type);
-        AddValueExample(type, type_string, attribute, node, examples);
+        attribute_types[attribute] = type_string;
       }
-      attribute_types[attribute] = type_string;
+    } catch (std::runtime_error e) {
+      std::cerr << "caught: " << e.what() << "\n";
+    } catch (std::invalid_argument e) {
+      std::cerr << "caught: " << e.what() << "\n";
+    } catch (...) {
+      std::cerr << "caught something else??\n";
     }
   }
 

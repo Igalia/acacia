@@ -20,32 +20,13 @@ class AXAPIContextImpl;
 template <typename T>
 class ScopedCFTypeRef;
 
+class Dictionary;
 class Point;
 class Size;
 class Rect;
 class Range;
 
-enum class ValueType {
-  NOT_PRESENT,
-  UNKNOWN,
-  LIST,
-  BOOLEAN,
-  INT,
-  FLOAT,
-  STRING,
-  URL,
-  NODE,
-  POINT,
-  SIZE,
-  RECT,
-  RANGE,
-  DICTIONARY,
-  DATA,
-  TEXTMARKER,
-  TEXTMARKERRANGE,
-};
-
-std::string ValueTypeToString(ValueType value_type);
+enum class ValueType;
 
 /**
  * Represents a node in the accessibility tree.
@@ -110,6 +91,12 @@ class AXAPINode {
   Range CopyRangeListAttributeValueAtIndex(std::string& attribute,
                                            int index) const;
 
+  std::vector<Dictionary> CopyDictionaryListAttributeValue(
+      std::string& attribute) const;
+
+  Dictionary CopyDictionaryListAttributeValueAtIndex(std::string& attribute,
+                                                     int index) const;
+
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
 
@@ -126,6 +113,7 @@ class AXAPINode {
   AXUIElementRef ax_ui_element_{NULL};
 
   friend class AXAPIContextImpl;
+  friend class Dictionary;
 };
 
 }  // namespace mac_inspect
