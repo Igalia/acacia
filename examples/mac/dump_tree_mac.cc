@@ -23,67 +23,6 @@ static void print_attributes(AXAPINode node) {
       std::cout << " \"" << node.CopyStringAttributeValue("AXTitle") << "\"";
   }
 
-  // Some sample attributes of each other type
-  if (node.HasAttribute("AXFocused")) {
-    if (node.CopyBooleanAttributeValue("AXFocused"))
-      std::cout << " FOCUSED";
-  }
-
-  if (node.HasAttribute("AXValue")) {
-    ValueType value_type = node.GetAttributeValueType("AXValue");
-    switch (value_type) {
-      case ValueType::STRING:
-        std::cout << " AXValue: \"" << node.CopyStringAttributeValue("AXValue")
-                  << "\"";
-        break;
-      case ValueType::INT:
-        std::cout << " AXValue: "
-                  << std::to_string(node.CopyIntAttributeValue("AXValue"));
-        break;
-      case ValueType::FLOAT:
-        std::cout << " AXValue: "
-                  << std::to_string(node.CopyFloatAttributeValue("AXValue"));
-        break;
-      default:
-        break;
-    }
-  }
-
-  if (node.HasAttribute("AXURL")) {
-    std::string url = node.CopyURLAttributeValue("AXURL");
-    std::cout << " AXURL: \"" << url << "\"";
-  }
-
-  if (node.HasAttribute("AXTitleUIElement")) {
-    AXAPINode title_node = node.CopyNodeAttributeValue("AXTitleUIElement");
-    if (title_node.HasAttribute("AXTitle")) {
-      std::string title_node_title =
-          title_node.CopyStringAttributeValue("AXTitle");
-      std::cout << " AXTitleUIElement: \"" << title_node_title << "\"";
-    }
-  }
-
-  if (node.HasAttribute("AXPosition")) {
-    mac_inspect::Point position = node.CopyPointAttributeValue("AXPosition");
-    std::cout << " AXPosition: " << position.ToString();
-  }
-
-  if (node.HasAttribute("AXSize")) {
-    mac_inspect::Size size = node.CopySizeAttributeValue("AXSize");
-    std::cout << " AXSize: " << size.ToString();
-  }
-
-  if (node.HasAttribute("AXFrame")) {
-    mac_inspect::Rect frame = node.CopyRectAttributeValue("AXFrame");
-    std::cout << " AXFrame: " << frame.ToString();
-  }
-
-  if (node.HasAttribute("AXSelectedTextRange")) {
-    mac_inspect::Range range =
-        node.CopyRangeAttributeValue("AXSelectedTextRange");
-    std::cout << " AXSelectedTextRange: " << range.ToString();
-  }
-
   std::cout << "\n";
 }
 
