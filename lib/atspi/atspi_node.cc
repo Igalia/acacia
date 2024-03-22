@@ -303,5 +303,9 @@ std::vector<AtspiNode> AtspiNode::get_children() const {
 }
 
 AtspiComponentInterface AtspiNode::query_component() const {
-  return AtspiComponentInterface(ATSPI_COMPONENT(accessible_));
+  if (ATSPI_IS_COMPONENT(accessible_)) {
+    return AtspiComponentInterface(ATSPI_COMPONENT(accessible_));
+  }
+
+  return AtspiComponentInterface();
 }
