@@ -7,6 +7,9 @@ namespace mac_inspect {
 
 class AXAPINode;
 
+// TODO: make each of these types a wrapper around the relevent CG/CF type
+// instead.
+
 class Point {
  public:
   Point() {}

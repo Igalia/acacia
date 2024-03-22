@@ -105,6 +105,11 @@ class AXAPINode {
   std::string CopyStringListAttributeValueAtIndex(std::string& attribute,
                                                   int index) const;
 
+  std::vector<Range> CopyRangeListAttributeValue(std::string& attribute) const;
+
+  Range CopyRangeListAttributeValueAtIndex(std::string& attribute,
+                                           int index) const;
+
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
 

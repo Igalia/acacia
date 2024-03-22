@@ -29,6 +29,7 @@ static std::set<ValueType> supported_types = {
 static std::set<ValueType> supported_list_types = {
     ValueType::NODE,
     ValueType::STRING,
+    ValueType::RANGE,
 };
 
 void AddListValueExample(ValueType type,
@@ -60,6 +61,22 @@ void AddListValueExample(ValueType type,
         value_string += ", ";
       }
       value_string += values.back();
+      value_string += "]";
+      break;
+    }
+    case ValueType::RANGE: {
+      vector<mac_inspect::Range> values =
+          node.CopyRangeListAttributeValue(attribute);
+      if (values.empty()) {
+        value_string = "[]";
+        break;
+      }
+      value_string = "[";
+      for (int i = 0; i < values.size() - 1; i++) {
+        value_string += values[i].ToString();
+        value_string += ", ";
+      }
+      value_string += values.back().ToString();
       value_string += "]";
       break;
     }

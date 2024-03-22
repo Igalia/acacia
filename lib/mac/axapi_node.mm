@@ -630,4 +630,48 @@ std::string AXAPINode::CopyStringListAttributeValueAtIndex(
   return CFStringRefToStdString((CFStringRef)cf_value.Retain());
 }
 
+std::vector<Range> AXAPINode::CopyRangeListAttributeValue(
+    std::string& attribute) const {
+  ScopedCFTypeRef<CFArrayRef> cf_array = CopyRawArrayAttributeValue(attribute);
+
+  std::vector<Range> value;
+  for (CFIndex i = 0; i < CFArrayGetCount(cf_array.get()); ++i) {
+    CFTypeRef cf_ith_value =
+        (CFTypeRef)CFArrayGetValueAtIndex(cf_array.get(), i);
+
+    ValueType value_type = DeduceValueType(cf_ith_value);
+    if (value_type != ValueType::RANGE) {
+      throw std::invalid_argument("Value for " + attribute + " is a list of " +
+                                  ValueTypeToString(value_type) + ", not a " +
+                                  ValueTypeToString(ValueType::RANGE) + ".");
+    }
+
+    CFRange cf_range;
+    if (!AXValueGetValue((AXValueRef)cf_ith_value,
+                         (AXValueType)kAXValueCFRangeType, &cf_range)) {
+      throw std::runtime_error("Could not get " +
+                               ValueTypeToString(ValueType::RANGE) +
+                               " value for " + attribute);
+    }
+
+    value.push_back(Range(cf_range.length, cf_range.location));
+  }
+
+  return value;
+}
+
+Range AXAPINode::CopyRangeListAttributeValueAtIndex(std::string& attribute,
+                                                    int index) const {
+  ScopedCFTypeRef<CFTypeRef> cf_value =
+      CopyRawArrayAttributeValueAtIndex(attribute, index, ValueType::RANGE);
+  CFRange cf_range;
+  if (!AXValueGetValue((AXValueRef)cf_value.get(),
+                       (AXValueType)kAXValueCFRangeType, &cf_range)) {
+    throw std::runtime_error("Could not get " +
+                             ValueTypeToString(ValueType::RANGE) +
+                             " value for " + attribute);
+  }
+  return Range(cf_range.length, cf_range.location);
+}
+
 }  // namespace mac_inspect
