@@ -16,7 +16,7 @@ enum APIType AtspiContextImpl::GetAPIType() {
 }
 
 NodePtr AtspiContextImpl::GetAccessibleRootByPID(const int pid) {
-  auto atspiRoot = find_root_accessible_from_pid(pid);
+  auto atspiRoot = findRootAtspiNodeFromPID(pid);
   if (atspiRoot == nullptr)
     return nullptr;
 

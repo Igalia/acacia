@@ -6,7 +6,7 @@
 
 #include <axaccess/atspi/linux_utils.h>
 
-void print_usage(std::string& program_path) {
+static void PrintUsage(std::string& program_path) {
   std::string program_name = program_path;
   size_t pos = program_name.find_last_of("/");
   if (pos != std::string::npos) {
@@ -19,7 +19,8 @@ void print_usage(std::string& program_path) {
   std::cout << "  " << program_name << " --name=NAME --pid=PID\n";
 }
 
-std::map<std::string, std::string> parse_arguments(int argc, char** argv) {
+static std::map<std::string, std::string> ParseArguments(int argc,
+                                                         char** argv) {
   std::map<std::string, std::string> argument_map;
   for (int i = 1; i < argc; ++i) {
     std::string arg(argv[i]);
@@ -40,7 +41,7 @@ std::map<std::string, std::string> parse_arguments(int argc, char** argv) {
   return argument_map;
 }
 
-static std::string string_vector_to_string(std::vector<std::string> strings) {
+static std::string StringVectorToString(std::vector<std::string> strings) {
   std::sort(strings.begin(), strings.end());
   std::string result;
   for (auto string : strings) {
@@ -53,46 +54,45 @@ static std::string string_vector_to_string(std::vector<std::string> strings) {
   return result;
 }
 
-static void print_node(AtspiNode node, int level) {
+static void PrintNode(AtspiNode node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
-  std::cout << "> " << node.get_role_name();
-  std::cout << " Name='" << node.get_name() << "'";
-  std::cout << " Description='" << node.get_description() << "'\n";
+  std::cout << "> " << node.getRoleName();
+  std::cout << " Name='" << node.getName() << "'";
+  std::cout << " Description='" << node.getDescription() << "'\n";
 
   std::string indent(level * 2, ' ');
-  std::vector<std::string> states = node.get_states();
-  std::cout << indent << "* States=(" << string_vector_to_string(states)
+  std::vector<std::string> states = node.getStates();
+  std::cout << indent << "* States=(" << StringVectorToString(states) << ")\n";
+
+  std::vector<std::string> interfaces = node.getInterfaces();
+  std::cout << indent << "* Interfaces=(" << StringVectorToString(interfaces)
             << ")\n";
 
-  std::vector<std::string> interfaces = node.get_interfaces();
-  std::cout << indent << "* Interfaces=(" << string_vector_to_string(interfaces)
+  std::vector<std::string> attributes = node.getAttributes();
+  std::cout << indent << "* Attributes=(" << StringVectorToString(attributes)
             << ")\n";
 
-  std::vector<std::string> attributes = node.get_attributes();
-  std::cout << indent << "* Attributes=(" << string_vector_to_string(attributes)
-            << ")\n";
-
-  std::vector<std::string> relations = node.get_relations();
+  std::vector<std::string> relations = node.getRelations();
   // We dump this conditionally because most objects lack relations.
   if (!relations.empty()) {
-    std::cout << indent << "* Relations=(" << string_vector_to_string(relations)
+    std::cout << indent << "* Relations=(" << StringVectorToString(relations)
               << ")\n";
   }
 
-  AtspiComponentInterface component = node.query_component();
-  std::cout << indent << "* Component: " << component.to_string() << "\n";
+  AtspiComponentInterface component = node.queryComponent();
+  std::cout << indent << "* Component: " << component.toString() << "\n";
 
-  int32_t child_count = node.get_child_count();
+  int32_t child_count = node.getChildCount();
   for (auto i = 0; i < child_count; i++) {
-    auto child = node.get_child_at_index(i);
-    print_node(child, level + 1);
+    auto child = node.getChildAtIndex(i);
+    PrintNode(child, level + 1);
   }
 }
 
 int main(int argc, char** argv) {
   std::string program_name(argv[0]);
-  auto args = parse_arguments(argc, argv);
+  auto args = ParseArguments(argc, argv);
 
   std::string name;
   if (args.find("--name") != args.end()) {
@@ -109,18 +109,18 @@ int main(int argc, char** argv) {
   }
 
   if (name.empty() && !pid) {
-    print_usage(program_name);
+    PrintUsage(program_name);
     return 1;
   }
 
   AtspiNode root;
   if (!name.empty()) {
-    root = find_root_accessible_from_name(name, pid);
+    root = findRootAtspiNodeFromName(name, pid);
   } else {
-    root = find_root_accessible_from_pid(pid);
+    root = findRootAtspiNodeFromPID(pid);
   }
 
-  if (root.is_null()) {
+  if (root.isNull()) {
     std::cerr << "ERROR: Could not find match for";
     if (!name.empty()) {
       std::cerr << " name: '" << name << "'";
@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
   }
 
   try {
-    print_node(root, 0);
+    PrintNode(root, 0);
   } catch (std::exception e) {
     std::cerr << e.what();
     return -1;

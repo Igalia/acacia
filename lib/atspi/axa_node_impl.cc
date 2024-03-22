@@ -17,19 +17,19 @@ std::unique_ptr<NodeImpl> AtspiNodeImpl::Create(AtspiNodePtr& aAtspiNode) {
 }
 
 std::string AtspiNodeImpl::Name() {
-  return atspiNode->get_name();
+  return atspiNode->getName();
 }
 
 std::string AtspiNodeImpl::RoleName() {
-  return atspiNode->get_role_name();
+  return atspiNode->getRoleName();
 }
 
 int32_t AtspiNodeImpl::ChildCount() {
-  return atspiNode->get_child_count();
+  return atspiNode->getChildCount();
 }
 
 NodePtr AtspiNodeImpl::ChildAt(const int32_t index) {
-  auto childNode = atspiNode->get_child_at_index(index);
+  auto childNode = atspiNode->getChildAtIndex(index);
   if (childNode == nullptr)
     return nullptr;
 

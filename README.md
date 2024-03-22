@@ -61,18 +61,18 @@ As well as a python module.
 % cd build/lib/atspi/
 % python
 >>> import atspi_inspect
->>> node = atspi_inspect.find_root_accessible_from_pid(1244182)
->>> node.get_role_name()
+>>> node = atspi_inspect.findRootAtspiNodeFromPID(1244182)
+>>> node.getRoleName()
 'application'
->>> node.get_name()
+>>> node.getName()
 'Google Chrome'
->>> child = node.get_child_at_index(0)
->>> child.get_states()
+>>> child = node.getChildAtIndex(0)
+>>> child.getStates()
 ('ATSPI_STATE_ENABLED', 'ATSPI_STATE_SENSITIVE', 'ATSPI_STATE_SHOWING', 'ATSPI_STATE_VISIBLE')
->>> child.get_relations()
+>>> child.getRelations()
 ('ATSPI_RELATION_EMBEDS',)
->>> component = child.query_component()
->>> component.get_size()
+>>> component = child.queryComponent()
+>>> component.getSize()
 (3840, 2160)
 ```
 
@@ -81,25 +81,25 @@ And a NodeJS module `atspi_inspect.node`.
 % cd build/lib/atspi/
 % node
 > const atspi_inspect = require("./atspi_inspect");
-> let node = atspi_inspect.find_root_accessible_from_pid(49500);
-> node.get_role_name();
+> let node = atspi_inspect.findRootAtspiNodeFromPID(49500);
+> node.getRoleName();
 'application'
-> node.get_name();
+> node.getName();
 'Firefox'
-> let child = node.get_child_at_index(0);
-> let states = child.get_states();
-> states.get_size()
+> let child = node.getChildAtIndex(0);
+> let states = child.getStates();
+> states.getSize()
 > states.get(0)
 'ATSPI_STATE_ENABLED'
-> let relations = child.get_relations();
+> let relations = child.getRelations();
 > relations.size()
 2
 > relations.get(0)
 'ATSPI_RELATION_NODE_CHILD_OF'
 > relations.get(1)
 'ATSPI_RELATION_EMBEDS'
-> component = child.query_component()
-> component.get_size()
+> component = child.queryComponent()
+> component.getSize()
 _exports_AtspiPairIntInt { second: 2098, first: 3840 }
 ```
 
@@ -261,7 +261,7 @@ To use the python library, navigate to `build/bin/Release`:
 >>> child.get_accRole()
 >>> action = child.QueryAction()
 >>> action.nActions()
->>> action.get_name(0)
+>>> action.getName(0)
 >>> component = child.QueryComponent()
 >>> component.get_locationInParent()
 >>> text = child.QueryText()

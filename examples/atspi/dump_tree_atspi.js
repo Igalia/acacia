@@ -34,20 +34,20 @@ if (name.length) {
     msg += ' and pid ' + pid;
   }
   console.log(msg + '.');
-  root = atspi.find_root_accessible_from_name(name, pid);
+  root = atspi.findRootAtspiNodeFromName(name, pid);
 } else {
   console.log('Searching for application with pid ' + pid + '.');
-  root = atspi.find_root_accessible_from_pid(pid);
+  root = atspi.findRootAtspiNodeFromPID(pid);
 }
 
 
-if (root.is_null()) {
+if (root.isNull()) {
   console.log('Application not found.');
   process.exit();
 }
 
 // C++ vectors are not wrapped as JavaScript array primitives.
-function vectorToString(vector) {
+function VectorToString(vector) {
   let string = '(';
   for (let i = 0; i < vector.size(); i++) {
     string += vector.get(i) + ', ';
@@ -55,43 +55,43 @@ function vectorToString(vector) {
   return string.slice(0, -2) + ')';
 }
 
-function printNode(node, level) {
+function PrintNode(node, level) {
   let sep = '';
   for (var i = 0; i < level; i++)
     sep += '--';
   console.log(
-      sep + '> ' + node.get_role_name() + ' Name=\'' + node.get_name() +
-      '\' Description=\'' + node.get_description() + '\'');
+      sep + '> ' + node.getRoleName() + ' Name=\'' + node.getName() +
+      '\' Description=\'' + node.getDescription() + '\'');
 
   console.log(
-      '  '.repeat(level) + '* States=' + vectorToString(node.get_states()));
+      '  '.repeat(level) + '* States=' + VectorToString(node.getStates()));
   console.log(
       '  '.repeat(level) +
-      '* Interfaces=' + vectorToString(node.get_interfaces()));
+      '* Interfaces=' + VectorToString(node.getInterfaces()));
   console.log(
       '  '.repeat(level) +
-      '* Attributes=' + vectorToString(node.get_attributes()));
+      '* Attributes=' + VectorToString(node.getAttributes()));
 
-  relations = node.get_relations();
+  relations = node.getRelations();
   // We dump this conditionally because most objects lack relations.
   if (relations.size() > 0) {
     console.log(
         '  '.repeat(level) +
-        '* Relations=' + vectorToString(node.get_relations()));
+        '* Relations=' + VectorToString(node.getRelations()));
   }
 
   // We don't check if this is null because pretty much everything implements
   // it.
-  component = node.query_component();
-  console.log('  '.repeat(level) + '* Component:' + component.to_string());
+  component = node.queryComponent();
+  console.log('  '.repeat(level) + '* Component:' + component.toString());
 
-  for (let i = 0; i < node.get_child_count(); i++) {
-    printNode(node.get_child_at_index(i), level + 1);
+  for (let i = 0; i < node.getChildCount(); i++) {
+    PrintNode(node.getChildAtIndex(i), level + 1);
   }
 }
 
 try {
-  printNode(root, 0);
+  PrintNode(root, 0);
 } catch (e) {
   console.log(e);
 }

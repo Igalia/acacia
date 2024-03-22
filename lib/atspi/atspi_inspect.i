@@ -16,21 +16,21 @@ namespace std {
   %template(AtspiPairIntInt) pair<int, int>;
 };
 
-%catches(std::runtime_error) AtspiNode::get_role_name() const;
-%catches(std::runtime_error) AtspiNode::get_name() const;
-%catches(std::runtime_error) AtspiNode::get_description() const;
-%catches(std::runtime_error) AtspiNode::get_attributes() const;
-%catches(std::runtime_error) AtspiNode::get_interfaces() const;
-%catches(std::runtime_error) AtspiNode::get_relations() const;
-%catches(std::runtime_error) AtspiNode::get_states() const;
-%catches(std::runtime_error) AtspiNode::get_child_count() const;
-%catches(std::runtime_error) AtspiNode::get_child_at_index(int index) const;
-%catches(std::runtime_error) AtspiNode::get_children() const;
-%catches(std::runtime_error) AtspiNode::query_component() const;
+%catches(std::runtime_error) AtspiNode::getRoleName() const;
+%catches(std::runtime_error) AtspiNode::getName() const;
+%catches(std::runtime_error) AtspiNode::getDescription() const;
+%catches(std::runtime_error) AtspiNode::getAttributes() const;
+%catches(std::runtime_error) AtspiNode::getInterfaces() const;
+%catches(std::runtime_error) AtspiNode::getRelations() const;
+%catches(std::runtime_error) AtspiNode::getStates() const;
+%catches(std::runtime_error) AtspiNode::getChildCount() const;
+%catches(std::runtime_error) AtspiNode::getChildAtIndex(int index) const;
+%catches(std::runtime_error) AtspiNode::getChildren() const;
+%catches(std::runtime_error) AtspiNode::queryComponent() const;
 
-%catches(std::runtime_error) AtspiComponentInterface::to_string() const;
-%catches(std::runtime_error) AtspiComponentInterface::get_position() const;
-%catches(std::runtime_error) AtspiComponentInterface::get_size() const;
+%catches(std::runtime_error) AtspiComponentInterface::toString() const;
+%catches(std::runtime_error) AtspiComponentInterface::getPosition() const;
+%catches(std::runtime_error) AtspiComponentInterface::getSize() const;
 
 %include <axaccess/atspi/atspi_component_interface.h>
 %include <axaccess/atspi/atspi_node.h>
