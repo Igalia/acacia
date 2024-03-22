@@ -7,7 +7,7 @@
 #include <string>
 
 namespace {
-static const std::string state_type_to_string(const AtspiStateType state) {
+static const std::string StateTypeToString(const AtspiStateType state) {
   switch (state) {
     case ATSPI_STATE_INVALID:
       return "ATSPI_STATE_INVALID";
@@ -102,7 +102,7 @@ static const std::string state_type_to_string(const AtspiStateType state) {
   }
 }
 
-static const std::string relation_type_to_string(
+static const std::string RelationTypeToString(
     const AtspiRelationType relation) {
   switch (relation) {
     case ATSPI_RELATION_NULL:
@@ -158,11 +158,11 @@ static const std::string relation_type_to_string(
 
 }  // Namespace
 
-bool AtspiNode::is_null() const {
+bool AtspiNode::isNull() const {
   return accessible_ == NULL;
 }
 
-std::string AtspiNode::get_role_name() const {
+std::string AtspiNode::getRoleName() const {
   GError* error = nullptr;
   char* role_name = atspi_accessible_get_role_name(accessible_, &error);
   if (error) {
@@ -176,7 +176,7 @@ std::string AtspiNode::get_role_name() const {
   return result;
 }
 
-std::string AtspiNode::get_name() const {
+std::string AtspiNode::getName() const {
   GError* error = nullptr;
   char* name = atspi_accessible_get_name(accessible_, &error);
   if (error) {
@@ -189,7 +189,7 @@ std::string AtspiNode::get_name() const {
   return result;
 }
 
-std::string AtspiNode::get_description() const {
+std::string AtspiNode::getDescription() const {
   GError* error = nullptr;
   char* description = atspi_accessible_get_description(accessible_, &error);
   if (error) {
@@ -202,7 +202,7 @@ std::string AtspiNode::get_description() const {
   return result;
 }
 
-std::vector<std::string> AtspiNode::get_attributes() const {
+std::vector<std::string> AtspiNode::getAttributes() const {
   GError* error = nullptr;
   GHashTable* attributes_hash =
       atspi_accessible_get_attributes(accessible_, &error);
@@ -226,7 +226,7 @@ std::vector<std::string> AtspiNode::get_attributes() const {
   return attributes;
 }
 
-std::vector<std::string> AtspiNode::get_interfaces() const {
+std::vector<std::string> AtspiNode::getInterfaces() const {
   GArray* interface_array = atspi_accessible_get_interfaces(accessible_);
   std::vector<std::string> interfaces;
   for (unsigned i = 0; i < interface_array->len; i++) {
@@ -238,7 +238,7 @@ std::vector<std::string> AtspiNode::get_interfaces() const {
   return interfaces;
 }
 
-std::vector<std::string> AtspiNode::get_relations() const {
+std::vector<std::string> AtspiNode::getRelations() const {
   GError* error = nullptr;
   GArray* relation_array =
       atspi_accessible_get_relation_set(accessible_, &error);
@@ -253,27 +253,27 @@ std::vector<std::string> AtspiNode::get_relations() const {
     AtspiRelation* relation = g_array_index(relation_array, AtspiRelation*, i);
     AtspiRelationType relation_type =
         atspi_relation_get_relation_type(relation);
-    relations.push_back(relation_type_to_string(relation_type));
     g_free(relation);
+    relations.push_back(RelationTypeToString(relation_type));
   }
   g_array_free(relation_array, TRUE);
   return relations;
 }
 
-std::vector<std::string> AtspiNode::get_states() const {
+std::vector<std::string> AtspiNode::getStates() const {
   AtspiStateSet* atspi_states = atspi_accessible_get_state_set(accessible_);
   GArray* state_array = atspi_state_set_get_states(atspi_states);
   std::vector<std::string> states;
   for (unsigned i = 0; i < state_array->len; i++) {
     AtspiStateType state_type = g_array_index(state_array, AtspiStateType, i);
-    states.push_back(state_type_to_string(state_type));
+    states.push_back(StateTypeToString(state_type));
   }
   g_array_free(state_array, TRUE);
   g_object_unref(atspi_states);
   return states;
 }
 
-int AtspiNode::get_child_count() const {
+int AtspiNode::getChildCount() const {
   GError* error = nullptr;
   gint count = atspi_accessible_get_child_count(accessible_, &error);
   if (error) {
@@ -284,7 +284,7 @@ int AtspiNode::get_child_count() const {
   return (int)count;
 }
 
-AtspiNode AtspiNode::get_child_at_index(int index) const {
+AtspiNode AtspiNode::getChildAtIndex(int index) const {
   GError* error = nullptr;
   AtspiAccessible* child =
       atspi_accessible_get_child_at_index(accessible_, index, &error);
@@ -296,7 +296,7 @@ AtspiNode AtspiNode::get_child_at_index(int index) const {
   return AtspiNode(child);
 }
 
-std::vector<AtspiNode> AtspiNode::get_children() const {
+std::vector<AtspiNode> AtspiNode::getChildren() const {
   std::vector<AtspiNode> result;
 
   GError* error = nullptr;
@@ -310,15 +310,15 @@ std::vector<AtspiNode> AtspiNode::get_children() const {
   result.resize(child_count);
 
   for (auto i = 0; i < child_count; i++) {
-    AtspiNode child_node = get_child_at_index(i);
-    if (!child_node.is_null())
+    AtspiNode child_node = getChildAtIndex(i);
+    if (!child_node.isNull())
       result[i] = child_node;
   }
 
   return result;
 }
 
-AtspiComponentInterface AtspiNode::query_component() const {
+AtspiComponentInterface AtspiNode::queryComponent() const {
   if (ATSPI_IS_COMPONENT(accessible_)) {
     return AtspiComponentInterface(ATSPI_COMPONENT(accessible_));
   }

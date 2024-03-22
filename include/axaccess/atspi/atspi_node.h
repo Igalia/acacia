@@ -20,20 +20,20 @@ class AtspiNode {
   AtspiNode() : accessible_(nullptr){};
   ~AtspiNode(){};
 
-  bool is_null() const;
+  bool isNull() const;
 
-  std::string get_role_name() const;
-  std::string get_name() const;
-  std::string get_description() const;
-  std::vector<std::string> get_attributes() const;
-  std::vector<std::string> get_interfaces() const;
-  std::vector<std::string> get_relations() const;
-  std::vector<std::string> get_states() const;
-  int get_child_count() const;
-  AtspiNode get_child_at_index(int index) const;
-  std::vector<AtspiNode> get_children() const;
+  std::string getRoleName() const;
+  std::string getName() const;
+  std::string getDescription() const;
+  std::vector<std::string> getAttributes() const;
+  std::vector<std::string> getInterfaces() const;
+  std::vector<std::string> getRelations() const;
+  std::vector<std::string> getStates() const;
+  int getChildCount() const;
+  AtspiNode getChildAtIndex(int index) const;
+  std::vector<AtspiNode> getChildren() const;
 
-  AtspiComponentInterface query_component() const;
+  AtspiComponentInterface queryComponent() const;
 };
 
 #endif  // LIB_ATSPI_ATSPI_NODE_H_

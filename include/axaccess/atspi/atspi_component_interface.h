@@ -13,10 +13,10 @@ class AtspiComponentInterface {
   AtspiComponentInterface() : interface_(nullptr){};
   ~AtspiComponentInterface(){};
 
-  bool is_null() const { return !interface_; }
-  std::string to_string() const;
-  std::pair<int, int> get_position() const;
-  std::pair<int, int> get_size() const;
+  bool isNull() const { return !interface_; }
+  std::string toString() const;
+  std::pair<int, int> getPosition() const;
+  std::pair<int, int> getSize() const;
 };
 
 #endif  // LIB_ATSPI_ATSPI_COMPONENT_H_

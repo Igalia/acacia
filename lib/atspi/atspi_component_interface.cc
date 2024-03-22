@@ -6,13 +6,13 @@
 #include <stdexcept>
 #include <string>
 
-std::string AtspiComponentInterface::to_string() const {
-  if (is_null()) {
+std::string AtspiComponentInterface::toString() const {
+  if (isNull()) {
     return "Not implemented";
   }
 
-  std::pair<int, int> position = get_position();
-  std::pair<int, int> size = get_size();
+  std::pair<int, int> position = getPosition();
+  std::pair<int, int> size = getSize();
   std::string result = "x:" + std::to_string(position.first) + ", " +
                        "y:" + std::to_string(position.second) + ", " +
                        "width:" + std::to_string(size.first) + ", " +
@@ -20,8 +20,8 @@ std::string AtspiComponentInterface::to_string() const {
   return result;
 }
 
-std::pair<int, int> AtspiComponentInterface::get_position() const {
-  if (is_null()) {
+std::pair<int, int> AtspiComponentInterface::getPosition() const {
+  if (isNull()) {
     return std::make_pair(0, 0);
   }
 
@@ -41,8 +41,8 @@ std::pair<int, int> AtspiComponentInterface::get_position() const {
   return result;
 }
 
-std::pair<int, int> AtspiComponentInterface::get_size() const {
-  if (is_null()) {
+std::pair<int, int> AtspiComponentInterface::getSize() const {
+  if (isNull()) {
     return std::make_pair(0, 0);
   }
 
