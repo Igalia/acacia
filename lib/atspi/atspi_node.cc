@@ -349,10 +349,88 @@ std::vector<AtspiNode> AtspiNode::getChildren() const {
   return result;
 }
 
+// For a TBD reason the ATSPI_IS_* macros are returning true even when the
+// interface is not implemented on the object. Therefore in all of the 'query'
+// functions below, we get (and immediately unref) the interface instead.
+
+AtspiActionInterface AtspiNode::queryAction() const {
+  AtspiAction* iface = atspi_accessible_get_action_iface(accessible_);
+  if (iface) {
+    g_object_unref(iface);
+    return AtspiActionInterface(ATSPI_ACTION(accessible_));
+  }
+
+  return AtspiActionInterface();
+}
+
 AtspiComponentInterface AtspiNode::queryComponent() const {
-  if (ATSPI_IS_COMPONENT(accessible_)) {
+  AtspiComponent* iface = atspi_accessible_get_component_iface(accessible_);
+  if (iface) {
+    g_object_unref(iface);
     return AtspiComponentInterface(ATSPI_COMPONENT(accessible_));
   }
 
   return AtspiComponentInterface();
+}
+
+AtspiDocumentInterface AtspiNode::queryDocument() const {
+  AtspiDocument* iface = atspi_accessible_get_document_iface(accessible_);
+  if (iface) {
+    g_object_unref(iface);
+    return AtspiDocumentInterface(ATSPI_DOCUMENT(accessible_));
+  }
+
+  return AtspiDocumentInterface();
+}
+
+AtspiHyperlinkInterface AtspiNode::queryHyperlink() const {
+  // Unlike the other interfaces, `get_hyperlink` gives us a new hyperlink
+  // object that serves as the interface. We unref it in the destructor.
+  AtspiHyperlink* hyperlink = atspi_accessible_get_hyperlink(accessible_);
+  if (hyperlink) {
+    AtspiHyperlinkInterface result = AtspiHyperlinkInterface(hyperlink);
+    return result;
+  }
+
+  return AtspiHyperlinkInterface();
+}
+
+AtspiTableInterface AtspiNode::queryTable() const {
+  AtspiTable* iface = atspi_accessible_get_table_iface(accessible_);
+  if (iface) {
+    g_object_unref(iface);
+    return AtspiTableInterface(ATSPI_TABLE(accessible_));
+  }
+
+  return AtspiTableInterface();
+}
+
+AtspiTableCellInterface AtspiNode::queryTableCell() const {
+  AtspiTableCell* iface = atspi_accessible_get_table_cell(accessible_);
+  if (iface) {
+    g_object_unref(iface);
+    return AtspiTableCellInterface(ATSPI_TABLE_CELL(accessible_));
+  }
+
+  return AtspiTableCellInterface();
+}
+
+AtspiTextInterface AtspiNode::queryText() const {
+  AtspiText* iface = atspi_accessible_get_text_iface(accessible_);
+  if (iface) {
+    g_object_unref(iface);
+    return AtspiTextInterface(ATSPI_TEXT(accessible_));
+  }
+
+  return AtspiTextInterface();
+}
+
+AtspiValueInterface AtspiNode::queryValue() const {
+  AtspiValue* iface = atspi_accessible_get_value_iface(accessible_);
+  if (iface) {
+    g_object_unref(iface);
+    return AtspiValueInterface(ATSPI_VALUE(accessible_));
+  }
+
+  return AtspiValueInterface();
 }

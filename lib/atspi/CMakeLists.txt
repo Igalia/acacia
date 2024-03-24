@@ -9,7 +9,14 @@ add_library(
 
   # Sources
   atspi_node.cc
+  atspi_action_interface.cc
   atspi_component_interface.cc
+  atspi_document_interface.cc
+  atspi_hyperlink_interface.cc
+  atspi_table_interface.cc
+  atspi_table_cell_interface.cc
+  atspi_text_interface.cc
+  atspi_value_interface.cc
   linux_utils.cc
 )
 

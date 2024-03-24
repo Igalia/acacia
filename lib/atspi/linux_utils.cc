@@ -12,6 +12,19 @@ std::string lower(const std::string& str) {
   return result;
 }
 
+std::string StringVectorToString(std::vector<std::string> strings) {
+  std::sort(strings.begin(), strings.end());
+  std::string result;
+  for (auto string : strings) {
+    result += string + ", ";
+  }
+  size_t pos = result.find_last_not_of(", ");
+  if (pos != std::string::npos) {
+    result = result.substr(0, pos + 1);
+  }
+  return result;
+}
+
 AtspiNode findRootAtspiNodeFromPID(const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);
 

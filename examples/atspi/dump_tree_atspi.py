@@ -22,6 +22,34 @@ def PrintNode(node, level):
     component = node.queryComponent()
     print(f"{'  ' * level}* Component: {component.toString()}")
 
+    action = node.queryAction()
+    if not action.isNull():
+        print(f"{'  ' * level}* Action: {action.toString()}")
+
+    document = node.queryDocument()
+    if not document.isNull():
+        print(f"{'  ' * level}* Document: {document.toString()}")
+
+    hyperlink = node.queryHyperlink()
+    if not hyperlink.isNull():
+        print(f"{'  ' * level}* Hyperlink: {hyperlink.toString()}")
+
+    table = node.queryTable()
+    if not table.isNull():
+        print(f"{'  ' * level}* Table: {table.toString()}")
+
+    tableCell = node.queryTableCell()
+    if not tableCell.isNull():
+        print(f"{'  ' * level}* Table Cell: {tableCell.toString()}")
+
+    text = node.queryText()
+    if not text.isNull():
+        print(f"{'  ' * level}* Text: {text.toString()}")
+
+    value = node.queryValue()
+    if not value.isNull():
+        print(f"{'  ' * level}* Value: {value.toString()}")
+
     for i in range(node.getChildCount()):
          PrintNode(node.getChildAtIndex(i), level + 1)
 

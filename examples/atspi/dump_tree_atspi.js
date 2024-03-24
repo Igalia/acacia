@@ -85,6 +85,41 @@ function PrintNode(node, level) {
   component = node.queryComponent();
   console.log('  '.repeat(level) + '* Component:' + component.toString());
 
+  action = node.queryAction();
+  if (!action.isNull()) {
+    console.log('  '.repeat(level) + '* Action:' + action.toString());
+  }
+
+  document = node.queryDocument();
+  if (!document.isNull()) {
+    console.log('  '.repeat(level) + '* Document:' + document.toString());
+  }
+
+  hyperlink = node.queryHyperlink();
+  if (!hyperlink.isNull()) {
+    console.log('  '.repeat(level) + '* Hyperlink:' + hyperlink.toString());
+  }
+
+  table = node.queryTable();
+  if (!table.isNull()) {
+    console.log('  '.repeat(level) + '* Table:' + table.toString());
+  }
+
+  tableCell = node.queryTableCell();
+  if (!tableCell.isNull()) {
+    console.log('  '.repeat(level) + '* Table Cell:' + tableCell.toString());
+  }
+
+  text = node.queryText();
+  if (!text.isNull()) {
+    console.log('  '.repeat(level) + '* Text:' + text.toString());
+  }
+
+  value = node.queryValue();
+  if (!value.isNull()) {
+    console.log('  '.repeat(level) + '* Value:' + value.toString());
+  }
+
   for (let i = 0; i < node.getChildCount(); i++) {
     PrintNode(node.getChildAtIndex(i), level + 1);
   }
