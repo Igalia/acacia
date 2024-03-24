@@ -17,27 +17,16 @@ namespace mac_inspect {
 
 class AXAPIContextImpl;
 
-enum class ValueType {
-  NOT_PRESENT,
-  UNKNOWN,
-  LIST,
-  BOOLEAN,
-  INT,
-  FLOAT,
-  STRING,
-  URL,
-  NODE,
-  POINT,
-  SIZE,
-  RECT,
-  RANGE,
-  DICTIONARY,
-  DATA,
-  TEXTMARKER,
-  TEXTMARKERRANGE,
-};
+template <typename T>
+class ScopedCFTypeRef;
 
-std::string ValueTypeToString(ValueType value_type);
+class Dictionary;
+class Point;
+class Size;
+class Rect;
+class Range;
+
+enum class ValueType;
 
 /**
  * Represents a node in the accessibility tree.
@@ -63,9 +52,27 @@ class AXAPINode {
 
   ValueType GetListAttributeElementType(const std::string& attribute) const;
 
+  int GetListAttributeValueCount(const std::string& attribute) const;
+
+  bool CopyBooleanAttributeValue(const std::string& attribute) const;
+
+  int CopyIntAttributeValue(const std::string& attribute) const;
+
+  float CopyFloatAttributeValue(const std::string& attribute) const;
+
   std::string CopyStringAttributeValue(const std::string& attribute) const;
 
-  int GetListAttributeValueCount(const std::string& attribute) const;
+  std::string CopyURLAttributeValue(const std::string& attribute) const;
+
+  AXAPINode CopyNodeAttributeValue(const std::string& attribute) const;
+
+  Point CopyPointAttributeValue(const std::string& attribute) const;
+
+  Size CopySizeAttributeValue(const std::string& attribute) const;
+
+  Rect CopyRectAttributeValue(const std::string& attribute) const;
+
+  Range CopyRangeAttributeValue(const std::string& attribute) const;
 
   std::vector<AXAPINode> CopyNodeListAttributeValue(
       const std::string& attribute) const;
@@ -73,13 +80,40 @@ class AXAPINode {
   AXAPINode CopyNodeListAttributeValueAtIndex(const std::string& attribute,
                                               int index) const;
 
+  std::vector<std::string> CopyStringListAttributeValue(
+      std::string& attribute) const;
+
+  std::string CopyStringListAttributeValueAtIndex(std::string& attribute,
+                                                  int index) const;
+
+  std::vector<Range> CopyRangeListAttributeValue(std::string& attribute) const;
+
+  Range CopyRangeListAttributeValueAtIndex(std::string& attribute,
+                                           int index) const;
+
+  std::vector<Dictionary> CopyDictionaryListAttributeValue(
+      std::string& attribute) const;
+
+  Dictionary CopyDictionaryListAttributeValueAtIndex(std::string& attribute,
+                                                     int index) const;
+
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
+
+  ScopedCFTypeRef<CFTypeRef> CopyRawAttributeValue(
+      const std::string& attribute,
+      ValueType expected_type) const;
+  ScopedCFTypeRef<CFArrayRef> CopyRawArrayAttributeValue(
+      const std::string& attribute) const;
+  ScopedCFTypeRef<CFTypeRef> CopyRawArrayAttributeValueAtIndex(
+      const std::string& attribute,
+      int index,
+      ValueType expected_type) const;
+
   AXUIElementRef ax_ui_element_{NULL};
 
-  bool HasAttribute(const CFStringRef attribute) const;
-
   friend class AXAPIContextImpl;
+  friend class Dictionary;
 };
 
 }  // namespace mac_inspect

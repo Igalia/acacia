@@ -8,6 +8,8 @@ add_library(
 
   # Sources
   axapi_node.mm
+  mac_data_types.mm
+  mac_helper_functions.mm
 )
 
 if (AXA_LIBAXACCESS)
