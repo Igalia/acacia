@@ -235,7 +235,8 @@ void CollectAttributeTypes(AXAPINode node,
           type_string = ValueTypeToString(type);
           AddValueExample(type, type_string, attribute, node, examples);
         }
-        attribute_types[attribute] = type_string;
+        if (!type_string.empty())
+          attribute_types[attribute] = type_string;
       }
     } catch (std::runtime_error e) {
       std::cerr << "caught: " << e.what() << "\n";
