@@ -280,15 +280,12 @@ AtspiNode AtspiNode::getTargetForRelationAtIndex(int relation_index,
 
   AtspiRelation* relation =
       g_array_index(relation_array, AtspiRelation*, relation_index);
-  int n_targets = atspi_relation_get_n_targets(relation);
-  if (target_index >= n_targets) {
-    std::string msg = "Target index " + std::to_string(target_index) +
-                      " exceeds target count " + std::to_string(n_targets);
+  AtspiAccessible* target = atspi_relation_get_target(relation, target_index);
+  if (!target) {
     g_array_free(relation_array, TRUE);
-    throw std::runtime_error(msg);
+    throw std::runtime_error("Target is null");
   }
 
-  AtspiAccessible* target = atspi_relation_get_target(relation, target_index);
   AtspiNode result = AtspiNode(target);
   g_array_free(relation_array, TRUE);
   return result;
