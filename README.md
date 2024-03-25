@@ -88,9 +88,19 @@ As well as a python module.
 >>> document = child.getTargetForRelationAtIndex(0)
 >>> document.getRoleName()
 'document web'
->>> component = child.queryComponent()
+>>> action = document.queryAction()
+>>> action.toString()
+'doDefault, scrollBackward, scrollDown, scrollForward, scrollLeft, scrollRight, scrollUp, showContextMenu'
+>>> component = document.queryComponent()
 >>> component.getSize()
-(3840, 2160)
+(3840, 2011)
+>>> document.queryDocument().getDocumentAttributes()
+('Title:Wikipedia, the free encyclopedia', 'MimeType:text/html', 'DocType:html', 'URI:https://en.wikipedia.org/wiki/Main_Page')
+>>> link = document.getChildAtIndex(0)
+>>> text = link.queryText()
+>>> text.getText(0, -1)
+'Jump to content'
+
 ```
 
 And a NodeJS module `atspi_inspect.node`.
@@ -118,6 +128,15 @@ And a NodeJS module `atspi_inspect.node`.
 > let document = child.getTargetForRelationAtIndex(1);
 > document.getRoleName();
 'document web'
+> document.queryDocument().getDocumentAttributes().get(1);
+'DocURL:https://en.wikipedia.org/wiki/Main_Page'
+> let link = document.getChildAtIndex(0);
+> let text = link.queryText();
+> text.getText(0, -1);
+'Jump to content'
+> let action = link.queryAction();
+> action.toString();
+'jump'
 > let component = child.queryComponent();
 > component.getSize();
 _exports_AtspiPairIntInt { second: 2098, first: 3840 }

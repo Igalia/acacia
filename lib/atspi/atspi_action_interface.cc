@@ -4,19 +4,21 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
+
+#include <axaccess/atspi/linux_utils.h>
 
 std::string AtspiActionInterface::toString() const {
   if (isNull()) {
     return "Not implemented";
   }
 
+  std::vector<std::string> result;
   int count = getNActions();
-  std::string result;
   for (int i = 0; i < count; ++i) {
-    std::string name = getName(i);
-    result += name + " ";
+    result.push_back(getName(i));
   }
-  return result;
+  return StringVectorToString(result);
 }
 
 int AtspiActionInterface::getNActions() const {
