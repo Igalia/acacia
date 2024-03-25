@@ -259,6 +259,38 @@ std::vector<std::string> AtspiNode::getRelations() const {
   return relations;
 }
 
+AtspiNode AtspiNode::getTargetForRelationAtIndex(int relation_index,
+                                                 int target_index) const {
+  GError* error = nullptr;
+  GArray* relation_array =
+      atspi_accessible_get_relation_set(accessible_, &error);
+  if (error) {
+    std::string err_msg = error->message;
+    g_error_free(error);
+    throw std::runtime_error(err_msg);
+  }
+
+  if (static_cast<uint>(relation_index) >= relation_array->len) {
+    std::string msg = "Relation index " + std::to_string(relation_index) +
+                      " exceeds relation count " +
+                      std::to_string(relation_array->len);
+    g_array_free(relation_array, TRUE);
+    throw std::runtime_error(msg);
+  }
+
+  AtspiRelation* relation =
+      g_array_index(relation_array, AtspiRelation*, relation_index);
+  AtspiAccessible* target = atspi_relation_get_target(relation, target_index);
+  if (!target) {
+    g_array_free(relation_array, TRUE);
+    throw std::runtime_error("Target is null");
+  }
+
+  AtspiNode result = AtspiNode(target);
+  g_array_free(relation_array, TRUE);
+  return result;
+}
+
 std::vector<std::string> AtspiNode::getStates() const {
   AtspiStateSet* atspi_states = atspi_accessible_get_state_set(accessible_);
   GArray* state_array = atspi_state_set_get_states(atspi_states);

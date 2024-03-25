@@ -22,6 +22,7 @@ namespace std {
 %catches(std::runtime_error) AtspiNode::getAttributes() const;
 %catches(std::runtime_error) AtspiNode::getInterfaces() const;
 %catches(std::runtime_error) AtspiNode::getRelations() const;
+%catches(std::runtime_error) AtspiNode::getTargetForRelationAtIndex(int relation_index, int target_index) const;
 %catches(std::runtime_error) AtspiNode::getStates() const;
 %catches(std::runtime_error) AtspiNode::getChildCount() const;
 %catches(std::runtime_error) AtspiNode::getChildAtIndex(int index) const;

@@ -28,6 +28,8 @@ class AtspiNode {
   std::vector<std::string> getAttributes() const;
   std::vector<std::string> getInterfaces() const;
   std::vector<std::string> getRelations() const;
+  AtspiNode getTargetForRelationAtIndex(int relation_index,
+                                        int target_index = 0) const;
   std::vector<std::string> getStates() const;
   int getChildCount() const;
   AtspiNode getChildAtIndex(int index) const;
