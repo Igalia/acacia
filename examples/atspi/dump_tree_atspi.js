@@ -95,11 +95,6 @@ function PrintNode(node, level) {
     console.log('  '.repeat(level) + '* Document:' + document.toString());
   }
 
-  hyperlink = node.queryHyperlink();
-  if (!hyperlink.isNull()) {
-    console.log('  '.repeat(level) + '* Hyperlink:' + hyperlink.toString());
-  }
-
   table = node.queryTable();
   if (!table.isNull()) {
     console.log('  '.repeat(level) + '* Table:' + table.toString());

@@ -9,7 +9,6 @@
 #include "axaccess/atspi/atspi_action_interface.h"
 #include "axaccess/atspi/atspi_component_interface.h"
 #include "axaccess/atspi/atspi_document_interface.h"
-#include "axaccess/atspi/atspi_hyperlink_interface.h"
 #include "axaccess/atspi/atspi_table_cell_interface.h"
 #include "axaccess/atspi/atspi_table_interface.h"
 #include "axaccess/atspi/atspi_text_interface.h"
@@ -45,7 +44,6 @@ class AtspiNode {
   AtspiActionInterface queryAction() const;
   AtspiComponentInterface queryComponent() const;
   AtspiDocumentInterface queryDocument() const;
-  AtspiHyperlinkInterface queryHyperlink() const;
   AtspiTableInterface queryTable() const;
   AtspiTableCellInterface queryTableCell() const;
   AtspiTextInterface queryText() const;

@@ -30,10 +30,6 @@ def PrintNode(node, level):
     if not document.isNull():
         print(f"{'  ' * level}* Document: {document.toString()}")
 
-    hyperlink = node.queryHyperlink()
-    if not hyperlink.isNull():
-        print(f"{'  ' * level}* Hyperlink: {hyperlink.toString()}")
-
     table = node.queryTable()
     if not table.isNull():
         print(f"{'  ' * level}* Table: {table.toString()}")

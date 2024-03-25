@@ -383,18 +383,6 @@ AtspiDocumentInterface AtspiNode::queryDocument() const {
   return AtspiDocumentInterface();
 }
 
-AtspiHyperlinkInterface AtspiNode::queryHyperlink() const {
-  // Unlike the other interfaces, `get_hyperlink` gives us a new hyperlink
-  // object that serves as the interface. We unref it in the destructor.
-  AtspiHyperlink* hyperlink = atspi_accessible_get_hyperlink(accessible_);
-  if (hyperlink) {
-    AtspiHyperlinkInterface result = AtspiHyperlinkInterface(hyperlink);
-    return result;
-  }
-
-  return AtspiHyperlinkInterface();
-}
-
 AtspiTableInterface AtspiNode::queryTable() const {
   AtspiTable* iface = atspi_accessible_get_table_iface(accessible_);
   if (iface) {
