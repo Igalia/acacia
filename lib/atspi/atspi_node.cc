@@ -253,7 +253,6 @@ std::vector<std::string> AtspiNode::getRelations() const {
     AtspiRelation* relation = g_array_index(relation_array, AtspiRelation*, i);
     AtspiRelationType relation_type =
         atspi_relation_get_relation_type(relation);
-    g_free(relation);
     relations.push_back(RelationTypeToString(relation_type));
   }
   g_array_free(relation_array, TRUE);
