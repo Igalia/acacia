@@ -60,6 +60,10 @@ target_link_libraries(
     "${ATSPI2_LIBRARIES}"
 )
 
+install(TARGETS
+  atspi_inspect LIBRARY
+)
+
 # SWIG Instructions to build library bindings to different languages
 # (only required if at least one binding is ON).
 
@@ -95,6 +99,20 @@ if (AXA_PYTHON_MODULE)
     TARGET atspi_python_inspect
     PROPERTY
       SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+  )
+
+  execute_process (
+    COMMAND python3 -c "import sys; ver_info = sys.version_info; print(f'python{ver_info[0]}.{ver_info[1]}', end='')"
+    OUTPUT_VARIABLE PY_MODULE_DIR
+  )
+
+  install(TARGETS
+    atspi_python_inspect
+      LIBRARY
+      DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
+  )
+  install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.py DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
   )
 endif()
 
@@ -148,5 +166,9 @@ if (AXA_NODEJS_MODULE)
       binding.gyp
       ${CMAKE_CURRENT_BINARY_DIR}/build
       atspi_inspect.node
+  )
+
+  install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.node DESTINATION "lib/node_modules"
   )
 endif (AXA_NODEJS_MODULE)
