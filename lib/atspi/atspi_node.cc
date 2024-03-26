@@ -349,11 +349,16 @@ std::vector<AtspiNode> AtspiNode::getChildren() const {
   return result;
 }
 
-// @FIXME: For a TBD reason the ATSPI_IS_* macros are returning true even when
-// the interface is not implemented on the object. Therefore in all of the
-// 'query' functions below, we get (and immediately unref) the interface
-// instead. See issue 167 filed against at-spi2-core.
-
+// N.B. Because GObject does not allow you to add an interface after the class
+// initialization, all possible interfaces must be added to AtspiAccessible
+// unconditionally. As a result, the ATSPI_IS_* macros return true even when the
+// interface is not implemented on the object. In addition, the function that
+// determines whether or not an object implements an interface is private
+// (_atspi_accessible_is_a). The creation of one or more public functions for
+// determining implemented interfaces at run time has been requested. In the
+// meantime, the only option we have is to get (and immediately unref) the
+// interface. See https://gitlab.gnome.org/GNOME/at-spi2-core/-/issues/167 for
+// details.
 AtspiActionInterface AtspiNode::queryAction() const {
   AtspiAction* iface = atspi_accessible_get_action_iface(accessible_);
   if (iface) {
