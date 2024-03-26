@@ -18,29 +18,26 @@ static std::string ToPrintableString(std::string str) {
 }
 
 std::string AtspiTextInterface::toString() const {
-  if (isNull()) {
+  if (isNull())
     return "Not implemented";
-  }
 
   std::string result;
-  long length = getCharacterCount();
+  int length = getCharacterCount();
   std::string content;
-  if (length < 50) {
+  if (length < 50)
     content = getText(0, length);
-  } else {
+  else
     content = getText(0, 20) + "[...]" + getText(length - 20, length);
-  }
   result += "'" + ToPrintableString(content) + "'";
   return result;
 }
 
 int AtspiTextInterface::getCaretOffset() const {
-  if (isNull()) {
+  if (isNull())
     return -1;
-  }
 
   GError* error = nullptr;
-  double result = atspi_text_get_caret_offset(interface_, &error);
+  int result = atspi_text_get_caret_offset(interface_, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -50,12 +47,11 @@ int AtspiTextInterface::getCaretOffset() const {
 }
 
 int AtspiTextInterface::getCharacterCount() const {
-  if (isNull()) {
+  if (isNull())
     return -1;
-  }
 
   GError* error = nullptr;
-  double result = atspi_text_get_character_count(interface_, &error);
+  int result = atspi_text_get_character_count(interface_, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -66,9 +62,8 @@ int AtspiTextInterface::getCharacterCount() const {
 
 std::string AtspiTextInterface::getText(int start_offset,
                                         int end_offset) const {
-  if (isNull()) {
+  if (isNull())
     return std::string();
-  }
 
   GError* error = nullptr;
   char* text =

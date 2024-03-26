@@ -6,9 +6,8 @@
 #include <string>
 
 std::string AtspiTableCellInterface::toString() const {
-  if (isNull()) {
+  if (isNull())
     return "Not implemented";
-  }
 
   return "row=" + std::to_string(getRowIndex()) +
          " column=" + std::to_string(getColumnIndex()) +
@@ -17,9 +16,8 @@ std::string AtspiTableCellInterface::toString() const {
 }
 
 std::pair<int, int> AtspiTableCellInterface::getPosition() const {
-  if (isNull()) {
+  if (isNull())
     return std::make_pair(0, 0);
-  }
 
   GError* error = nullptr;
   int row, column;
@@ -33,17 +31,12 @@ std::pair<int, int> AtspiTableCellInterface::getPosition() const {
 }
 
 int AtspiTableCellInterface::getColumnIndex() const {
-  if (isNull()) {
-    return 0;
-  }
-
-  return getPosition().second;
+  return isNull() ? 0 : getPosition().second;
 }
 
 int AtspiTableCellInterface::getColumnSpan() const {
-  if (isNull()) {
+  if (isNull())
     return 0;
-  }
 
   GError* error = nullptr;
   int result = atspi_table_cell_get_column_span(interface_, &error);
@@ -56,17 +49,12 @@ int AtspiTableCellInterface::getColumnSpan() const {
 }
 
 int AtspiTableCellInterface::getRowIndex() const {
-  if (isNull()) {
-    return 0;
-  }
-
-  return getPosition().first;
+  return isNull() ? 0 : getPosition().first;
 }
 
 int AtspiTableCellInterface::getRowSpan() const {
-  if (isNull()) {
+  if (isNull())
     return 0;
-  }
 
   GError* error = nullptr;
   int result = atspi_table_cell_get_row_span(interface_, &error);

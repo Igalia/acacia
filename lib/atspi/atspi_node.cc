@@ -349,9 +349,10 @@ std::vector<AtspiNode> AtspiNode::getChildren() const {
   return result;
 }
 
-// For a TBD reason the ATSPI_IS_* macros are returning true even when the
-// interface is not implemented on the object. Therefore in all of the 'query'
-// functions below, we get (and immediately unref) the interface instead.
+// @FIXME: For a TBD reason the ATSPI_IS_* macros are returning true even when
+// the interface is not implemented on the object. Therefore in all of the
+// 'query' functions below, we get (and immediately unref) the interface
+// instead. See issue 167 filed against at-spi2-core.
 
 AtspiActionInterface AtspiNode::queryAction() const {
   AtspiAction* iface = atspi_accessible_get_action_iface(accessible_);

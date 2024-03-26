@@ -6,9 +6,8 @@
 #include <string>
 
 std::string AtspiValueInterface::toString() const {
-  if (isNull()) {
+  if (isNull())
     return "Not implemented";
-  }
 
   return "current=" + std::to_string(getCurrentValue()) +
          " min=" + std::to_string(getMinimumValue()) +
@@ -16,9 +15,8 @@ std::string AtspiValueInterface::toString() const {
 }
 
 double AtspiValueInterface::getCurrentValue() const {
-  if (isNull()) {
+  if (isNull())
     return 0.0;
-  }
 
   GError* error = nullptr;
   double result = atspi_value_get_current_value(interface_, &error);
@@ -31,9 +29,8 @@ double AtspiValueInterface::getCurrentValue() const {
 }
 
 double AtspiValueInterface::getMaximumValue() const {
-  if (isNull()) {
+  if (isNull())
     return 0.0;
-  }
 
   GError* error = nullptr;
   double result = atspi_value_get_maximum_value(interface_, &error);
@@ -46,9 +43,8 @@ double AtspiValueInterface::getMaximumValue() const {
 }
 
 double AtspiValueInterface::getMinimumValue() const {
-  if (isNull()) {
+  if (isNull())
     return 0.0;
-  }
 
   GError* error = nullptr;
   double result = atspi_value_get_minimum_value(interface_, &error);

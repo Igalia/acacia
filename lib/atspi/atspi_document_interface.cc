@@ -8,9 +8,8 @@
 #include <axaccess/atspi/linux_utils.h>
 
 std::string AtspiDocumentInterface::toString() const {
-  if (isNull()) {
+  if (isNull())
     return "Not implemented";
-  }
 
   return "Attributes=" + StringVectorToString(getDocumentAttributes()) +
          " Locale=" + getLocale();
@@ -41,9 +40,8 @@ std::vector<std::string> AtspiDocumentInterface::getDocumentAttributes() const {
 }
 
 std::string AtspiDocumentInterface::getLocale() const {
-  if (isNull()) {
+  if (isNull())
     std::string();
-  }
 
   GError* error = nullptr;
   char* locale = atspi_document_get_locale(interface_, &error);

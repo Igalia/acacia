@@ -9,9 +9,8 @@
 #include <axaccess/atspi/linux_utils.h>
 
 std::string AtspiActionInterface::toString() const {
-  if (isNull()) {
+  if (isNull())
     return "Not implemented";
-  }
 
   std::vector<std::string> result;
   int count = getNActions();
@@ -22,9 +21,8 @@ std::string AtspiActionInterface::toString() const {
 }
 
 int AtspiActionInterface::getNActions() const {
-  if (isNull()) {
+  if (isNull())
     return 0;
-  }
 
   GError* error = nullptr;
   int result = atspi_action_get_n_actions(interface_, &error);
@@ -37,9 +35,8 @@ int AtspiActionInterface::getNActions() const {
 }
 
 std::string AtspiActionInterface::getName(int index) const {
-  if (isNull()) {
+  if (isNull())
     std::string();
-  }
 
   GError* error = nullptr;
   char* name = atspi_action_get_name(interface_, index, &error);
@@ -54,9 +51,8 @@ std::string AtspiActionInterface::getName(int index) const {
 }
 
 std::string AtspiActionInterface::getDescription(int index) const {
-  if (isNull()) {
+  if (isNull())
     std::string();
-  }
 
   GError* error = nullptr;
   char* description = atspi_action_get_description(interface_, index, &error);

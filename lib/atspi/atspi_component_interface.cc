@@ -7,9 +7,8 @@
 #include <string>
 
 std::string AtspiComponentInterface::toString() const {
-  if (isNull()) {
+  if (isNull())
     return "Not implemented";
-  }
 
   std::pair<int, int> position = getPosition();
   std::pair<int, int> size = getSize();
@@ -21,9 +20,8 @@ std::string AtspiComponentInterface::toString() const {
 }
 
 std::pair<int, int> AtspiComponentInterface::getPosition() const {
-  if (isNull()) {
+  if (isNull())
     return std::make_pair(0, 0);
-  }
 
   // N.B. We always ask for WINDOW coordinates because in Wayland we cannot get
   // the SCREEN coordinates. And some implementations (e.g. GTK4) don't
@@ -42,9 +40,8 @@ std::pair<int, int> AtspiComponentInterface::getPosition() const {
 }
 
 std::pair<int, int> AtspiComponentInterface::getSize() const {
-  if (isNull()) {
+  if (isNull())
     return std::make_pair(0, 0);
-  }
 
   GError* error = nullptr;
   AtspiPoint* size = atspi_component_get_size(interface_, &error);
