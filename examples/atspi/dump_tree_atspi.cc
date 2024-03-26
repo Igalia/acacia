@@ -115,9 +115,9 @@ int main(int argc, char** argv) {
 
   AtspiNode root;
   if (!name.empty()) {
-    root = findRootAtspiNodeFromName(name, pid);
+    root = findRootAtspiNodeForName(name, pid);
   } else {
-    root = findRootAtspiNodeFromPID(pid);
+    root = findRootAtspiNodeForPID(pid);
   }
 
   if (root.isNull()) {

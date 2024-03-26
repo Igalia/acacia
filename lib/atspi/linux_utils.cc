@@ -12,7 +12,7 @@ std::string lower(const std::string& str) {
   return result;
 }
 
-AtspiNode findRootAtspiNodeFromPID(const int pid) {
+AtspiNode findRootAtspiNodeForPID(const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);
 
   GError* error = nullptr;
@@ -44,7 +44,7 @@ handle_gerror:
   throw std::runtime_error(err_msg);
 }
 
-AtspiNode findRootAtspiNodeFromName(const std::string& name, const int pid) {
+AtspiNode findRootAtspiNodeForName(const std::string& name, const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);
   std::string lower_name = lower(name);
 

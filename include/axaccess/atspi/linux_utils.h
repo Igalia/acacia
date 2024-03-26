@@ -21,7 +21,7 @@
  *
  * @returns A unique pointer wrapping an AtspiNode.
  */
-AtspiNode findRootAtspiNodeFromPID(const int pid);
+AtspiNode findRootAtspiNodeForPID(const int pid);
 
 /**
  * Returns the root node of the accessible tree of a running application
@@ -33,6 +33,6 @@ AtspiNode findRootAtspiNodeFromPID(const int pid);
  *
  * @returns A unique pointer wrapping an AtspiNode.
  */
-AtspiNode findRootAtspiNodeFromName(const std::string& name, const int pid = 0);
+AtspiNode findRootAtspiNodeForName(const std::string& name, const int pid = 0);
 
 #endif  // LIB_ATSPI_LINUX_UTILS_H_
