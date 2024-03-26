@@ -8,8 +8,14 @@
       ],
       "sources": [
         "../../../lib/atspi/linux_utils.cc",
+        "../../../lib/atspi/atspi_action_interface.cc",
         "../../../lib/atspi/atspi_component_interface.cc",
+        "../../../lib/atspi/atspi_document_interface.cc",
         "../../../lib/atspi/atspi_node.cc",
+        "../../../lib/atspi/atspi_table_interface.cc",
+        "../../../lib/atspi/atspi_table_cell_interface.cc",
+        "../../../lib/atspi/atspi_text_interface.cc",
+        "../../../lib/atspi/atspi_value_interface.cc",
         "./atspi_nodejs_inspect_wrap.cxx",
       ],
       "cflags": [

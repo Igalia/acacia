@@ -6,6 +6,8 @@
 
 #include <axaccess/atspi/linux_utils.h>
 
+#include "lib/utils.h"
+
 static void PrintUsage(std::string& program_path) {
   std::string program_name = program_path;
   size_t pos = program_name.find_last_of("/");
@@ -41,19 +43,6 @@ static std::map<std::string, std::string> ParseArguments(int argc,
   return argument_map;
 }
 
-static std::string StringVectorToString(std::vector<std::string> strings) {
-  std::sort(strings.begin(), strings.end());
-  std::string result;
-  for (auto string : strings) {
-    result += string + ", ";
-  }
-  size_t pos = result.find_last_not_of(", ");
-  if (pos != std::string::npos) {
-    result = result.substr(0, pos + 1);
-  }
-  return result;
-}
-
 static void PrintNode(AtspiNode node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
@@ -80,8 +69,40 @@ static void PrintNode(AtspiNode node, int level) {
               << ")\n";
   }
 
+  // We don't check if this is null because pretty much everything implements
+  // it.
   AtspiComponentInterface component = node.queryComponent();
   std::cout << indent << "* Component: " << component.toString() << "\n";
+
+  AtspiActionInterface action = node.queryAction();
+  if (!action.isNull()) {
+    std::cout << indent << "* Action: " << action.toString() << "\n";
+  }
+
+  AtspiDocumentInterface document = node.queryDocument();
+  if (!document.isNull()) {
+    std::cout << indent << "* Document: " << document.toString() << "\n";
+  }
+
+  AtspiTableInterface table = node.queryTable();
+  if (!table.isNull()) {
+    std::cout << indent << "* Table: " << table.toString() << "\n";
+  }
+
+  AtspiTableCellInterface table_cell = node.queryTableCell();
+  if (!table_cell.isNull()) {
+    std::cout << indent << "* Table Cell: " << table_cell.toString() << "\n";
+  }
+
+  AtspiTextInterface text = node.queryText();
+  if (!text.isNull()) {
+    std::cout << indent << "* Text: " << text.toString() << "\n";
+  }
+
+  AtspiValueInterface value = node.queryValue();
+  if (!value.isNull()) {
+    std::cout << indent << "* Value: " << value.toString() << "\n";
+  }
 
   int32_t child_count = node.getChildCount();
   for (auto i = 0; i < child_count; i++) {
