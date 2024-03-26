@@ -35,14 +35,4 @@ AtspiNode findRootAtspiNodeFromPID(const int pid);
  */
 AtspiNode findRootAtspiNodeFromName(const std::string& name, const int pid = 0);
 
-/**
- * Returns a single string containing the contents of vector.
- * @ingroup atspi
- *
- * @param strings: The vector of strings to be concatenated.
- *
- * @returns A string with the concatenated contents.
- */
-std::string StringVectorToString(std::vector<std::string> strings);
-
 #endif  // LIB_ATSPI_LINUX_UTILS_H_

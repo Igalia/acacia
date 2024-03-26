@@ -5,6 +5,7 @@
 #include <string>
 
 #include <axaccess/atspi/linux_utils.h>
+#include <axaccess/utils.h>
 
 static void PrintUsage(std::string& program_path) {
   std::string program_name = program_path;

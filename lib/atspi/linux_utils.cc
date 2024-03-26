@@ -1,29 +1,9 @@
-#include <algorithm>
 #include <iostream>
 #include <ostream>
 #include <string>
 
 #include <axaccess/atspi/linux_utils.h>
-
-std::string lower(const std::string& str) {
-  std::string result = str;
-  std::transform(result.begin(), result.end(), result.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-  return result;
-}
-
-std::string StringVectorToString(std::vector<std::string> strings) {
-  std::sort(strings.begin(), strings.end());
-  std::string result;
-  for (auto string : strings) {
-    result += string + ", ";
-  }
-  size_t pos = result.find_last_not_of(", ");
-  if (pos != std::string::npos) {
-    result = result.substr(0, pos + 1);
-  }
-  return result;
-}
+#include <axaccess/utils.h>
 
 AtspiNode findRootAtspiNodeFromPID(const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);

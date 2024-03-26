@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-#include <axaccess/atspi/linux_utils.h>
+#include <axaccess/utils.h>
 
 std::string AtspiDocumentInterface::toString() const {
   if (isNull())

@@ -24,6 +24,7 @@ if (AXA_LIBAXACCESS)
     AXA_SOURCES
     context.cc
     node.cc
+    utils.h
   )
 
   target_compile_definitions(
