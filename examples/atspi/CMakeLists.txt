@@ -9,6 +9,8 @@ target_link_libraries(
     atspi_inspect
 )
 
+target_include_directories(dump_tree_atspi PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
 if (AXA_PYTHON_MODULE)
   add_custom_target(
     dump_tree_atspi.py

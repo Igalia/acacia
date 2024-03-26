@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include <axaccess/utils.h>
+#include "../utils.h"
 
 std::string AtspiActionInterface::toString() const {
   if (isNull())

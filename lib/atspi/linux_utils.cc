@@ -3,7 +3,8 @@
 #include <string>
 
 #include <axaccess/atspi/linux_utils.h>
-#include <axaccess/utils.h>
+
+#include "../utils.h"
 
 AtspiNode findRootAtspiNodeFromPID(const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);
