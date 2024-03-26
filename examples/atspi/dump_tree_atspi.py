@@ -46,10 +46,10 @@ def main():
         if pid:
             msg += f" and pid {pid}"
         print(f"{msg}.")
-        root = atspi_inspect.findRootAtspiNodeFromName(name, pid)
+        root = atspi_inspect.findRootAtspiNodeForName(name, pid)
     else:
         print(f"Searching for application with pid {pid}.")
-        root = atspi_inspect.findRootAtspiNodeFromPID(pid)
+        root = atspi_inspect.findRootAtspiNodeForPID(pid)
     if root.isNull():
         print("Error: Application not found.")
         sys.exit()

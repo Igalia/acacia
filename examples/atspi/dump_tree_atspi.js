@@ -34,10 +34,10 @@ if (name.length) {
     msg += ' and pid ' + pid;
   }
   console.log(msg + '.');
-  root = atspi.findRootAtspiNodeFromName(name, pid);
+  root = atspi.findRootAtspiNodeForName(name, pid);
 } else {
   console.log('Searching for application with pid ' + pid + '.');
-  root = atspi.findRootAtspiNodeFromPID(pid);
+  root = atspi.findRootAtspiNodeForPID(pid);
 }
 
 

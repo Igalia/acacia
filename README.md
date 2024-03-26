@@ -75,7 +75,7 @@ As well as a python module.
 % cd build/lib/atspi/
 % python
 >>> import atspi_inspect
->>> node = atspi_inspect.findRootAtspiNodeFromName("chromium")
+>>> node = atspi_inspect.findRootAtspiNodeForName("chromium")
 >>> node.getRoleName()
 'application'
 >>> node.getName()
@@ -98,7 +98,7 @@ And a NodeJS module `atspi_inspect.node`.
 % cd build/lib/atspi/
 % node
 > const atspi_inspect = require("./atspi_inspect");
-> let node = atspi_inspect.findRootAtspiNodeFromName('firefox');
+> let node = atspi_inspect.findRootAtspiNodeForName('firefox');
 > node.getRoleName();
 'application'
 > node.getName();
