@@ -4,7 +4,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 13.0)
 
 add_library(
   # Name
-  mac_inspect
+  axapi_inspect
 
   # Sources
   axapi_node.mm
@@ -14,7 +14,7 @@ add_library(
 
 if (AXA_LIBAXACCESS)
   target_sources(
-    mac_inspect
+    axapi_inspect
     PRIVATE
       axapi_context_impl.cc
       axapi_node_impl.cc
@@ -27,7 +27,7 @@ find_library(FOUNDATION_FRAMEWORK Foundation)
 cmake_print_variables(FOUNDATION_FRAMEWORK)
 
 target_include_directories(
-  mac_inspect
+  axapi_inspect
 
   PUBLIC
     ${PROJECT_BINARY_DIR}/include
@@ -35,7 +35,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-  mac_inspect
+  axapi_inspect
 
   PRIVATE
     ${APPLICATION_SERVICES_FRAMEWORK}
@@ -50,7 +50,7 @@ if (AXA_PYTHON_MODULE OR AXA_NODEJS_MODULE)
   include(UseSWIG)
 endif()
 
-# SWIG Instructions to build a python module called "mac_inspect"
+# SWIG Instructions to build a python module called "axapi_inspect"
 
 if (AXA_PYTHON_MODULE)
   find_package(Python3 COMPONENTS Interpreter Development)
@@ -58,18 +58,18 @@ if (AXA_PYTHON_MODULE)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
   include_directories(${Python3_INCLUDE_DIRS})
 
-  set_property(SOURCE mac_inspect.i PROPERTY CPLUSPLUS ON)
+  set_property(SOURCE axapi_inspect.i PROPERTY CPLUSPLUS ON)
 
   swig_add_library(
     # The name of the c++ library used by python module
-    mac_python_inspect
+    python_axapi_inspect
     TYPE SHARED
     LANGUAGE python
-    SOURCES mac_inspect.i
+    SOURCES axapi_inspect.i
   )
 
   set_target_properties(
-    mac_python_inspect
+    python_axapi_inspect
 
     PROPERTIES
     SUFFIX .so
@@ -77,15 +77,15 @@ if (AXA_PYTHON_MODULE)
 
   target_link_libraries(
     # Target to link
-    mac_python_inspect
+    python_axapi_inspect
 
     # Items to link into the target
-    mac_inspect
+    axapi_inspect
     ${Python3_LIBRARIES}
   )
 
   set_property(
-    TARGET mac_python_inspect
+    TARGET python_axapi_inspect
     PROPERTY
       SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
   )
@@ -105,22 +105,22 @@ if (AXA_NODEJS_MODULE)
 
   # Final cmake target and proper destination for the NodeJS module
   add_custom_target(
-    mac_inspect.node ALL
+    axapi_inspect.node ALL
     DEPENDS
-      "${CMAKE_CURRENT_BINARY_DIR}/mac_nodejs_inspect_wrap.cxx"
+      "${CMAKE_CURRENT_BINARY_DIR}/nodejs_axapi_inspect_wrap.cxx"
     COMMAND
       ${NODE_GYP} configure build
     COMMAND
-      ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/mac_inspect.node" .
+      ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/axapi_inspect.node" .
     VERBATIM
   )
 
   set_property(
-    TARGET mac_inspect.node
+    TARGET axapi_inspect.node
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
       ${CMAKE_CURRENT_BINARY_DIR}/build
-      mac_inspect.node
+      axapi_inspect.node
   )
 
   # Generate `binding.gyp` file for node-gyp
@@ -130,10 +130,10 @@ if (AXA_NODEJS_MODULE)
 
   # Generate C++ wrapper for NodeJS
   add_custom_command(
-    OUTPUT mac_nodejs_inspect_wrap.cxx
-    DEPENDS mac_inspect
+    OUTPUT nodejs_axapi_inspect_wrap.cxx
+    DEPENDS axapi_inspect
     COMMAND
-      swig -c++ -javascript -node -o mac_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/mac_inspect.i
+      swig -c++ -javascript -node -o nodejs_axapi_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/axapi_inspect.i
     VERBATIM
   )
 

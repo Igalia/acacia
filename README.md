@@ -189,32 +189,32 @@ As well as a python module:
 ```
 % cd build/lib/mac/
 % python3
->>> import mac_inspect
->>> app = mac_inspect.AXAPINode.CreateForPID(12345)
->>> attribute_names = app.CopyAttributeNames()
->>> role = app.CopyStringAttributeValue('AXRole')
->>> title = app.CopyStringAttributeValue('AXTitle')
->>> children_count = app.GetListAttributeValueCount('AXChildren')
+>>> import axapi_inspect
+>>> app = axapi_inspect.findRootAXAPINodeForPID(12345)
+>>> attribute_names = app.getAttributeNames()
+>>> role = app.getStringValue('AXRole')
+>>> title = app.getStringValue('AXTitle')
+>>> children_count = app.getListElementCount('AXChildren')
 >>> if children_count > 0:
-...   first_child = app.CopyNodeListAttributeValueAtIndex('AXChildren', 0)
->>> children = CopyNodeListAttributeValue('AXChildren')
->>> if first_child.HasAttribute('AXRoleDescription)
-...   role_description = first_child.CopyStringAttributeValue('AXRoleDescription')
+...   first_child = app.getNodeListValueAtIndex('AXChildren', 0)
+>>> children = app.getNodeListValue('AXChildren')
+>>> if first_child.hasAttribute('AXRoleDescription'):
+...   role_description = first_child.getStringValue('AXRoleDescription')
 ```
 
 And a node C++ add-on:
 ```
 % cd build/lib/mac/
 % node
-> const mac_inspect = require("./mac_inspect");
-> let app = mac_inspect.AXAPINode.CreateForPID(12345);
-> const title = app.CopyStringAttributeValue('AXTitle');
+> const axapi_inspect = require("./axapi_inspect");
+> let app = axapi_inspect.findRootAXAPINodeForPID(1693);
+> const title = app.getStringValue('AXTitle');
 > let children_count = 0;
-> if (app.HasAttribute('AXChildren'))
-... children_count = app.GetListAttributeValueCount('AXChildren');
+> if (app.hasAttribute('AXChildren'))
+... children_count = app.getListElementCount('AXChildren');
 > let first_child;
 > if (children_count > 0)
-... first_child = app.CopyNodeListAttributeValueAtIndex('AXChildren', 0);
+... first_child = app.getNodeListValueAtIndex('AXChildren', 0);
 ```
 
 ### On Windows

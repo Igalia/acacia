@@ -45,13 +45,13 @@ void AddListValueExample(ValueType type,
   string value_string;
   switch (list_type) {
     case ValueType::NODE: {
-      int num_elements = node.GetListAttributeValueCount(attribute);
+      int num_elements = node.getListElementCount(attribute);
       value_string = "[" + std::to_string(num_elements) + " node" +
                      (num_elements == 1 ? "" : "s") + "]";
       break;
     }
     case ValueType::STRING: {
-      vector<string> values = node.CopyStringListAttributeValue(attribute);
+      vector<string> values = node.getStringListValue(attribute);
       if (values.empty()) {
         value_string = "[]";
         break;
@@ -66,8 +66,7 @@ void AddListValueExample(ValueType type,
       break;
     }
     case ValueType::RANGE: {
-      vector<mac_inspect::Range> values =
-          node.CopyRangeListAttributeValue(attribute);
+      vector<mac_inspect::Range> values = node.getRangeListValue(attribute);
       if (values.empty()) {
         value_string = "[]";
         break;
@@ -83,7 +82,7 @@ void AddListValueExample(ValueType type,
     }
     case ValueType::DICTIONARY: {
       mac_inspect::Dictionary dict =
-          node.CopyDictionaryListAttributeValueAtIndex(attribute, 0);
+          node.getDictionaryListValueAtIndex(attribute, 0);
       vector<string> keys = dict.keys();
       value_string = "first value: {\n";
       for (string& key : keys) {
@@ -97,9 +96,8 @@ void AddListValueExample(ValueType type,
           case ValueType::NODE: {
             AXAPINode value = dict.getNodeValue(key);
             value_string += "  \"" + key + "\": ";
-            if (value.HasAttribute("AXTitle"))
-              value_string +=
-                  "(" + value.CopyStringAttributeValue("AXTitle") + ")";
+            if (value.hasAttribute("AXTitle"))
+              value_string += "(" + value.getStringValue("AXTitle") + ")";
             else
               value_string += "[unnamed node]";
             value_string += "\n";
@@ -147,51 +145,51 @@ void AddValueExample(ValueType type,
   string value_string;
   switch (type) {
     case ValueType::BOOLEAN: {
-      bool value = node.CopyBooleanAttributeValue(attribute);
+      bool value = node.getBooleanValue(attribute);
       value_string = value ? "true" : "false";
       break;
     }
     case ValueType::INT: {
-      int value = node.CopyIntAttributeValue(attribute);
+      int value = node.getIntValue(attribute);
       value_string = std::to_string(value);
       break;
     }
     case ValueType::FLOAT: {
-      float value = node.CopyFloatAttributeValue(attribute);
+      float value = node.getFloatValue(attribute);
       value_string = std::to_string(value);
       break;
     }
     case ValueType::STRING: {
-      value_string = "\"" + node.CopyStringAttributeValue(attribute) + "\"";
+      value_string = "\"" + node.getStringValue(attribute) + "\"";
       break;
     }
     case ValueType::URL: {
-      value_string = "\"" + node.CopyURLAttributeValue(attribute) + "\"";
+      value_string = "\"" + node.getURLValue(attribute) + "\"";
       break;
     }
     case ValueType::NODE: {
-      AXAPINode value = node.CopyNodeAttributeValue(attribute);
-      if (value.HasAttribute("AXTitle"))
-        value_string = "(" + value.CopyStringAttributeValue("AXTitle") + ")";
+      AXAPINode value = node.getNodeValue(attribute);
+      if (value.hasAttribute("AXTitle"))
+        value_string = "(" + value.getStringValue("AXTitle") + ")";
       break;
     }
     case ValueType::POINT: {
-      mac_inspect::Point value = node.CopyPointAttributeValue(attribute);
+      mac_inspect::Point value = node.getPointValue(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::SIZE: {
-      mac_inspect::Size value = node.CopySizeAttributeValue(attribute);
+      mac_inspect::Size value = node.getSizeValue(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::RECT: {
-      mac_inspect::Rect value = node.CopyRectAttributeValue(attribute);
+      mac_inspect::Rect value = node.getRectValue(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::RANGE: {
-      mac_inspect::Range value = node.CopyRangeAttributeValue(attribute);
+      mac_inspect::Range value = node.getRangeValue(attribute);
       value_string = value.ToString();
       break;
     }
@@ -211,7 +209,7 @@ void AddValueExample(ValueType type,
 void CollectAttributeTypes(AXAPINode node,
                            map<string, string>& attribute_types,
                            map<string, map<string, string>>& examples) {
-  vector<string> attributes = node.CopyAttributeNames();
+  vector<string> attributes = node.getAttributeNames();
   for (const string& attribute : attributes) {
     try {
       // TODO: Some attributes map to *multiple* types. This should map to a
@@ -219,12 +217,12 @@ void CollectAttributeTypes(AXAPINode node,
       if (attribute_types.count(attribute) > 0)
         continue;
 
-      ValueType type = node.GetAttributeValueType(attribute);
+      ValueType type = node.getValueType(attribute);
 
       std::string type_string;
       if (type != ValueType::NOT_PRESENT) {
         if (type == ValueType::LIST) {
-          ValueType list_type = node.GetListAttributeElementType(attribute);
+          ValueType list_type = node.getListElementType(attribute);
           if (list_type != ValueType::UNKNOWN) {
             type_string = ValueTypeToString(type) + "<" +
                           ValueTypeToString(list_type) + ">";
@@ -247,11 +245,11 @@ void CollectAttributeTypes(AXAPINode node,
     }
   }
 
-  if (!node.HasAttribute("AXChildren"))
+  if (!node.hasAttribute("AXChildren"))
     return;
 
   try {
-    vector<AXAPINode> children = node.CopyNodeListAttributeValue("AXChildren");
+    vector<AXAPINode> children = node.getNodeListValue("AXChildren");
     for (AXAPINode& child : children)
       CollectAttributeTypes(child, attribute_types, examples);
   } catch (...) {
@@ -259,7 +257,7 @@ void CollectAttributeTypes(AXAPINode node,
 }
 
 void LogAllAttributeValueTypesAndExamples(pid_t pid) {
-  AXAPINode application = AXAPINode::CreateForPID(pid);
+  AXAPINode application = mac_inspect::findRootAXAPINodeForPID(pid);
   map<string, string> attribute_types;
   map<string, map<string, string>> examples;
 

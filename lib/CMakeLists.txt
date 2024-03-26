@@ -60,7 +60,7 @@ if (AXA_LIBAXACCESS)
     target_link_libraries(
       axaccess
       PRIVATE
-        mac_inspect
+        axapi_inspect
     )
   endif (APPLE)
 endif (AXA_LIBAXACCESS)

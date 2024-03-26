@@ -20,6 +20,7 @@ class AXAPIContextImpl;
 template <typename T>
 class ScopedCFTypeRef;
 
+class AXAPINode;
 class Dictionary;
 class Point;
 class Size;
@@ -27,6 +28,8 @@ class Rect;
 class Range;
 
 enum class ValueType;
+
+AXAPINode findRootAXAPINodeForPID(int pid);
 
 /**
  * Represents a node in the accessibility tree.
@@ -40,72 +43,67 @@ class AXAPINode {
 
   AXAPINode& operator=(AXAPINode other);
 
-  static AXAPINode CreateForPID(int pid);
+  bool isNull();
 
-  bool IsNull();
+  std::vector<std::string> getAttributeNames() const;
 
-  std::vector<std::string> CopyAttributeNames() const;
+  bool hasAttribute(const std::string& attribute) const;
 
-  bool HasAttribute(const std::string& attribute) const;
+  ValueType getValueType(const std::string& attribute) const;
 
-  ValueType GetAttributeValueType(const std::string& attribute) const;
+  ValueType getListElementType(const std::string& attribute) const;
 
-  ValueType GetListAttributeElementType(const std::string& attribute) const;
+  int getListElementCount(const std::string& attribute) const;
 
-  int GetListAttributeValueCount(const std::string& attribute) const;
+  bool getBooleanValue(const std::string& attribute) const;
 
-  bool CopyBooleanAttributeValue(const std::string& attribute) const;
+  int getIntValue(const std::string& attribute) const;
 
-  int CopyIntAttributeValue(const std::string& attribute) const;
+  float getFloatValue(const std::string& attribute) const;
 
-  float CopyFloatAttributeValue(const std::string& attribute) const;
+  std::string getStringValue(const std::string& attribute) const;
 
-  std::string CopyStringAttributeValue(const std::string& attribute) const;
+  std::string getURLValue(const std::string& attribute) const;
 
-  std::string CopyURLAttributeValue(const std::string& attribute) const;
+  AXAPINode getNodeValue(const std::string& attribute) const;
 
-  AXAPINode CopyNodeAttributeValue(const std::string& attribute) const;
+  Point getPointValue(const std::string& attribute) const;
 
-  Point CopyPointAttributeValue(const std::string& attribute) const;
+  Size getSizeValue(const std::string& attribute) const;
 
-  Size CopySizeAttributeValue(const std::string& attribute) const;
+  Rect getRectValue(const std::string& attribute) const;
 
-  Rect CopyRectAttributeValue(const std::string& attribute) const;
+  Range getRangeValue(const std::string& attribute) const;
 
-  Range CopyRangeAttributeValue(const std::string& attribute) const;
+  std::vector<AXAPINode> getNodeListValue(const std::string& attribute) const;
 
-  std::vector<AXAPINode> CopyNodeListAttributeValue(
-      const std::string& attribute) const;
+  AXAPINode getNodeListValueAtIndex(const std::string& attribute,
+                                    int index) const;
 
-  AXAPINode CopyNodeListAttributeValueAtIndex(const std::string& attribute,
-                                              int index) const;
+  std::vector<std::string> getStringListValue(std::string& attribute) const;
 
-  std::vector<std::string> CopyStringListAttributeValue(
-      std::string& attribute) const;
+  std::string getStringListValueAtIndex(std::string& attribute,
+                                        int index) const;
 
-  std::string CopyStringListAttributeValueAtIndex(std::string& attribute,
-                                                  int index) const;
+  std::vector<Range> getRangeListValue(std::string& attribute) const;
 
-  std::vector<Range> CopyRangeListAttributeValue(std::string& attribute) const;
+  Range getRangeListValueAtIndex(std::string& attribute, int index) const;
 
-  Range CopyRangeListAttributeValueAtIndex(std::string& attribute,
+  std::vector<Dictionary> getDictionaryListValue(std::string& attribute) const;
+
+  Dictionary getDictionaryListValueAtIndex(std::string& attribute,
                                            int index) const;
 
-  std::vector<Dictionary> CopyDictionaryListAttributeValue(
-      std::string& attribute) const;
-
-  Dictionary CopyDictionaryListAttributeValueAtIndex(std::string& attribute,
-                                                     int index) const;
+  friend AXAPINode findRootAXAPINodeForPID(int pid);
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
 
-  ScopedCFTypeRef<CFTypeRef> CopyRawAttributeValue(
-      const std::string& attribute,
-      ValueType expected_type) const;
-  ScopedCFTypeRef<CFArrayRef> CopyRawArrayAttributeValue(
+  ScopedCFTypeRef<CFTypeRef> GetRawValue(const std::string& attribute,
+                                         ValueType expected_type) const;
+  ScopedCFTypeRef<CFArrayRef> GetRawArrayValue(
       const std::string& attribute) const;
-  ScopedCFTypeRef<CFTypeRef> CopyRawArrayAttributeValueAtIndex(
+  ScopedCFTypeRef<CFTypeRef> GetRawArrayValueAtIndex(
       const std::string& attribute,
       int index,
       ValueType expected_type) const;

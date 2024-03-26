@@ -35,7 +35,6 @@ class Point {
  public:
   Point() {}
   Point(const Point&) = default;
-  Point(Point&&) = default;
   Point& operator=(const Point&) = default;
   Point& operator=(Point&) = default;
 
@@ -58,7 +57,6 @@ class Size {
  public:
   Size() {}
   Size(const Size&) = default;
-  Size(Size&&) = default;
   Size& operator=(const Size&) = default;
   Size& operator=(Size&) = default;
 
@@ -81,7 +79,6 @@ class Rect {
  public:
   Rect() {}
   Rect(const Rect&) = default;
-  Rect(Rect&&) = default;
   Rect& operator=(const Rect&) = default;
   Rect& operator=(Rect&) = default;
 
@@ -105,7 +102,6 @@ class Range {
  public:
   Range() {}
   Range(const Range&) = default;
-  Range(Range&&) = default;
   Range& operator=(const Range&) = default;
   Range& operator=(Range&) = default;
 
@@ -126,7 +122,6 @@ class Dictionary {
  public:
   Dictionary() {}
   Dictionary(const Dictionary&) = default;
-  Dictionary(Dictionary&&) = default;
   Dictionary& operator=(const Dictionary&) = default;
   Dictionary& operator=(Dictionary&) = default;
 

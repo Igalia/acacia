@@ -13,7 +13,7 @@ target_link_libraries(
   dump_tree_mac
 
   # Items to link into the target
-  PRIVATE mac_inspect
+  PRIVATE axapi_inspect
 )
 
 add_executable(
@@ -29,5 +29,5 @@ target_link_libraries(
   attribute_types
 
   # Items to link into the target
-  PRIVATE mac_inspect
+  PRIVATE axapi_inspect
 )
