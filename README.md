@@ -298,22 +298,22 @@ To use the python library, navigate to `build/bin`:
 ```
 % python3
 >>> import ia2_inspect
->>> app = ia2_inspect.IANode.CreateRootForName("firefox")
->>> app.get_accRole()
->>> app.get_accChildCount()
+>>> app = ia2_inspect.IANode.findRootIANodeForName("firefox")
+>>> app.getAccRole()
+>>> app.getAccChildCount()
 >>> child = app.AccessibleChildAt(3)
->>> child.get_accRole()
+>>> child.getAccRole()
 >>> action = child.QueryAction()
 >>> action.nActions()
 >>> action.getName(0)
 >>> component = child.QueryComponent()
->>> component.get_locationInParent()
+>>> component.getLocationInParent()
 >>> text = child.QueryText()
->>> text.get_nCharacters()
->>> text.get_text(0, -1)
+>>> text.getNCharacters()
+>>> text.getText(0, -1)
 >>> ia2 = child.QueryIA2()
->>> ia2.get_attributes()
->>> ia2.GetRelations()
+>>> ia2.getAttributes()
+>>> ia2.getRelations()
 ```
 
 Or run the script:

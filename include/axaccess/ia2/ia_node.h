@@ -39,8 +39,9 @@ class AXA_EXPORT IANode {
   };
   ~IANode(){};
 
-  static IANode CreateRootForName(const std::string& name, const int pid = 0);
-  static IANode CreateRootForPID(const int pid);
+  static IANode findRootIANodeForName(const std::string& name,
+                                      const int pid = 0);
+  static IANode findRootIANodeForPID(const int pid);
 
   IA2 QueryIA2();
   IAAction QueryAction();
@@ -51,17 +52,17 @@ class AXA_EXPORT IANode {
   IAText QueryText();
   IAValue QueryValue();
 
-  bool IsNull();
+  bool isNull();
 
-  std::string get_accRole();
-  std::string get_accName();
-  std::string get_accDescription();
+  std::string getAccRole();
+  std::string getAccName();
+  std::string getAccDescription();
 
-  long get_accChildCount();
+  long getAccChildCount();
   IANode AccessibleChildAt(int index);
 
-  long get_accState();
-  std::vector<std::string> GetStates();
+  long getAccState();
+  std::vector<std::string> getStateStrings();
 
  private:
   Microsoft::WRL::ComPtr<IServiceProvider> GetServiceProvider();

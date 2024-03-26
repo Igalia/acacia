@@ -6,15 +6,15 @@
 
 using namespace win_utils;
 
-std::string IAAction::GetProperties() {
-  if (IsNull()) {
+std::string IAAction::toString() {
+  if (isNull()) {
     return "Action: Not implemented";
   }
 
   long count = nActions();
   std::string result = "Action:";
   for (int i = 0; i < count; ++i) {
-    std::string name = get_name(i);
+    std::string name = getName(i);
     result += " " + name;
   }
   return result;
@@ -33,7 +33,7 @@ long IAAction::nActions() {
   return 0;
 }
 
-std::string IAAction::get_description(int index) {
+std::string IAAction::getDescription(int index) {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_description(index, &bstr_result);
@@ -48,7 +48,7 @@ std::string IAAction::get_description(int index) {
   return std::string();
 }
 
-std::string IAAction::get_name(int index) {
+std::string IAAction::getName(int index) {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_name(index, &bstr_result);

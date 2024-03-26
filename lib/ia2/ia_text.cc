@@ -21,24 +21,24 @@ std::string ToPrintableString(std::string str) {
 
 }  // namespace
 
-std::string IAText::GetProperties() {
-  if (IsNull()) {
+std::string IAText::toString() {
+  if (isNull()) {
     return "Text: Not implemented";
   }
 
   std::string result = "Text: ";
-  long length = get_nCharacters();
+  long length = getNCharacters();
   std::string content;
   if (length < 50) {
-    content = get_text(0, length);
+    content = getText(0, length);
   } else {
-    content = get_text(0, 20) + "[...]" + get_text(length - 20, length);
+    content = getText(0, 20) + "[...]" + getText(length - 20, length);
   }
   result += "'" + ToPrintableString(content) + "'";
   return result;
 }
 
-long IAText::get_caretOffset() {
+long IAText::getCaretOffset() {
   if (iface_) {
     long offset;
     HRESULT hr = iface_->get_caretOffset(&offset);
@@ -51,7 +51,7 @@ long IAText::get_caretOffset() {
   return -1;
 }
 
-long IAText::get_nCharacters() {
+long IAText::getNCharacters() {
   if (iface_) {
     long count;
     HRESULT hr = iface_->get_nCharacters(&count);
@@ -64,7 +64,7 @@ long IAText::get_nCharacters() {
   return 0;
 }
 
-std::string IAText::get_text(long start_offset, long end_offset) {
+std::string IAText::getText(long start_offset, long end_offset) {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_text(start_offset, end_offset, &bstr_result);

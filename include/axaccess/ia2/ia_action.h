@@ -13,11 +13,11 @@ class AXA_EXPORT IAAction {
   IAAction(Microsoft::WRL::ComPtr<IAccessibleAction> iface) : iface_(iface) {}
   ~IAAction(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
+  bool isNull() { return !iface_; }
+  std::string toString();
   long nActions();
-  std::string get_description(int index);
-  std::string get_name(int index);
+  std::string getDescription(int index);
+  std::string getName(int index);
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleAction> iface_;

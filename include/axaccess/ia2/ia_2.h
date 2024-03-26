@@ -26,14 +26,14 @@ class AXA_EXPORT IA2 {
   IA2(Microsoft::WRL::ComPtr<IAccessible2> iface) : iface_(iface) {}
   ~IA2(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
-  std::string get_attributes();
-  GroupPosition get_groupPosition();
-  std::vector<std::string> GetRelations();
+  bool isNull() { return !iface_; }
+  std::string toString();
+  std::string getAttributes();
+  GroupPosition getGroupPosition();
+  std::vector<std::string> getRelations();
   std::string role();
-  long get_states();
-  std::vector<std::string> GetStates();
+  long getStates();
+  std::vector<std::string> getStateStrings();
 
  private:
   Microsoft::WRL::ComPtr<IAccessible2> iface_;

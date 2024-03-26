@@ -6,18 +6,18 @@
 
 using namespace win_utils;
 
-std::string IAValue::GetProperties() {
-  if (IsNull()) {
+std::string IAValue::toString() {
+  if (isNull()) {
     return "Value: Not implemented";
   }
 
-  std::string result = "Value: " + get_currentValue() +
-                       " min: " + get_minimumValue() +
-                       " max: " + get_maximumValue();
+  std::string result = "Value: " + getCurrentValue() +
+                       " min: " + getMinimumValue() +
+                       " max: " + getMaximumValue();
   return result;
 }
 
-std::string IAValue::get_currentValue() {
+std::string IAValue::getCurrentValue() {
   if (iface_) {
     VARIANT variant_result;
     HRESULT hr = iface_->get_currentValue(&variant_result);
@@ -32,7 +32,7 @@ std::string IAValue::get_currentValue() {
   return std::string();
 }
 
-std::string IAValue::get_maximumValue() {
+std::string IAValue::getMaximumValue() {
   if (iface_) {
     VARIANT variant_result;
     HRESULT hr = iface_->get_maximumValue(&variant_result);
@@ -47,7 +47,7 @@ std::string IAValue::get_maximumValue() {
   return std::string();
 }
 
-std::string IAValue::get_minimumValue() {
+std::string IAValue::getMinimumValue() {
   if (iface_) {
     VARIANT variant_result;
     HRESULT hr = iface_->get_minimumValue(&variant_result);

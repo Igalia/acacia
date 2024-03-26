@@ -13,11 +13,11 @@ class AXA_EXPORT IAValue {
   IAValue(Microsoft::WRL::ComPtr<IAccessibleValue> iface) : iface_(iface) {}
   ~IAValue(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
-  std::string get_currentValue();
-  std::string get_maximumValue();
-  std::string get_minimumValue();
+  bool isNull() { return !iface_; }
+  std::string toString();
+  std::string getCurrentValue();
+  std::string getMaximumValue();
+  std::string getMinimumValue();
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleValue> iface_;

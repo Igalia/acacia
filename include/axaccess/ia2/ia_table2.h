@@ -13,10 +13,10 @@ class AXA_EXPORT IATable2 {
   IATable2(Microsoft::WRL::ComPtr<IAccessibleTable2> iface) : iface_(iface) {}
   ~IATable2(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
-  long get_nColumns();
-  long get_nRows();
+  bool isNull() { return !iface_; }
+  std::string toString();
+  long getNColumns();
+  long getNRows();
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleTable2> iface_;

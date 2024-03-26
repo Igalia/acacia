@@ -14,11 +14,11 @@ class AXA_EXPORT IAHyperlink {
       : iface_(iface) {}
   ~IAHyperlink(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
-  long get_startIndex();
-  long get_endIndex();
-  std::string get_anchorTarget(long index);
+  bool isNull() { return !iface_; }
+  std::string toString();
+  long getStartIndex();
+  long getEndIndex();
+  std::string getAnchorTarget(long index);
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleHyperlink> iface_;

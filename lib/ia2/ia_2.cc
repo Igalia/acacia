@@ -121,20 +121,20 @@ std::string RoleToString(LONG role) {
 
 using namespace win_utils;
 
-std::string IA2::GetProperties() {
-  if (IsNull()) {
+std::string IA2::toString() {
+  if (isNull()) {
     return "IAccessible2: Not implemented";
   }
 
   std::string result = "IAccessible2: ";
-  GroupPosition group_position = get_groupPosition();
+  GroupPosition group_position = getGroupPosition();
   if (!group_position.IsEmpty()) {
     result += "Position=" + std::to_string(group_position.position) + ", " +
               "Setsize=" + std::to_string(group_position.setsize) + ", " +
               "Level=" + std::to_string(group_position.level) + "; ";
   }
 
-  std::vector<std::string> relations = GetRelations();
+  std::vector<std::string> relations = getRelations();
   if (!relations.empty()) {
     result += "Relations=";
     for (auto relation : relations) {
@@ -147,11 +147,11 @@ std::string IA2::GetProperties() {
     result += "; ";
   }
 
-  result += "Attributes=" + get_attributes();
+  result += "Attributes=" + getAttributes();
   return result;
 }
 
-std::string IA2::get_attributes() {
+std::string IA2::getAttributes() {
   if (iface_) {
     BSTR bstr_result;
     HRESULT hr = iface_->get_attributes(&bstr_result);
@@ -166,7 +166,7 @@ std::string IA2::get_attributes() {
   return std::string();
 }
 
-GroupPosition IA2::get_groupPosition() {
+GroupPosition IA2::getGroupPosition() {
   if (iface_) {
     GroupPosition result;
     long level, setsize, position;
@@ -180,7 +180,7 @@ GroupPosition IA2::get_groupPosition() {
   return GroupPosition();
 }
 
-std::vector<std::string> IA2::GetRelations() {
+std::vector<std::string> IA2::getRelations() {
   std::vector<std::string> relation_strings;
   if (!iface_) {
     return relation_strings;
@@ -227,7 +227,7 @@ std::string IA2::role() {
   return "";
 }
 
-long IA2::get_states() {
+long IA2::getStates() {
   if (iface_) {
     long result;
     HRESULT hr = iface_->get_states(&result);
@@ -240,8 +240,8 @@ long IA2::get_states() {
   return 0;
 }
 
-std::vector<std::string> IA2::GetStates() {
-  long state = get_states();
+std::vector<std::string> IA2::getStateStrings() {
+  long state = getStates();
   std::vector<std::string> state_strings;
   if (state & IA2_STATE_ACTIVE) {
     state_strings.push_back("ACTIVE");
