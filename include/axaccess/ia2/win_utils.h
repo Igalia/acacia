@@ -25,7 +25,7 @@ AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(
     const std::string& name,
     DWORD dwProcessID);
 
-AXA_EXPORT std::string nameFromHwnd(HWND hwnd);
+AXA_EXPORT std::string NameFromHwnd(HWND hwnd);
 
 AXA_EXPORT std::string BstrToString(BSTR bstr);
 

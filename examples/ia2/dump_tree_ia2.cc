@@ -32,7 +32,7 @@ static void print_node(IANode node, int level) {
     std::cout << "--";
   std::cout << "> ";
 
-  std::string msaa_role = node.get_accRole();
+  std::string msaa_role = node.getAccRole();
   IA2 ia2 = node.QueryIA2();
   std::string ia2_role = ia2.role();
   if (ia2_role.empty() || ia2_role == msaa_role)
@@ -40,11 +40,11 @@ static void print_node(IANode node, int level) {
   else
     std::cout << ia2_role << " " << msaa_role;
 
-  std::cout << " Name='" << node.get_accName() << "',";
-  std::cout << " Description='" << node.get_accDescription() << "',";
+  std::cout << " Name='" << node.getAccName() << "',";
+  std::cout << " Description='" << node.getAccDescription() << "',";
 
-  std::vector<std::string> states = node.GetStates();
-  std::vector<std::string> ia2_states = ia2.GetStates();
+  std::vector<std::string> states = node.getStateStrings();
+  std::vector<std::string> ia2_states = ia2.getStateStrings();
   states.insert(states.end(), ia2_states.begin(), ia2_states.end());
   std::sort(states.begin(), states.end());
   std::string states_string;
@@ -60,47 +60,47 @@ static void print_node(IANode node, int level) {
   std::string indent(level * 2, ' ');
 
   // For the purpose of this example, dump properties even if null.
-  std::string properties = ia2.GetProperties();
+  std::string properties = ia2.toString();
   if (!properties.empty()) {
     std::cout << indent << "* " << properties << "\n";
   }
 
   IAAction action = node.QueryAction();
-  if (!action.IsNull()) {
-    std::cout << indent << "* " << action.GetProperties() << "\n";
+  if (!action.isNull()) {
+    std::cout << indent << "* " << action.toString() << "\n";
   }
 
   IAComponent component = node.QueryComponent();
-  if (!component.IsNull()) {
-    std::cout << indent << "* " << component.GetProperties() << "\n";
+  if (!component.isNull()) {
+    std::cout << indent << "* " << component.toString() << "\n";
   }
 
   IAHyperlink hyperlink = node.QueryHyperlink();
-  if (!hyperlink.IsNull()) {
-    std::cout << indent << "* " << hyperlink.GetProperties() << "\n";
+  if (!hyperlink.isNull()) {
+    std::cout << indent << "* " << hyperlink.toString() << "\n";
   }
 
   IATable2 table2 = node.QueryTable2();
-  if (!table2.IsNull()) {
-    std::cout << indent << "* " << table2.GetProperties() << "\n";
+  if (!table2.isNull()) {
+    std::cout << indent << "* " << table2.toString() << "\n";
   }
 
   IATableCell table_cell = node.QueryTableCell();
-  if (!table_cell.IsNull()) {
-    std::cout << indent << "* " << table_cell.GetProperties() << "\n";
+  if (!table_cell.isNull()) {
+    std::cout << indent << "* " << table_cell.toString() << "\n";
   }
 
   IAText text = node.QueryText();
-  if (!text.IsNull()) {
-    std::cout << indent << "* " << text.GetProperties() << "\n";
+  if (!text.isNull()) {
+    std::cout << indent << "* " << text.toString() << "\n";
   }
 
   IAValue value = node.QueryValue();
-  if (!value.IsNull()) {
-    std::cout << indent << "* " << value.GetProperties() << "\n";
+  if (!value.isNull()) {
+    std::cout << indent << "* " << value.toString() << "\n";
   }
 
-  int32_t child_count = node.get_accChildCount();
+  int32_t child_count = node.getAccChildCount();
   if (child_count < 0)
     return;
 
@@ -154,8 +154,8 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  IANode root = IANode::CreateRootForName(name, pid);
-  if (root.IsNull()) {
+  IANode root = IANode::findRootIANodeForName(name, pid);
+  if (root.isNull()) {
     std::cerr << "ERROR: Could not find match for";
     if (!name.empty()) {
       std::cerr << " name: '" << name << "'";

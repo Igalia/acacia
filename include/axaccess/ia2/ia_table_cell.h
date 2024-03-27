@@ -14,12 +14,12 @@ class AXA_EXPORT IATableCell {
       : iface_(iface) {}
   ~IATableCell(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
-  long get_columnExtent();
-  long get_columnIndex();
-  long get_rowExtent();
-  long get_rowIndex();
+  bool isNull() { return !iface_; }
+  std::string toString();
+  long getColumnExtent();
+  long getColumnIndex();
+  long getRowExtent();
+  long getRowIndex();
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleTableCell> iface_;

@@ -35,7 +35,7 @@ class CCoInitialize {
 
 CCoInitialize init;
 
-std::string nameFromHwnd(HWND hwnd) {
+std::string NameFromHwnd(HWND hwnd) {
   int length = ::GetWindowTextLength(hwnd);
   if (length == 0) {
     return "";
@@ -71,7 +71,7 @@ BOOL CALLBACK FindWindow(HWND hwnd, LPARAM lparam) {
     return TRUE;
   }
 
-  std::string title = lower(nameFromHwnd(hwnd));
+  std::string title = lower(NameFromHwnd(hwnd));
   if (has_name) {
     std::string name = lower(criteria->name.value());
     if (title.find(name) == std::string::npos) {
@@ -79,7 +79,7 @@ BOOL CALLBACK FindWindow(HWND hwnd, LPARAM lparam) {
     }
   }
 
-  std::cout << "Window found: " << nameFromHwnd(hwnd);
+  std::cout << "Window found: " << NameFromHwnd(hwnd);
   if (has_pid) {
     std::cout << " - PID: " << criteria->pid.value();
   }

@@ -13,11 +13,11 @@ class AXA_EXPORT IAText {
   IAText(Microsoft::WRL::ComPtr<IAccessibleText> iface) : iface_(iface) {}
   ~IAText(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
-  long get_caretOffset();
-  long get_nCharacters();
-  std::string get_text(long start_offset, long end_offset);
+  bool isNull() { return !iface_; }
+  std::string toString();
+  long getCaretOffset();
+  long getNCharacters();
+  std::string getText(long start_offset, long end_offset);
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleText> iface_;

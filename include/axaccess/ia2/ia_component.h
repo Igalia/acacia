@@ -14,11 +14,11 @@ class AXA_EXPORT IAComponent {
       : iface_(iface) {}
   ~IAComponent(){};
 
-  bool IsNull() { return !iface_; }
-  std::string GetProperties();
-  std::string get_background();
-  std::string get_foreground();
-  std::pair<long, long> get_locationInParent();
+  bool isNull() { return !iface_; }
+  std::string toString();
+  std::string getBackground();
+  std::string getForeground();
+  std::pair<long, long> getLocationInParent();
 
  private:
   Microsoft::WRL::ComPtr<IAccessibleComponent> iface_;

@@ -150,7 +150,7 @@ std::string MSAARoleToString(LONG role) {
 }  // Namespace
 
 Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
-  if (IsNull()) {
+  if (isNull()) {
     return nullptr;
   }
   Microsoft::WRL::ComPtr<IServiceProvider> service_provider;
@@ -163,13 +163,14 @@ Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
   return service_provider;
 }
 
-IANode IANode::CreateRootForName(const std::string& app_name, const int pid) {
+IANode IANode::findRootIANodeForName(const std::string& app_name,
+                                     const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
 
   return IANode(root);
 }
 
-IANode IANode::CreateRootForPID(const int pid) {
+IANode IANode::findRootIANodeForPID(const int pid) {
   Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
 
   return IANode(root);
@@ -239,13 +240,13 @@ IAValue IANode::QueryValue() {
   return IAValue(iface);
 }
 
-bool IANode::IsNull() {
+bool IANode::isNull() {
   if (!root_)
     return true;
   return false;
 }
 
-std::string IANode::get_accRole() {
+std::string IANode::getAccRole() {
   VARIANT ia_role_variant;
   HRESULT hr = root_->get_accRole(child_id_, &ia_role_variant);
   if (FAILED(hr)) {
@@ -256,7 +257,7 @@ std::string IANode::get_accRole() {
   return MSAARoleToString(ia_role_variant.lVal);
 }
 
-std::string IANode::get_accName() {
+std::string IANode::getAccName() {
   BSTR bstr_name;
   HRESULT hr = root_->get_accName(child_id_, &bstr_name);
   if (FAILED(hr)) {
@@ -269,7 +270,7 @@ std::string IANode::get_accName() {
   return str_name;
 }
 
-std::string IANode::get_accDescription() {
+std::string IANode::getAccDescription() {
   VARIANT child;
   child.vt = VT_I4;
   child.lVal = V_I4(&child_id_);
@@ -285,7 +286,7 @@ std::string IANode::get_accDescription() {
   return str_description;
 }
 
-long IANode::get_accChildCount() {
+long IANode::getAccChildCount() {
   if (child_id_.intVal != CHILDID_SELF)
     return 0;
 
@@ -338,7 +339,7 @@ IANode IANode::AccessibleChildAt(int index) {
   return IANode(accessible);
 }
 
-long IANode::get_accState() {
+long IANode::getAccState() {
   HRESULT hr;
   VARIANT state;
   VARIANT child;
@@ -353,8 +354,8 @@ long IANode::get_accState() {
   return V_I4(&state);
 }
 
-std::vector<std::string> IANode::GetStates() {
-  long states = get_accState();
+std::vector<std::string> IANode::getStateStrings() {
+  long states = getAccState();
   std::vector<std::string> state_strings;
   if (states & STATE_SYSTEM_ALERT_HIGH) {
     state_strings.push_back("ALERT_HIGH");

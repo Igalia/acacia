@@ -15,22 +15,22 @@ std::string ColorToString(IA2Color color) {
 }
 }  // namespace
 
-std::string IAComponent::GetProperties() {
-  if (IsNull()) {
+std::string IAComponent::toString() {
+  if (isNull()) {
     return "Component: Not implemented";
   }
 
   std::string result = "Component:";
-  std::pair<long, long> location = get_locationInParent();
+  std::pair<long, long> location = getLocationInParent();
   result += " x:" + std::to_string(location.first) +
             " y:" + std::to_string(location.second);
-  result += " foreground:" + get_foreground();
-  result += " background:" + get_background();
+  result += " foreground:" + getForeground();
+  result += " background:" + getBackground();
 
   return result;
 }
 
-std::string IAComponent::get_background() {
+std::string IAComponent::getBackground() {
   if (iface_) {
     IA2Color color;
     HRESULT hr = iface_->get_background(&color);
@@ -43,7 +43,7 @@ std::string IAComponent::get_background() {
   return std::string();
 }
 
-std::string IAComponent::get_foreground() {
+std::string IAComponent::getForeground() {
   if (iface_) {
     IA2Color color;
     HRESULT hr = iface_->get_foreground(&color);
@@ -56,7 +56,7 @@ std::string IAComponent::get_foreground() {
   return std::string();
 }
 
-std::pair<long, long> IAComponent::get_locationInParent() {
+std::pair<long, long> IAComponent::getLocationInParent() {
   if (iface_) {
     LONG x, y;
     HRESULT hr = iface_->get_locationInParent(&x, &y);

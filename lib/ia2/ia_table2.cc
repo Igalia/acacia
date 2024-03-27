@@ -6,17 +6,17 @@
 
 using namespace win_utils;
 
-std::string IATable2::GetProperties() {
-  if (IsNull()) {
+std::string IATable2::toString() {
+  if (isNull()) {
     return "Table2: Not implemented";
   }
 
-  std::string result = "Table: rows=" + std::to_string(get_nRows()) +
-                       " columns=" + std::to_string(get_nColumns());
+  std::string result = "Table: rows=" + std::to_string(getNRows()) +
+                       " columns=" + std::to_string(getNColumns());
   return result;
 }
 
-long IATable2::get_nColumns() {
+long IATable2::getNColumns() {
   if (iface_) {
     long count = 0;
     HRESULT hr = iface_->get_nColumns(&count);
@@ -29,7 +29,7 @@ long IATable2::get_nColumns() {
   return 0;
 }
 
-long IATable2::get_nRows() {
+long IATable2::getNRows() {
   if (iface_) {
     long count = 0;
     HRESULT hr = iface_->get_nRows(&count);

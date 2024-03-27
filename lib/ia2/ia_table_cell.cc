@@ -6,19 +6,19 @@
 
 using namespace win_utils;
 
-std::string IATableCell::GetProperties() {
-  if (IsNull()) {
+std::string IATableCell::toString() {
+  if (isNull()) {
     return "Table Cell: Not implemented";
   }
 
-  std::string result = "Table Cell: row=" + std::to_string(get_rowIndex()) +
-                       " column=" + std::to_string(get_columnIndex()) +
-                       " rowspan=" + std::to_string(get_rowExtent()) +
-                       " colspan=" + std::to_string(get_columnExtent());
+  std::string result = "Table Cell: row=" + std::to_string(getRowIndex()) +
+                       " column=" + std::to_string(getColumnIndex()) +
+                       " rowspan=" + std::to_string(getRowExtent()) +
+                       " colspan=" + std::to_string(getColumnExtent());
   return result;
 }
 
-long IATableCell::get_columnExtent() {
+long IATableCell::getColumnExtent() {
   if (iface_) {
     long span = 0;
     HRESULT hr = iface_->get_columnExtent(&span);
@@ -31,7 +31,7 @@ long IATableCell::get_columnExtent() {
   return 0;
 }
 
-long IATableCell::get_columnIndex() {
+long IATableCell::getColumnIndex() {
   if (iface_) {
     long index = 0;
     HRESULT hr = iface_->get_columnIndex(&index);
@@ -44,7 +44,7 @@ long IATableCell::get_columnIndex() {
   return -1;
 }
 
-long IATableCell::get_rowExtent() {
+long IATableCell::getRowExtent() {
   if (iface_) {
     long span = 0;
     HRESULT hr = iface_->get_rowExtent(&span);
@@ -57,7 +57,7 @@ long IATableCell::get_rowExtent() {
   return 0;
 }
 
-long IATableCell::get_rowIndex() {
+long IATableCell::getRowIndex() {
   if (iface_) {
     long index = 0;
     HRESULT hr = iface_->get_rowIndex(&index);

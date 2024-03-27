@@ -20,13 +20,13 @@ namespace std {
   %template(PairLongLong) pair<long, long>;
 };
 
-%catches(std::runtime_error) IANode::get_accRole();
-%catches(std::runtime_error) IANode::get_accName();
-%catches(std::runtime_error) IANode::get_accDescription();
-%catches(std::runtime_error) IANode::get_accChildCount();
-%catches(std::runtime_error) IANode::get_accState();
+%catches(std::runtime_error) IANode::getAccRole();
+%catches(std::runtime_error) IANode::getAccName();
+%catches(std::runtime_error) IANode::getAccDescription();
+%catches(std::runtime_error) IANode::getAccChildCount();
+%catches(std::runtime_error) IANode::getAccState();
 %catches(std::runtime_error) IANode::AccessibleChildAt(int index);
-%catches(std::runtime_error) IANode::GetStates();
+%catches(std::runtime_error) IANode::getStateStrings();
 %catches(std::runtime_error) IANode::QueryIA2();
 %catches(std::runtime_error) IANode::QueryAction();
 %catches(std::runtime_error) IANode::QueryComponent();
@@ -36,56 +36,56 @@ namespace std {
 %catches(std::runtime_error) IANode::QueryText();
 %catches(std::runtime_error) IANode::QueryValue();
 
-%catches(std::runtime_error) IA2::IsNull();
-%catches(std::runtime_error) IA2::get_attributes();
-%catches(std::runtime_error) IA2::get_groupPosition();
+%catches(std::runtime_error) IA2::isNull();
+%catches(std::runtime_error) IA2::getAttributes();
+%catches(std::runtime_error) IA2::getGroupPosition();
 %catches(std::runtime_error) IA2::role();
-%catches(std::runtime_error) IA2::get_states();
-%catches(std::runtime_error) IA2::GetProperties();
-%catches(std::runtime_error) IA2::GetRelations();
-%catches(std::runtime_error) IA2::GetStates();
+%catches(std::runtime_error) IA2::getStates();
+%catches(std::runtime_error) IA2::toString();
+%catches(std::runtime_error) IA2::getRelations();
+%catches(std::runtime_error) IA2::getStateStrings();
 
-%catches(std::runtime_error) IAAction::IsNull();
+%catches(std::runtime_error) IAAction::isNull();
 %catches(std::runtime_error) IAAction::nActions();
-%catches(std::runtime_error) IAAction::get_description(int index);
-%catches(std::runtime_error) IAAction::get_name(int index);
-%catches(std::runtime_error) IAAction::GetProperties();
+%catches(std::runtime_error) IAAction::getDescription(int index);
+%catches(std::runtime_error) IAAction::getName(int index);
+%catches(std::runtime_error) IAAction::toString();
 
-%catches(std::runtime_error) IAComponent::IsNull();
-%catches(std::runtime_error) IAComponent::get_background();
-%catches(std::runtime_error) IAComponent::get_foreground();
-%catches(std::runtime_error) IAComponent::get_locationInParent();
-%catches(std::runtime_error) IAComponent::GetProperties();
+%catches(std::runtime_error) IAComponent::isNull();
+%catches(std::runtime_error) IAComponent::getBackground();
+%catches(std::runtime_error) IAComponent::getForeground();
+%catches(std::runtime_error) IAComponent::getLocationInParent();
+%catches(std::runtime_error) IAComponent::toString();
 
-%catches(std::runtime_error) IAHyperlink::IsNull();
-%catches(std::runtime_error) IAHyperlink::get_startIndex();
-%catches(std::runtime_error) IAHyperlink::get_endIndex();
-%catches(std::runtime_error) IAHyperlink::get_anchorTarget(long index);
-%catches(std::runtime_error) IAHyperlink::GetProperties();
+%catches(std::runtime_error) IAHyperlink::isNull();
+%catches(std::runtime_error) IAHyperlink::getStartIndex();
+%catches(std::runtime_error) IAHyperlink::getEndIndex();
+%catches(std::runtime_error) IAHyperlink::getAnchorTarget(long index);
+%catches(std::runtime_error) IAHyperlink::toString();
 
-%catches(std::runtime_error) IATable2::IsNull();
-%catches(std::runtime_error) IATable2::get_nColumns();
-%catches(std::runtime_error) IATable2::get_nRows();
-%catches(std::runtime_error) IATable2::GetProperties();
+%catches(std::runtime_error) IATable2::isNull();
+%catches(std::runtime_error) IATable2::getNColumns();
+%catches(std::runtime_error) IATable2::getNRows();
+%catches(std::runtime_error) IATable2::toString();
 
-%catches(std::runtime_error) IATableCell::IsNull();
-%catches(std::runtime_error) IATableCell::get_columnExtent();
-%catches(std::runtime_error) IATableCell::get_columnIndex();
-%catches(std::runtime_error) IATableCell::get_rowExtent();
-%catches(std::runtime_error) IATableCell::get_rowIndex();
-%catches(std::runtime_error) IATableCell::GetProperties();
+%catches(std::runtime_error) IATableCell::isNull();
+%catches(std::runtime_error) IATableCell::getColumnExtent();
+%catches(std::runtime_error) IATableCell::getColumnIndex();
+%catches(std::runtime_error) IATableCell::getRowExtent();
+%catches(std::runtime_error) IATableCell::getRowIndex();
+%catches(std::runtime_error) IATableCell::toString();
 
-%catches(std::runtime_error) IAText::IsNull();
-%catches(std::runtime_error) IAText::get_caretOffset();
-%catches(std::runtime_error) IAText::get_nCharacters();
-%catches(std::runtime_error) IAText::get_text(long start_offset, long end_offset);
-%catches(std::runtime_error) IAText::GetProperties();
+%catches(std::runtime_error) IAText::isNull();
+%catches(std::runtime_error) IAText::getCaretOffset();
+%catches(std::runtime_error) IAText::getNCharacters();
+%catches(std::runtime_error) IAText::getText(long start_offset, long end_offset);
+%catches(std::runtime_error) IAText::toString();
 
-%catches(std::runtime_error) IAValue::IsNull();
-%catches(std::runtime_error) IAValue::get_currentValue();
-%catches(std::runtime_error) IAValue::get_maximumValue();
-%catches(std::runtime_error) IAValue::get_minimumValue();
-%catches(std::runtime_error) IAValue::GetProperties();
+%catches(std::runtime_error) IAValue::isNull();
+%catches(std::runtime_error) IAValue::getCurrentValue();
+%catches(std::runtime_error) IAValue::getMaximumValue();
+%catches(std::runtime_error) IAValue::getMinimumValue();
+%catches(std::runtime_error) IAValue::toString();
 
 #define AXA_EXPORT
 %include <axaccess/ia2/ia_2.h>

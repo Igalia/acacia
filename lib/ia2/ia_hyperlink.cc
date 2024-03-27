@@ -6,20 +6,20 @@
 
 using namespace win_utils;
 
-std::string IAHyperlink::GetProperties() {
-  if (IsNull()) {
+std::string IAHyperlink::toString() {
+  if (isNull()) {
     return "Hyperlink: Not implemented";
   }
 
   // Typically there is one target, at least in the Linux equivalent API.
   // The maximum index is, according to the documentation, the number of
   // actions returned via IAccessibleAction. For now, assume one target.
-  std::string result = "Hyperlink: '" + get_anchorTarget(0) +
-                       "' startIndex=" + std::to_string(get_startIndex());
+  std::string result = "Hyperlink: '" + getAnchorTarget(0) +
+                       "' startIndex=" + std::to_string(getStartIndex());
   return result;
 }
 
-long IAHyperlink::get_startIndex() {
+long IAHyperlink::getStartIndex() {
   if (iface_) {
     long index;
     HRESULT hr = iface_->get_startIndex(&index);
@@ -32,7 +32,7 @@ long IAHyperlink::get_startIndex() {
   return -1;
 }
 
-long IAHyperlink::get_endIndex() {
+long IAHyperlink::getEndIndex() {
   if (iface_) {
     long index;
     HRESULT hr = iface_->get_endIndex(&index);
@@ -45,7 +45,7 @@ long IAHyperlink::get_endIndex() {
   return -1;
 }
 
-std::string IAHyperlink::get_anchorTarget(long index) {
+std::string IAHyperlink::getAnchorTarget(long index) {
   if (iface_) {
     VARIANT variant_result;
     HRESULT hr = iface_->get_anchorTarget(index, &variant_result);
