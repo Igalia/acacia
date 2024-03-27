@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "../utils.h"
+#include "lib/utils/utils.h"
 
 std::string AtspiDocumentInterface::toString() const {
   if (isNull())

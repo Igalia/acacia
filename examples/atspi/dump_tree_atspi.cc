@@ -6,7 +6,7 @@
 
 #include <acacia/atspi/linux_utils.h>
 
-#include "lib/utils.h"
+#include "lib/utils/utils.h"
 
 static void PrintUsage(std::string& program_path) {
   std::string program_name = program_path;

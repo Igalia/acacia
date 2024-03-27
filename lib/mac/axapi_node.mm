@@ -12,6 +12,7 @@
 #include "include/acacia/mac/mac_data_types.h"
 #include "lib/mac/mac_helper_functions.h"
 #include "lib/mac/scoped_cf_type_ref.h"
+#include "lib/utils/stack_trace.h"
 #include "lib/utils.h"
 
 using std::cerr;
@@ -19,6 +20,8 @@ using std::cerr;
 namespace acacia {
 
 AXAPINode findRootAXAPINodeForPID(int pid) {
+  stack_trace::InstallSIGSEGVHandler();
+
   AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
 
   // Check whether we got an actual AXUIElement or an invalid placeholder.
@@ -177,7 +180,7 @@ int32_t AXAPINode::getListElementCount(const std::string& attribute) const {
 
 template <typename T>
 ScopedCFTypeRef<T> AXAPINode::GetRawValue(const std::string& attribute,
-                                          ValueType expected_type) const {
+    ValueType expected_type) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
   ScopedCFTypeRef<T> cf_value;
   AXError err = AXUIElementCopyAttributeValue(

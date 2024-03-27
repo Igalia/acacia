@@ -4,7 +4,7 @@
 
 #include <acacia/atspi/linux_utils.h>
 
-#include "../utils.h"
+#include "lib/utils/utils.h"
 
 AtspiNode findRootAtspiNodeForPID(const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);
