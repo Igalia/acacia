@@ -41,6 +41,7 @@ namespace std {
 %catches(std::runtime_error, std::invalid_argument) mac_inspect::AXAPINode::getDictionaryListValueAtIndex(std::string& attribute, int index) const;
 
 %rename(findRootAXAPINodeForPID) mac_inspect::findRootAXAPINodeForPID;
+%rename(findRootAXAPINodeForName) mac_inspect::findRootAXAPINodeForName;
 
 %include <include/axaccess/mac/mac_data_types.h>
 %include <include/axaccess/mac/axapi_node.h>

@@ -30,6 +30,7 @@ class Range;
 enum class ValueType;
 
 AXAPINode findRootAXAPINodeForPID(int pid);
+AXAPINode findRootAXAPINodeForName(std::string name);
 
 /**
  * Represents a node in the accessibility tree.
@@ -95,6 +96,7 @@ class AXAPINode {
                                            int index) const;
 
   friend AXAPINode findRootAXAPINodeForPID(int pid);
+  friend AXAPINode findRootAXAPINodeForName(std::string name);
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
