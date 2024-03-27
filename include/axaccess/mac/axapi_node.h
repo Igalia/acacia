@@ -98,15 +98,19 @@ class AXAPINode {
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
+  explicit AXAPINode(ScopedCFTypeRef<AXUIElementRef> ax_element);
 
-  ScopedCFTypeRef<CFTypeRef> GetRawValue(const std::string& attribute,
-                                         ValueType expected_type) const;
+  template <typename T>
+  ScopedCFTypeRef<T> GetRawValue(const std::string& attribute,
+                                 ValueType expected_type) const;
+
   ScopedCFTypeRef<CFArrayRef> GetRawArrayValue(
       const std::string& attribute) const;
-  ScopedCFTypeRef<CFTypeRef> GetRawArrayValueAtIndex(
-      const std::string& attribute,
-      int index,
-      ValueType expected_type) const;
+
+  template <typename T>
+  ScopedCFTypeRef<T> GetRawArrayValueAtIndex(const std::string& attribute,
+                                             int index,
+                                             ValueType expected_type) const;
 
   AXUIElementRef ax_ui_element_{NULL};
 

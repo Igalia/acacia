@@ -14,7 +14,8 @@ template <typename T>
 class ScopedCFTypeRef {
  public:
   ScopedCFTypeRef() = default;
-  ScopedCFTypeRef(ScopedCFTypeRef& other) : ref_(other.ref_) { CFRetain(ref_); }
+  ScopedCFTypeRef(const ScopedCFTypeRef& other)
+      : ref_((T)CFRetain(other.ref_)) {}
 
   explicit ScopedCFTypeRef(T ref) : ref_(ref) {}
 
@@ -31,19 +32,21 @@ class ScopedCFTypeRef {
   T get() { return ref_; }
   T* get_ptr() { return &ref_; }
 
-  // If you need to pass the reference to something else which should retain it,
-  // use this rather than get().
-  T Retain() { return CFRetain(ref_); }
-
-  ScopedCFTypeRef& operator=(ScopedCFTypeRef other) {
+  void reset(T ref) {
     if (ref_)
       CFRelease(ref_);
-    ref_ = other.ref_;
+    ref_ = ref;
+  }
+
+  ScopedCFTypeRef& operator=(const ScopedCFTypeRef& other) {
+    if (ref_)
+      CFRelease(ref_);
+    ref_ = (T)CFRetain(other.ref_);
     return *this;
   }
 
  private:
-  T ref_{NULL};
+  T ref_{nullptr};
 };
 
 }  // namespace mac_inspect
