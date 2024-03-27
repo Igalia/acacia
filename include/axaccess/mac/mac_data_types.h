@@ -8,6 +8,8 @@
 namespace mac_inspect {
 
 class AXAPINode;
+template <typename T>
+class ScopedCFTypeRef;
 
 enum class ValueType {
   NOT_PRESENT,
@@ -134,8 +136,8 @@ class Dictionary {
   AXAPINode getNodeValue(const std::string& node);
 
  private:
-  Dictionary(const CFDictionaryRef cf_dictionary)
-      : cf_dictionary_(cf_dictionary) {}
+  explicit Dictionary(CFDictionaryRef cf_dictionary);
+  explicit Dictionary(ScopedCFTypeRef<CFDictionaryRef> cf_dictionary);
 
   CFDictionaryRef cf_dictionary_{NULL};
 

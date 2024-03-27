@@ -70,6 +70,11 @@ std::string Range::ToString() {
   return "[" + std::to_string(length_) + ", " + std::to_string(location_) + "]";
 }
 
+Dictionary::Dictionary(CFDictionaryRef cf_dictionary)
+    : cf_dictionary_(cf_dictionary) {}
+Dictionary::Dictionary(ScopedCFTypeRef<CFDictionaryRef> cf_dictionary)
+    : cf_dictionary_((CFDictionaryRef)CFRetain(cf_dictionary.get())) {}
+
 Dictionary::~Dictionary() {
   if (cf_dictionary_)
     CFRelease(cf_dictionary_);
