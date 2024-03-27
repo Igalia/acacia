@@ -21,6 +21,7 @@
         "OTHER_LDFLAGS": [
           "-framework", "ApplicationServices",
           "-framework", "CoreFoundation",
+          "-framework", "AppKit",
         ],
       },
     }

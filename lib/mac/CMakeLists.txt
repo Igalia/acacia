@@ -25,6 +25,8 @@ find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices)
 cmake_print_variables(APPLICATION_SERVICES_FRAMEWORK)
 find_library(FOUNDATION_FRAMEWORK Foundation)
 cmake_print_variables(FOUNDATION_FRAMEWORK)
+find_library(APPKIT_FRAMEWORK AppKit)
+cmake_print_variables(APPKIT_FRAMEWORK)
 
 target_include_directories(
   axapi_inspect
@@ -40,6 +42,7 @@ target_link_libraries(
   PRIVATE
     ${APPLICATION_SERVICES_FRAMEWORK}
     ${FOUNDATION_FRAMEWORK}
+    ${APPKIT_FRAMEWORK}
 )
 
 # SWIG Instructions to build library bindings to different languages

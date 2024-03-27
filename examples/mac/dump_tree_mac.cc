@@ -11,7 +11,7 @@ using mac_inspect::AXAPINode;
 using mac_inspect::ValueType;
 
 void print_usage(std::string& program_name) {
-  std::cout << "Usage: " << program_name << " <pid>\n";
+  std::cout << "Usage: " << program_name << " [<pid> | name]\n";
 }
 
 static void print_attributes(AXAPINode node) {
@@ -65,17 +65,16 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  std::string pid_string(argv[1]);
+  AXAPINode root;
+  std::string arg_string(argv[1]);
   std::regex number_regex("\\d+");
-  if (!std::regex_match(pid_string, number_regex)) {
-    print_usage(program_name);
-    return 1;
+  if (std::regex_match(arg_string, number_regex)) {
+    const int pid = std::stoi(arg_string);
+    root = mac_inspect::findRootAXAPINodeForPID(pid);
+  } else {
+    root = mac_inspect::findRootAXAPINodeForName(arg_string);
   }
 
-  const int pid = std::stoi(pid_string);
-  std::cerr << "Got PID: " << pid << "\n";
-
-  AXAPINode root = mac_inspect::findRootAXAPINodeForPID(pid);
   try {
     print_node(root, 0);
   } catch (std::runtime_error e) {

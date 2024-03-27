@@ -1,5 +1,7 @@
 #include "include/axaccess/mac/axapi_node.h"
 
+#import <AppKit/NSRunningApplication.h>
+#import <AppKit/NSWorkspace.h>
 #import <Foundation/Foundation.h>
 
 #include <cstdlib>
@@ -25,6 +27,34 @@ AXAPINode findRootAXAPINodeForPID(int pid) {
   if (err)
     return mac_inspect::AXAPINode();
 
+  return AXAPINode(root_ax_ui_element);
+}
+
+AXAPINode findRootAXAPINodeForName(std::string name) {
+  ScopedCFTypeRef<CFStringRef> cf_name = StdStringToCFStringRef(name);
+  NSWorkspace* ws = [NSWorkspace sharedWorkspace];
+  NSArray* running_apps = [[ws runningApplications]
+      filteredArrayUsingPredicate:
+          [NSComparisonPredicate
+              predicateWithFormat:@"activationPolicy == %ld",
+                                  NSApplicationActivationPolicyRegular]];
+  NSArray* filtered_apps = [running_apps
+      filteredArrayUsingPredicate:
+          [NSPredicate predicateWithFormat:@"localizedName contains[c] %@",
+                                           (NSString*)cf_name.get()]];
+  for (NSRunningApplication* app in filtered_apps) {
+    CFShow(app);
+  }
+  if ([filtered_apps count] == 0)
+    return AXAPINode();
+
+  // Just return the first one that matches.
+  NSRunningApplication* app = filtered_apps[0];
+  pid_t pid = [app processIdentifier];
+  if (pid == -1)
+    return AXAPINode();
+
+  AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication(pid);
   return AXAPINode(root_ax_ui_element);
 }
 
