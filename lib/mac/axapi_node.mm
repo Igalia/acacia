@@ -42,9 +42,7 @@ AXAPINode findRootAXAPINodeForName(std::string name) {
       filteredArrayUsingPredicate:
           [NSPredicate predicateWithFormat:@"localizedName contains[c] %@",
                                            (NSString*)cf_name.get()]];
-  for (NSRunningApplication* app in filtered_apps) {
-    CFShow(app);
-  }
+
   if ([filtered_apps count] == 0)
     return AXAPINode();
 
