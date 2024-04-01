@@ -5,16 +5,6 @@
 #include <stdexcept>
 #include <string>
 
-AtspiHyperlinkInterface::~AtspiHyperlinkInterface() {
-  // Unlike the other interfaces, `atspi_accessible_get_hyperlink` gives us a
-  // new hyperlink object that serves as the interface. So we unref it here.
-  // Unfortunately doing so causes the python and node examples to crash
-  // due to some not yet fully understood issue related to garbage collecting.
-  if (interface_) {
-    g_object_unref(interface_);
-  }
-}
-
 std::string AtspiHyperlinkInterface::toString() const {
   if (isNull()) {
     return "Not implemented";
@@ -30,7 +20,7 @@ int AtspiHyperlinkInterface::getStartIndex() const {
   }
 
   GError* error = nullptr;
-  double result = atspi_hyperlink_get_start_index(interface_, &error);
+  double result = atspi_hyperlink_get_start_index(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -45,7 +35,7 @@ int AtspiHyperlinkInterface::getEndIndex() const {
   }
 
   GError* error = nullptr;
-  double result = atspi_hyperlink_get_end_index(interface_, &error);
+  double result = atspi_hyperlink_get_end_index(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -60,7 +50,7 @@ std::string AtspiHyperlinkInterface::getURI(int index) const {
   }
 
   GError* error = nullptr;
-  char* uri = atspi_hyperlink_get_uri(interface_, index, &error);
+  char* uri = atspi_hyperlink_get_uri(interface_.get(), index, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
