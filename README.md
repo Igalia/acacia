@@ -361,3 +361,7 @@ application in a cross-platform way).
 
 The feature is governed by the feature flag `AXA_LIBAXACCESS`, currently OFF by default. To enable it,
 simply pass `-DAXA_LIBAXACCESS=ON` to cmake.
+
+## License
+
+[GNU Library General Public License version 2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html), see [LICENSE](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) file.
