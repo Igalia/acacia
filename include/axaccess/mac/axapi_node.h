@@ -44,7 +44,7 @@ class AXAPINode {
 
   AXAPINode& operator=(AXAPINode other);
 
-  bool isNull();
+  bool isNull() const;
 
   std::vector<std::string> getAttributeNames() const;
 

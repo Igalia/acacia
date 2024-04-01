@@ -75,12 +75,18 @@ AXAPINode::~AXAPINode() {
 }
 
 AXAPINode& AXAPINode::operator=(AXAPINode other) {
+  if (ax_ui_element_)
+    CFRelease(ax_ui_element_);
+
+  ax_ui_element_ = NULL;
+
   if (other.ax_ui_element_)
     ax_ui_element_ = (AXUIElementRef)CFRetain(other.ax_ui_element_);
+
   return *this;
 }
 
-bool AXAPINode::isNull() {
+bool AXAPINode::isNull() const {
   return ax_ui_element_ == NULL;
 }
 
