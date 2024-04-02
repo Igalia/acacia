@@ -11,6 +11,7 @@
         "../../../lib/atspi/atspi_action_interface.cc",
         "../../../lib/atspi/atspi_component_interface.cc",
         "../../../lib/atspi/atspi_document_interface.cc",
+        "../../../lib/atspi/atspi_hyperlink_interface.cc",
         "../../../lib/atspi/atspi_node.cc",
         "../../../lib/atspi/atspi_table_interface.cc",
         "../../../lib/atspi/atspi_table_cell_interface.cc",

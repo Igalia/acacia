@@ -389,6 +389,18 @@ AtspiDocumentInterface AtspiNode::queryDocument() const {
   return AtspiDocumentInterface();
 }
 
+AtspiHyperlinkInterface AtspiNode::queryHyperlink() const {
+  // Unlike the other interfaces, `atspi_accessible_get_hyperlink` gives us a
+  // new hyperlink object that serves as the interface. Therefore we cannot
+  // free it until we're done with it. See also `atspi_hyperlink_interface.h`.
+  AtspiHyperlink* hyperlink = atspi_accessible_get_hyperlink(accessible_);
+  if (hyperlink) {
+    return AtspiHyperlinkInterface(hyperlink);
+  }
+
+  return AtspiHyperlinkInterface();
+}
+
 AtspiTableInterface AtspiNode::queryTable() const {
   AtspiTable* iface = atspi_accessible_get_table_iface(accessible_);
   if (iface) {
