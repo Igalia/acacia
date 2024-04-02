@@ -19,7 +19,6 @@ class AtspiHyperlinkInterface {
   AtspiHyperlinkInterface& operator=(const AtspiHyperlinkInterface&) = delete;
 
   AtspiHyperlinkInterface(AtspiHyperlinkInterface&&) = default;
-  AtspiHyperlinkInterface& operator=(AtspiHyperlinkInterface&&) = default;
 
   bool isNull() const { return !interface_; }
   std::string toString() const;
@@ -33,6 +32,7 @@ class AtspiHyperlinkInterface {
   // the AtspiAccessible as the interface. Keeping this as a raw pointer and
   // then unrefing it in the destructor works with C++ but results in a double-
   // free with both python and node.
+  // TODO: Find a way to use a raw pointer by modifying something in SWIG.
   std::unique_ptr<AtspiHyperlink, void (*)(AtspiHyperlink*)> interface_;
 };
 
