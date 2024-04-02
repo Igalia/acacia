@@ -345,6 +345,12 @@ NodeJS also has an example dump tree which can be run from the bin folder:
 % node ./dump_tree_ia2.js --name chrome
 ```
 
+## Testing
+
+There is basic unit-test infrastructure, for now only available on Linux. To run the tests, simple do `make test` after a successful build.
+
+The tests are built by default. To disable them, pass `-DAXA_UNIT_TESTS=off` to cmake.
+
 ## Documentation
 
 Documentation for the different backend APIs can be automatically generated from source code via [Doxygen](https://www.doxygen.nl/download.html), which must be install locally. It is off by default; to enable it, pass `-DAXA_BUILD_DOC=ON` to cmake.
