@@ -5,6 +5,8 @@ Thes project uses clang-format as specified by the .clang-format config file in 
 * `pip install clang-format`
 * `pre-commit install`
 
+Note: on Debian, you can install with apt: `sudo apt install pre-commit clang-format`
+
 The pre-submit hook will run clang-format the code in your staging area before commiting. The commit will not succeed if a file is reformatted, and you will have to re-add the file with format changes and re-run git commit.
 
 ## How to build
