@@ -12,10 +12,11 @@
 #include <axaccess/atspi/linux_utils.h>
 %}
 
-%include <std_string.i>
-%include <std_pair.i>
-%include <std_vector.i>
 %include <std_except.i>
+%include <std_pair.i>
+%include <std_string.i>
+%include <std_unique_ptr.i>
+%include <std_vector.i>
 
 namespace std {
   %template(AtspiNodeVector) vector<AtspiNode>;
