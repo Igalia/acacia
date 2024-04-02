@@ -14,8 +14,6 @@
 
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
-namespace win_utils {
-
 struct WindowSearchCriteria {
   std::optional<std::string> name;
   std::optional<DWORD> pid;
@@ -112,6 +110,16 @@ Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(const std::string& name,
   return root;
 }
 
+IANode findRootIANodeForName(const std::string& name, const int pid) {
+  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(name, pid);
+  return IANode(root);
+}
+
+IANode findRootIANodeForPID(const int pid) {
+  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
+  return IANode(root);
+}
+
 std::string BstrToString(BSTR bstr) {
   if (SysStringLen(bstr) == 0)
     return "";
@@ -182,4 +190,3 @@ std::string VariantToString(VARIANT variant) {
       return "Unsupported type: " + std::to_string(variant.vt);
   }
 }
-}  // namespace win_utils

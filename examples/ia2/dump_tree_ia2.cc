@@ -13,6 +13,7 @@
 #include "include/axaccess/ia2/ia_table_cell.h"
 #include "include/axaccess/ia2/ia_text.h"
 #include "include/axaccess/ia2/ia_value.h"
+#include "include/axaccess/ia2/win_utils.h"
 
 void print_usage(std::string& program_path) {
   std::string program_name = program_path;
@@ -154,7 +155,7 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  IANode root = IANode::findRootIANodeForName(name, pid);
+  IANode root = findRootIANodeForName(name, pid);
   if (root.isNull()) {
     std::cerr << "ERROR: Could not find match for";
     if (!name.empty()) {

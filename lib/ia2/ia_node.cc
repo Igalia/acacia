@@ -8,8 +8,6 @@
 #include "axaccess/ia2/win_utils.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
-using namespace win_utils;
-
 namespace {
 
 std::string MSAARoleToString(LONG role) {
@@ -161,19 +159,6 @@ Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
         HResultErrorToString(hr));
   }
   return service_provider;
-}
-
-IANode IANode::findRootIANodeForName(const std::string& app_name,
-                                     const int pid) {
-  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(app_name, pid);
-
-  return IANode(root);
-}
-
-IANode IANode::findRootIANodeForPID(const int pid) {
-  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
-
-  return IANode(root);
 }
 
 IA2 IANode::QueryIA2() {

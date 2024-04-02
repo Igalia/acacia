@@ -29,9 +29,9 @@ if (!name.length && pid === 0) {
 
 let root;
 if (name) {
-  root = ia2_inspect.IANode.findRootIANodeForName(name, pid);
+  root = ia2_inspect.findRootIANodeForName(name, pid);
 } else {
-  root = ia2_inspect.IANode.findRootIANodeForPID(pid);
+  root = ia2_inspect.findRootIANodeForPID(pid);
 }
 if (root.isNull()) {
   let errormsg = 'Error: no accessible application found for name: ' + name;

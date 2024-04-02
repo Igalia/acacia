@@ -5,8 +5,6 @@
 
 #include "axaccess/ia2/win_utils.h"
 
-using namespace win_utils;
-
 namespace {
 std::string ColorToString(IA2Color color) {
   std::stringstream ss;

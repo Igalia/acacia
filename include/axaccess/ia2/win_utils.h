@@ -8,8 +8,7 @@
 #include <wrl/client.h>
 
 #include "axaccess/export.h"
-
-namespace win_utils {
+# include "ia_node.h"
 
 /**
  * Returns the root node of the accessiblity tree of a running
@@ -25,6 +24,10 @@ AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(
     const std::string& name,
     DWORD dwProcessID);
 
+AXA_EXPORT IANode findRootIANodeForName(const std::string& name, const int pid = 0);
+
+AXA_EXPORT IANode findRootIANodeForPID(const int pid);
+
 AXA_EXPORT std::string NameFromHwnd(HWND hwnd);
 
 AXA_EXPORT std::string BstrToString(BSTR bstr);
@@ -32,7 +35,5 @@ AXA_EXPORT std::string BstrToString(BSTR bstr);
 AXA_EXPORT std::string VariantToString(VARIANT variant);
 
 AXA_EXPORT std::string HResultErrorToString(HRESULT err);
-
-}  // namespace win_utils
 
 #endif  // LIB_IA2_WIN_UTILS_H_

@@ -119,8 +119,6 @@ std::string RoleToString(LONG role) {
 }
 }  // namespace
 
-using namespace win_utils;
-
 std::string IA2::toString() {
   if (isNull()) {
     return "IAccessible2: Not implemented";

@@ -9,6 +9,7 @@
 #include <include/axaccess/ia2/ia_table_cell.h>
 #include <include/axaccess/ia2/ia_text.h>
 #include <include/axaccess/ia2/ia_value.h>
+#include <include/axaccess/ia2/win_utils.h>
 %}
 
 %include <std_pair.i>
@@ -97,3 +98,4 @@ namespace std {
 %include <axaccess/ia2/ia_table_cell.h>
 %include <axaccess/ia2/ia_text.h>
 %include <axaccess/ia2/ia_value.h>
+%include <axaccess/ia2/win_utils.h>

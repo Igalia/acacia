@@ -4,8 +4,6 @@
 
 #include "axaccess/ia2/win_utils.h"
 
-using namespace win_utils;
-
 namespace {
 std::string ToPrintableString(std::string str) {
   const std::string ufffc = "\xEF\xBF\xBC";
