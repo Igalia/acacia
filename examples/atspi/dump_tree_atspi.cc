@@ -84,6 +84,11 @@ static void PrintNode(AtspiNode node, int level) {
     std::cout << indent << "* Document: " << document.toString() << "\n";
   }
 
+  AtspiHyperlinkInterface hyperlink = node.queryHyperlink();
+  if (!hyperlink.isNull()) {
+    std::cout << indent << "* Hyperlink: " << hyperlink.toString() << "\n";
+  }
+
   AtspiTableInterface table = node.queryTable();
   if (!table.isNull()) {
     std::cout << indent << "* Table: " << table.toString() << "\n";

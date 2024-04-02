@@ -3,6 +3,7 @@
 #include <axaccess/atspi/atspi_action_interface.h>
 #include <axaccess/atspi/atspi_component_interface.h>
 #include <axaccess/atspi/atspi_document_interface.h>
+#include <axaccess/atspi/atspi_hyperlink_interface.h>
 #include <axaccess/atspi/atspi_node.h>
 #include <axaccess/atspi/atspi_table_interface.h>
 #include <axaccess/atspi/atspi_table_cell_interface.h>
@@ -11,10 +12,11 @@
 #include <axaccess/atspi/linux_utils.h>
 %}
 
-%include <std_string.i>
-%include <std_pair.i>
-%include <std_vector.i>
 %include <std_except.i>
+%include <std_pair.i>
+%include <std_string.i>
+%include <std_unique_ptr.i>
+%include <std_vector.i>
 
 namespace std {
   %template(AtspiNodeVector) vector<AtspiNode>;
@@ -58,6 +60,12 @@ namespace std {
 %catches(std::runtime_error) AtspiDocumentInterface::getDocumentAttributes() const;
 %catches(std::runtime_error) AtspiDocumentInterface::getLocale() const;
 
+%catches(std::runtime_error) AtspiHyperlinkInterface::isNull() const;
+%catches(std::runtime_error) AtspiHyperlinkInterface::toString() const;
+%catches(std::runtime_error) AtspiHyperlinkInterface::getStartIndex() const;
+%catches(std::runtime_error) AtspiHyperlinkInterface::getEndIndex() const;
+%catches(std::runtime_error) AtspiHyperlinkInterface::getURI(int index) const;
+
 %catches(std::runtime_error) AtspiTableInterface::isNull() const;
 %catches(std::runtime_error) AtspiTableInterface::toString() const;
 %catches(std::runtime_error) AtspiTableInterface::getNColumns() const;
@@ -86,6 +94,7 @@ namespace std {
 %include <axaccess/atspi/atspi_action_interface.h>
 %include <axaccess/atspi/atspi_component_interface.h>
 %include <axaccess/atspi/atspi_document_interface.h>
+%include <axaccess/atspi/atspi_hyperlink_interface.h>
 %include <axaccess/atspi/atspi_node.h>
 %include <axaccess/atspi/atspi_table_interface.h>
 %include <axaccess/atspi/atspi_table_cell_interface.h>

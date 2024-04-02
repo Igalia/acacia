@@ -351,6 +351,34 @@ There is basic unit-test infrastructure, for now only available on Linux. To run
 
 The tests are built by default. To disable them, pass `-DAXA_UNIT_TESTS=off` to cmake.
 
+## Installing
+
+After building your targets successfully with `make`, simply do:
+
+```
+make install
+```
+
+Use the CMAKE variable `CMAKE_INSTALL_PREFIX` to define the root directory where the different artifacts will be placed. For example:
+
+```
+$ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+```
+
+### On Linux
+
+On Linux, the default prefix is `/usr/local`.
+
+Before installing, please make sure that the user has write permissions on the destination dir. Also, before using the library from the installation dir, make sure your that `<PREFIX>/lib` is added to ld.so configuration (e.g, via `LD_LIBRARY_PATH` environment variable).
+
+### On Mac
+
+*Not yet supported*.
+
+### On Windows
+
+*Not yet supported*.
+
 ## Documentation
 
 Documentation for the different backend APIs can be automatically generated from source code via [Doxygen](https://www.doxygen.nl/download.html), which must be install locally. It is off by default; to enable it, pass `-DAXA_BUILD_DOC=ON` to cmake.
