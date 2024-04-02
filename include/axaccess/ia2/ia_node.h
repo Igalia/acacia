@@ -25,7 +25,10 @@
 /** @} */  // end of axapi group
 
 /**
- * Represents a node in the accessibility tree.
+ * Represents a node in the IAccessible2 accessibility tree. This object wraps
+ * an [IAccessible
+ * Interface](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nn-oleacc-iaccessible)
+ * pointer.
  * @ingroup ia2
  */
 class AXA_EXPORT IANode {
@@ -39,25 +42,143 @@ class AXA_EXPORT IANode {
   };
   ~IANode(){};
 
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessible2
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IA2.
+   */
   IA2 QueryIA2();
+
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleAction
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IAAction.
+   */
   IAAction QueryAction();
+
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleComponent
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IAComponent.
+   */
   IAComponent QueryComponent();
+
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleHyperlink
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IAHyperlink.
+   */
   IAHyperlink QueryHyperlink();
+
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleTableCell
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IATableCell.
+   */
   IATableCell QueryTableCell();
+
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleTable2
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IATable2.
+   */
   IATable2 QueryTable2();
+
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleText
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IAText.
+   */
   IAText QueryText();
+
+  /**
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleText
+   * interface for this node.
+   * @ingroup ia2
+   *
+   * @returns An @ref IAText.
+   */
   IAValue QueryValue();
 
+  /**
+   * Test whether the underlaying IAccessible pointer is the null pointer.
+   * An IANode with an null IAccessible pointer will be created if the
+   * wrapped API returned a nullptr with no error codes.
+   * @ingroup ia2
+   */
   bool isNull();
 
+  /**
+   * Wraps
+   * [get_accRole](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-iaccessible-get_accrole).
+   * @ingroup ia2
+   */
   std::string getAccRole();
+
+  /**
+   * Wraps
+   * [get_accName](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-iaccessible-get_accname).
+   * @ingroup ia2
+   */
   std::string getAccName();
+
+  /**
+   * Wraps
+   * [get_accDescription](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-iaccessible-get_accdescription).
+   * @ingroup ia2
+   */
   std::string getAccDescription();
 
+  /**
+   * Wraps
+   * [get_accChildCount](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-iaccessible-get_accchildcount).
+   * @ingroup ia2
+   */
   long getAccChildCount();
+
+  /**
+   * Helper function which uses
+   * [AccessibleChildren](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-accessiblechildren)
+   * to query accessible children, and returns the child specified by the index.
+   * Some children returned by the AccessibleChildAt are not accessible objects
+   * with their own IAccessible interface, but partial children with no
+   * interfaces. For these partial children, only a role and a name are
+   * available.
+   * @ingroup ia2
+   *
+   * @param index
+   *
+   * @returns An @ref IANode.
+   */
   IANode AccessibleChildAt(int index);
 
+  /**
+   * Wraps
+   * [get_accState](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-iaccessible-get_accstate).
+   * @ingroup ia2
+   */
   long getAccState();
+
+  /**
+   * Helper function to convert the state bit vector to strings indicating the
+   * [state
+   * constants](https://learn.microsoft.com/en-us/windows/win32/winauto/object-state-constants).
+   * @ingroup ia2
+   */
   std::vector<std::string> getStateStrings();
 
  private:
