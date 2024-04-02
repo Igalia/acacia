@@ -16,7 +16,7 @@
 #include "axaccess/atspi/atspi_value_interface.h"
 
 /**
- * Represents a node in the AT-SPI accessibility tree. This object  wraps an
+ * Represents a node in the AT-SPI accessibility tree. This object wraps an
  * [AtspiAccessible](https://docs.gtk.org/atspi2/class.Accessible.html) pointer.
  * @ingroup atspi
  */
