@@ -9,6 +9,12 @@ target_link_libraries(
     atspi_inspect
 )
 
+add_custom_target(
+  examples
+  DEPENDS
+    dump_tree_atspi
+)
+
 if (AXA_PYTHON_MODULE)
   add_custom_target(
     dump_tree_atspi.py

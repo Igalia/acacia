@@ -24,3 +24,7 @@ configure_file(
   ${DOXYGEN_OUT}
   @ONLY
 )
+
+install(DIRECTORY
+  ${CMAKE_CURRENT_BINARY_DIR}/docs DESTINATION share/doc/${CMAKE_PROJECT_NAME}
+)
