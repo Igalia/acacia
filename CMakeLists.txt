@@ -55,6 +55,12 @@ option(
   OFF
 )
 
+## Enable/disable Unit tests, ON by default
+option(
+  AXA_UNIT_TESTS
+  "Enable unit tests"
+  ON
+)
 
 if (AXA_BUILD_DOC)
   add_subdirectory(docs)
@@ -75,3 +81,8 @@ endif(WIN32)
 add_subdirectory(lib)
 add_subdirectory(examples)
 add_subdirectory(third_party)
+
+if (AXA_UNIT_TESTS)
+  include(CTest)
+  add_subdirectory(tests)
+endif (AXA_UNIT_TESTS)

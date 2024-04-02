@@ -345,6 +345,12 @@ NodeJS also has an example dump tree which can be run from the bin folder:
 % node ./dump_tree_ia2.js --name chrome
 ```
 
+## Testing
+
+There is basic unit-test infrastructure, for now only available on Linux. To run the tests, simple do `make test` after a successful build.
+
+The tests are built by default. To disable them, pass `-DAXA_UNIT_TESTS=off` to cmake.
+
 ## Installing
 
 After building your targets successfully with `make`, simply do:
@@ -372,7 +378,6 @@ Before installing, please make sure that the user has write permissions on the d
 ### On Windows
 
 *Not yet supported*.
-
 
 ## Documentation
 
