@@ -8,25 +8,37 @@
 #include <wrl/client.h>
 
 #include "axaccess/export.h"
-# include "ia_node.h"
+#include "ia_node.h"
 
 /**
- * Returns the root node of the accessiblity tree of a running
- * application referenced by name and process ID.
+ * Returns the root node of the accessible tree of a running application
+ * referenced by the application's accessible name.
  * @ingroup ia2
  *
- * @param name: The name of the application.
- * @param dwProcessID: process ID.
+ * @param name: The accessible name (or substring thereof) to search for.
+ * @param pid: Optional. The process id to search for.
  *
- * @returns Pointer to the node.
+ * @returns An @ref IANode.
  */
+AXA_EXPORT IANode findRootIANodeForName(const std::string& name,
+                                        const int pid = 0);
+
+/**
+ * Returns the root node of the accessiblity tree of a running application
+ * referenced by pid.
+ * @ingroup ia2
+ *
+ * @param pid: The process id of the running application.
+ *
+ * @returns An @ref IANode.
+ */
+AXA_EXPORT IANode findRootIANodeForPID(const int pid);
+
+// The remaining functions are not exposed to the SWIG generated interfaces
+
 AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(
     const std::string& name,
     DWORD dwProcessID);
-
-AXA_EXPORT IANode findRootIANodeForName(const std::string& name, const int pid = 0);
-
-AXA_EXPORT IANode findRootIANodeForPID(const int pid);
 
 AXA_EXPORT std::string NameFromHwnd(HWND hwnd);
 
