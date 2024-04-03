@@ -32,19 +32,19 @@ function printNodeAndSubtree(node, level) {
   if (!node.hasAttribute('AXChildren'))
     return;
 
-  let children = getListAttributeValue(node, 'AXChildren');
+  let children = getListAttribute(node, 'AXChildren');
   for (let child of children)
     printNodeAndSubtree(child, level + 1);
 }
 
 function serializeRoleAndAttributes(node, attributes) {
-  let output = getAttributeValue(node, 'AXRole');
+  let output = getAttribute(node, 'AXRole');
 
   for (let attribute of attributes) {
     if (!node.hasAttribute(attribute))
       continue;
 
-    let value = getAttributeValue(node, attribute);
+    let value = getAttribute(node, attribute);
     switch (typeof value) {
       case 'undefined':
         continue;
@@ -109,34 +109,34 @@ function printUsageAndExit() {
   process.exit();
 }
 
-function getAttributeValue(node, attribute) {
+function getAttribute(node, attribute) {
   try {
     const type = node.getValueType(attribute);
     switch (type) {
       case axapi_inspect.ValueType_LIST:
-        return getListAttributeValue(node, attribute);
+        return getListAttribute(node, attribute);
       case axapi_inspect.ValueType_BOOLEAN:
-        return node.getBooleanValue(attribute);
+        return node.getBooleanAttribute(attribute);
       case axapi_inspect.ValueType_INT:
-        return node.getIntValue(attribute);
+        return node.getIntAttribute(attribute);
       case axapi_inspect.ValueType_FLOAT:
-        return node.getFloatValue(attribute);
+        return node.getFloatAttribute(attribute);
       case axapi_inspect.ValueType_STRING:
-        return node.getStringValue(attribute);
+        return node.getStringAttribute(attribute);
       case axapi_inspect.ValueType_URL:
-        return node.getURLValue(attribute);
+        return node.getURLAttribute(attribute);
       case axapi_inspect.ValueType_NODE:
-        return node.getNodeValue(attribute);
+        return node.getNodeAttribute(attribute);
       case axapi_inspect.ValueType_POINT:
-        return node.getPointValue(attribute);
+        return node.getPointAttribute(attribute);
       case axapi_inspect.ValueType_SIZE:
-        return node.getSizeValue(attribute);
+        return node.getSizeAttribute(attribute);
       case axapi_inspect.ValueType_RECT:
-        return node.getRectValue(attribute);
+        return node.getRectAttribute(attribute);
       case axapi_inspect.ValueType_RANGE:
-        return node.getRangeValue(attribute);
+        return node.getRangeAttribute(attribute);
       case axapi_inspect.ValueType_DICTIONARY:
-        return node.getDictionaryValue(attribute);
+        return node.getDictionaryAttribute(attribute);
       default:
         const typeString = axapi_inspect.ValueTypeToString(type);
         console.error(`Unsupported type: ${typeString} for ${attribute}`);
@@ -147,7 +147,7 @@ function getAttributeValue(node, attribute) {
   }
 }
 
-function getListAttributeValue(node, attribute) {
+function getListAttribute(node, attribute) {
   let count = node.getListElementCount(attribute);
   if (count === 0)
     return [];
@@ -161,21 +161,21 @@ function getListAttributeValue(node, attribute) {
 
   let array = [];
   for (let i = 0; i < count; i++)
-    array.push(getListAttributeValueAtIndex(node, type, attribute, i));
+    array.push(getListAttributeAtIndex(node, type, attribute, i));
 
   return array;
 }
 
-function getListAttributeValueAtIndex(node, type, attribute, index) {
+function getListAttributeAtIndex(node, type, attribute, index) {
   switch (type) {
     case axapi_inspect.ValueType_NODE:
-      return node.getNodeListValueAtIndex(attribute, index);
+      return node.getNodeListAttribute(attribute, index);
     case axapi_inspect.ValueType_STRING:
-      return node.getStringListValueAtIndex(attribute, index);
+      return node.getStringListAttribute(attribute, index);
     case axapi_inspect.ValueType_RANGE:
-      return node.getRangeListValueAtIndex(attribute, index);
+      return node.getRangeListAttribute(attribute, index);
     case axapi_inspect.ValueType_DICTIONARY:
-      return node.getDictionaryListValueAtIndex(attribute, index);
+      return node.getDictionaryListAttribute(attribute, index);
     default:
       return undefined;
   }

@@ -280,13 +280,13 @@ ScopedCFTypeRef<T> AXAPINode::GetRawArrayValueAtIndex(
   return cf_value;
 }
 
-bool AXAPINode::getBooleanValue(const std::string& attribute) const {
+bool AXAPINode::getBooleanAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<CFBooleanRef>(attribute, ValueType::BOOLEAN);
 
   return CFBooleanGetValue(cf_value.get());
 }
 
-int AXAPINode::getIntValue(const std::string& attribute) const {
+int AXAPINode::getIntAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<CFNumberRef>(attribute, ValueType::INT);
 
   int int_value;
@@ -298,7 +298,7 @@ int AXAPINode::getIntValue(const std::string& attribute) const {
   return int_value;
 }
 
-float AXAPINode::getFloatValue(const std::string& attribute) const {
+float AXAPINode::getFloatAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<CFNumberRef>(attribute, ValueType::FLOAT);
 
   float float_value;
@@ -310,7 +310,7 @@ float AXAPINode::getFloatValue(const std::string& attribute) const {
   return float_value;
 }
 
-std::string AXAPINode::getStringValue(const std::string& attribute) const {
+std::string AXAPINode::getStringAttribute(const std::string& attribute) const {
   ScopedCFTypeRef<CFStringRef> cf_attribute = StdStringToCFStringRef(attribute);
   ScopedCFTypeRef<CFTypeRef> cf_value;
   AXError err = AXUIElementCopyAttributeValue(
@@ -345,7 +345,7 @@ std::string AXAPINode::getStringValue(const std::string& attribute) const {
   return CFStringRefToStdString((CFStringRef)cf_value.get());
 }
 
-std::string AXAPINode::getURLValue(const std::string& attribute) const {
+std::string AXAPINode::getURLAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<CFURLRef>(attribute, ValueType::URL);
 
   CFStringRef cf_url_string = CFURLGetString(cf_value.get());
@@ -353,13 +353,13 @@ std::string AXAPINode::getURLValue(const std::string& attribute) const {
   return CFStringRefToStdString(cf_url_string);
 }
 
-AXAPINode AXAPINode::getNodeValue(const std::string& attribute) const {
+AXAPINode AXAPINode::getNodeAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<AXUIElementRef>(attribute, ValueType::NODE);
 
   return AXAPINode(cf_value);
 }
 
-Point AXAPINode::getPointValue(const std::string& attribute) const {
+Point AXAPINode::getPointAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<AXValueRef>(attribute, ValueType::POINT);
 
   CGPoint cg_point;
@@ -373,7 +373,7 @@ Point AXAPINode::getPointValue(const std::string& attribute) const {
   return Point(cg_point.x, cg_point.y);
 }
 
-Size AXAPINode::getSizeValue(const std::string& attribute) const {
+Size AXAPINode::getSizeAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<AXValueRef>(attribute, ValueType::SIZE);
 
   CGSize cg_size;
@@ -387,7 +387,7 @@ Size AXAPINode::getSizeValue(const std::string& attribute) const {
   return Size(cg_size.width, cg_size.height);
 }
 
-Rect AXAPINode::getRectValue(const std::string& attribute) const {
+Rect AXAPINode::getRectAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<AXValueRef>(attribute, ValueType::RECT);
 
   CGRect cg_rect;
@@ -402,7 +402,7 @@ Rect AXAPINode::getRectValue(const std::string& attribute) const {
   return Rect(cg_origin.x, cg_origin.y, cg_size.width, cg_size.height);
 }
 
-Range AXAPINode::getRangeValue(const std::string& attribute) const {
+Range AXAPINode::getRangeAttribute(const std::string& attribute) const {
   auto cf_value = GetRawValue<AXValueRef>(attribute, ValueType::RANGE);
 
   CFRange cf_range;
@@ -416,7 +416,7 @@ Range AXAPINode::getRangeValue(const std::string& attribute) const {
   return Range(cf_range.length, cf_range.location);
 }
 
-std::vector<AXAPINode> AXAPINode::getNodeListValue(
+std::vector<AXAPINode> AXAPINode::getNodeListAttribute(
     const std::string& attribute) const {
   ScopedCFTypeRef<CFArrayRef> cf_array = GetRawArrayValue(attribute);
 
@@ -438,15 +438,15 @@ std::vector<AXAPINode> AXAPINode::getNodeListValue(
   return value;
 }
 
-AXAPINode AXAPINode::getNodeListValueAtIndex(const std::string& attribute,
-                                             int index) const {
+AXAPINode AXAPINode::getNodeListAttribute(const std::string& attribute,
+                                          int index) const {
   auto cf_value = GetRawArrayValueAtIndex<AXUIElementRef>(attribute, index,
                                                           ValueType::NODE);
 
   return AXAPINode(cf_value);
 }
 
-std::vector<std::string> AXAPINode::getStringListValue(
+std::vector<std::string> AXAPINode::getStringListAttribute(
     std::string& attribute) const {
   ScopedCFTypeRef<CFArrayRef> cf_array = GetRawArrayValue(attribute);
 
@@ -468,15 +468,16 @@ std::vector<std::string> AXAPINode::getStringListValue(
   return value;
 }
 
-std::string AXAPINode::getStringListValueAtIndex(std::string& attribute,
-                                                 int index) const {
+std::string AXAPINode::getStringListAttribute(std::string& attribute,
+                                              int index) const {
   auto cf_value =
       GetRawArrayValueAtIndex<CFStringRef>(attribute, index, ValueType::STRING);
 
   return CFStringRefToStdString(cf_value.get());
 }
 
-std::vector<Range> AXAPINode::getRangeListValue(std::string& attribute) const {
+std::vector<Range> AXAPINode::getRangeListAttribute(
+    std::string& attribute) const {
   ScopedCFTypeRef<CFArrayRef> cf_array = GetRawArrayValue(attribute);
 
   std::vector<Range> value;
@@ -505,8 +506,8 @@ std::vector<Range> AXAPINode::getRangeListValue(std::string& attribute) const {
   return value;
 }
 
-Range AXAPINode::getRangeListValueAtIndex(std::string& attribute,
-                                          int index) const {
+Range AXAPINode::getRangeListAttribute(std::string& attribute,
+                                       int index) const {
   auto cf_value =
       GetRawArrayValueAtIndex<AXValueRef>(attribute, index, ValueType::RANGE);
   CFRange cf_range;
@@ -519,7 +520,7 @@ Range AXAPINode::getRangeListValueAtIndex(std::string& attribute,
   return Range(cf_range.length, cf_range.location);
 }
 
-std::vector<Dictionary> AXAPINode::getDictionaryListValue(
+std::vector<Dictionary> AXAPINode::getDictionaryListAttribute(
     std::string& attribute) const {
   ScopedCFTypeRef<CFArrayRef> cf_array = GetRawArrayValue(attribute);
 
@@ -542,8 +543,8 @@ std::vector<Dictionary> AXAPINode::getDictionaryListValue(
   return value;
 }
 
-Dictionary AXAPINode::getDictionaryListValueAtIndex(std::string& attribute,
-                                                    int index) const {
+Dictionary AXAPINode::getDictionaryListAttribute(std::string& attribute,
+                                                 int index) const {
   auto cf_value = GetRawArrayValueAtIndex<CFDictionaryRef>(
       attribute, index, ValueType::DICTIONARY);
 

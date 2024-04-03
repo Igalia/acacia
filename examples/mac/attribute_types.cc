@@ -51,7 +51,7 @@ void AddListValueExample(ValueType type,
       break;
     }
     case ValueType::STRING: {
-      vector<string> values = node.getStringListValue(attribute);
+      vector<string> values = node.getStringListAttribute(attribute);
       if (values.empty()) {
         value_string = "[]";
         break;
@@ -66,7 +66,7 @@ void AddListValueExample(ValueType type,
       break;
     }
     case ValueType::RANGE: {
-      vector<mac_inspect::Range> values = node.getRangeListValue(attribute);
+      vector<mac_inspect::Range> values = node.getRangeListAttribute(attribute);
       if (values.empty()) {
         value_string = "[]";
         break;
@@ -82,7 +82,7 @@ void AddListValueExample(ValueType type,
     }
     case ValueType::DICTIONARY: {
       mac_inspect::Dictionary dict =
-          node.getDictionaryListValueAtIndex(attribute, 0);
+          node.getDictionaryListAttribute(attribute, 0);
       vector<string> keys = dict.keys();
       value_string = "first value: {\n";
       for (string& key : keys) {
@@ -97,7 +97,7 @@ void AddListValueExample(ValueType type,
             AXAPINode value = dict.getNodeValue(key);
             value_string += "  \"" + key + "\": ";
             if (value.hasAttribute("AXTitle"))
-              value_string += "(" + value.getStringValue("AXTitle") + ")";
+              value_string += "(" + value.getStringAttribute("AXTitle") + ")";
             else
               value_string += "[unnamed node]";
             value_string += "\n";
@@ -145,51 +145,51 @@ void AddValueExample(ValueType type,
   string value_string;
   switch (type) {
     case ValueType::BOOLEAN: {
-      bool value = node.getBooleanValue(attribute);
+      bool value = node.getBooleanAttribute(attribute);
       value_string = value ? "true" : "false";
       break;
     }
     case ValueType::INT: {
-      int value = node.getIntValue(attribute);
+      int value = node.getIntAttribute(attribute);
       value_string = std::to_string(value);
       break;
     }
     case ValueType::FLOAT: {
-      float value = node.getFloatValue(attribute);
+      float value = node.getFloatAttribute(attribute);
       value_string = std::to_string(value);
       break;
     }
     case ValueType::STRING: {
-      value_string = "\"" + node.getStringValue(attribute) + "\"";
+      value_string = "\"" + node.getStringAttribute(attribute) + "\"";
       break;
     }
     case ValueType::URL: {
-      value_string = "\"" + node.getURLValue(attribute) + "\"";
+      value_string = "\"" + node.getURLAttribute(attribute) + "\"";
       break;
     }
     case ValueType::NODE: {
-      AXAPINode value = node.getNodeValue(attribute);
+      AXAPINode value = node.getNodeAttribute(attribute);
       if (value.hasAttribute("AXTitle"))
-        value_string = "(" + value.getStringValue("AXTitle") + ")";
+        value_string = "(" + value.getStringAttribute("AXTitle") + ")";
       break;
     }
     case ValueType::POINT: {
-      mac_inspect::Point value = node.getPointValue(attribute);
+      mac_inspect::Point value = node.getPointAttribute(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::SIZE: {
-      mac_inspect::Size value = node.getSizeValue(attribute);
+      mac_inspect::Size value = node.getSizeAttribute(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::RECT: {
-      mac_inspect::Rect value = node.getRectValue(attribute);
+      mac_inspect::Rect value = node.getRectAttribute(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::RANGE: {
-      mac_inspect::Range value = node.getRangeValue(attribute);
+      mac_inspect::Range value = node.getRangeAttribute(attribute);
       value_string = value.ToString();
       break;
     }
@@ -249,7 +249,7 @@ void CollectAttributeTypes(AXAPINode node,
     return;
 
   try {
-    vector<AXAPINode> children = node.getNodeListValue("AXChildren");
+    vector<AXAPINode> children = node.getNodeListAttribute("AXChildren");
     for (AXAPINode& child : children)
       CollectAttributeTypes(child, attribute_types, examples);
   } catch (...) {

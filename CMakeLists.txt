@@ -1,5 +1,5 @@
-project(AXAccess)
 cmake_minimum_required(VERSION 3.25)
+project(AXAccess)
 
 # Enable cmake_print_variables() and cmake_print_properties() for debugging
 include(CMakePrintHelpers)
@@ -63,7 +63,10 @@ option(
 )
 
 if (AXA_BUILD_DOC)
+  message(STATUS "AXA_BUILD_DOC on")
   add_subdirectory(docs)
+else()
+  message(STATUS "AXA_BUILD_DOC off")
 endif (AXA_BUILD_DOC)
 
 # On windows, put all of the resulting libraries and executables in

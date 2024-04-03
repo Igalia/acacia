@@ -97,6 +97,7 @@ endif()
 # Generate a NodeJS Module using swig + node-gyp
 
 if (AXA_NODEJS_MODULE)
+  message(STATUS "AXA_NODEJS_MODULE on")
   find_program(
     NODE_GYP "node-gyp"
     REQUIRED

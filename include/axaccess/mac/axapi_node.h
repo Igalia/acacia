@@ -56,44 +56,44 @@ class AXAPINode {
 
   int getListElementCount(const std::string& attribute) const;
 
-  bool getBooleanValue(const std::string& attribute) const;
+  bool getBooleanAttribute(const std::string& attribute) const;
 
-  int getIntValue(const std::string& attribute) const;
+  int getIntAttribute(const std::string& attribute) const;
 
-  float getFloatValue(const std::string& attribute) const;
+  float getFloatAttribute(const std::string& attribute) const;
 
-  std::string getStringValue(const std::string& attribute) const;
+  std::string getStringAttribute(const std::string& attribute) const;
 
-  std::string getURLValue(const std::string& attribute) const;
+  std::string getURLAttribute(const std::string& attribute) const;
 
-  AXAPINode getNodeValue(const std::string& attribute) const;
+  AXAPINode getNodeAttribute(const std::string& attribute) const;
 
-  Point getPointValue(const std::string& attribute) const;
+  Point getPointAttribute(const std::string& attribute) const;
 
-  Size getSizeValue(const std::string& attribute) const;
+  Size getSizeAttribute(const std::string& attribute) const;
 
-  Rect getRectValue(const std::string& attribute) const;
+  Rect getRectAttribute(const std::string& attribute) const;
 
-  Range getRangeValue(const std::string& attribute) const;
+  Range getRangeAttribute(const std::string& attribute) const;
 
-  std::vector<AXAPINode> getNodeListValue(const std::string& attribute) const;
+  std::vector<AXAPINode> getNodeListAttribute(
+      const std::string& attribute) const;
 
-  AXAPINode getNodeListValueAtIndex(const std::string& attribute,
-                                    int index) const;
+  AXAPINode getNodeListAttribute(const std::string& attribute, int index) const;
 
-  std::vector<std::string> getStringListValue(std::string& attribute) const;
+  std::vector<std::string> getStringListAttribute(std::string& attribute) const;
 
-  std::string getStringListValueAtIndex(std::string& attribute,
+  std::string getStringListAttribute(std::string& attribute, int index) const;
+
+  std::vector<Range> getRangeListAttribute(std::string& attribute) const;
+
+  Range getRangeListAttribute(std::string& attribute, int index) const;
+
+  std::vector<Dictionary> getDictionaryListAttribute(
+      std::string& attribute) const;
+
+  Dictionary getDictionaryListAttribute(std::string& attribute,
                                         int index) const;
-
-  std::vector<Range> getRangeListValue(std::string& attribute) const;
-
-  Range getRangeListValueAtIndex(std::string& attribute, int index) const;
-
-  std::vector<Dictionary> getDictionaryListValue(std::string& attribute) const;
-
-  Dictionary getDictionaryListValueAtIndex(std::string& attribute,
-                                           int index) const;
 
   friend AXAPINode findRootAXAPINodeForPID(int pid);
   friend AXAPINode findRootAXAPINodeForName(std::string name);

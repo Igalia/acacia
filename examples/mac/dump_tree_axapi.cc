@@ -15,12 +15,12 @@ void print_usage(std::string& program_name) {
 }
 
 static void print_attributes(AXAPINode node) {
-  std::cout << node.getStringValue("AXRole");
+  std::cout << node.getStringAttribute("AXRole");
 
   if (node.hasAttribute("AXTitle")) {
-    std::string title = node.getStringValue("AXTitle");
+    std::string title = node.getStringAttribute("AXTitle");
     if (!title.empty())
-      std::cout << " \"" << node.getStringValue("AXTitle") << "\"";
+      std::cout << " \"" << node.getStringAttribute("AXTitle") << "\"";
   }
 
   std::cout << "\n";
@@ -47,7 +47,7 @@ static void print_node(AXAPINode node, int level) {
   int32_t child_count = node.getListElementCount("AXChildren");
   for (auto i = 0; i < child_count; i++) {
     try {
-      auto child = node.getNodeListValueAtIndex("AXChildren", i);
+      auto child = node.getNodeListAttribute("AXChildren", i);
       print_node(child, level + 1);
     } catch (...) {
       // Sometimes getting a child produces kAXErrorFailure for totally opaque
