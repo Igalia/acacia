@@ -15,7 +15,7 @@
  * interface using IANode::QueryComponent().
  * @ingroup ia2
  */
-class AXA_EXPORT IAComponent {
+class ACACIA_EXPORT IAComponent {
  public:
   IAComponent(Microsoft::WRL::ComPtr<IAccessibleComponent> iface)
       : iface_(iface) {}

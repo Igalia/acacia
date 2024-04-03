@@ -15,7 +15,7 @@
  * interface using IANode::QueryTable2().
  * @ingroup ia2
  */
-class AXA_EXPORT IATable2 {
+class ACACIA_EXPORT IATable2 {
  public:
   IATable2(Microsoft::WRL::ComPtr<IAccessibleTable2> iface) : iface_(iface) {}
   ~IATable2(){};

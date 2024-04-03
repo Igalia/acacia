@@ -31,7 +31,7 @@
  * pointer.
  * @ingroup ia2
  */
-class AXA_EXPORT IANode {
+class ACACIA_EXPORT IANode {
  public:
   IANode(){};
   IANode(Microsoft::WRL::ComPtr<IAccessible> root, VARIANT child_id)

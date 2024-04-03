@@ -20,7 +20,7 @@ class NodeImpl {
   virtual NodePtr ChildAt(const int32_t index) = 0;
 };
 
-class AXA_EXPORT Node {
+class ACACIA_EXPORT Node {
  public:
   static NodePtr Create(std::unique_ptr<NodeImpl> impl);
   Node(std::unique_ptr<NodeImpl> aImpl);

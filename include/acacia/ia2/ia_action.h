@@ -15,7 +15,7 @@
  * interface using IANode::QueryAction().
  * @ingroup ia2
  */
-class AXA_EXPORT IAAction {
+class ACACIA_EXPORT IAAction {
  public:
   IAAction(Microsoft::WRL::ComPtr<IAccessibleAction> iface) : iface_(iface) {}
   ~IAAction(){};
