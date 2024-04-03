@@ -153,9 +153,9 @@ class AXA_EXPORT IANode {
   /**
    * Helper function which uses
    * [AccessibleChildren](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nf-oleacc-accessiblechildren)
-   * to query accessible children, and returns the child specified by the index.
-   * Some children returned by the AccessibleChildAt are not accessible objects
-   * with their own IAccessible interface, but partial children with no
+   * to retrieve accessible children, and returns the child specified by the
+   * index. Some children returned by the AccessibleChildAt are not accessible
+   * objects with their own IAccessible interface, but partial children with no
    * interfaces. For these partial children, only a role and a name are
    * available.
    * @ingroup ia2
