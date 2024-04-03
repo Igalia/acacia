@@ -25,8 +25,8 @@
 /** @} */  // end of axapi group
 
 /**
- * Represents a node in the IAccessible2 accessibility tree. This object wraps
- * an [IAccessible2
+ * Represents a node in the MSAA with IAccessible2 accessibility tree. This
+ * object wraps an [MSAA/IAccessible
  * Interface](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nn-oleacc-iaccessible)
  * pointer.
  * @ingroup ia2
@@ -43,7 +43,7 @@ class AXA_EXPORT IANode {
   ~IANode(){};
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessible2
+   * Wraps QueryInterface and QueryService to retrieve the IAccessible2
    * interface for this node.
    * @ingroup ia2
    *
@@ -52,7 +52,7 @@ class AXA_EXPORT IANode {
   IA2 QueryIA2();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleAction
+   * Wraps QueryInterface and QueryService to retrieve the IAccessibleAction
    * interface for this node.
    * @ingroup ia2
    *
@@ -61,7 +61,7 @@ class AXA_EXPORT IANode {
   IAAction QueryAction();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleComponent
+   * Wraps QueryInterface and QueryService to retrieve the IAccessibleComponent
    * interface for this node.
    * @ingroup ia2
    *
@@ -70,7 +70,7 @@ class AXA_EXPORT IANode {
   IAComponent QueryComponent();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleHyperlink
+   * Wraps QueryInterface and QueryService to retrieve the IAccessibleHyperlink
    * interface for this node.
    * @ingroup ia2
    *
@@ -79,7 +79,7 @@ class AXA_EXPORT IANode {
   IAHyperlink QueryHyperlink();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleTableCell
+   * Wraps QueryInterface and QueryService to retrieve the IAccessibleTableCell
    * interface for this node.
    * @ingroup ia2
    *
@@ -88,7 +88,7 @@ class AXA_EXPORT IANode {
   IATableCell QueryTableCell();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleTable2
+   * Wraps QueryInterface and QueryService to retrieve the IAccessibleTable2
    * interface for this node.
    * @ingroup ia2
    *
@@ -97,7 +97,7 @@ class AXA_EXPORT IANode {
   IATable2 QueryTable2();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleText
+   * Wraps QueryInterface and QueryService to retrieve the IAccessibleText
    * interface for this node.
    * @ingroup ia2
    *
@@ -106,7 +106,7 @@ class AXA_EXPORT IANode {
   IAText QueryText();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleValue
+   * Wraps QueryInterface and QueryService to retrieve the IAccessibleValue
    * interface for this node.
    * @ingroup ia2
    *

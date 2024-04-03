@@ -43,6 +43,8 @@ class AXA_EXPORT IAAction {
    * Wraps
    * [getDescription](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_action.html#a7c8d49908df62d2ca14794b7ee2977d5).
    * @ingroup ia2
+   *
+   * @param index: Index of the action.
    */
   std::string getDescription(int index);
 
@@ -50,6 +52,8 @@ class AXA_EXPORT IAAction {
    * Wraps
    * [getName](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_action.html#a3be5d5fd7ce55e48de5a7c0cc856758f).
    * @ingroup ia2
+   *
+   * @param index: Index of the action.
    */
   std::string getName(int index);
 
