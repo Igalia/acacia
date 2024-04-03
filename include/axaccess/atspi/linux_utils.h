@@ -19,7 +19,7 @@
  *
  * @param pid: The process id of the running application.
  *
- * @returns A unique pointer wrapping an AtspiNode.
+ * @returns An @ref AtspiNode.
  */
 AtspiNode findRootAtspiNodeForPID(const int pid);
 
@@ -31,7 +31,7 @@ AtspiNode findRootAtspiNodeForPID(const int pid);
  * @param name: The accessible name (or substring thereof) to search for.
  * @param pid: Optional. The process id to search for.
  *
- * @returns A unique pointer wrapping an AtspiNode.
+ * @returns An @ref AtspiNode.
  */
 AtspiNode findRootAtspiNodeForName(const std::string& name, const int pid = 0);
 

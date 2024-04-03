@@ -16,7 +16,7 @@
 #include "axaccess/atspi/atspi_value_interface.h"
 
 /**
- * Represents a node in the AT-SPI accessibility tree. This object  wraps an
+ * Represents a node in the AT-SPI accessibility tree. This object wraps an
  * [AtspiAccessible](https://docs.gtk.org/atspi2/class.Accessible.html) pointer.
  * @ingroup atspi
  */
@@ -29,7 +29,9 @@ class AtspiNode {
   ~AtspiNode(){};
 
   /**
-   * Test whether the underlaying AtspiAccessible pointer is the null pointer.
+   * Tests whether the underlying AtspiAccessible pointer is the null pointer.
+   * An AtspiNode with an null AtspiAccessible pointer will be created if the
+   * wrapped API returned a nullptr with no error codes.
    * @ingroup atspi
    */
   bool isNull() const;
@@ -60,8 +62,9 @@ class AtspiNode {
    * [atspi_accessible_get_attributes](https://docs.gtk.org/atspi2/method.Accessible.get_attributes.html).
    * @ingroup atspi
    *
-   * @returns Represents a GHashTable*. Each string in the vector is a key value
-   * pair separated by a ":" character, for example, "xml-roles:main".
+   * @returns A vector of strings representing a GHashTable*. Each string in the
+   * vector is a key value pair separated by a ":" character, for example,
+   * "xml-roles:main".
    */
   std::vector<std::string> getAttributes() const;
 

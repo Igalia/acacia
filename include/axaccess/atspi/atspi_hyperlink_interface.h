@@ -6,6 +6,13 @@
 
 #include <atspi/atspi.h>
 
+/**
+ * This object wraps an
+ * [AtspiHyperlink](https://docs.gtk.org/atspi2/iface.Hyperlink.html) pointer.
+ * It can be retrieved from an accessible object which implements this interface
+ * using AtspiNode::queryHyperlink().
+ * @ingroup atspi
+ */
 class AtspiHyperlinkInterface {
  public:
   AtspiHyperlinkInterface(AtspiHyperlink* interface)
@@ -20,10 +27,39 @@ class AtspiHyperlinkInterface {
 
   AtspiHyperlinkInterface(AtspiHyperlinkInterface&&) = default;
 
+  /**
+   * Tests whether the underlying AtspiHyperlink pointer is the null pointer.
+   * @ingroup atspi
+   */
   bool isNull() const { return !interface_; }
+
+  /**
+   * Helper function.
+   * @ingroup atspi
+   */
   std::string toString() const;
+
+  /**
+   * Wraps
+   * [atspi_hyperlink_get_start_index](https://docs.gtk.org/atspi2/method.Hyperlink.get_start_index.html).
+   * @ingroup atspi
+   */
   int getStartIndex() const;
+
+  /**
+   * Wraps
+   * [atspi_hyperlink_get_end_index](https://docs.gtk.org/atspi2/method.Hyperlink.get_end_index.html).
+   * @ingroup atspi
+   */
   int getEndIndex() const;
+
+  /**
+   * Wraps
+   * [atspi_hyperlink_get_uri](https://docs.gtk.org/atspi2/method.Hyperlink.get_uri.html).
+   * @ingroup atspi
+   *
+   * @param index: Indiciates which hyperlink anchor to query.
+   */
   std::string getURI(int index = 0) const;
 
  private:
