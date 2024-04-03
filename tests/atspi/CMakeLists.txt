@@ -12,7 +12,7 @@ add_test(
   COMMAND test_smoke
 )
 
-if (AXA_PYTHON_MODULE)
+if (ACACIA_PYTHON)
   add_custom_target(
     python_tests
     ALL
@@ -33,9 +33,9 @@ if (AXA_PYTHON_MODULE)
     NAME test_smoke_py
     COMMAND python test_smoke.py
   )
-endif (AXA_PYTHON_MODULE)
+endif (ACACIA_PYTHON)
 
-if (AXA_NODEJS_MODULE)
+if (ACACIA_NODEJS)
   add_custom_target(
     node_tests
     ALL
@@ -54,4 +54,4 @@ if (AXA_NODEJS_MODULE)
     NAME test_smoke_js
     COMMAND node test_smoke.js
   )
-endif (AXA_NODEJS_MODULE)
+endif (ACACIA_NODEJS)

@@ -32,7 +32,7 @@ target_link_libraries(
   PRIVATE axapi_inspect
 )
 
-if (AXA_NODEJS_MODULE)
+if (ACACIA_NODEJS)
   add_custom_target(
     dump_tree_axapi.js
     ALL
@@ -44,4 +44,4 @@ if (AXA_NODEJS_MODULE)
       ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/mac/axapi_inspect.node ${CMAKE_CURRENT_BINARY_DIR}/axapi_inspect.node
     VERBATIM
   )
-endif (AXA_NODEJS_MODULE)
+endif (ACACIA_NODEJS)

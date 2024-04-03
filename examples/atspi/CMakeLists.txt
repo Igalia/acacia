@@ -15,7 +15,7 @@ add_custom_target(
     dump_tree_atspi
 )
 
-if (AXA_PYTHON_MODULE)
+if (ACACIA_PYTHON)
   add_custom_target(
     dump_tree_atspi.py
     ALL
@@ -30,9 +30,9 @@ if (AXA_PYTHON_MODULE)
       ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/acacia_atspi.py ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.py
     VERBATIM
   )
-endif (AXA_PYTHON_MODULE)
+endif (ACACIA_PYTHON)
 
-if (AXA_NODEJS_MODULE)
+if (ACACIA_NODEJS)
   add_custom_target(
     dump_tree_atspi.js
     ALL
@@ -45,4 +45,4 @@ if (AXA_NODEJS_MODULE)
       ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/acacia_atspi.node ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.node
     VERBATIM
   )
-endif (AXA_NODEJS_MODULE)
+endif (ACACIA_NODEJS)

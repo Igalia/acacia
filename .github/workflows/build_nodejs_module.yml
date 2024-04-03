@@ -27,7 +27,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DAXA_NODEJS_MODULE=ON
+          cmake .. -DACACIA_NODEJS=ON
       - name: Build project
         run: |
           cd build

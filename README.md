@@ -15,8 +15,8 @@ The pre-submit hook will run clang-format the code in your staging area before c
 
 This library can build either a Python3 module or a NodeJS c++ addon for any of the currently support accessibility APIs. To control which bindings are build, please provide the following feature flag.
 
-* Python3 bindings: `-DAXA_PYTHON_MODULE=<ON/OFF>`, OFF by default.
-* NodeJS bindings: `-DAXA_NODEJS_MODULE=<ON/OFF>`, OFF by default.
+* Python3 bindings: `-DACACIA_PYTHON=<ON/OFF>`, OFF by default.
+* NodeJS bindings: `-DACACIA_NODEJS=<ON/OFF>`, OFF by default.
 
 If no target language is specified, only the c++ library and examples will be built.
 
@@ -275,8 +275,8 @@ npm install -g node-gyp
 Add the following to your settings.json:
 ```
     "cmake.configureArgs": [
-        "-DAXA_PYTHON_MODULE=ON"
-        "-DAXA_NODEJS_MODULE=ON"
+        "-DACACIA_PYTHON=ON"
+        "-DACACIA_NODEJS=ON"
     ],
     "cmake.generator": "Ninja",
 ```
@@ -305,7 +305,7 @@ Note: `-DCMAKE_BUILD_TYPE=Release` is necessary if you are using msvc and only h
 
 To turn on the Python3 and NodeJS bindings, run cmake with the following flags:
 ```
-% cmake -DCMAKE_BUILD_TYPE=Release -DAXA_PYTHON_MODULE=ON -DAXA_NODEJS_MODULE=ON .. -G "Ninja" --fresh
+% cmake -DCMAKE_BUILD_TYPE=Release -DACACIA_PYTHON=ON -DACACIA_NODEJS=ON .. -G "Ninja" --fresh
 ```
 
 **OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
@@ -351,7 +351,7 @@ NodeJS also has an example dump tree which can be run from the bin folder:
 
 There is basic unit-test infrastructure, for now only available on Linux. To run the tests, simple do `make test` after a successful build.
 
-The tests are built by default. To disable them, pass `-DAXA_UNIT_TESTS=off` to cmake.
+The tests are built by default. To disable them, pass `-DACACIA_TESTS=off` to cmake.
 
 ## Installing
 
@@ -383,7 +383,7 @@ Before installing, please make sure that the user has write permissions on the d
 
 ## Documentation
 
-Documentation for the different backend APIs can be automatically generated from source code via [Doxygen](https://www.doxygen.nl/download.html), which must be install locally. It is off by default; to enable it, pass `-DAXA_BUILD_DOC=ON` to cmake.
+Documentation for the different backend APIs can be automatically generated from source code via [Doxygen](https://www.doxygen.nl/download.html), which must be install locally. It is off by default; to enable it, pass `-DACACIA_DOCS=ON` to cmake.
 
 The resulting documentation can be found in: `build/docs/docs/html`
 

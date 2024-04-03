@@ -48,14 +48,14 @@ target_link_libraries(
 # SWIG Instructions to build library bindings to different languages
 # (only required if at least one binding is ON).
 
-if (AXA_PYTHON_MODULE OR AXA_NODEJS_MODULE)
+if (ACACIA_PYTHON OR ACACIA_NODEJS)
   find_package(SWIG REQUIRED)
   include(UseSWIG)
 endif()
 
 # SWIG Instructions to build a python module called "axapi_inspect"
 
-if (AXA_PYTHON_MODULE)
+if (ACACIA_PYTHON)
   find_package(Python3 COMPONENTS Interpreter Development)
 
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -96,7 +96,7 @@ endif()
 
 # Generate a NodeJS Module using swig + node-gyp
 
-if (AXA_NODEJS_MODULE)
+if (ACACIA_NODEJS)
   find_program(
     NODE_GYP "node-gyp"
     REQUIRED
@@ -140,4 +140,4 @@ if (AXA_NODEJS_MODULE)
     VERBATIM
   )
 
-endif (AXA_NODEJS_MODULE)
+endif (ACACIA_NODEJS)
