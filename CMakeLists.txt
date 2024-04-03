@@ -30,7 +30,7 @@ include_directories(
 
 ## Feature flag for cross-platform library, OFF by default
 option(
-  AXA_LIBACACIA
+  ACACIA_CAT
   "Build cross-platform library (experimental)"
   OFF
 )

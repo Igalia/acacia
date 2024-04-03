@@ -5,7 +5,7 @@
 
 #include "acacia/export.h"
 
-namespace axa {
+namespace acat {
 
 class Node;
 typedef std::unique_ptr<Node> NodePtr;
@@ -35,4 +35,4 @@ class ACACIA_EXPORT Node {
   std::unique_ptr<NodeImpl> impl;
 };
 
-}  // namespace axa
+}  // namespace acat

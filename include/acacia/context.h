@@ -5,7 +5,7 @@
 
 #include "./node.h"
 
-namespace axa {
+namespace acat {
 
 enum APIType {
   UNKNOWN,
@@ -37,4 +37,4 @@ class ACACIA_EXPORT Context {
   std::unique_ptr<ContextImpl> impl;
 };
 
-}  // namespace axa
+}  // namespace acat

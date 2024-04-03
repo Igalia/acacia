@@ -1,17 +1,17 @@
 #include <acacia/context.h>
 #include <assert.h>
-#if defined(AXA_API_ATSPI)
-#include "atspi/axa_context_impl.h"
-#elif defined(AXA_API_AXAPI)
+#if defined(ACACIA_CAT_ATSPI)
+#include "atspi/acat_context_impl.h"
+#elif defined(ACACIA_CAT_AXAPI)
 #include "lib/mac/axapi_context_impl.h"
 #endif
 
-namespace axa {
+namespace acat {
 
 Context::Context() {
-#if defined(AXA_API_ATSPI)
+#if defined(ACACIA_CAT_ATSPI)
   impl = std::move(AtspiContextImpl::Create());
-#elif defined(AXA_API_AXAPI)
+#elif defined(ACACIA_CAT_AXAPI)
   impl = std::move(AXAPIContextImpl::Create());
 #endif
 }
@@ -34,4 +34,4 @@ NodePtr Context::GetAccessibleRootByPID(const int pid) {
   return impl->GetAccessibleRootByPID(pid);
 }
 
-}  // namespace axa
+}  // namespace acat

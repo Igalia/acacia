@@ -13,7 +13,7 @@ endif(WIN32)
 
 
 # Cross-platform API libacacia (experimental)
-if (AXA_LIBACACIA)
+if (ACACIA_CAT)
   # Main library (libacacia.so)
   add_library(
     acacia
@@ -43,7 +43,7 @@ if (AXA_LIBACACIA)
   if (LINUX)
     target_compile_definitions(
       acacia
-      PUBLIC -DAXA_API_ATSPI
+      PUBLIC -DACACIA_CAT_ATSPI
     )
     target_link_libraries(
       acacia
@@ -55,7 +55,7 @@ if (AXA_LIBACACIA)
   if (APPLE)
     target_compile_definitions(
       acacia
-      PUBLIC -DAXA_API_AXAPI
+      PUBLIC -DACACIA_CAT_AXAPI
     )
     target_link_libraries(
       acacia
@@ -63,4 +63,4 @@ if (AXA_LIBACACIA)
         axapi_inspect
     )
   endif (APPLE)
-endif (AXA_LIBACACIA)
+endif (ACACIA_CAT)
