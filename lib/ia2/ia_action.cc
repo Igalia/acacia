@@ -4,8 +4,6 @@
 
 #include "axaccess/ia2/win_utils.h"
 
-using namespace win_utils;
-
 std::string IAAction::toString() {
   if (isNull()) {
     return "Action: Not implemented";

@@ -39,10 +39,6 @@ class AXA_EXPORT IANode {
   };
   ~IANode(){};
 
-  static IANode findRootIANodeForName(const std::string& name,
-                                      const int pid = 0);
-  static IANode findRootIANodeForPID(const int pid);
-
   IA2 QueryIA2();
   IAAction QueryAction();
   IAComponent QueryComponent();

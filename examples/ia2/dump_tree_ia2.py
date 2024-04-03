@@ -69,9 +69,9 @@ def main():
       sys.exit()
 
     if (args.name):
-      app = ia2_inspect.IANode.findRootIANodeForName(args.name)
+      app = ia2_inspect.findRootIANodeForName(args.name)
     else:
-      app = ia2_inspect.IANode.findRootIANodeForPID(args.pid)
+      app = ia2_inspect.findRootIANodeForPID(args.pid)
 
     if (app.isNull()):
       print("Couldn't find application")
