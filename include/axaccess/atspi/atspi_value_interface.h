@@ -21,7 +21,7 @@ class AtspiValueInterface {
   ~AtspiValueInterface(){};
 
   /**
-   * Test whether the underlaying AtspiValue pointer is the null pointer. An
+   * Tests whether the underlying AtspiValue pointer is the null pointer. An
    * AtspiValueInterface with an null AtspiValue pointer will be created if the
    * wrapped API returned a nullptr with no error codes.
    * @ingroup atspi

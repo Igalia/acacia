@@ -28,7 +28,7 @@ class AtspiHyperlinkInterface {
   AtspiHyperlinkInterface(AtspiHyperlinkInterface&&) = default;
 
   /**
-   * Test whether the underlaying AtspiHyperlink pointer is the null pointer.
+   * Tests whether the underlying AtspiHyperlink pointer is the null pointer.
    * @ingroup atspi
    */
   bool isNull() const { return !interface_; }

@@ -21,7 +21,7 @@ class AtspiTableCellInterface {
   ~AtspiTableCellInterface(){};
 
   /**
-   * Test whether the underlaying AtspiTableCell pointer is the null pointer. An
+   * Tests whether the underlying AtspiTableCell pointer is the null pointer. An
    * AtspiTableCellInterface with an null AtspiTableCell pointer will be created
    * if the wrapped API returned a nullptr with no error codes.
    * @ingroup atspi

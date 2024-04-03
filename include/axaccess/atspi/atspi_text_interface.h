@@ -21,7 +21,7 @@ class AtspiTextInterface {
   ~AtspiTextInterface(){};
 
   /**
-   * Test whether the underlaying AtspiText pointer is the null pointer. An
+   * Tests whether the underlying AtspiText pointer is the null pointer. An
    * AtspiTextInterface with an null AtspiText pointer will be created if the
    * wrapped API returned a nullptr with no error codes.
    * @ingroup atspi

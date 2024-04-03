@@ -21,7 +21,7 @@ class AtspiActionInterface {
   ~AtspiActionInterface(){};
 
   /**
-   * Test whether the underlaying AtspiAction pointer is the null pointer. An
+   * Tests whether the underlying AtspiAction pointer is the null pointer. An
    * AtspiActionInterface with an null AtspiAction pointer will be created if
    * the wrapped API returned a nullptr with no error codes.
    * @ingroup atspi

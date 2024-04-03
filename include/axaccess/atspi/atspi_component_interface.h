@@ -21,7 +21,7 @@ class AtspiComponentInterface {
   ~AtspiComponentInterface(){};
 
   /**
-   * Test whether the underlaying AtspiComponent pointer is the null pointer. An
+   * Tests whether the underlying AtspiComponent pointer is the null pointer. An
    * AtspiComponentInterface with an null AtspiComponent pointer will be created
    * if the wrapped API returned a nullptr with no error codes.
    * @ingroup atspi
@@ -39,7 +39,7 @@ class AtspiComponentInterface {
    * [atspi_component_get_position](https://docs.gtk.org/atspi2/method.Component.get_position.html).
    * @ingroup atspi
    *
-   * @returns An tuple in the form (x,y).
+   * @returns A tuple in the form (x,y).
    */
   std::pair<int, int> getPosition() const;
 
@@ -48,7 +48,7 @@ class AtspiComponentInterface {
    * [atspi_component_get_size](https://docs.gtk.org/atspi2/method.Component.get_size.html).
    * @ingroup atspi
    *
-   * @returns An tuple in the form (x,y).
+   * @returns An tuple in the form (width, height).
    */
   std::pair<int, int> getSize() const;
 };

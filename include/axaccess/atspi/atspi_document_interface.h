@@ -22,7 +22,7 @@ class AtspiDocumentInterface {
   ~AtspiDocumentInterface(){};
 
   /**
-   * Test whether the underlaying AtspiDocument pointer is the null pointer. An
+   * Tests whether the underlying AtspiDocument pointer is the null pointer. An
    * AtspiDocumentInterface with an null AtspiDocument pointer will be created
    * if the wrapped API returned a nullptr with no error codes.
    * @ingroup atspi
@@ -49,7 +49,7 @@ class AtspiDocumentInterface {
    *
    * @returns A vector of strings representing a GHashTable*. Each string in the
    * vector is a key value pair separated by a ":" character, for example,
-   * "xml-roles:main".
+   * "MimeType:text/html".
    */
   std::vector<std::string> getDocumentAttributes() const;
 };

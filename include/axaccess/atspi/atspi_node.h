@@ -29,7 +29,7 @@ class AtspiNode {
   ~AtspiNode(){};
 
   /**
-   * Test whether the underlaying AtspiAccessible pointer is the null pointer.
+   * Tests whether the underlying AtspiAccessible pointer is the null pointer.
    * An AtspiNode with an null AtspiAccessible pointer will be created if the
    * wrapped API returned a nullptr with no error codes.
    * @ingroup atspi
