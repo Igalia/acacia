@@ -15,7 +15,7 @@
  * interface using IANode::QueryValue().
  * @ingroup ia2
  */
-class AXA_EXPORT IAValue {
+class ACACIA_EXPORT IAValue {
  public:
   IAValue(Microsoft::WRL::ComPtr<IAccessibleValue> iface) : iface_(iface) {}
   ~IAValue(){};

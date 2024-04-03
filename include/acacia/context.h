@@ -24,7 +24,7 @@ class ContextImpl {
 class Context;
 typedef std::shared_ptr<Context> ContextPtr;
 
-class AXA_EXPORT Context {
+class ACACIA_EXPORT Context {
  public:
   static ContextPtr Create();
   Context();

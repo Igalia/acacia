@@ -15,7 +15,7 @@
  * interface using IANode::QueryHyperlink().
  * @ingroup ia2
  */
-class AXA_EXPORT IAHyperlink {
+class ACACIA_EXPORT IAHyperlink {
  public:
   IAHyperlink(Microsoft::WRL::ComPtr<IAccessibleHyperlink> iface)
       : iface_(iface) {}

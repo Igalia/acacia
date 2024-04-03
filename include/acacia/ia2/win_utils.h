@@ -20,8 +20,8 @@
  *
  * @returns An @ref IANode.
  */
-AXA_EXPORT IANode findRootIANodeForName(const std::string& name,
-                                        const int pid = 0);
+ACACIA_EXPORT IANode findRootIANodeForName(const std::string& name,
+                                           const int pid = 0);
 
 /**
  * Returns the root node of the accessiblity tree of a running application
@@ -32,20 +32,20 @@ AXA_EXPORT IANode findRootIANodeForName(const std::string& name,
  *
  * @returns An @ref IANode.
  */
-AXA_EXPORT IANode findRootIANodeForPID(const int pid);
+ACACIA_EXPORT IANode findRootIANodeForPID(const int pid);
 
 // The remaining functions are not exposed to the SWIG generated interfaces
 
-AXA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(
+ACACIA_EXPORT Microsoft::WRL::ComPtr<IAccessible> GetAccessibleRoot(
     const std::string& name,
     DWORD dwProcessID);
 
-AXA_EXPORT std::string NameFromHwnd(HWND hwnd);
+ACACIA_EXPORT std::string NameFromHwnd(HWND hwnd);
 
-AXA_EXPORT std::string BstrToString(BSTR bstr);
+ACACIA_EXPORT std::string BstrToString(BSTR bstr);
 
-AXA_EXPORT std::string VariantToString(VARIANT variant);
+ACACIA_EXPORT std::string VariantToString(VARIANT variant);
 
-AXA_EXPORT std::string HResultErrorToString(HRESULT err);
+ACACIA_EXPORT std::string HResultErrorToString(HRESULT err);
 
 #endif  // LIB_IA2_WIN_UTILS_H_

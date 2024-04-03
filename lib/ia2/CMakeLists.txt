@@ -33,7 +33,7 @@ target_compile_definitions(
   ia2_inspect
   PRIVATE
     # preprocessor macro to specify we are building a binary .dll, in which
-    # case all AXA_EXPORTS will result in a dllexport statement.
+    # case all ACACIA_EXPORTS will result in a dllexport statement.
     acacia_EXPORTS
 )
 

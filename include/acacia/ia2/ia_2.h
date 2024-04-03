@@ -33,7 +33,7 @@ struct GroupPosition {
  * interface using IANode::QueryIA2().
  * @ingroup ia2
  */
-class AXA_EXPORT IA2 {
+class ACACIA_EXPORT IA2 {
  public:
   IA2(Microsoft::WRL::ComPtr<IAccessible2> iface) : iface_(iface) {}
   ~IA2(){};

@@ -88,7 +88,7 @@ namespace std {
 %catches(std::runtime_error) IAValue::getMinimumValue();
 %catches(std::runtime_error) IAValue::toString();
 
-#define AXA_EXPORT
+#define ACACIA_EXPORT
 %include <acacia/ia2/ia_2.h>
 %include <acacia/ia2/ia_action.h>
 %include <acacia/ia2/ia_component.h>
