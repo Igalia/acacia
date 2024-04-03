@@ -48,7 +48,7 @@ if (AXA_LIBAXACCESS)
     target_link_libraries(
       axaccess
       PRIVATE
-        atspi_inspect
+        acacia_atspi
     )
   endif (LINUX)
 

@@ -26,7 +26,7 @@ if (!name.length && pid === 0) {
   process.exit();
 }
 
-const atspi = require('./atspi_inspect');
+const atspi = require('./acacia_atspi');
 let root;
 if (name.length) {
   msg = 'Searching for application with name \'' + name + '\'';

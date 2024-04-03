@@ -1,7 +1,7 @@
 
 add_library(
   # Name
-  atspi_inspect
+  acacia_atspi
 
   # This value needs to be the same as the SWIG_ADD_LIBRARY
   # And I think we want a shared library for including in python's runtime
@@ -22,7 +22,7 @@ add_library(
 
 if (AXA_LIBAXACCESS)
   target_sources(
-    atspi_inspect
+    acacia_atspi
     PRIVATE
     axa_context_impl.cc
     axa_node_impl.cc
@@ -45,7 +45,7 @@ pkg_check_modules(
 
 # With this, we can #include "atspi/atspi.h"
 target_include_directories(
-  atspi_inspect
+  acacia_atspi
 
   PUBLIC
     ${PROJECT_BINARY_DIR}/include
@@ -54,7 +54,7 @@ target_include_directories(
 
 target_link_libraries(
   # Target to link (created above)
-  atspi_inspect
+  acacia_atspi
 
   # Items to link into the target
   PRIVATE
@@ -62,7 +62,7 @@ target_link_libraries(
 )
 
 install(TARGETS
-  atspi_inspect LIBRARY
+  acacia_atspi LIBRARY
 )
 
 # SWIG Instructions to build library bindings to different languages
@@ -80,24 +80,24 @@ if (AXA_PYTHON_MODULE)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
   INCLUDE_DIRECTORIES(${Python3_INCLUDE_DIRS})
 
-  SET_SOURCE_FILES_PROPERTIES(atspi_inspect.i PROPERTIES CPLUSPLUS ON)
+  SET_SOURCE_FILES_PROPERTIES(acacia_atspi.i PROPERTIES CPLUSPLUS ON)
 
   SWIG_ADD_LIBRARY(
     # The name of the c++ library used by python module
-    atspi_python_inspect
+    acacia_atspi_python
     TYPE SHARED
     LANGUAGE python
-    SOURCES atspi_inspect.i
+    SOURCES acacia_atspi.i
   )
 
   TARGET_LINK_LIBRARIES(
-    atspi_python_inspect
-    atspi_inspect
+    acacia_atspi_python
+    acacia_atspi
     ${python3_LIBRARIES}
   )
 
   set_property(
-    TARGET atspi_python_inspect
+    TARGET acacia_atspi_python
     PROPERTY
       SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
   )
@@ -108,12 +108,12 @@ if (AXA_PYTHON_MODULE)
   )
 
   install(TARGETS
-    atspi_python_inspect
+    acacia_atspi_python
       LIBRARY
       DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
   )
   install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.py DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
+    ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.py DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
   )
 endif()
 
@@ -133,43 +133,43 @@ if (AXA_NODEJS_MODULE)
 
   ## Generate C++ wrapper for NodeJS
   add_custom_command(
-    OUTPUT atspi_nodejs_inspect_wrap.cxx
+    OUTPUT acacia_atspi_nodejs_wrap.cxx
     DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/atspi_inspect.i
+      ${CMAKE_CURRENT_SOURCE_DIR}/acacia_atspi.i
     COMMAND
-      swig -c++ -javascript -node -o atspi_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/atspi_inspect.i
+      swig -c++ -javascript -node -o acacia_atspi_nodejs_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/acacia_atspi.i
     VERBATIM
   )
 
   add_custom_command(
-    OUTPUT atspi_inspect.node
+    OUTPUT acacia_atspi.node
     DEPENDS
-      libatspi_inspect.so
+      libacacia_atspi.so
       binding.gyp
-      atspi_nodejs_inspect_wrap.cxx
+      acacia_atspi_nodejs_wrap.cxx
     COMMAND
       ${NODE_GYP} configure build
-      COMMAND cp "./build/Release/atspi_inspect.node" .
+      COMMAND cp "./build/Release/acacia_atspi.node" .
     VERBATIM
   )
 
   add_custom_target(
-    atspi_inspect_module ALL
+    acacia_atspi_module ALL
     DEPENDS
-      atspi_inspect
-      atspi_inspect.node
+      acacia_atspi
+      acacia_atspi.node
   )
 
   set_property(
-    TARGET atspi_inspect_module
+    TARGET acacia_atspi_module
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
       binding.gyp
       ${CMAKE_CURRENT_BINARY_DIR}/build
-      atspi_inspect.node
+      acacia_atspi.node
   )
 
   install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.node DESTINATION "lib/node_modules"
+    ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.node DESTINATION "lib/node_modules"
   )
 endif (AXA_NODEJS_MODULE)

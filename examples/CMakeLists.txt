@@ -31,7 +31,7 @@ if (AXA_LIBAXACCESS)
     target_link_libraries(
       dump_tree
       PRIVATE
-        atspi_inspect
+        acacia_atspi
     )
   endif (LINUX)
 endif (AXA_LIBAXACCESS)

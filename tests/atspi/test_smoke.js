@@ -1,5 +1,5 @@
-const atspi = require('./atspi_inspect');
+const atspi = require('./acacia_atspi');
 
-root = atspi.findRootAtspiNodeForName("_invalid_add_name__", 0);
+root = atspi.findRootAtspiNodeForName('_invalid_add_name__', 0);
 if (!root.isNull())
-    throw ("Not reachable");
+  throw ('Not reachable');
