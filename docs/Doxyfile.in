@@ -1,12 +1,12 @@
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = AXAccess
+PROJECT_NAME           = Acacia
 OUTPUT_LANGUAGE        = English
 
 OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@/docs/
 
-INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/axaccess/atspi
-INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/axaccess/mac
-INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/axaccess/ia2
+INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/acacia/atspi
+INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/acacia/mac
+INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/acacia/ia2
 
 EXCLUDE_PATTERNS       = @DOXY_EXCLUDE@
 

@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "axaccess/mac/axapi_node.h"
-#include "axaccess/node.h"
+#include "acacia/mac/axapi_node.h"
+#include "acacia/node.h"
 #include "lib/mac/axapi_node_impl.h"
 
 namespace axa {

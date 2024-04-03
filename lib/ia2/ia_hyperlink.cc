@@ -1,8 +1,8 @@
-#include "axaccess/ia2/ia_hyperlink.h"
+#include "acacia/ia2/ia_hyperlink.h"
 
 #include <stdexcept>
 
-#include "axaccess/ia2/win_utils.h"
+#include "acacia/ia2/win_utils.h"
 
 std::string IAHyperlink::toString() {
   if (isNull()) {

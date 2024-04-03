@@ -1,9 +1,9 @@
-#include "axaccess/ia2/ia_component.h"
+#include "acacia/ia2/ia_component.h"
 
 #include <sstream>
 #include <stdexcept>
 
-#include "axaccess/ia2/win_utils.h"
+#include "acacia/ia2/win_utils.h"
 
 namespace {
 std::string ColorToString(IA2Color color) {

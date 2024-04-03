@@ -5,8 +5,8 @@
 #include <set>
 #include <string>
 
-#include "include/axaccess/mac/axapi_node.h"
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/axapi_node.h"
+#include "include/acacia/mac/mac_data_types.h"
 
 using std::map;
 using std::set;

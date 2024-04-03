@@ -6,14 +6,14 @@
 
 #include <atspi/atspi.h>
 
-#include "axaccess/atspi/atspi_action_interface.h"
-#include "axaccess/atspi/atspi_component_interface.h"
-#include "axaccess/atspi/atspi_document_interface.h"
-#include "axaccess/atspi/atspi_hyperlink_interface.h"
-#include "axaccess/atspi/atspi_table_cell_interface.h"
-#include "axaccess/atspi/atspi_table_interface.h"
-#include "axaccess/atspi/atspi_text_interface.h"
-#include "axaccess/atspi/atspi_value_interface.h"
+#include "acacia/atspi/atspi_action_interface.h"
+#include "acacia/atspi/atspi_component_interface.h"
+#include "acacia/atspi/atspi_document_interface.h"
+#include "acacia/atspi/atspi_hyperlink_interface.h"
+#include "acacia/atspi/atspi_table_cell_interface.h"
+#include "acacia/atspi/atspi_table_interface.h"
+#include "acacia/atspi/atspi_text_interface.h"
+#include "acacia/atspi/atspi_value_interface.h"
 
 /**
  * Represents a node in the AT-SPI accessibility tree. This object wraps an

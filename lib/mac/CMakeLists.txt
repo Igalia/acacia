@@ -12,14 +12,14 @@ add_library(
   mac_helper_functions.mm
 )
 
-if (AXA_LIBAXACCESS)
+if (AXA_LIBACACIA)
   target_sources(
     axapi_inspect
     PRIVATE
       axapi_context_impl.cc
       axapi_node_impl.cc
   )
-endif (AXA_LIBAXACCESS)
+endif (AXA_LIBACACIA)
 
 find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices)
 cmake_print_variables(APPLICATION_SERVICES_FRAMEWORK)

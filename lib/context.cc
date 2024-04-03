@@ -1,5 +1,5 @@
+#include <acacia/context.h>
 #include <assert.h>
-#include <axaccess/context.h>
 #if defined(AXA_API_ATSPI)
 #include "atspi/axa_context_impl.h"
 #elif defined(AXA_API_AXAPI)

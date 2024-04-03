@@ -6,7 +6,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <Foundation/Foundation.h>
 
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/mac_data_types.h"
 
 namespace mac_inspect {
 

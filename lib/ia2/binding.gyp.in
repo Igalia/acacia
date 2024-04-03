@@ -25,7 +25,7 @@
           "${CMAKE_BINARY_DIR}/third_party/ia2/lib/iaccessible2.lib",
         ]
       },
-      "defines": [ "axaccess_EXPORTS" ],
+      "defines": [ "acacia_EXPORTS" ],
       "msvs_settings": {
           "VCCLCompilerTool": {
               "AdditionalOptions": [

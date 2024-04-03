@@ -1,8 +1,8 @@
 %module axapi_inspect
 
 %{
-#include <include/axaccess/mac/mac_data_types.h>
-#include <include/axaccess/mac/axapi_node.h>
+#include <include/acacia/mac/mac_data_types.h>
+#include <include/acacia/mac/axapi_node.h>
 %}
 
 %include <std_string.i>
@@ -43,5 +43,5 @@ namespace std {
 %rename(findRootAXAPINodeForPID) mac_inspect::findRootAXAPINodeForPID;
 %rename(findRootAXAPINodeForName) mac_inspect::findRootAXAPINodeForName;
 
-%include <include/axaccess/mac/mac_data_types.h>
-%include <include/axaccess/mac/axapi_node.h>
+%include <include/acacia/mac/mac_data_types.h>
+%include <include/acacia/mac/axapi_node.h>

@@ -4,16 +4,16 @@
 #include <regex>
 #include <string>
 
-#include "include/axaccess/ia2/ia_2.h"
-#include "include/axaccess/ia2/ia_action.h"
-#include "include/axaccess/ia2/ia_component.h"
-#include "include/axaccess/ia2/ia_hyperlink.h"
-#include "include/axaccess/ia2/ia_node.h"
-#include "include/axaccess/ia2/ia_table2.h"
-#include "include/axaccess/ia2/ia_table_cell.h"
-#include "include/axaccess/ia2/ia_text.h"
-#include "include/axaccess/ia2/ia_value.h"
-#include "include/axaccess/ia2/win_utils.h"
+#include "include/acacia/ia2/ia_2.h"
+#include "include/acacia/ia2/ia_action.h"
+#include "include/acacia/ia2/ia_component.h"
+#include "include/acacia/ia2/ia_hyperlink.h"
+#include "include/acacia/ia2/ia_node.h"
+#include "include/acacia/ia2/ia_table2.h"
+#include "include/acacia/ia2/ia_table_cell.h"
+#include "include/acacia/ia2/ia_text.h"
+#include "include/acacia/ia2/ia_value.h"
+#include "include/acacia/ia2/win_utils.h"
 
 void print_usage(std::string& program_path) {
   std::string program_name = program_path;
