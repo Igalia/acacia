@@ -30,7 +30,8 @@ class AtspiDocumentInterface {
   bool isNull() const { return !interface_; }
 
   /**
-   * Helper function.
+   * Helper function to print commonly needed values associated with this
+   * interface.
    * @ingroup atspi
    */
   std::string toString() const;

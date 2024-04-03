@@ -27,7 +27,8 @@ class AXA_EXPORT IATable2 {
   bool isNull() { return !iface_; }
 
   /**
-   * Helper function.
+   * Helper function to print commonly needed values associated with this
+   * interface.
    * @ingroup ia2
    */
   std::string toString();
