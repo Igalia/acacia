@@ -10,7 +10,7 @@
 
 /**
  * This object wraps an
- * [Iaccessible2Component](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_component.html)
+ * [IAccessible2Component](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_component.html)
  * pointer. It can be retrieved from an accessible object which implements this
  * interface using IANode::QueryComponent().
  * @ingroup ia2

@@ -27,7 +27,7 @@ struct GroupPosition {
 
 /**
  * This object wraps an
- * [Iaccessible2
+ * [IAccessible2
  * Interface](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible2.html)
  * pointer. It can be retrieved from an accessible object which implements this
  * interface using IANode::QueryIA2().

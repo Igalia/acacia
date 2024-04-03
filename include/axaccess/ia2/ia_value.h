@@ -10,7 +10,7 @@
 
 /**
  * This object wraps an
- * [IaccessibleValue](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_value.html)
+ * [IAccessibleValue](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_value.html)
  * pointer. It can be retrieved from an accessible object which implements this
  * interface using IANode::QueryValue().
  * @ingroup ia2

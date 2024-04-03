@@ -10,7 +10,7 @@
 
 /**
  * This object wraps an
- * [IaccessibleHyperlink](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_action.html)
+ * [IAccessibleHyperlink](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_action.html)
  * pointer. It can be retrieved from an accessible object which implements this
  * interface using IANode::QueryHyperlink().
  * @ingroup ia2
@@ -52,6 +52,8 @@ class AXA_EXPORT IAHyperlink {
    * Wraps
    * [anchorTarget](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_hyperlink.html#a88ee9258c44095ea1a179867d6c05e77).
    * @ingroup ia2
+   *
+   * @param index:
    */
   std::string getAnchorTarget(long index);
 
