@@ -84,7 +84,7 @@ class AXA_EXPORT IA2 {
 
   /**
    * Wraps
-   * [role](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible2.html#a801f0db3054d4dd8b71882e8cbe84541).
+   * [states](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible2.html#a801f0db3054d4dd8b71882e8cbe84541).
    * @ingroup ia2
    */
   long getStates();
