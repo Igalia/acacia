@@ -318,8 +318,8 @@ Currently produces the following executable:
 To use the python library, navigate to `build/bin`:
 ```
 % python3
->>> import ia2_inspect
->>> app = ia2_inspect.findRootIANodeForName("firefox")
+>>> import acacia_ia2
+>>> app = acacia_ia2.findRootIANodeForName("firefox")
 >>> app.getAccRole()
 >>> app.getAccChildCount()
 >>> child = app.AccessibleChildAt(3)

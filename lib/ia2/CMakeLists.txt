@@ -1,6 +1,6 @@
 add_library(
   # Name
-  ia2_inspect
+  acacia_ia2
   SHARED
 
   # Sources
@@ -17,20 +17,20 @@ add_library(
 )
 
 add_dependencies(
-  ia2_inspect
+  acacia_ia2
 
   iaccessible2
 )
 
 target_link_libraries(
-  ia2_inspect
+  acacia_ia2
 
   oleacc
   iaccessible2
 )
 
 target_compile_definitions(
-  ia2_inspect
+  acacia_ia2
   PRIVATE
     # preprocessor macro to specify we are building a binary .dll, in which
     # case all ACACIA_EXPORTS will result in a dllexport statement.
@@ -46,7 +46,7 @@ if (ACACIA_PYTHON OR ACACIA_NODEJS)
   include(UseSWIG)
 endif()
 
-# Generate a python module called "ia2_inspect"
+# Generate a python module called "acacia_ia2"
 
 if (ACACIA_PYTHON)
 
@@ -54,25 +54,25 @@ if (ACACIA_PYTHON)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
   INCLUDE_DIRECTORIES(${Python3_INCLUDE_DIRS})
 
-  SET_SOURCE_FILES_PROPERTIES(ia2_inspect.i PROPERTIES CPLUSPLUS ON)
+  SET_SOURCE_FILES_PROPERTIES(acacia_ia2.i PROPERTIES CPLUSPLUS ON)
 
   SWIG_ADD_LIBRARY(
     # The name of the c++ library used by python module
-    ia2_python_inspect
+    acacia_ia2_python
     TYPE SHARED
-    SOURCES ia2_inspect.i
+    SOURCES acacia_ia2.i
     LANGUAGE python
     OUTPUT_DIR "${WIN_OUTPUT_DIRECTORY}"
   )
 
   TARGET_LINK_LIBRARIES(
-    ia2_python_inspect
-    ia2_inspect
+    acacia_ia2_python
+    acacia_ia2
     ${Python3_LIBRARIES}
   )
 
   set_property(
-    TARGET ia2_python_inspect
+    TARGET acacia_ia2_python
     PROPERTY
       SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
   )
@@ -91,28 +91,28 @@ if (ACACIA_NODEJS)
   set(NODE_GYP_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/build/Release")
 
   add_custom_target(
-    ia2_inspect_node_module ALL
+    acacia_ia2_node_module ALL
     DEPENDS
-      ia2_inspect
-      ia2_inspect.node
+      acacia_ia2
+      acacia_ia2.node
   )
 
   add_custom_command(
-    OUTPUT ia2_inspect.node
+    OUTPUT acacia_ia2.node
     DEPENDS
-    "${CMAKE_CURRENT_BINARY_DIR}/ia2_nodejs_inspect_wrap.cxx"
+    "${CMAKE_CURRENT_BINARY_DIR}/acacia_ia2_nodejs_wrap.cxx"
     COMMAND
       ${NODE_GYP} configure build
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/ia2_inspect.node" "${WIN_OUTPUT_DIRECTORY}"
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/acacia_ia2.node" "${WIN_OUTPUT_DIRECTORY}"
     VERBATIM
   )
 
   set_property(
-    TARGET ia2_inspect_node_module
+    TARGET acacia_ia2_node_module
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
       ${CMAKE_CURRENT_BINARY_DIR}/build
-      ia2_inspect.node
+      acacia_ia2.node
   )
 
   # Generate `binding.gyp` file for node-gyp
@@ -122,14 +122,14 @@ if (ACACIA_NODEJS)
 
   # Generate C++ wrapper for NodeJS
   add_custom_command(
-    OUTPUT ia2_nodejs_inspect_wrap.cxx
+    OUTPUT acacia_ia2_nodejs_wrap.cxx
     COMMAND
-      swig -c++ -javascript -node -o ia2_nodejs_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/ia2_inspect.i
+      swig -c++ -javascript -node -o acacia_ia2_nodejs_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/acacia_ia2.i
     VERBATIM
   )
 
   add_dependencies(
-    ia2_inspect_node_module
+    acacia_ia2_node_module
 
     iaccessible2
   )
