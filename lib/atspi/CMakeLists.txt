@@ -20,14 +20,14 @@ add_library(
   linux_utils.cc
 )
 
-if (AXA_LIBACACIA)
+if (ACACIA_CAT)
   target_sources(
     acacia_atspi
     PRIVATE
-    axa_context_impl.cc
-    axa_node_impl.cc
+    acat_context_impl.cc
+    acat_node_impl.cc
   )
-endif (AXA_LIBACACIA)
+endif (ACACIA_CAT)
 
 # CMake module that can find system c++ librarys
 find_package(

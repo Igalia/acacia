@@ -14,7 +14,7 @@ endif(WIN32)
 
 
 # Cross-platform examples (experimental)
-if (AXA_LIBACACIA)
+if (ACACIA_CAT)
   # EXAMPLE: cross-platform `dump_tree`
   add_executable(
     dump_tree
@@ -34,4 +34,4 @@ if (AXA_LIBACACIA)
         acacia_atspi
     )
   endif (LINUX)
-endif (AXA_LIBACACIA)
+endif (ACACIA_CAT)

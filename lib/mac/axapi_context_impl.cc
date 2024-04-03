@@ -6,7 +6,7 @@
 #include "acacia/node.h"
 #include "lib/mac/axapi_node_impl.h"
 
-namespace axa {
+namespace acat {
 
 using mac_inspect::AXAPINode;
 
@@ -26,4 +26,4 @@ NodePtr AXAPIContextImpl::GetAccessibleRootByPID(const int pid) {
   return Node::Create(std::move(root_node_impl));
 }
 
-}  // namespace axa
+}  // namespace acat

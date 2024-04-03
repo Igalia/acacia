@@ -5,7 +5,7 @@
 #include "acacia/mac/axapi_node.h"
 #include "acacia/node.h"
 
-namespace axa {
+namespace acat {
 
 class AXAPINodeImpl : public NodeImpl {
  public:
@@ -20,4 +20,4 @@ class AXAPINodeImpl : public NodeImpl {
   mac_inspect::AXAPINode axapi_node_;
 };
 
-}  // namespace axa
+}  // namespace acat

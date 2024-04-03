@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <string>
 
-namespace axa {
+namespace acat {
 
 Node::Node(std::unique_ptr<NodeImpl> aImpl) : impl(std::move(aImpl)) {}
 
@@ -31,4 +31,4 @@ NodePtr Node::ChildAt(const int32_t index) {
   return impl->ChildAt(index);
 }
 
-}  // namespace axa
+}  // namespace acat

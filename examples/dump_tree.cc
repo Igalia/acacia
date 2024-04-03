@@ -4,13 +4,13 @@
 #include <regex>
 #include <string>
 
-#include <acacia/axaccess.h>
+#include <acacia/acacia_cat.h>
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " <pid>\n";
 }
 
-static void print_node(axa::NodePtr& node, int level) {
+static void print_node(acat::NodePtr& node, int level) {
   for (auto i = 0; i < level; i++)
     std::cout << "--";
   std::cout << "> " << node->RoleName();
@@ -47,10 +47,10 @@ int main(int argc, char** argv) {
   const int pid = std::stoi(pid_string);
   std::cout << "Got PID: " << pid << "\n";
 
-  axa::ContextPtr ctx = axa::Context::Create();
+  acat::ContextPtr ctx = axa::Context::Create();
   assert(ctx != nullptr);
 
-  axa::NodePtr root = ctx->GetAccessibleRootByPID(pid);
+  acat::NodePtr root = ctx->GetAccessibleRootByPID(pid);
   if (root == nullptr) {
     std::cerr << "No accessible root found at pid " << pid << "\n";
     return EXIT_FAILURE;
