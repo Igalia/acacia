@@ -12,7 +12,7 @@ target_link_libraries(
   dump_tree_ia2
 
   # Items to link into the target
-  PRIVATE ia2_inspect
+  PRIVATE acacia_ia2
 )
 
 if (ACACIA_PYTHON)
@@ -20,8 +20,8 @@ if (ACACIA_PYTHON)
     dump_tree_ia2.py
     ALL
     DEPENDS
-      ia2_inspect
-      ia2_python_inspect
+      acacia_ia2
+      acacia_ia2_python
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_ia2.py "${WIN_OUTPUT_DIRECTORY}"
   )
@@ -32,8 +32,8 @@ if (ACACIA_NODEJS)
     dump_tree_ia2.js
     ALL
     DEPENDS
-      ia2_inspect
-      ia2_inspect_node_module
+      acacia_ia2
+      acacia_ia2_node_module
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_ia2.js "${WIN_OUTPUT_DIRECTORY}"
   )

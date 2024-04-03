@@ -1,4 +1,4 @@
-%module ia2_inspect
+%module acacia_ia2
 %{
 #include <include/acacia/ia2/ia_2.h>
 #include <include/acacia/ia2/ia_action.h>

@@ -1,4 +1,4 @@
-const ia2_inspect = require('./ia2_inspect');
+const acacia_ia2 = require('./ia2_inspect');
 
 let name = '';
 let pid = 0;
@@ -29,9 +29,9 @@ if (!name.length && pid === 0) {
 
 let root;
 if (name) {
-  root = ia2_inspect.findRootIANodeForName(name, pid);
+  root = acacia_ia2.findRootIANodeForName(name, pid);
 } else {
-  root = ia2_inspect.findRootIANodeForPID(pid);
+  root = acacia_ia2.findRootIANodeForPID(pid);
 }
 if (root.isNull()) {
   let errormsg = 'Error: no accessible application found for name: ' + name;

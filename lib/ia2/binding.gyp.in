@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "ia2_inspect",
+      "target_name": "acacia_ia2",
       "include_dirs": [
         "${CMAKE_SOURCE_DIR}",
         "${CMAKE_SOURCE_DIR}/include",
@@ -17,7 +17,7 @@
         "../../../lib/ia2/ia_table2.cc",
         "../../../lib/ia2/ia_text.cc",
         "../../../lib/ia2/ia_value.cc",
-        "./ia2_nodejs_inspect_wrap.cxx",
+        "./acacia_ia2_nodejs_wrap.cxx",
       ],
       'link_settings': {
         'libraries': [
