@@ -9,7 +9,7 @@
  * This object wraps an
  * [AtspiAction](https://docs.gtk.org/atspi2/iface.Action.html) pointer. It can
  * be retrieved from an accessible object which implements this interface using
- * AtspiNode::queryValue().
+ * AtspiNode::queryAction().
  * @ingroup atspi
  */
 class AtspiActionInterface {
