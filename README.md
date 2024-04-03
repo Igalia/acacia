@@ -76,8 +76,8 @@ As well as a python module.
 ```
 % cd build/lib/atspi/
 % python
->>> import atspi_inspect
->>> node = atspi_inspect.findRootAtspiNodeForName("chromium")
+>>> import acacia_atspi
+>>> node = acacia_atspi.findRootAtspiNodeForName("chromium")
 >>> node.getRoleName()
 'application'
 >>> node.getName()
@@ -105,12 +105,12 @@ As well as a python module.
 
 ```
 
-And a NodeJS module `atspi_inspect.node`.
+And a NodeJS module `acacia_atspi.node`.
 ```
 % cd build/lib/atspi/
 % node
-> const atspi_inspect = require("./atspi_inspect");
-> let node = atspi_inspect.findRootAtspiNodeForName('firefox');
+> const acacia_atspi = require("./acacia_atspi");
+> let node = acacia_atspi.findRootAtspiNodeForName('firefox');
 > node.getRoleName();
 'application'
 > node.getName();

@@ -1,4 +1,4 @@
-%module atspi_inspect
+%module acacia_atspi
 %{
 #include <axaccess/atspi/atspi_action_interface.h>
 #include <axaccess/atspi/atspi_component_interface.h>
