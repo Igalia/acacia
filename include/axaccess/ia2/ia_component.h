@@ -53,7 +53,7 @@ class AXA_EXPORT IAComponent {
    * [getLocationInParent](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_component.html#a8709fdbf3f51ae079af274854a8bffd4).
    * @ingroup ia2
    *
-   * @returns An tuple in the form (x,y).
+   * @returns A tuple in the form (x,y).
    */
   std::pair<long, long> getLocationInParent();
 
