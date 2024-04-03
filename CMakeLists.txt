@@ -1,4 +1,4 @@
-project(AXAccess)
+project(Acacia)
 cmake_minimum_required(VERSION 3.25)
 
 # Enable cmake_print_variables() and cmake_print_properties() for debugging
@@ -14,7 +14,7 @@ else()
 endif()
 
 project(
-  axaccess
+  acacia
   VERSION 1.0
   LANGUAGES ${PROJECT_LANGUAGES}
 )
@@ -30,7 +30,7 @@ include_directories(
 
 ## Feature flag for cross-platform library, OFF by default
 option(
-  AXA_LIBAXACCESS
+  AXA_LIBACACIA
   "Build cross-platform library (experimental)"
   OFF
 )

@@ -1,4 +1,4 @@
-#include "include/axaccess/mac/axapi_node.h"
+#include "include/acacia/mac/axapi_node.h"
 
 #import <AppKit/NSRunningApplication.h>
 #import <AppKit/NSWorkspace.h>
@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/mac_data_types.h"
 #include "lib/mac/mac_helper_functions.h"
 #include "lib/mac/scoped_cf_type_ref.h"
 #include "lib/utils.h"

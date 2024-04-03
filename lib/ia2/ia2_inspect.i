@@ -1,15 +1,15 @@
 %module ia2_inspect
 %{
-#include <include/axaccess/ia2/ia_2.h>
-#include <include/axaccess/ia2/ia_action.h>
-#include <include/axaccess/ia2/ia_component.h>
-#include <include/axaccess/ia2/ia_hyperlink.h>
-#include <include/axaccess/ia2/ia_node.h>
-#include <include/axaccess/ia2/ia_table2.h>
-#include <include/axaccess/ia2/ia_table_cell.h>
-#include <include/axaccess/ia2/ia_text.h>
-#include <include/axaccess/ia2/ia_value.h>
-#include <include/axaccess/ia2/win_utils.h>
+#include <include/acacia/ia2/ia_2.h>
+#include <include/acacia/ia2/ia_action.h>
+#include <include/acacia/ia2/ia_component.h>
+#include <include/acacia/ia2/ia_hyperlink.h>
+#include <include/acacia/ia2/ia_node.h>
+#include <include/acacia/ia2/ia_table2.h>
+#include <include/acacia/ia2/ia_table_cell.h>
+#include <include/acacia/ia2/ia_text.h>
+#include <include/acacia/ia2/ia_value.h>
+#include <include/acacia/ia2/win_utils.h>
 %}
 
 %include <std_pair.i>
@@ -89,15 +89,15 @@ namespace std {
 %catches(std::runtime_error) IAValue::toString();
 
 #define AXA_EXPORT
-%include <axaccess/ia2/ia_2.h>
-%include <axaccess/ia2/ia_action.h>
-%include <axaccess/ia2/ia_component.h>
-%include <axaccess/ia2/ia_hyperlink.h>
-%include <axaccess/ia2/ia_node.h>
-%include <axaccess/ia2/ia_table2.h>
-%include <axaccess/ia2/ia_table_cell.h>
-%include <axaccess/ia2/ia_text.h>
-%include <axaccess/ia2/ia_value.h>
+%include <acacia/ia2/ia_2.h>
+%include <acacia/ia2/ia_action.h>
+%include <acacia/ia2/ia_component.h>
+%include <acacia/ia2/ia_hyperlink.h>
+%include <acacia/ia2/ia_node.h>
+%include <acacia/ia2/ia_table2.h>
+%include <acacia/ia2/ia_table_cell.h>
+%include <acacia/ia2/ia_text.h>
+%include <acacia/ia2/ia_value.h>
 
 IANode findRootIANodeForName(const std::string& name, const int pid = 0);
 IANode findRootIANodeForPID(const int pid);

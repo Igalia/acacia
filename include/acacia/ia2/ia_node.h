@@ -8,15 +8,15 @@
 #include <oleacc.h>
 #include <wrl/client.h>
 
-#include "axaccess/export.h"
-#include "axaccess/ia2/ia_2.h"
-#include "axaccess/ia2/ia_action.h"
-#include "axaccess/ia2/ia_component.h"
-#include "axaccess/ia2/ia_hyperlink.h"
-#include "axaccess/ia2/ia_table2.h"
-#include "axaccess/ia2/ia_table_cell.h"
-#include "axaccess/ia2/ia_text.h"
-#include "axaccess/ia2/ia_value.h"
+#include "acacia/export.h"
+#include "acacia/ia2/ia_2.h"
+#include "acacia/ia2/ia_action.h"
+#include "acacia/ia2/ia_component.h"
+#include "acacia/ia2/ia_hyperlink.h"
+#include "acacia/ia2/ia_table2.h"
+#include "acacia/ia2/ia_table_cell.h"
+#include "acacia/ia2/ia_text.h"
+#include "acacia/ia2/ia_value.h"
 
 /** @defgroup ia2 IA2 API (Windows)
  *  IA2 Accessiblity API for Windows

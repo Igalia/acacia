@@ -395,8 +395,8 @@ This is a native C++ library that will eventually abstract the other, platform-s
 of that provided by the platform. This may be useful for some use-cases (e.g, to dump the accessible tree of an
 application in a cross-platform way).
 
-The feature is governed by the feature flag `AXA_LIBAXACCESS`, currently OFF by default. To enable it,
-simply pass `-DAXA_LIBAXACCESS=ON` to cmake.
+The feature is governed by the feature flag `AXA_LIBACACIA`, currently OFF by default. To enable it,
+simply pass `-DAXA_LIBACACIA=ON` to cmake.
 
 ## License
 

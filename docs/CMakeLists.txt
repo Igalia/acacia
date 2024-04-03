@@ -15,7 +15,7 @@ add_custom_target(
   VERBATIM
 )
 
-if (NOT AXA_LIBAXACCESS)
+if (NOT AXA_LIBACACIA)
   set(DOXY_EXCLUDE 'axa_*')
 endif ()
 

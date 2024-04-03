@@ -4,7 +4,7 @@
 #include <regex>
 #include <string>
 
-#include <axaccess/axaccess.h>
+#include <acacia/axaccess.h>
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " <pid>\n";

@@ -5,7 +5,7 @@
 // clang-format off
 #ifdef WIN32
 #  ifndef AXA_EXPORT
-#    ifdef axaccess_EXPORTS
+#    ifdef acacia_EXPORTS
         /* We are building this library */
 #      define AXA_EXPORT __declspec(dllexport)
 #    else

@@ -1,4 +1,4 @@
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/mac_data_types.h"
 
 #include <iostream>
 #include <string>
@@ -7,7 +7,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <Foundation/Foundation.h>
 
-#include "include/axaccess/mac/axapi_node.h"
+#include "include/acacia/mac/axapi_node.h"
 #include "lib/mac/mac_helper_functions.h"
 #include "lib/mac/scoped_cf_type_ref.h"
 

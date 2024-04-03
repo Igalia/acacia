@@ -1,5 +1,5 @@
 // NodeJS example that dumps the accessible tree of a running process using
-// AXAccess AT-SPI API backend.
+// Acacia AT-SPI API backend.
 
 let name = '';
 let pid = 0;
