@@ -37,34 +37,34 @@ option(
 
 ## Feature flag for Python bindings, OFF by default
 option(
-  AXA_PYTHON_MODULE
+  ACACIA_PYTHON
   "Build Python bindings (requires swig and python3)"
   OFF
 )
 
 ## Feature flag for NodeJS bindings, OFF by default
 option(
-  AXA_NODEJS_MODULE
+  ACACIA_NODEJS
   "Build NodeJS bindings (requires swig and node-gyp)"
   OFF
 )
 
 option(
-  AXA_BUILD_DOC
+  ACACIA_DOCS
   "Build documentation"
   OFF
 )
 
 ## Enable/disable Unit tests, ON by default
 option(
-  AXA_UNIT_TESTS
+  ACACIA_TESTS
   "Enable unit tests"
   ON
 )
 
-if (AXA_BUILD_DOC)
+if (ACACIA_DOCS)
   add_subdirectory(docs)
-endif (AXA_BUILD_DOC)
+endif (ACACIA_DOCS)
 
 # On windows, put all of the resulting libraries and executables in
 # `build/bin/<CONFIG>` where CONFIG is Debug, Release, etc, because
@@ -82,7 +82,7 @@ add_subdirectory(lib)
 add_subdirectory(examples)
 add_subdirectory(third_party)
 
-if (AXA_UNIT_TESTS)
+if (ACACIA_TESTS)
   include(CTest)
   add_subdirectory(tests)
-endif (AXA_UNIT_TESTS)
+endif (ACACIA_TESTS)

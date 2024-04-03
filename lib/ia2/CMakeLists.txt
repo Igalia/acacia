@@ -41,14 +41,14 @@ target_compile_definitions(
 # SWIG Instructions to build library bindings to different languages
 # (only required if at least one binding is ON).
 
-if (AXA_PYTHON_MODULE OR AXA_NODEJS_MODULE)
+if (ACACIA_PYTHON OR ACACIA_NODEJS)
   find_package(SWIG REQUIRED)
   include(UseSWIG)
 endif()
 
 # Generate a python module called "ia2_inspect"
 
-if (AXA_PYTHON_MODULE)
+if (ACACIA_PYTHON)
 
   FIND_PACKAGE(Python3 COMPONENTS Interpreter Development.Module)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
@@ -77,11 +77,11 @@ if (AXA_PYTHON_MODULE)
       SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
   )
 
-endif(AXA_PYTHON_MODULE)
+endif(ACACIA_PYTHON)
 
 # Generate a NodeJS Module using swig + node-gyp
 
-if (AXA_NODEJS_MODULE)
+if (ACACIA_NODEJS)
   find_program(
     NODE_GYP "node-gyp"
     REQUIRED
@@ -134,4 +134,4 @@ if (AXA_NODEJS_MODULE)
     iaccessible2
   )
 
-endif (AXA_NODEJS_MODULE)
+endif (ACACIA_NODEJS)
