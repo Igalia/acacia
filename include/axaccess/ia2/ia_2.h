@@ -39,7 +39,7 @@ class AXA_EXPORT IA2 {
   ~IA2(){};
 
   /**
-   * Test whether the underlaying IAccessible2 pointer is the null pointer.
+   * Tests whether the underlying IAccessible2 pointer is the null pointer.
    * @ingroup ia2
    */
   bool isNull() { return !iface_; }

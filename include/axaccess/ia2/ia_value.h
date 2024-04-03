@@ -21,7 +21,7 @@ class AXA_EXPORT IAValue {
   ~IAValue(){};
 
   /**
-   * Test whether the underlaying IAccessibleValue pointer is the null pointer.
+   * Tests whether the underlying IAccessibleValue pointer is the null pointer.
    * @ingroup ia2
    */
   bool isNull() { return !iface_; }

@@ -22,7 +22,7 @@ class AXA_EXPORT IAHyperlink {
   ~IAHyperlink(){};
 
   /**
-   * Test whether the underlaying IAccessibleHyperlink pointer is the null
+   * Tests whether the underlying IAccessibleHyperlink pointer is the null
    * pointer.
    * @ingroup ia2
    */

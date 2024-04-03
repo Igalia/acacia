@@ -21,7 +21,7 @@ class AXA_EXPORT IATable2 {
   ~IATable2(){};
 
   /**
-   * Test whether the underlaying IAccessibleTable2 pointer is the null pointer.
+   * Tests whether the underlying IAccessibleTable2 pointer is the null pointer.
    * @ingroup ia2
    */
   bool isNull() { return !iface_; }

@@ -21,7 +21,7 @@ class AXA_EXPORT IAAction {
   ~IAAction(){};
 
   /**
-   * Test whether the underlaying IAccessibleAction pointer is the null pointer.
+   * Tests whether the underlying IAccessibleAction pointer is the null pointer.
    * @ingroup ia2
    */
   bool isNull() { return !iface_; }

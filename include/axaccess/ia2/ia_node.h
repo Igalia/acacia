@@ -115,7 +115,7 @@ class AXA_EXPORT IANode {
   IAValue QueryValue();
 
   /**
-   * Test whether the underlaying IAccessible pointer is the null pointer.
+   * Tests whether the underlying IAccessible pointer is the null pointer.
    * An IANode with an null IAccessible pointer will be created if the
    * wrapped API returned a nullptr with no error codes.
    * @ingroup ia2

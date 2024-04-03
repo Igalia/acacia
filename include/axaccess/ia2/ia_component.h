@@ -22,7 +22,7 @@ class AXA_EXPORT IAComponent {
   ~IAComponent(){};
 
   /**
-   * Test whether the underlaying IAccessibleComponent pointer is the null
+   * Tests whether the underlying IAccessibleComponent pointer is the null
    * pointer.
    * @ingroup ia2
    */
