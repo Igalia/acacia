@@ -7,8 +7,8 @@
 #include "include/acacia/mac/axapi_node.h"
 #include "include/acacia/mac/mac_data_types.h"
 
-using mac_inspect::AXAPINode;
-using mac_inspect::ValueType;
+using acacia_axapi::AXAPINode;
+using acacia_axapi::ValueType;
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " [<pid> | name]\n";
@@ -70,9 +70,9 @@ int main(int argc, char** argv) {
   std::regex number_regex("\\d+");
   if (std::regex_match(arg_string, number_regex)) {
     const int pid = std::stoi(arg_string);
-    root = mac_inspect::findRootAXAPINodeForPID(pid);
+    root = acacia_axapi::findRootAXAPINodeForPID(pid);
   } else {
-    root = mac_inspect::findRootAXAPINodeForName(arg_string);
+    root = acacia_axapi::findRootAXAPINodeForName(arg_string);
   }
 
   try {

@@ -1,7 +1,7 @@
 #ifndef LIB_MAC_SCOPED_CF_TYPE_REF_H_
 #define LIB_MAC_SCOPED_CF_TYPE_REF_H_
 
-namespace mac_inspect {
+namespace acacia_axapi {
 // Container to handle CFRelease-ing CFTypeRefs at the end of a scope. See:
 // https://developer.apple.com/library/archive/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/Concepts/Ownership.html
 //
@@ -49,6 +49,6 @@ class ScopedCFTypeRef {
   T ref_{nullptr};
 };
 
-}  // namespace mac_inspect
+}  // namespace acacia_axapi
 
 #endif  // LIB_MAC_SCOPED_CF_TYPE_REF_H_

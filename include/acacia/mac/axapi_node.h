@@ -13,7 +13,7 @@
  */
 /** @} */  // end of axapi group
 
-namespace mac_inspect {
+namespace acacia_axapi {
 
 class AXAPIContextImpl;
 
@@ -120,6 +120,6 @@ class AXAPINode {
   friend class Dictionary;
 };
 
-}  // namespace mac_inspect
+}  // namespace acacia_axapi
 
 #endif  // LIB_MAC_AXAPI_NODE_H_
