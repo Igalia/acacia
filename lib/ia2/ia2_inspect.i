@@ -98,4 +98,6 @@ namespace std {
 %include <axaccess/ia2/ia_table_cell.h>
 %include <axaccess/ia2/ia_text.h>
 %include <axaccess/ia2/ia_value.h>
-%include <axaccess/ia2/win_utils.h>
+
+IANode findRootIANodeForName(const std::string& name, const int pid = 0);
+IANode findRootIANodeForPID(const int pid);
