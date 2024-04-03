@@ -12,10 +12,11 @@
 
 /**
  * Returns the root node of the accessible tree of a running application
- * referenced by pid.
+ * referenced by the application's accessible name.
  * @ingroup ia2
  *
- * @param pid: The process id of the running application.
+ * @param name: The accessible name (or substring thereof) to search for.
+ * @param pid: Optional. The process id to search for.
  *
  * @returns An @ref IANode.
  */
@@ -23,7 +24,7 @@ AXA_EXPORT IANode findRootIANodeForName(const std::string& name,
                                         const int pid = 0);
 
 /**
- * Returns the root node of the accessible tree of a running application
+ * Returns the root node of the accessiblity tree of a running application
  * referenced by pid.
  * @ingroup ia2
  *

@@ -22,7 +22,8 @@ class AXA_EXPORT IAHyperlink {
   ~IAHyperlink(){};
 
   /**
-   * Test whether the underlaying IAccessibleAction pointer is the null pointer.
+   * Test whether the underlaying IAccessibleHyperlink pointer is the null
+   * pointer.
    * @ingroup ia2
    */
   bool isNull() { return !iface_; }

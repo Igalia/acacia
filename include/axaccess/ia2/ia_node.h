@@ -26,7 +26,7 @@
 
 /**
  * Represents a node in the IAccessible2 accessibility tree. This object wraps
- * an [IAccessible
+ * an [IAccessible2
  * Interface](https://learn.microsoft.com/en-us/windows/win32/api/oleacc/nn-oleacc-iaccessible)
  * pointer.
  * @ingroup ia2
@@ -106,11 +106,11 @@ class AXA_EXPORT IANode {
   IAText QueryText();
 
   /**
-   * Wraps QueryInterface and QueryService to retreive the IAccessibleText
+   * Wraps QueryInterface and QueryService to retreive the IAccessibleValue
    * interface for this node.
    * @ingroup ia2
    *
-   * @returns An @ref IAText.
+   * @returns An @ref IAValue.
    */
   IAValue QueryValue();
 
