@@ -5,17 +5,17 @@
 #include <set>
 #include <string>
 
-#include "include/axaccess/mac/axapi_node.h"
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/axapi_node.h"
+#include "include/acacia/mac/mac_data_types.h"
 
 using std::map;
 using std::set;
 using std::string;
 using std::vector;
 
-using mac_inspect::AXAPINode;
-using mac_inspect::ValueType;
-using mac_inspect::ValueTypeToString;
+using acacia::AXAPINode;
+using acacia::ValueType;
+using acacia::ValueTypeToString;
 
 void print_usage(std::string& program_name) {
   std::cout << "Usage: " << program_name << " <pid>\n";
@@ -66,7 +66,7 @@ void AddListValueExample(ValueType type,
       break;
     }
     case ValueType::RANGE: {
-      vector<mac_inspect::Range> values = node.getRangeListValue(attribute);
+      vector<acacia::Range> values = node.getRangeListValue(attribute);
       if (values.empty()) {
         value_string = "[]";
         break;
@@ -81,7 +81,7 @@ void AddListValueExample(ValueType type,
       break;
     }
     case ValueType::DICTIONARY: {
-      mac_inspect::Dictionary dict =
+      acacia::Dictionary dict =
           node.getDictionaryListValueAtIndex(attribute, 0);
       vector<string> keys = dict.keys();
       value_string = "first value: {\n";
@@ -174,22 +174,22 @@ void AddValueExample(ValueType type,
       break;
     }
     case ValueType::POINT: {
-      mac_inspect::Point value = node.getPointValue(attribute);
+      acacia::Point value = node.getPointValue(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::SIZE: {
-      mac_inspect::Size value = node.getSizeValue(attribute);
+      acacia::Size value = node.getSizeValue(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::RECT: {
-      mac_inspect::Rect value = node.getRectValue(attribute);
+      acacia::Rect value = node.getRectValue(attribute);
       value_string = value.ToString();
       break;
     }
     case ValueType::RANGE: {
-      mac_inspect::Range value = node.getRangeValue(attribute);
+      acacia::Range value = node.getRangeValue(attribute);
       value_string = value.ToString();
       break;
     }
@@ -257,7 +257,7 @@ void CollectAttributeTypes(AXAPINode node,
 }
 
 void LogAllAttributeValueTypesAndExamples(pid_t pid) {
-  AXAPINode application = mac_inspect::findRootAXAPINodeForPID(pid);
+  AXAPINode application = acacia::findRootAXAPINodeForPID(pid);
   map<string, string> attribute_types;
   map<string, map<string, string>> examples;
 

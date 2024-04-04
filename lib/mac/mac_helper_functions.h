@@ -6,9 +6,9 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <Foundation/Foundation.h>
 
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/mac_data_types.h"
 
-namespace mac_inspect {
+namespace acacia {
 
 template <typename T>
 class ScopedCFTypeRef;
@@ -27,6 +27,6 @@ std::string AXErrorToString(AXError err);
 ValueType DeduceValueType(CFTypeRef cf_value,
                           const std::string& attribute = "");
 
-}  // namespace mac_inspect
+}  // namespace acacia
 
 #endif  // LIB_MAC_MAC_HELPER_FUNCTIONS_H_

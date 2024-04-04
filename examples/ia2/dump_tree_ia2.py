@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-import ia2_inspect
+import acacia_ia2
 
 def print_tree(node, level):
   print(("--" * level) + "> ", end="")
@@ -69,9 +69,9 @@ def main():
       sys.exit()
 
     if (args.name):
-      app = ia2_inspect.findRootIANodeForName(args.name)
+      app = acacia_ia2.findRootIANodeForName(args.name)
     else:
-      app = ia2_inspect.findRootIANodeForPID(args.pid)
+      app = acacia_ia2.findRootIANodeForPID(args.pid)
 
     if (app.isNull()):
       print("Couldn't find application")

@@ -12,11 +12,11 @@ if(WIN32)
 endif(WIN32)
 
 
-# Cross-platform API libaxaccess (experimental)
-if (AXA_LIBAXACCESS)
-  # Main library (libaxaccess.so)
+# Cross-platform API libacacia (experimental)
+if (ACACIA_CAT)
+  # Main library (libacacia.so)
   add_library(
-    axaccess
+    acacia
     SHARED
   )
 
@@ -27,40 +27,40 @@ if (AXA_LIBAXACCESS)
   )
 
   target_compile_definitions(
-    axaccess
+    acacia
     PRIVATE
       # preprocessor macro to specify we are building a binary .dll, in which
-      # case all AXA_EXPORTS will result in a dllexport statement.
-      axaccess_EXPORTS
+      # case all ACACIA_EXPORTS will result in a dllexport statement.
+      acacia_EXPORTS
   )
 
   target_sources(
-    axaccess
+    acacia
     PRIVATE
       ${AXA_SOURCES}
   )
 
   if (LINUX)
     target_compile_definitions(
-      axaccess
-      PUBLIC -DAXA_API_ATSPI
+      acacia
+      PUBLIC -DACACIA_CAT_ATSPI
     )
     target_link_libraries(
-      axaccess
+      acacia
       PRIVATE
-        atspi_inspect
+        acacia_atspi
     )
   endif (LINUX)
 
   if (APPLE)
     target_compile_definitions(
-      axaccess
-      PUBLIC -DAXA_API_AXAPI
+      acacia
+      PUBLIC -DACACIA_CAT_AXAPI
     )
     target_link_libraries(
-      axaccess
+      acacia
       PRIVATE
-        axapi_inspect
+        acacia_axapi
     )
   endif (APPLE)
-endif (AXA_LIBAXACCESS)
+endif (ACACIA_CAT)

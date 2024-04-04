@@ -2,11 +2,11 @@
 
 #include <string>
 
-#include "axaccess/mac/axapi_node.h"
+#include "acacia/mac/axapi_node.h"
 
-namespace axa {
+namespace acacia {
 
-AXAPINodeImpl::AXAPINodeImpl(mac_inspect::AXAPINode axapi_node)
+AXAPINodeImpl::AXAPINodeImpl(acacia::AXAPINode axapi_node)
     : axapi_node_(axapi_node) {}
 
 std::string AXAPINodeImpl::Name() {
@@ -26,7 +26,7 @@ int32_t AXAPINodeImpl::ChildCount() {
 }
 
 NodePtr AXAPINodeImpl::ChildAt(int32_t index) {
-  std::vector<mac_inspect::AXAPINode> children =
+  std::vector<acacia::AXAPINode> children =
       axapi_node_.CopyNodeListAttributeValue("AXChildren");
   if (index < 0 || index >= children.size()) {
     throw std::invalid_argument("Index out of bounds");
@@ -36,4 +36,4 @@ NodePtr AXAPINodeImpl::ChildAt(int32_t index) {
   return Node::Create(std::move(child));
 }
 
-}  // namespace axa
+}  // namespace acacia

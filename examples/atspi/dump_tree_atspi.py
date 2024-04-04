@@ -1,6 +1,6 @@
 import argparse
 import sys
-import atspi_inspect
+import acacia_atspi
 
 
 def PrintNode(node, level):
@@ -74,10 +74,10 @@ def main():
         if pid:
             msg += f" and pid {pid}"
         print(f"{msg}.")
-        root = atspi_inspect.findRootAtspiNodeForName(name, pid)
+        root = acacia_atspi.findRootAtspiNodeForName(name, pid)
     else:
         print(f"Searching for application with pid {pid}.")
-        root = atspi_inspect.findRootAtspiNodeForPID(pid)
+        root = acacia_atspi.findRootAtspiNodeForPID(pid)
     if root.isNull():
         print("Error: Application not found.")
         sys.exit()

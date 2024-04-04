@@ -1,4 +1,4 @@
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/mac_data_types.h"
 
 #include <iostream>
 #include <string>
@@ -7,13 +7,13 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <Foundation/Foundation.h>
 
-#include "include/axaccess/mac/axapi_node.h"
+#include "include/acacia/mac/axapi_node.h"
 #include "lib/mac/mac_helper_functions.h"
 #include "lib/mac/scoped_cf_type_ref.h"
 
 using std::cerr;
 
-namespace mac_inspect {
+namespace acacia {
 
 std::string ValueTypeToString(ValueType value_type) {
   switch (value_type) {
@@ -132,4 +132,4 @@ AXAPINode Dictionary::getNodeValue(const std::string& key) {
   return AXAPINode((AXUIElementRef)CFRetain(cf_value));
 }
 
-}  // namespace mac_inspect
+}  // namespace acacia

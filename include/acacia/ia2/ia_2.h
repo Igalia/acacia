@@ -6,7 +6,7 @@
 
 #include <wrl/client.h>
 
-#include "axaccess/export.h"
+#include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 /**
@@ -33,7 +33,7 @@ struct GroupPosition {
  * interface using IANode::QueryIA2().
  * @ingroup ia2
  */
-class AXA_EXPORT IA2 {
+class ACACIA_EXPORT IA2 {
  public:
   IA2(Microsoft::WRL::ComPtr<IAccessible2> iface) : iface_(iface) {}
   ~IA2(){};

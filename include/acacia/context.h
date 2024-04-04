@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include "axaccess/export.h"
+#include "acacia/export.h"
 
 #include "./node.h"
 
-namespace axa {
+namespace acacia {
 
 enum APIType {
   UNKNOWN,
@@ -24,7 +24,7 @@ class ContextImpl {
 class Context;
 typedef std::shared_ptr<Context> ContextPtr;
 
-class AXA_EXPORT Context {
+class ACACIA_EXPORT Context {
  public:
   static ContextPtr Create();
   Context();
@@ -37,4 +37,4 @@ class AXA_EXPORT Context {
   std::unique_ptr<ContextImpl> impl;
 };
 
-}  // namespace axa
+}  // namespace acacia

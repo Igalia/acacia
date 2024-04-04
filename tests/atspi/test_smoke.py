@@ -1,4 +1,4 @@
-import atspi_inspect
+import acacia_atspi
 
-root = atspi_inspect.findRootAtspiNodeForName("__invalid_app_name_", 0)
+root = acacia_atspi.findRootAtspiNodeForName("__invalid_app_name_", 0)
 assert root.isNull()

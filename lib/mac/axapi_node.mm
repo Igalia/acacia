@@ -1,4 +1,4 @@
-#include "include/axaccess/mac/axapi_node.h"
+#include "include/acacia/mac/axapi_node.h"
 
 #import <AppKit/NSRunningApplication.h>
 #import <AppKit/NSWorkspace.h>
@@ -9,14 +9,14 @@
 #include <string>
 #include <vector>
 
-#include "include/axaccess/mac/mac_data_types.h"
+#include "include/acacia/mac/mac_data_types.h"
 #include "lib/mac/mac_helper_functions.h"
 #include "lib/mac/scoped_cf_type_ref.h"
 #include "lib/utils.h"
 
 using std::cerr;
 
-namespace mac_inspect {
+namespace acacia {
 
 AXAPINode findRootAXAPINodeForPID(int pid) {
   AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
@@ -26,7 +26,7 @@ AXAPINode findRootAXAPINodeForPID(int pid) {
   AXError err = AXUIElementCopyAttributeNames(root_ax_ui_element,
                                               cf_attributes.get_ptr());
   if (err)
-    return mac_inspect::AXAPINode();
+    return acacia::AXAPINode();
 
   return AXAPINode(root_ax_ui_element);
 }
@@ -550,4 +550,4 @@ Dictionary AXAPINode::getDictionaryListValueAtIndex(std::string& attribute,
   return Dictionary(cf_value);
 }
 
-}  // namespace mac_inspect
+}  // namespace acacia

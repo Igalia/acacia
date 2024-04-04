@@ -2,13 +2,13 @@
 
 #include <memory>
 
-#include "axaccess/mac/axapi_node.h"
-#include "axaccess/node.h"
+#include "acacia/mac/axapi_node.h"
+#include "acacia/node.h"
 #include "lib/mac/axapi_node_impl.h"
 
-namespace axa {
+namespace acacia {
 
-using mac_inspect::AXAPINode;
+using acacia::AXAPINode;
 
 std::unique_ptr<ContextImpl> AXAPIContextImpl::Create() {
   return std::make_unique<AXAPIContextImpl>();
@@ -26,4 +26,4 @@ NodePtr AXAPIContextImpl::GetAccessibleRootByPID(const int pid) {
   return Node::Create(std::move(root_node_impl));
 }
 
-}  // namespace axa
+}  // namespace acacia

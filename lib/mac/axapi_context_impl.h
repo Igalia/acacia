@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "axaccess/context.h"
+#include "acacia/context.h"
 
-namespace axa {
+namespace acacia {
 
 class AXAPIContextImpl : public ContextImpl {
  public:
@@ -16,4 +16,4 @@ class AXAPIContextImpl : public ContextImpl {
   NodePtr GetAccessibleRootByPID(const int pid) override;
 };
 
-}  // namespace axa
+}  // namespace acacia

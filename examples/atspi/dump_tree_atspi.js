@@ -1,5 +1,5 @@
 // NodeJS example that dumps the accessible tree of a running process using
-// AXAccess AT-SPI API backend.
+// Acacia AT-SPI API backend.
 
 let name = '';
 let pid = 0;
@@ -26,7 +26,7 @@ if (!name.length && pid === 0) {
   process.exit();
 }
 
-const atspi = require('./atspi_inspect');
+const atspi = require('./acacia_atspi');
 let root;
 if (name.length) {
   msg = 'Searching for application with name \'' + name + '\'';

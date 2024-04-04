@@ -1,10 +1,10 @@
 #pragma once
 
-#include <axaccess/atspi/atspi_node.h>
-#include <axaccess/node.h>
+#include <acacia/atspi/atspi_node.h>
+#include <acacia/node.h>
 #include <string>
 
-namespace axa {
+namespace acacia {
 
 class AtspiNodeImpl : public NodeImpl {
  public:
@@ -21,4 +21,4 @@ class AtspiNodeImpl : public NodeImpl {
   AtspiNodePtr atspiNode;
 };
 
-}  // namespace axa
+}  // namespace acacia

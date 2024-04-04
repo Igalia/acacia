@@ -1,15 +1,15 @@
-%module atspi_inspect
+%module acacia_atspi
 %{
-#include <axaccess/atspi/atspi_action_interface.h>
-#include <axaccess/atspi/atspi_component_interface.h>
-#include <axaccess/atspi/atspi_document_interface.h>
-#include <axaccess/atspi/atspi_hyperlink_interface.h>
-#include <axaccess/atspi/atspi_node.h>
-#include <axaccess/atspi/atspi_table_interface.h>
-#include <axaccess/atspi/atspi_table_cell_interface.h>
-#include <axaccess/atspi/atspi_text_interface.h>
-#include <axaccess/atspi/atspi_value_interface.h>
-#include <axaccess/atspi/linux_utils.h>
+#include <acacia/atspi/atspi_action_interface.h>
+#include <acacia/atspi/atspi_component_interface.h>
+#include <acacia/atspi/atspi_document_interface.h>
+#include <acacia/atspi/atspi_hyperlink_interface.h>
+#include <acacia/atspi/atspi_node.h>
+#include <acacia/atspi/atspi_table_interface.h>
+#include <acacia/atspi/atspi_table_cell_interface.h>
+#include <acacia/atspi/atspi_text_interface.h>
+#include <acacia/atspi/atspi_value_interface.h>
+#include <acacia/atspi/linux_utils.h>
 %}
 
 %include <std_except.i>
@@ -91,13 +91,13 @@ namespace std {
 %catches(std::runtime_error) AtspiValueInterface::getMaximumValue() const;
 %catches(std::runtime_error) AtspiValueInterface::getMinimumValue() const;
 
-%include <axaccess/atspi/atspi_action_interface.h>
-%include <axaccess/atspi/atspi_component_interface.h>
-%include <axaccess/atspi/atspi_document_interface.h>
-%include <axaccess/atspi/atspi_hyperlink_interface.h>
-%include <axaccess/atspi/atspi_node.h>
-%include <axaccess/atspi/atspi_table_interface.h>
-%include <axaccess/atspi/atspi_table_cell_interface.h>
-%include <axaccess/atspi/atspi_text_interface.h>
-%include <axaccess/atspi/atspi_value_interface.h>
-%include <axaccess/atspi/linux_utils.h>
+%include <acacia/atspi/atspi_action_interface.h>
+%include <acacia/atspi/atspi_component_interface.h>
+%include <acacia/atspi/atspi_document_interface.h>
+%include <acacia/atspi/atspi_hyperlink_interface.h>
+%include <acacia/atspi/atspi_node.h>
+%include <acacia/atspi/atspi_table_interface.h>
+%include <acacia/atspi/atspi_table_cell_interface.h>
+%include <acacia/atspi/atspi_text_interface.h>
+%include <acacia/atspi/atspi_value_interface.h>
+%include <acacia/atspi/linux_utils.h>

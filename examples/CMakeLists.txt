@@ -14,7 +14,7 @@ endif(WIN32)
 
 
 # Cross-platform examples (experimental)
-if (AXA_LIBAXACCESS)
+if (ACACIA_CAT)
   # EXAMPLE: cross-platform `dump_tree`
   add_executable(
     dump_tree
@@ -24,14 +24,14 @@ if (AXA_LIBAXACCESS)
   target_link_libraries(
     dump_tree
     PRIVATE
-      axaccess
+      acacia
   )
 
   if (LINUX)
     target_link_libraries(
       dump_tree
       PRIVATE
-        atspi_inspect
+        acacia_atspi
     )
   endif (LINUX)
-endif (AXA_LIBAXACCESS)
+endif (ACACIA_CAT)

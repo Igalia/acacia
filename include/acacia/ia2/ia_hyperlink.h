@@ -5,7 +5,7 @@
 
 #include <wrl/client.h>
 
-#include "axaccess/export.h"
+#include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 /**
@@ -15,7 +15,7 @@
  * interface using IANode::QueryHyperlink().
  * @ingroup ia2
  */
-class AXA_EXPORT IAHyperlink {
+class ACACIA_EXPORT IAHyperlink {
  public:
   IAHyperlink(Microsoft::WRL::ComPtr<IAccessibleHyperlink> iface)
       : iface_(iface) {}

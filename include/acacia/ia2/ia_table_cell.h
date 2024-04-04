@@ -5,10 +5,10 @@
 
 #include <wrl/client.h>
 
-#include "axaccess/export.h"
+#include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
-class AXA_EXPORT IATableCell {
+class ACACIA_EXPORT IATableCell {
  public:
   IATableCell(Microsoft::WRL::ComPtr<IAccessibleTableCell> iface)
       : iface_(iface) {}

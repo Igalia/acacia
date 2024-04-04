@@ -1,8 +1,8 @@
+#include <acacia/node.h>
 #include <assert.h>
-#include <axaccess/node.h>
 #include <string>
 
-namespace axa {
+namespace acacia {
 
 Node::Node(std::unique_ptr<NodeImpl> aImpl) : impl(std::move(aImpl)) {}
 
@@ -31,4 +31,4 @@ NodePtr Node::ChildAt(const int32_t index) {
   return impl->ChildAt(index);
 }
 
-}  // namespace axa
+}  // namespace acacia

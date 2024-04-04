@@ -2,14 +2,14 @@
 
 #include <string>
 
-#include "axaccess/mac/axapi_node.h"
-#include "axaccess/node.h"
+#include "acacia/mac/axapi_node.h"
+#include "acacia/node.h"
 
-namespace axa {
+namespace acacia {
 
 class AXAPINodeImpl : public NodeImpl {
  public:
-  AXAPINodeImpl(mac_inspect::AXAPINode axapi_node);
+  AXAPINodeImpl(acacia::AXAPINode axapi_node);
 
   std::string Name() override;
   std::string RoleName() override;
@@ -17,7 +17,7 @@ class AXAPINodeImpl : public NodeImpl {
   NodePtr ChildAt(const int32_t index) override;
 
  private:
-  mac_inspect::AXAPINode axapi_node_;
+  acacia::AXAPINode axapi_node_;
 };
 
-}  // namespace axa
+}  // namespace acacia

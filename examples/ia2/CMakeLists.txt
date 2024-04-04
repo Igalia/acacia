@@ -12,29 +12,29 @@ target_link_libraries(
   dump_tree_ia2
 
   # Items to link into the target
-  PRIVATE ia2_inspect
+  PRIVATE acacia_ia2
 )
 
-if (AXA_PYTHON_MODULE)
+if (ACACIA_PYTHON)
   add_custom_target(
     dump_tree_ia2.py
     ALL
     DEPENDS
-      ia2_inspect
-      ia2_python_inspect
+      acacia_ia2
+      acacia_ia2_python
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_ia2.py "${WIN_OUTPUT_DIRECTORY}"
   )
-endif (AXA_PYTHON_MODULE)
+endif (ACACIA_PYTHON)
 
-if (AXA_NODEJS_MODULE)
+if (ACACIA_NODEJS)
   add_custom_target(
     dump_tree_ia2.js
     ALL
     DEPENDS
-      ia2_inspect
-      ia2_inspect_node_module
+      acacia_ia2
+      acacia_ia2_node_module
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_ia2.js "${WIN_OUTPUT_DIRECTORY}"
   )
-endif (AXA_NODEJS_MODULE)
+endif (ACACIA_NODEJS)

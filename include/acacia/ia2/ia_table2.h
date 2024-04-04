@@ -5,7 +5,7 @@
 
 #include <wrl/client.h>
 
-#include "axaccess/export.h"
+#include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 /**
@@ -15,7 +15,7 @@
  * interface using IANode::QueryTable2().
  * @ingroup ia2
  */
-class AXA_EXPORT IATable2 {
+class ACACIA_EXPORT IATable2 {
  public:
   IATable2(Microsoft::WRL::ComPtr<IAccessibleTable2> iface) : iface_(iface) {}
   ~IATable2(){};

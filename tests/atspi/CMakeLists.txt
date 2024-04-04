@@ -5,26 +5,26 @@ add_executable(
 )
 target_link_libraries(
   test_smoke
-  PRIVATE atspi_inspect
+  PRIVATE acacia_atspi
 )
 add_test(
   NAME test_smoke
   COMMAND test_smoke
 )
 
-if (AXA_PYTHON_MODULE)
+if (ACACIA_PYTHON)
   add_custom_target(
     python_tests
     ALL
     DEPENDS
-      atspi_inspect
-      atspi_python_inspect
+      acacia_atspi
+      acacia_atspi_python
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_smoke.py ${CMAKE_CURRENT_BINARY_DIR}/
     COMMAND
-      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/_atspi_python_inspect.so ${CMAKE_CURRENT_BINARY_DIR}/_atspi_python_inspect.so
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/_acacia_atspi_python.so ${CMAKE_CURRENT_BINARY_DIR}/_acacia_atspi_python.so
     COMMAND
-      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/atspi_inspect.py ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.py
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/acacia_atspi.py ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.py
     VERBATIM
   )
 
@@ -33,19 +33,19 @@ if (AXA_PYTHON_MODULE)
     NAME test_smoke_py
     COMMAND python test_smoke.py
   )
-endif (AXA_PYTHON_MODULE)
+endif (ACACIA_PYTHON)
 
-if (AXA_NODEJS_MODULE)
+if (ACACIA_NODEJS)
   add_custom_target(
     node_tests
     ALL
     DEPENDS
-      atspi_inspect
-      atspi_inspect_module
+      acacia_atspi
+      acacia_atspi_module
     COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_smoke.js ${CMAKE_CURRENT_BINARY_DIR}/
     COMMAND
-      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/atspi_inspect.node ${CMAKE_CURRENT_BINARY_DIR}/atspi_inspect.node
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/acacia_atspi.node ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.node
     VERBATIM
   )
 
@@ -54,4 +54,4 @@ if (AXA_NODEJS_MODULE)
     NAME test_smoke_js
     COMMAND node test_smoke.js
   )
-endif (AXA_NODEJS_MODULE)
+endif (ACACIA_NODEJS)

@@ -3,9 +3,9 @@
 #include <memory>
 #include <string>
 
-#include "axaccess/export.h"
+#include "acacia/export.h"
 
-namespace axa {
+namespace acacia {
 
 class Node;
 typedef std::unique_ptr<Node> NodePtr;
@@ -20,7 +20,7 @@ class NodeImpl {
   virtual NodePtr ChildAt(const int32_t index) = 0;
 };
 
-class AXA_EXPORT Node {
+class ACACIA_EXPORT Node {
  public:
   static NodePtr Create(std::unique_ptr<NodeImpl> impl);
   Node(std::unique_ptr<NodeImpl> aImpl);
@@ -35,4 +35,4 @@ class AXA_EXPORT Node {
   std::unique_ptr<NodeImpl> impl;
 };
 
-}  // namespace axa
+}  // namespace acacia

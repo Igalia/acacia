@@ -1,11 +1,11 @@
-#include "axa_context_impl.h"
+#include "acat_context_impl.h"
 
+#include <acacia/atspi/linux_utils.h>
 #include <assert.h>
-#include <axaccess/atspi/linux_utils.h>
 
-#include "axa_node_impl.h"
+#include "acat_node_impl.h"
 
-namespace axa {
+namespace acacia {
 
 std::unique_ptr<ContextImpl> AtspiContextImpl::Create() {
   return std::make_unique<AtspiContextImpl>();
@@ -25,4 +25,4 @@ NodePtr AtspiContextImpl::GetAccessibleRootByPID(const int pid) {
   return Node::Create(std::move(rootNodeImpl));
 }
 
-}  // namespace axa
+}  // namespace acacia
