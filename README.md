@@ -327,7 +327,7 @@ To turn on the Python3 and NodeJS bindings, run cmake with the following flags:
 % cmake -DCMAKE_BUILD_TYPE=Release -DACACIA_PYTHON=ON -DACACIA_NODEJS=ON .. -G "Ninja" --fresh
 ```
 
-##### OUTPUT FILES
+#### Output files
 
 All output files on Windows are in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
 
