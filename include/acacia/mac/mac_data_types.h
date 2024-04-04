@@ -11,24 +11,53 @@ class AXAPINode;
 template <typename T>
 class ScopedCFTypeRef;
 
+/**
+ * Represents the types that various polymorphic getters may return.
+ * @ingroup axapi
+ */
 enum class ValueType {
-  NOT_PRESENT,
-  UNKNOWN,
-  LIST,
-  BOOLEAN,
-  INT,
-  FLOAT,
-  STRING,
-  URL,
-  NODE,
-  POINT,
-  SIZE,
-  RECT,
-  RANGE,
-  DICTIONARY,
-  DATA,
-  TEXTMARKER,
-  TEXTMARKERRANGE,
+  NOT_PRESENT, /** There is no value for the given parameter on this object. */
+  UNKNOWN,     /** The value type couldn't be deduced. */
+  LIST,        /** The value is a
+                  [CFArrayRef](https://developer.apple.com/documentation/corefoundation/cfarray-s28).
+                  Values of this type are converted to a std::vector. */
+  BOOLEAN,     /** The value is a boolean. */
+  INT,         /** The value is an int. */
+  FLOAT,       /** The value is a float. */
+  STRING,      /** The value is a
+                  [CFStringRef](https://developer.apple.com/documentation/corefoundation/cfstring-rfh).
+                  Values of this type are converted to std::string. */
+  URL,         /** The value is a
+                  [CFURLRef](https://developer.apple.com/documentation/corefoundation/cfurl-rd7).
+                  Values of this type are converted to std::string. */
+  NODE,        /** The value is an
+                  [AXUIElementRef](https://developer.apple.com/documentation/applicationservices/axuielementref?language=objc).
+                  Values of this type are converted to an AXAPINode. */
+  POINT,       /** The value is a
+                  [CGPoint](https://developer.apple.com/documentation/corefoundation/cgpoint).
+                  Values of this type are converted to a Point. */
+  SIZE,        /** The value is a
+                  [CGSize](https://developer.apple.com/documentation/corefoundation/cgsize).
+                  Values of this type are converted to a Size. */
+  RECT,        /** The value is a
+                  [CGRect](https://developer.apple.com/documentation/corefoundation/cgrect).
+                  Values of this type are converted to a Rect. */
+  RANGE,       /** The value is a
+                  [CFRange](https://developer.apple.com/documentation/corefoundation/cfrange/).
+                  Values of this type are converted to a Range. */
+  DICTIONARY,  /** The value is a
+                  [CFDictionary](https://developer.apple.com/documentation/corefoundation/cfdictionaryref/).
+                  Values of this type are converted to a Dictionary. */
+  DATA,        /** The value is a
+                  [CFDataRef](https://developer.apple.com/documentation/corefoundation/cfdata/).
+                */
+  TEXTMARKER,  /** The value is an
+                  [AXTextMarker](https://developer.apple.com/documentation/applicationservices/axtextmarker/).
+                */
+  TEXTMARKERRANGE, /** The value is an
+                      [AXTextMarkerRange](https://developer.apple.com/documentation/applicationservices/axtextmarkerrange).
+                    */
+
 };
 
 std::string ValueTypeToString(ValueType value_type);
