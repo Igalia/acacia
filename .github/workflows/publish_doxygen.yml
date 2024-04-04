@@ -6,18 +6,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_docs:
+  build:
+    name: Build and publish gh-pages
     runs-on: ubuntu-latest
     steps:
+      - name: Install System dependencies
+        run: sudo apt install -y libatspi2.0-dev doxygen
       - uses: actions/checkout@v3
-      - name: Doxygen Action
-        uses: mattnotmitt/doxygen-action@v1.9.5
+      - name: Configure Project
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DACACIA_DOCS=ON
+      - name: Build project
+        run: |
+          cd build
+          make -j
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          working-directory: 'docs/'
-          doxyfile-path: 'Doxyfile.in'
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3.9.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/doxydocs/html
+          path: './build/docs/docs/html'
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
