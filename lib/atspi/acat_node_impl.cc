@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-namespace acat {
+namespace acacia {
 
 AtspiNodeImpl::AtspiNodeImpl(AtspiNodePtr& aAtspiNode)
     : atspiNode(std::move(aAtspiNode)) {}
@@ -38,4 +38,4 @@ NodePtr AtspiNodeImpl::ChildAt(const int32_t index) {
   return Node::Create(std::move(nodeImpl));
 }
 
-}  // namespace acat
+}  // namespace acacia

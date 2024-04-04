@@ -4,7 +4,7 @@
 #include <acacia/node.h>
 #include <string>
 
-namespace acat {
+namespace acacia {
 
 class AtspiNodeImpl : public NodeImpl {
  public:
@@ -21,4 +21,4 @@ class AtspiNodeImpl : public NodeImpl {
   AtspiNodePtr atspiNode;
 };
 
-}  // namespace acat
+}  // namespace acacia

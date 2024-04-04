@@ -6,7 +6,7 @@
 #include "lib/mac/axapi_context_impl.h"
 #endif
 
-namespace acat {
+namespace acacia {
 
 Context::Context() {
 #if defined(ACACIA_CAT_ATSPI)
@@ -34,4 +34,4 @@ NodePtr Context::GetAccessibleRootByPID(const int pid) {
   return impl->GetAccessibleRootByPID(pid);
 }
 
-}  // namespace acat
+}  // namespace acacia

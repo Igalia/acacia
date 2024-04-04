@@ -4,7 +4,7 @@
 
 #include "acacia/mac/axapi_node.h"
 
-namespace acat {
+namespace acacia {
 
 AXAPINodeImpl::AXAPINodeImpl(acacia_axapi::AXAPINode axapi_node)
     : axapi_node_(axapi_node) {}
@@ -36,4 +36,4 @@ NodePtr AXAPINodeImpl::ChildAt(int32_t index) {
   return Node::Create(std::move(child));
 }
 
-}  // namespace acat
+}  // namespace acacia

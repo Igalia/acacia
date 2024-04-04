@@ -5,7 +5,7 @@
 
 #include "acat_node_impl.h"
 
-namespace acat {
+namespace acacia {
 
 std::unique_ptr<ContextImpl> AtspiContextImpl::Create() {
   return std::make_unique<AtspiContextImpl>();
@@ -25,4 +25,4 @@ NodePtr AtspiContextImpl::GetAccessibleRootByPID(const int pid) {
   return Node::Create(std::move(rootNodeImpl));
 }
 
-}  // namespace acat
+}  // namespace acacia
