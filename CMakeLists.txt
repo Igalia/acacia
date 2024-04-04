@@ -55,10 +55,10 @@ option(
   OFF
 )
 
-## Enable/disable Unit tests, ON by default
+## Enable/disable tests, ON by default
 option(
   ACACIA_TESTS
-  "Enable unit tests"
+  "Enable tests"
   ON
 )
 
