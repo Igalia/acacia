@@ -4,7 +4,7 @@
 
 #include "acacia/context.h"
 
-namespace acat {
+namespace acacia {
 
 class AtspiContextImpl : public ContextImpl {
  public:
@@ -16,4 +16,4 @@ class AtspiContextImpl : public ContextImpl {
   NodePtr GetAccessibleRootByPID(const int pid) override;
 };
 
-}  // namespace acat
+}  // namespace acacia
