@@ -8,7 +8,7 @@
 
 namespace acacia {
 
-using acacia_axapi::AXAPINode;
+using acacia::AXAPINode;
 
 std::unique_ptr<ContextImpl> AXAPIContextImpl::Create() {
   return std::make_unique<AXAPIContextImpl>();

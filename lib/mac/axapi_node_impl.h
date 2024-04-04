@@ -9,7 +9,7 @@ namespace acacia {
 
 class AXAPINodeImpl : public NodeImpl {
  public:
-  AXAPINodeImpl(acacia_axapi::AXAPINode axapi_node);
+  AXAPINodeImpl(acacia::AXAPINode axapi_node);
 
   std::string Name() override;
   std::string RoleName() override;
@@ -17,7 +17,7 @@ class AXAPINodeImpl : public NodeImpl {
   NodePtr ChildAt(const int32_t index) override;
 
  private:
-  acacia_axapi::AXAPINode axapi_node_;
+  acacia::AXAPINode axapi_node_;
 };
 
 }  // namespace acacia

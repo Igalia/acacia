@@ -9,7 +9,7 @@
 
 using std::cerr;
 
-namespace acacia_axapi {
+namespace acacia {
 
 ValueType DeduceValueType(CFTypeRef cf_value, const std::string& attribute) {
   CFTypeID type_id = CFGetTypeID(cf_value);
@@ -132,4 +132,4 @@ std::string AXErrorToString(AXError err) {
   }
 }
 
-}  // namespace acacia_axapi
+}  // namespace acacia
