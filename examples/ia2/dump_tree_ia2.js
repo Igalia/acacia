@@ -1,4 +1,4 @@
-const acacia_ia2 = require('./ia2_inspect');
+const acacia_ia2 = require('./acacia_ia2');
 
 let name = '';
 let pid = 0;
