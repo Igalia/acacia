@@ -29,7 +29,28 @@ class Range;
 
 enum class ValueType;
 
+/**
+ * Returns the root node of the tree of a running application with the given
+ * PID.
+ *
+ * @ingroup axapi
+ *
+ * @return An AXAPINode representing the root accessibility object for the
+ * application with the given PID, or a null AXAPINode if no such application
+ * exists.
+ */
 AXAPINode findRootAXAPINodeForPID(int pid);
+
+/**
+ * Returns the root node of the tree of a running application with the given
+ * name.
+ *
+ * @ingroup axapi
+ *
+ * @return An AXAPINode representing the root accessibility object for an
+ * application whose name matches the given name, or a null AXAPINode if no such
+ * application exists.
+ */
 AXAPINode findRootAXAPINodeForName(std::string name);
 
 /**
