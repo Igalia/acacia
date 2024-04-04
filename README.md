@@ -7,7 +7,7 @@ Supported APIs:
 * Window's [MSAA with IAccessible2 1.3](https://wiki.linuxfoundation.org/accessibility/iaccessible2/)
 * Linux's [AT-SPI](https://docs.gtk.org/atspi2/class.Accessible.html)
 
-This library is a work in progress, no API is completely supported, yet! :) To see the supported APIs, peruse the [documentation ADD LINK TO PAGES]() or take a look at the [examples](https://github.com/Igalia/acacia/tree/main/examples).
+This library is a work in progress, no API is completely supported, yet! :) To see the supported APIs, peruse the [documentation](https://igalia.github.io/acacia/modules.html) or take a look at the [examples](https://github.com/Igalia/acacia/tree/main/examples).
 
 ## Contribution Guide
 
