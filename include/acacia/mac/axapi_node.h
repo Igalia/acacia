@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-/** @defgroup axapi AX-API (MacOS)
+/** @defgroup axapi AX API (MacOS)
  *  Accessiblity API for MacOS
  *  @{
  */

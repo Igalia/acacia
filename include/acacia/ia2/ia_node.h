@@ -18,7 +18,7 @@
 #include "acacia/ia2/ia_text.h"
 #include "acacia/ia2/ia_value.h"
 
-/** @defgroup ia2 IA2 API (Windows)
+/** @defgroup ia2 MSAA with IAccessible2 (Windows)
  *  IA2 Accessiblity API for Windows
  *  @{
  */
