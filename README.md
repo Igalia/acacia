@@ -1,15 +1,26 @@
+# Acacia
+
+Acacia is a library for accessing accessibility APIs. The goal of this library to make it easier to test or inspect the accessibility APIs on any platform for any application. The library provides a thin C++ wrapper around each supported API which can be exposed in a Python C++ extension module and a NodeJS C++ addon.
+
+Supported APIs:
+* Mac's [NSAccessibility Protocol](https://developer.apple.com/documentation/appkit/nsaccessibility) (also referred to as AXAPI)
+* Window's [MSAA with IAccessible2 1.3](https://wiki.linuxfoundation.org/accessibility/iaccessible2/)
+* Linux's [AT-SPI](https://docs.gtk.org/atspi2/class.Accessible.html)
+
+This library is a work in progress, no API is completely supported, yet! :) To see the supported APIs, peruse the [documentation ADD LINK TO PAGES]() or take a look at the [examples](https://github.com/Igalia/acacia/tree/main/examples).
+
 ## Contribution Guide
 
-Thes project uses clang-format as specified by the .clang-format config file in the root directory. We recommend setting up a pre-commit hook, which requires python and the following steps:
+These project uses clang-format as specified by the .clang-format config file in the root directory. We recommend setting up a pre-commit hook, which requires python and the following steps:
 * `pip install pre-commit`
 * `pip install clang-format`
 * `pre-commit install`
 
 Note: on Debian, you can install with apt: `sudo apt install pre-commit clang-format`
 
-The pre-submit hook will run clang-format the code in your staging area before commiting. The commit will not succeed if a file is reformatted, and you will have to re-add the file with format changes and re-run git commit.
+The pre-submit hook will run clang-format the code in your staging area before committing. The commit will not succeed if a file is reformatted, and you will have to re-add the file with format changes and re-run git commit.
 
-## How to build
+## Building and using the library
 
 ### Supported target languages
 
@@ -22,7 +33,7 @@ If no target language is specified, only the c++ library and examples will be bu
 
 #### Notes on NodeJS bindings
 
-At present, arrays returned by the underlaying c++ functions are not implemented as native javascript array objects. They are objects with the follow accessor functions:
+At present, arrays returned by the underlying c++ functions are not implemented as native JavaScript array objects. They are objects with the follow accessor functions:
 * `equals`
 * `size`
 * `capacity`
@@ -63,18 +74,38 @@ $ sudo ln -sf /usr/bin/ld.gold /usr/bin/ld
 % make
 ```
 
-This will produce the executable `build/lib/atspi/dump_tree_atspi` which can be used with either the
+#### Output files
+
+This will produce a shared library, python module and node module in `build/lib/atspi/` and examples in `build/examples/`.
+
+##### Examples
+
+An `examples/atspi` folder will be created under the build directory
+containing example programs that show how the API can be used.
+
+* `dump_tree_atspi`: Dumps the accessible tree of a running application given
+                     its process ID and/or name as shown in the build steps.
+* `dump_tree_atspi.js`: If the NodeJS bindings feature is enabled, this program
+                     can be run using the same arguments as the executable via
+                     `node examples/atspi/dump_tree_atspi.js`.
+* `dump_tree_atspi.py`: If the Python bindings feature is enabled, this program
+                     can be run using the same arguments as the executable via
+                     `python examples/atspi/dump_tree_atspi.py`.
+
+All examples can be used to dump information in an accessibility tree using the
 PID of the browser, its name or substring thereof, or both:
 
 ```
 % build/lib/atspi/dump_tree_atspi --pid=49500
 % build/lib/atspi/dump_tree_atspi --name=firefox
-% build/lib/atspi/dump_tree_atspi --name=chrom --pid=50319
+% build/lib/atspi/dump_tree_atspi --name=chrome --pid=50319
 ```
 
-As well as a python module.
+##### Python module
+
+To use the Python module:
 ```
-% cd build/lib/atspi/
+% cd build/example/atspi/
 % python
 >>> import acacia_atspi
 >>> node = acacia_atspi.findRootAtspiNodeForName("chromium")
@@ -105,9 +136,11 @@ As well as a python module.
 
 ```
 
-And a NodeJS module `acacia_atspi.node`.
+##### NodeJS module
+
+To use the NodeJS module:
 ```
-% cd build/lib/atspi/
+% cd build/example/atspi/
 % node
 > const acacia_atspi = require("./acacia_atspi");
 > let node = acacia_atspi.findRootAtspiNodeForName('firefox');
@@ -144,21 +177,6 @@ And a NodeJS module `acacia_atspi.node`.
 _exports_AtspiPairIntInt { second: 2098, first: 3840 }
 ```
 
-#### Examples
-
-An `examples/atspi` folder will be created under the build directory
-containing example programs that show how the API can be used.
-
-* `dump_tree_atspi`: Dumps the accessible tree of a running application given
-                     its process ID and/or name as shown in the build steps.
-* `dump_tree_atspi.js`: If the NodeJS bindings feature is enabled, this program
-                     can be run using the same arguments as the executable via
-                     `node examples/atspi/dump_tree_atspi.js`.
-* `dump_tree_atspi.py`: If the Python bindings feature is enabled, this program
-                     can be run using the same arguments as the executable via
-                     `python examples/atspi/dump_tree_atspi.py`.
-
-
 ### On Mac
 
 #### Dependencies
@@ -177,7 +195,7 @@ If you encounter a python3_LIBRARIES not found, try updating python with:
 brew install python
 ```
 
-For the nodeJS bindings, you will need to download and build node-gyp app and put the executable on your path. One way to do this is through npm:
+For the NodeJS bindings, you will need to download and build node-gyp app and put the executable on your path. One way to do this is through npm:
 
 ```
 npm install -g node-gyp
@@ -251,14 +269,15 @@ Through the Visual Studio Installer, install:
 
 Through the Microsoft Store, download Python.
 
-Git for windows (this also installs git bash, very nice to have and used by default in VSCode's terminal):
+Git for windows:
 - https://git-scm.com/download/win
 
 For package management, you can use scoop (https://scoop.sh/) or the windows package manager of your choice.
 
 IMPORTANT: This project was not designed for a multi-configuration generator, like Visual Studios. Instead, please use a single configuration generator. The recommended generator is [Ninja](https://ninja-build.org/) and the following instructions will assume Ninja will be used. You can install `ninja` through scoop.
 
-[SWIG](https://www.swig.org/) and python3 are also necessary to build both the nodejs and python3 bindings.
+[SWIG](https://www.swig.org/) and python3 are also necessary to build both the NodeJS and python3 bindings.
+
 ```
 scoop install swig python ninja
 ```
@@ -281,11 +300,11 @@ Add the following to your settings.json:
     "cmake.generator": "Ninja",
 ```
 
-If you are using MSVC to compile, you will need to specify the "release" build, otherwise you will need a debug version of the python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release". If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
+If you are using MSVC to compile, you will need to specify the "Release" build, otherwise you will need a debug version of the Python library. In VSCode, you can use the command pallet option "Cmake: select variant", and choose "Release". If you want to build python bindings with a "Debug" build with visual studios, you will need to create a debug build of the python library to link against.
 
 You can then build and run any number of was through VS Code, such as through the command pallet (search for "build") or by right clicking on the root directories CMakeLists.txt
 
-##### Powershell
+##### PowerShell
 
 To build from PowerShell, first you have to import and run the DevShell module:
 ```
@@ -301,14 +320,16 @@ Then, to build:
 % ninja
 ```
 
-Note: `-DCMAKE_BUILD_TYPE=Release` is necessary if you are using msvc and only have the Release version of Python.
+Note: `-DCMAKE_BUILD_TYPE=Release` is necessary if you are using MSVC and only have the Release version of Python.
 
 To turn on the Python3 and NodeJS bindings, run cmake with the following flags:
 ```
 % cmake -DCMAKE_BUILD_TYPE=Release -DACACIA_PYTHON=ON -DACACIA_NODEJS=ON .. -G "Ninja" --fresh
 ```
 
-**OUTPUT FILES** for Windows are all in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
+##### OUTPUT FILES
+
+All output files on Windows are in the `build/bin` directory, as shared libraries must be in the same folder as the executable on windows.
 
 Currently produces the following executable:
 ```
@@ -391,7 +412,7 @@ The resulting documentation can be found in: `build/docs/docs/html`
 
 ### Cross-platform Accessibility Tree (CAT) API
 
-This is a native C++ library that will eventually abstract the other, platform-specifc APIs, so that developers can target a single API regardless
+This is a native C++ library that will eventually abstract the other, platform-specific APIs, so that developers can target a single API regardless
 of that provided by the platform. This may be useful for some use-cases (e.g, to dump the accessible tree of an
 application in a cross-platform way).
 
