@@ -8,7 +8,7 @@
 
 #include "include/acacia/mac/mac_data_types.h"
 
-namespace acacia_axapi {
+namespace acacia {
 
 template <typename T>
 class ScopedCFTypeRef;
@@ -27,6 +27,6 @@ std::string AXErrorToString(AXError err);
 ValueType DeduceValueType(CFTypeRef cf_value,
                           const std::string& attribute = "");
 
-}  // namespace acacia_axapi
+}  // namespace acacia
 
 #endif  // LIB_MAC_MAC_HELPER_FUNCTIONS_H_

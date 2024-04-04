@@ -6,7 +6,7 @@
 
 namespace acacia {
 
-AXAPINodeImpl::AXAPINodeImpl(acacia_axapi::AXAPINode axapi_node)
+AXAPINodeImpl::AXAPINodeImpl(acacia::AXAPINode axapi_node)
     : axapi_node_(axapi_node) {}
 
 std::string AXAPINodeImpl::Name() {
@@ -26,7 +26,7 @@ int32_t AXAPINodeImpl::ChildCount() {
 }
 
 NodePtr AXAPINodeImpl::ChildAt(int32_t index) {
-  std::vector<acacia_axapi::AXAPINode> children =
+  std::vector<acacia::AXAPINode> children =
       axapi_node_.CopyNodeListAttributeValue("AXChildren");
   if (index < 0 || index >= children.size()) {
     throw std::invalid_argument("Index out of bounds");
