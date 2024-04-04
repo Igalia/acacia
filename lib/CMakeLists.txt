@@ -60,7 +60,7 @@ if (ACACIA_CAT)
     target_link_libraries(
       acacia
       PRIVATE
-        axapi_inspect
+        acacia_axapi
     )
   endif (APPLE)
 endif (ACACIA_CAT)

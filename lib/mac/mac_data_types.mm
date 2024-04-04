@@ -13,7 +13,7 @@
 
 using std::cerr;
 
-namespace mac_inspect {
+namespace acacia_axapi {
 
 std::string ValueTypeToString(ValueType value_type) {
   switch (value_type) {
@@ -132,4 +132,4 @@ AXAPINode Dictionary::getNodeValue(const std::string& key) {
   return AXAPINode((AXUIElementRef)CFRetain(cf_value));
 }
 
-}  // namespace mac_inspect
+}  // namespace acacia_axapi

@@ -10,10 +10,10 @@ const kAttributes = [
 
 const {name, pid} = processArguments();
 
-const axapi_inspect = require('./axapi_inspect');
+const acacia_axapi = require('./acacia_axapi');
 const kSupportedListTypes = new Set([
-  axapi_inspect.ValueType_NODE, axapi_inspect.ValueType_STRING,
-  axapi_inspect.ValueType_RANGE, axapi_inspect.ValueType_DICTIONARY
+  acacia_axapi.ValueType_NODE, acacia_axapi.ValueType_STRING,
+  acacia_axapi.ValueType_RANGE, acacia_axapi.ValueType_DICTIONARY
 ]);
 
 const root = getRootAXAPINode(name, pid);
@@ -22,7 +22,7 @@ printNodeAndSubtree(root, 0);
 function printNodeAndSubtree(node, level) {
   if (!node.hasAttribute('AXRole'))
     return;
-  if (node.getValueType('AXRole') == axapi_inspect.ValueType_UNKNOWN)
+  if (node.getValueType('AXRole') == acacia_axapi.ValueType_UNKNOWN)
     return;
 
   const prefix = '--'.repeat(level) + '>';
@@ -66,7 +66,7 @@ function serializeRoleAndAttributes(node, attributes) {
 
 function getRootAXAPINode(name, pid) {
   if (name !== undefined) {
-    let root = axapi_inspect.findRootAXAPINodeForName(name);
+    let root = acacia_axapi.findRootAXAPINodeForName(name);
     if (root.isNull()) {
       console.error(`No running application found with name ${name}.`)
       process.exit();
@@ -75,7 +75,7 @@ function getRootAXAPINode(name, pid) {
   }
 
   if (pid !== undefined) {
-    let root = axapi_inspect.findRootAXAPINodeForPID(pid);
+    let root = acacia_axapi.findRootAXAPINodeForPID(pid);
     if (!root.isNull()) {
       console.error(`No running application found with PID ${pid}.`)
       process.exit();
@@ -113,32 +113,32 @@ function getAttributeValue(node, attribute) {
   try {
     const type = node.getValueType(attribute);
     switch (type) {
-      case axapi_inspect.ValueType_LIST:
+      case acacia_axapi.ValueType_LIST:
         return getListAttributeValue(node, attribute);
-      case axapi_inspect.ValueType_BOOLEAN:
+      case acacia_axapi.ValueType_BOOLEAN:
         return node.getBooleanValue(attribute);
-      case axapi_inspect.ValueType_INT:
+      case acacia_axapi.ValueType_INT:
         return node.getIntValue(attribute);
-      case axapi_inspect.ValueType_FLOAT:
+      case acacia_axapi.ValueType_FLOAT:
         return node.getFloatValue(attribute);
-      case axapi_inspect.ValueType_STRING:
+      case acacia_axapi.ValueType_STRING:
         return node.getStringValue(attribute);
-      case axapi_inspect.ValueType_URL:
+      case acacia_axapi.ValueType_URL:
         return node.getURLValue(attribute);
-      case axapi_inspect.ValueType_NODE:
+      case acacia_axapi.ValueType_NODE:
         return node.getNodeValue(attribute);
-      case axapi_inspect.ValueType_POINT:
+      case acacia_axapi.ValueType_POINT:
         return node.getPointValue(attribute);
-      case axapi_inspect.ValueType_SIZE:
+      case acacia_axapi.ValueType_SIZE:
         return node.getSizeValue(attribute);
-      case axapi_inspect.ValueType_RECT:
+      case acacia_axapi.ValueType_RECT:
         return node.getRectValue(attribute);
-      case axapi_inspect.ValueType_RANGE:
+      case acacia_axapi.ValueType_RANGE:
         return node.getRangeValue(attribute);
-      case axapi_inspect.ValueType_DICTIONARY:
+      case acacia_axapi.ValueType_DICTIONARY:
         return node.getDictionaryValue(attribute);
       default:
-        const typeString = axapi_inspect.ValueTypeToString(type);
+        const typeString = acacia_axapi.ValueTypeToString(type);
         console.error(`Unsupported type: ${typeString} for ${attribute}`);
         return undefined;
     }
@@ -154,7 +154,7 @@ function getListAttributeValue(node, attribute) {
 
   const type = node.getListElementType(attribute);
   if (!kSupportedListTypes.has(type)) {
-    const typeString = axapi_inspect.ValueTypeToString(type);
+    const typeString = acacia_axapi.ValueTypeToString(type);
     console.error(`Unsupported list type: ${typeString} for ${attribute}`);
     return undefined;
   }
@@ -168,13 +168,13 @@ function getListAttributeValue(node, attribute) {
 
 function getListAttributeValueAtIndex(node, type, attribute, index) {
   switch (type) {
-    case axapi_inspect.ValueType_NODE:
+    case acacia_axapi.ValueType_NODE:
       return node.getNodeListValueAtIndex(attribute, index);
-    case axapi_inspect.ValueType_STRING:
+    case acacia_axapi.ValueType_STRING:
       return node.getStringListValueAtIndex(attribute, index);
-    case axapi_inspect.ValueType_RANGE:
+    case acacia_axapi.ValueType_RANGE:
       return node.getRangeListValueAtIndex(attribute, index);
-    case axapi_inspect.ValueType_DICTIONARY:
+    case acacia_axapi.ValueType_DICTIONARY:
       return node.getDictionaryListValueAtIndex(attribute, index);
     default:
       return undefined;

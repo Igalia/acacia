@@ -210,8 +210,8 @@ As well as a python module:
 ```
 % cd build/lib/mac/
 % python3
->>> import axapi_inspect
->>> app = axapi_inspect.findRootAXAPINodeForPID(12345)
+>>> import acacia_axapi
+>>> app = acacia_axapi.findRootAXAPINodeForPID(12345)
 >>> attribute_names = app.getAttributeNames()
 >>> role = app.getStringValue('AXRole')
 >>> title = app.getStringValue('AXTitle')
@@ -227,8 +227,8 @@ And a node C++ add-on:
 ```
 % cd build/lib/mac/
 % node
-> const axapi_inspect = require("./axapi_inspect");
-> let app = axapi_inspect.findRootAXAPINodeForPID(1693);
+> const acacia_axapi = require("./acacia_axapi");
+> let app = acacia_axapi.findRootAXAPINodeForPID(1693);
 > const title = app.getStringValue('AXTitle');
 > let children_count = 0;
 > if (app.hasAttribute('AXChildren'))

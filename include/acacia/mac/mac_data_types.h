@@ -5,7 +5,7 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-namespace mac_inspect {
+namespace acacia_axapi {
 
 class AXAPINode;
 template <typename T>
@@ -144,6 +144,6 @@ class Dictionary {
   friend class AXAPINode;
 };
 
-}  // namespace mac_inspect
+}  // namespace acacia_axapi
 
 #endif  // LIB_MAC_AXAPI_DATA_TYPES_H_

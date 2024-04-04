@@ -8,7 +8,7 @@
 
 namespace acat {
 
-using mac_inspect::AXAPINode;
+using acacia_axapi::AXAPINode;
 
 std::unique_ptr<ContextImpl> AXAPIContextImpl::Create() {
   return std::make_unique<AXAPIContextImpl>();

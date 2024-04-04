@@ -16,7 +16,7 @@
 
 using std::cerr;
 
-namespace mac_inspect {
+namespace acacia_axapi {
 
 AXAPINode findRootAXAPINodeForPID(int pid) {
   AXUIElementRef root_ax_ui_element = AXUIElementCreateApplication((pid_t)pid);
@@ -26,7 +26,7 @@ AXAPINode findRootAXAPINodeForPID(int pid) {
   AXError err = AXUIElementCopyAttributeNames(root_ax_ui_element,
                                               cf_attributes.get_ptr());
   if (err)
-    return mac_inspect::AXAPINode();
+    return acacia_axapi::AXAPINode();
 
   return AXAPINode(root_ax_ui_element);
 }
@@ -550,4 +550,4 @@ Dictionary AXAPINode::getDictionaryListValueAtIndex(std::string& attribute,
   return Dictionary(cf_value);
 }
 
-}  // namespace mac_inspect
+}  // namespace acacia_axapi

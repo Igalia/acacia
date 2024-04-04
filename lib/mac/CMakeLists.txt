@@ -4,7 +4,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 13.0)
 
 add_library(
   # Name
-  axapi_inspect
+  acacia_axapi
 
   # Sources
   axapi_node.mm
@@ -14,7 +14,7 @@ add_library(
 
 if (ACACIA_CAT)
   target_sources(
-    axapi_inspect
+    acacia_axapi
     PRIVATE
       axapi_context_impl.cc
       axapi_node_impl.cc
@@ -29,7 +29,7 @@ find_library(APPKIT_FRAMEWORK AppKit)
 cmake_print_variables(APPKIT_FRAMEWORK)
 
 target_include_directories(
-  axapi_inspect
+  acacia_axapi
 
   PUBLIC
     ${PROJECT_BINARY_DIR}/include
@@ -37,7 +37,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-  axapi_inspect
+  acacia_axapi
 
   PRIVATE
     ${APPLICATION_SERVICES_FRAMEWORK}
@@ -53,7 +53,7 @@ if (ACACIA_PYTHON OR ACACIA_NODEJS)
   include(UseSWIG)
 endif()
 
-# SWIG Instructions to build a python module called "axapi_inspect"
+# SWIG Instructions to build a python module called "acacia_axapi"
 
 if (ACACIA_PYTHON)
   find_package(Python3 COMPONENTS Interpreter Development)
@@ -61,18 +61,18 @@ if (ACACIA_PYTHON)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
   include_directories(${Python3_INCLUDE_DIRS})
 
-  set_property(SOURCE axapi_inspect.i PROPERTY CPLUSPLUS ON)
+  set_property(SOURCE acacia_axapi.i PROPERTY CPLUSPLUS ON)
 
   swig_add_library(
     # The name of the c++ library used by python module
-    python_axapi_inspect
+    python_acacia_axapi
     TYPE SHARED
     LANGUAGE python
-    SOURCES axapi_inspect.i
+    SOURCES acacia_axapi.i
   )
 
   set_target_properties(
-    python_axapi_inspect
+    python_acacia_axapi
 
     PROPERTIES
     SUFFIX .so
@@ -80,15 +80,15 @@ if (ACACIA_PYTHON)
 
   target_link_libraries(
     # Target to link
-    python_axapi_inspect
+    python_acacia_axapi
 
     # Items to link into the target
-    axapi_inspect
+    acacia_axapi
     ${Python3_LIBRARIES}
   )
 
   set_property(
-    TARGET python_axapi_inspect
+    TARGET python_acacia_axapi
     PROPERTY
       SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
   )
@@ -108,22 +108,22 @@ if (ACACIA_NODEJS)
 
   # Final cmake target and proper destination for the NodeJS module
   add_custom_target(
-    axapi_inspect.node ALL
+    acacia_axapi.node ALL
     DEPENDS
-      "${CMAKE_CURRENT_BINARY_DIR}/nodejs_axapi_inspect_wrap.cxx"
+      "${CMAKE_CURRENT_BINARY_DIR}/nodejs_acacia_axapi_wrap.cxx"
     COMMAND
       ${NODE_GYP} configure build
     COMMAND
-      ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/axapi_inspect.node" .
+      ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/acacia_axapi.node" .
     VERBATIM
   )
 
   set_property(
-    TARGET axapi_inspect.node
+    TARGET acacia_axapi.node
     APPEND
     PROPERTY ADDITIONAL_CLEAN_FILES
       ${CMAKE_CURRENT_BINARY_DIR}/build
-      axapi_inspect.node
+      acacia_axapi.node
   )
 
   # Generate `binding.gyp` file for node-gyp
@@ -133,10 +133,10 @@ if (ACACIA_NODEJS)
 
   # Generate C++ wrapper for NodeJS
   add_custom_command(
-    OUTPUT nodejs_axapi_inspect_wrap.cxx
-    DEPENDS axapi_inspect
+    OUTPUT nodejs_acacia_axapi_wrap.cxx
+    DEPENDS acacia_axapi
     COMMAND
-      swig -c++ -javascript -node -o nodejs_axapi_inspect_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/axapi_inspect.i
+      swig -c++ -javascript -node -o nodejs_acacia_axapi_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/acacia_axapi.i
     VERBATIM
   )
 

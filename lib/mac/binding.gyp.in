@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "axapi_inspect",
+      "target_name": "acacia_axapi",
       "include_dirs": [
         "${CMAKE_SOURCE_DIR}",
         "${CMAKE_SOURCE_DIR}/include",
@@ -10,7 +10,7 @@
         "../../../lib/mac/axapi_node.mm",
         "../../../lib/mac/mac_data_types.mm",
         "../../../lib/mac/mac_helper_functions.mm",
-        "./nodejs_axapi_inspect_wrap.cxx",
+        "./nodejs_acacia_axapi_wrap.cxx",
       ],
       "xcode_settings": {
         "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
