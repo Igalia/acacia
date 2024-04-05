@@ -68,6 +68,7 @@ class AXAPINode {
    * Note: This is required for SWIG bindings to compile, but creates a node
    * which doesn't wrap an AXUIElementRef, and will cause a crash when any of
    * the accessor methods which depend on a valid AXUIElementRef are called.
+   * @ingroup axapi
    */
   AXAPINode();
 
@@ -78,6 +79,7 @@ class AXAPINode {
 
   /**
    * Checks whether this AXAPINode wraps a valid AXUIElementRef.
+   * @ingroup axapi
    *
    * @return true if this AXAPINode doesn't have a valid AXUIElementRef.
    */
@@ -86,6 +88,7 @@ class AXAPINode {
   /**
    * Wraps
    * [`AXUIElementCopyAttributeNames()`](https://developer.apple.com/documentation/applicationservices/1459475-axuielementcopyattributenames?language=objc).
+   * @ingroup axapi
    *
    * @return The list of attributes supported by this accessibility object. Note
    * that it's not always the case that an attribute being supported indicates
@@ -95,6 +98,7 @@ class AXAPINode {
 
   /**
    * Checks whether the given attribute is present on this accessibility object.
+   * @ingroup axapi
    *
    * @return true if the attribute is present.
    */
@@ -106,6 +110,7 @@ class AXAPINode {
    *
    * Note: Some attributes, such as `"AXValue"`, have values of different types
    * depending on the role of the accessibility object.
+   * @ingroup axapi
    *
    * @return
    * - ValueType::NOT_PRESENT if the attribute is unsupported or not present on
@@ -119,6 +124,7 @@ class AXAPINode {
   /**
    * For attributes whose value is a ValueType::LIST, deduces the type of the
    * list elements.
+   * @ingroup axapi
    *
    * @return
    * - ValueType::NOT_PRESENT if the attribute is unsupported or not present on
@@ -136,6 +142,7 @@ class AXAPINode {
    *
    * For attributes whose value is a ValueType::LIST, gets the number of
    * list elements.
+   * @ingroup axapi
    */
   int getListElementCount(const std::string& attribute) const;
 
@@ -144,6 +151,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::BOOLEAN.
+   * @ingroup axapi
    */
   bool getBooleanValue(const std::string& attribute) const;
 
@@ -152,6 +160,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::INT.
+   * @ingroup axapi
    */
   int getIntValue(const std::string& attribute) const;
 
@@ -160,6 +169,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::FLOAT.
+   * @ingroup axapi
    */
   float getFloatValue(const std::string& attribute) const;
 
@@ -168,6 +178,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::STRING.
+   * @ingroup axapi
    */
   std::string getStringValue(const std::string& attribute) const;
 
@@ -176,6 +187,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::URL.
+   * @ingroup axapi
    */
   std::string getURLValue(const std::string& attribute) const;
 
@@ -184,6 +196,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::NODE.
+   * @ingroup axapi
    */
   AXAPINode getNodeValue(const std::string& attribute) const;
 
@@ -192,6 +205,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::POINT.
+   * @ingroup axapi
    */
   Point getPointValue(const std::string& attribute) const;
 
@@ -200,6 +214,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::SIZE.
+   * @ingroup axapi
    */
   Size getSizeValue(const std::string& attribute) const;
 
@@ -208,6 +223,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::RECT.
+   * @ingroup axapi
    */
   Rect getRectValue(const std::string& attribute) const;
 
@@ -216,6 +232,7 @@ class AXAPINode {
    * [AXUIElementCopyAttributeValue](https://developer.apple.com/documentation/applicationservices/1462085-axuielementcopyattributevalue?language=objc).
    *
    * Gets the value for an attribute whose value is a ValueType::RANGE.
+   * @ingroup axapi
    */
   Range getRangeValue(const std::string& attribute) const;
 
@@ -225,6 +242,7 @@ class AXAPINode {
    *
    * Gets the values for an attribute whose value is a ValueType::LIST whose
    * elements are ValueType::NODE values.
+   * @ingroup axapi
    */
   std::vector<AXAPINode> getNodeListValue(const std::string& attribute) const;
 
@@ -234,6 +252,7 @@ class AXAPINode {
    *
    * Gets the individual value at the given index for an attribute whose value
    * is a ValueType::LIST whose elements are ValueType::NODE values.
+   * @ingroup axapi
    */
   AXAPINode getNodeListValueAtIndex(const std::string& attribute,
                                     int index) const;
@@ -244,6 +263,7 @@ class AXAPINode {
    *
    * Gets the values for an attribute whose value is a ValueType::LIST whose
    * elements are ValueType::STRING values.
+   * @ingroup axapi
    */
   std::vector<std::string> getStringListValue(std::string& attribute) const;
 
@@ -253,6 +273,7 @@ class AXAPINode {
    *
    * Gets the individual value at the given index for an attribute whose value
    * is a ValueType::LIST whose elements are ValueType::STRING values.
+   * @ingroup axapi
    */
   std::string getStringListValueAtIndex(std::string& attribute,
                                         int index) const;
@@ -263,6 +284,7 @@ class AXAPINode {
    *
    * Gets the values for an attribute whose value is a ValueType::LIST whose
    * elements are ValueType::RANGE values.
+   * @ingroup axapi
    */
   std::vector<Range> getRangeListValue(std::string& attribute) const;
 
@@ -272,6 +294,7 @@ class AXAPINode {
    *
    * Gets the individual value at the given index for an attribute whose value
    * is a ValueType::LIST whose elements are ValueType::RANGE values.
+   * @ingroup axapi
    */
   Range getRangeListValueAtIndex(std::string& attribute, int index) const;
 
@@ -281,6 +304,7 @@ class AXAPINode {
    *
    * Gets the values for an attribute whose value is a ValueType::LIST whose
    * elements are ValueType::DICTIONARY values.
+   * @ingroup axapi
    */
   std::vector<Dictionary> getDictionaryListValue(std::string& attribute) const;
 
@@ -290,6 +314,7 @@ class AXAPINode {
    *
    * Gets the individual value at the given index for an attribute whose value
    * is a ValueType::LIST whose elements are ValueType::DICTIONARY values.
+   * @ingroup axapi
    */
   Dictionary getDictionaryListValueAtIndex(std::string& attribute,
                                            int index) const;
