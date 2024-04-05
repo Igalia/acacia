@@ -1,95 +1,113 @@
 # Acacia
 
-Acacia is a library for accessing accessibility APIs. The goal of this library to make it easier to test or inspect the accessibility APIs on any platform for any application. The library provides a thin C++ wrapper around each supported API which can be exposed in a Python C++ extension module and a NodeJS C++ addon.
+Acacia is a library for accessing accessibility APIs. The goal of this library to make it easier to test or inspect the accessibility APIs on any platform for any application. The library provides a thin C++ wrapper around each supported API, which can also be exposed in a Python C++ extension module and a Node.js C++ addon.
 
-Supported APIs:
-* Mac's [NSAccessibility Protocol](https://developer.apple.com/documentation/appkit/nsaccessibility) (also referred to as AXAPI)
-* Window's [MSAA with IAccessible2 1.3](https://wiki.linuxfoundation.org/accessibility/iaccessible2/)
-* Linux's [AT-SPI](https://docs.gtk.org/atspi2/class.Accessible.html)
+| OS | Supported API |
+|----|---------------|
+| Linux | [AT-SPI](https://docs.gtk.org/atspi2/class.Accessible.html) |
+| macOS | [NSAccessibility Protocol](https://developer.apple.com/documentation/appkit/nsaccessibility) (also referred to as AX API) |
+| Windows | [MSAA with IAccessible2 1.3](https://wiki.linuxfoundation.org/accessibility/iaccessible2/) |
 
-This library is a work in progress, no API is completely supported, yet! :) To see the supported APIs, peruse the [documentation](https://igalia.github.io/acacia/modules.html) or take a look at the [examples](https://github.com/Igalia/acacia/tree/main/examples).
+This library is a work in progress, no API is completely supported, yet! :) To see the currently supported APIs, peruse the [documentation](https://igalia.github.io/acacia/modules.html) or take a look at the [examples](https://github.com/Igalia/acacia/tree/main/examples).
 
-## Contribution Guide
+(If you're viewing this README on GitHub, you can use the Outline button at the top right of the preview pane to see a Table of Contents for this README.)
 
-These project uses clang-format as specified by the .clang-format config file in the root directory. We recommend setting up a pre-commit hook, which requires python and the following steps:
-* `pip install pre-commit`
-* `pip install clang-format`
-* `pre-commit install`
+## Building and contributing to the library
 
-Note: on Debian, you can install with apt: `sudo apt install pre-commit clang-format`
+We use [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure our code is consistently formatted and readable. We recommend setting up clang-format and [pre-commit](https://pre-commit.com/) to ensure your code is consistent with the project style (and to make your life easier!)
 
-The pre-submit hook will run clang-format the code in your staging area before committing. The commit will not succeed if a file is reformatted, and you will have to re-add the file with format changes and re-run git commit.
+Setting up pre-commit will cause clang-format to run on uncommitted code (changed lines only) when you run `git commit`, and prevent the commit if clang-format makes any changes. You can then run `git commit` again to commit the formatted change.
 
-## Building and using the library
+The OS-specific instructions below include instructions on setting up clang-format and pre-commit, as well as setting up [CMake](https://cmake.org/) to build the project binaries.
 
-### Supported target languages
+### CMake feature flags
 
-This library can build either a Python3 module or a NodeJS c++ addon for any of the currently support accessibility APIs. To control which bindings are build, please provide the following feature flag.
+By default, building the project will only build the C++ library.
 
-* Python3 bindings: `-DACACIA_PYTHON=<ON/OFF>`, OFF by default.
-* NodeJS bindings: `-DACACIA_NODEJS=<ON/OFF>`, OFF by default.
+The build steps on each operating system mention `<feature-flags>`. These are flags that may be passed to CMake during the configure step in order to enable building the various optional features:
 
-If no target language is specified, only the c++ library and examples will be built.
+| Flag | Feature | Default |
+|------|---------|---------|
+| ACACIA_PYTHON | Enable building Python bindings | OFF |
+| ACACIA_NODEJS | Enable building Node.js bindings | OFF  |
+| ACACIA_DOCS | Enable building Doxygen documentation for the C++ library | OFF  |
+| ACACIA_TESTS | Enable building tests. | ON |
+| ACACIA_CAT | Enable building the experimental cross-platform library. If enabled, this will also build bindings for the cross-platform library for each enabled optional target language. | OFF |
 
-#### Notes on NodeJS bindings
+To pass feature flags on the command line, add `-D<flag>=ON` for each feature flag you wish to enable, and `-D<flag>=OFF` for each feature you wish to disable. For example:
 
-At present, arrays returned by the underlying c++ functions are not implemented as native JavaScript array objects. They are objects with the follow accessor functions:
-* `equals`
-* `size`
-* `capacity`
-* `reserve`
-* `isEmpty`
-* `clear`
-* `add`
-* `get`
-* `set`
-* `constructor`
+```sh
+% cmake --fresh -DACACIA_NODEJS=ON -DACACIA_TESTS=OFF ../
+```
 
 ### On Linux
 
-#### Dependencies
+The instructions below assume a Debian-like system (e.g. Debian, Ubuntu).
 
-On Debian-like systems:
+#### Install build dependencies
 
-`sudo apt install cmake libatspi2.0-dev`
+```sh
+sudo apt install cmake libatspi2.0-dev
+```
 
-For Python3 bindings (optional):
-* `sudo apt install swig python3-dev`
-
-For NodeJS module (optional):
-* `sudo apt install swig libnode-dev node-gyp`
-
-There is a known issue linking the NodeJS module with the Debian default linker. So using the gold linker
-is recommended:
+There is a known issue linking the NodeJS module with the Debian default linker. So, using the gold linker is recommended:
 
 ```
 $ sudo ln -sf /usr/bin/ld.gold /usr/bin/ld
 ```
 
+For building Python3 bindings (optional):
+```sh
+sudo apt install swig python3-dev
+```
+
+For building the Node.js module (optional):
+```sh
+sudo apt install swig libnode-dev node-gyp
+```
+
+#### Install pre-commit and clang-format
+
+You should be able to simply install clang-format and pre-commit using apt:
+
+```sh
+% sudo apt install clang-format pre-commit
+```
+
+From the project root, configure pre-commit for the project:
+
+```sh
+% cd path/to/acacia
+% pre-commit install
+```
+
 #### Build steps
+
+From the project root:
+
 ```
 % mkdir build
 % cd build
-% cmake <feature-flags> .. --fresh
+% cmake --fresh <feature-flags> ..
 % make
 ```
 
 #### Output files
 
-This will produce a shared library, python module and node module in `build/lib/atspi/` and examples in `build/examples/`.
+This will produce a shared C++ library, optional Python module and optional Node.js module in `build/lib/atspi/`, and examples in `build/examples/`.
 
 ##### Examples
 
 An `examples/atspi` folder will be created under the build directory
 containing example programs that show how the API can be used.
 
-* `dump_tree_atspi`: Dumps the accessible tree of a running application given
-                     its process ID and/or name as shown in the build steps.
-* `dump_tree_atspi.js`: If the NodeJS bindings feature is enabled, this program
-                     can be run using the same arguments as the executable via
+* `dump_tree_atspi`: (C++ binary.) Dumps the accessible tree of a running application given
+                     its process ID and/or name.
+* `dump_tree_atspi.js`: If the Node.js bindings feature is enabled, this program
+                     can be run using the same arguments as the C++ binary via
                      `node examples/atspi/dump_tree_atspi.js`.
 * `dump_tree_atspi.py`: If the Python bindings feature is enabled, this program
-                     can be run using the same arguments as the executable via
+                     can be run using the same arguments as the C++ binary via
                      `python examples/atspi/dump_tree_atspi.py`.
 
 All examples can be used to dump information in an accessibility tree using the
@@ -103,7 +121,8 @@ PID of the browser, its name or substring thereof, or both:
 
 ##### Python module
 
-To use the Python module:
+To use the Python module, `import` `acacia_atspi`from within your Python script or the Python Interpreter. For example:
+
 ```
 % cd build/example/atspi/
 % python
@@ -138,7 +157,8 @@ To use the Python module:
 
 ##### NodeJS module
 
-To use the NodeJS module:
+To use the Node.js module, `require` `acacia_atspi` from your JavaScript code or the Node.js REPL. For example:
+
 ```
 % cd build/example/atspi/
 % node
@@ -407,6 +427,20 @@ Before installing, please make sure that the user has write permissions on the d
 Documentation for the different backend APIs can be automatically generated from source code via [Doxygen](https://www.doxygen.nl/download.html), which must be install locally. It is off by default; to enable it, pass `-DACACIA_DOCS=ON` to cmake.
 
 The resulting documentation can be found in: `build/docs/docs/html`
+
+## Notes on Node.js bindings
+
+At present, arrays returned by the underlying c++ functions are not implemented as native JavaScript array objects. They are objects with the follow accessor functions:
+* `equals`
+* `size`
+* `capacity`
+* `reserve`
+* `isEmpty`
+* `clear`
+* `add`
+* `get`
+* `set`
+* `constructor`
 
 ## Experimental features
 
