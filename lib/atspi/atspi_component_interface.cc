@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace acacia {
+
 std::string AtspiComponentInterface::toString() const {
   if (isNull())
     return "Not implemented";
@@ -56,3 +58,5 @@ std::pair<int, int> AtspiComponentInterface::getSize() const {
   g_free(size);
   return result;
 }
+
+}  // namespace acacia

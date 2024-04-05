@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace acacia {
+
 std::string AtspiValueInterface::toString() const {
   if (isNull())
     return "Not implemented";
@@ -55,3 +57,5 @@ double AtspiValueInterface::getMinimumValue() const {
   }
   return result;
 }
+
+}  // namespace acacia

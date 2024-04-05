@@ -6,6 +6,8 @@
 
 #include "../utils.h"
 
+namespace acacia {
+
 AtspiNode findRootAtspiNodeForPID(const int pid) {
   AtspiAccessible* desktop = atspi_get_desktop(0);
 
@@ -82,3 +84,5 @@ handle_gerror:
   g_error_free(error);
   throw std::runtime_error(err_msg);
 }
+
+}  // namespace acacia

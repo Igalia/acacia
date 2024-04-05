@@ -8,6 +8,8 @@
 
 #include "lib/utils.h"
 
+using acacia::AtspiNode;
+
 static void PrintUsage(std::string& program_path) {
   std::string program_name = program_path;
   size_t pos = program_name.find_last_of("/");
@@ -71,40 +73,40 @@ static void PrintNode(AtspiNode node, int level) {
 
   // We don't check if this is null because pretty much everything implements
   // it.
-  AtspiComponentInterface component = node.queryComponent();
+  acacia::AtspiComponentInterface component = node.queryComponent();
   std::cout << indent << "* Component: " << component.toString() << "\n";
 
-  AtspiActionInterface action = node.queryAction();
+  acacia::AtspiActionInterface action = node.queryAction();
   if (!action.isNull()) {
     std::cout << indent << "* Action: " << action.toString() << "\n";
   }
 
-  AtspiDocumentInterface document = node.queryDocument();
+  acacia::AtspiDocumentInterface document = node.queryDocument();
   if (!document.isNull()) {
     std::cout << indent << "* Document: " << document.toString() << "\n";
   }
 
-  AtspiHyperlinkInterface hyperlink = node.queryHyperlink();
+  acacia::AtspiHyperlinkInterface hyperlink = node.queryHyperlink();
   if (!hyperlink.isNull()) {
     std::cout << indent << "* Hyperlink: " << hyperlink.toString() << "\n";
   }
 
-  AtspiTableInterface table = node.queryTable();
+  acacia::AtspiTableInterface table = node.queryTable();
   if (!table.isNull()) {
     std::cout << indent << "* Table: " << table.toString() << "\n";
   }
 
-  AtspiTableCellInterface table_cell = node.queryTableCell();
+  acacia::AtspiTableCellInterface table_cell = node.queryTableCell();
   if (!table_cell.isNull()) {
     std::cout << indent << "* Table Cell: " << table_cell.toString() << "\n";
   }
 
-  AtspiTextInterface text = node.queryText();
+  acacia::AtspiTextInterface text = node.queryText();
   if (!text.isNull()) {
     std::cout << indent << "* Text: " << text.toString() << "\n";
   }
 
-  AtspiValueInterface value = node.queryValue();
+  acacia::AtspiValueInterface value = node.queryValue();
   if (!value.isNull()) {
     std::cout << indent << "* Value: " << value.toString() << "\n";
   }
@@ -141,9 +143,9 @@ int main(int argc, char** argv) {
 
   AtspiNode root;
   if (!name.empty()) {
-    root = findRootAtspiNodeForName(name, pid);
+    root = acacia::findRootAtspiNodeForName(name, pid);
   } else {
-    root = findRootAtspiNodeForPID(pid);
+    root = acacia::findRootAtspiNodeForPID(pid);
   }
 
   if (root.isNull()) {

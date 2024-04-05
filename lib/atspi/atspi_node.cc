@@ -158,6 +158,8 @@ static const std::string RelationTypeToString(
 
 }  // Namespace
 
+namespace acacia {
+
 bool AtspiNode::isNull() const {
   return accessible_ == NULL;
 }
@@ -440,3 +442,5 @@ AtspiValueInterface AtspiNode::queryValue() const {
 
   return AtspiValueInterface();
 }
+
+}  // namespace acacia

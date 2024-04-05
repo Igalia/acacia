@@ -15,6 +15,8 @@
 #include "acacia/atspi/atspi_text_interface.h"
 #include "acacia/atspi/atspi_value_interface.h"
 
+namespace acacia {
+
 /**
  * Represents a node in the AT-SPI accessibility tree. This object wraps an
  * [AtspiAccessible](https://docs.gtk.org/atspi2/class.Accessible.html) pointer.
@@ -209,5 +211,7 @@ class AtspiNode {
    */
   AtspiValueInterface queryValue() const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_NODE_H_

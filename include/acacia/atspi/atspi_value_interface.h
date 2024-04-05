@@ -5,6 +5,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiValue](https://docs.gtk.org/atspi2/iface.Value.html) pointer. It can be
@@ -56,5 +58,7 @@ class AtspiValueInterface {
    */
   double getMinimumValue() const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_VALUE_H_

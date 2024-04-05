@@ -12,6 +12,8 @@
  */
 /** @} */  // end of atspi group
 
+namespace acacia {
+
 /**
  * Returns the root node of the accessible tree of a running application
  * referenced by pid.
@@ -38,5 +40,7 @@ AtspiNode findRootAtspiNodeForPID(const int pid);
  * exists.
  */
 AtspiNode findRootAtspiNodeForName(const std::string& name, const int pid = 0);
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_LINUX_UTILS_H_

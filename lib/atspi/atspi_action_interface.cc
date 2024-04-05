@@ -8,6 +8,8 @@
 
 #include "../utils.h"
 
+namespace acacia {
+
 std::string AtspiActionInterface::toString() const {
   if (isNull())
     return "Not implemented";
@@ -65,3 +67,5 @@ std::string AtspiActionInterface::getDescription(int index) const {
   g_free(description);
   return result;
 }
+
+}  // namespace acacia

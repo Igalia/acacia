@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace acacia {
+
 std::string AtspiHyperlinkInterface::toString() const {
   if (isNull()) {
     return "Not implemented";
@@ -60,3 +62,5 @@ std::string AtspiHyperlinkInterface::getURI(int index) const {
   g_free(uri);
   return result;
 }
+
+}  // namespace acacia

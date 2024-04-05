@@ -7,6 +7,8 @@
 
 #include "../utils.h"
 
+namespace acacia {
+
 std::string AtspiDocumentInterface::toString() const {
   if (isNull())
     return "Not implemented";
@@ -54,3 +56,5 @@ std::string AtspiDocumentInterface::getLocale() const {
   g_free(locale);
   return result;
 }
+
+}  // namespace acacia
