@@ -28,9 +28,8 @@
       "cflags!": [
         "-fno-exceptions",
       ],
-      "ldflags": [
-        "<!@(pkg-config \"atspi-2\" --libs)",
-        "-lv8",
+      "libraries": [
+        "-latspi"
       ],
     }
   ]

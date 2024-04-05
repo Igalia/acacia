@@ -1,0 +1,65 @@
+name: Dump Chromium Accessiblity Tree and run tests on Linux
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  launch_chromium:
+    name: Run tests and dump tree examples against Chromium on Linux
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install System dependencies
+        run: sudo apt install -y at-spi2-core libatspi2.0-dev libnode-dev
+      - name: Install Chromium
+        run: sudo apt install -y chromium-browser
+      - name: Launch D-Bus Session bus service
+        run: dbus-daemon --session &
+      - name: Launch AT-SPI2 service
+        run: |
+          mkdir -p /run/user/1001/at-spi
+          /usr/libexec/at-spi-bus-launcher &
+          /usr/libexec/at-spi2-registryd --use-gnome-session &
+      - name: Install node-gyp
+        run: sudo npm install -g node-gyp
+      - name: Launch Chromium
+        shell: bash
+        run: |
+          export QT_ACCESSIBILITY=1
+          export XDG_RUNTIME_DIR=/run/user/1001
+          export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
+          /usr/bin/chromium --force-renderer-accessibility --headless=new --disable-gpu "https://igalia.com" > /dev/null 2>&1 &
+      - name: Install SWIG 4.1.0
+        run: |
+          wget "https://github.com/swig/swig/archive/refs/tags/v4.1.0.tar.gz"
+          tar -axf v4.1.0.tar.gz
+          cd swig-4.1.0
+          ./autogen.sh
+          ./configure --without-alllang --with-javascript --with-jsv8inc=/usr/include/v8 --with-jsv8lib=/usr/lib --with-python3
+          make -j
+          sudo make install
+      - uses: actions/checkout@v3
+      - name: Configure Project
+        run: |
+          mkdir -p build
+          cd build
+          cmake .. -DACACIA_NODEJS=on -DACACIA_PYTHON=off -DACACIA_TESTS=on
+      - name: Build project
+        run: |
+          cd build
+          make -j
+      - name: Run tests
+        run: |
+          cd build
+          ctest --rerun-failed --output-on-failure
+      - name: Run native dump_tree_atspi example
+        shell: bash
+        run: |
+          cd build
+          ./examples/atspi/dump_tree_atspi --name chromium
+      - name: Run NodeJS dump_tree_atspi example
+        shell: bash
+        run: |
+          cd build
+          node ./examples/atspi/dump_tree_atspi.js --name chromium
