@@ -18,7 +18,9 @@
  * @param name: The accessible name (or substring thereof) to search for.
  * @param pid: Optional. The process id to search for.
  *
- * @returns An @ref IANode.
+ * @returns An @ref IANode representing the root accessibility object for the
+ * application with the given name, or a null IANode if no such application
+ * exists.
  */
 ACACIA_EXPORT IANode findRootIANodeForName(const std::string& name,
                                            const int pid = 0);
@@ -30,7 +32,9 @@ ACACIA_EXPORT IANode findRootIANodeForName(const std::string& name,
  *
  * @param pid: The process id of the running application.
  *
- * @returns An @ref IANode.
+ * @returns An @ref IANode representing the root accessibility object for the
+ * application with the given PID, or a null IANode if no such application
+ * exists.
  */
 ACACIA_EXPORT IANode findRootIANodeForPID(const int pid);
 

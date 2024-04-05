@@ -19,7 +19,9 @@
  *
  * @param pid: The process id of the running application.
  *
- * @returns An @ref AtspiNode.
+ * @returns An @ref AtspiNode representing the root accessibility object for the
+ * application with the given PID, or a null AtspiNode if no such application
+ * exists.
  */
 AtspiNode findRootAtspiNodeForPID(const int pid);
 
@@ -31,7 +33,9 @@ AtspiNode findRootAtspiNodeForPID(const int pid);
  * @param name: The accessible name (or substring thereof) to search for.
  * @param pid: Optional. The process id to search for.
  *
- * @returns An @ref AtspiNode.
+ * @returns An @ref AtspiNode representing the root accessibility object for the
+ * application with the given name, or a null AtspiNode if no such application
+ * exists.
  */
 AtspiNode findRootAtspiNodeForName(const std::string& name, const int pid = 0);
 
