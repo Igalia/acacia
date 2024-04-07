@@ -43,5 +43,13 @@ namespace std {
 %rename(findRootAXAPINodeForPID) acacia::findRootAXAPINodeForPID;
 %rename(findRootAXAPINodeForName) acacia::findRootAXAPINodeForName;
 
+%warnfilter(503) acacia::AXAPINode::operator=;
+%warnfilter(503) acacia::Point::operator=;
+%warnfilter(503) acacia::Size::operator=;
+%warnfilter(503) acacia::Rect::operator=;
+%warnfilter(503) acacia::Range::operator=;
+%warnfilter(503) acacia::Dictionary::operator=;
+
+
 %include <include/acacia/mac/mac_data_types.h>
 %include <include/acacia/mac/axapi_node.h>
