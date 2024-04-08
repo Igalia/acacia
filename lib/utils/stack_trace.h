@@ -1,11 +1,12 @@
 #pragma once
 
+#ifndef NDEBUG
+
 #include <execinfo.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <mutex>
 
 namespace {
 
@@ -21,14 +22,15 @@ void SIGSEGVHandler(int sig) {
   exit(1);
 }
 
-std::once_flag sigsegv_installed;
-
 }  // namespace
 
-namespace stack_trace {
+namespace acacia {
 
-void InstallSIGSEGVHandler() {
-  std::call_once(sigsegv_installed, signal, SIGSEGV, SIGSEGVHandler);
-}
+static bool sigsegv_handler_installed = [] {
+  signal(SIGSEGV, SIGSEGVHandler);
+  return true;
+}();
 
-}  // namespace stack_trace
+}  // namespace acacia
+
+#endif  // NDEBUG
