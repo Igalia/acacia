@@ -10,8 +10,16 @@
 using acacia::AXAPINode;
 using acacia::ValueType;
 
-void print_usage(std::string& program_name) {
-  std::cout << "Usage: " << program_name << " [<pid> | name]\n";
+void print_usage(std::string& program_path) {
+  std::string program_name = program_path;
+  size_t pos = program_name.find_last_of("/");
+  if (pos != std::string::npos) {
+    program_name = program_name.substr(pos + 1);
+  }
+
+  std::cout << "Usage:\n";
+  std::cout << "  " << program_name << " --name=NAME\n";
+  std::cout << "  " << program_name << " --pid=PID\n";
 }
 
 static void print_attributes(AXAPINode node) {
@@ -67,12 +75,31 @@ int main(int argc, char** argv) {
 
   AXAPINode root;
   std::string arg_string(argv[1]);
-  std::regex number_regex("\\d+");
-  if (std::regex_match(arg_string, number_regex)) {
-    const int pid = std::stoi(arg_string);
+  std::regex arg_regex("--(\\w+)=(\\w+)");
+  std::smatch m;
+  if (!std::regex_match(arg_string, m, arg_regex)) {
+    print_usage(program_name);
+    return 1;
+  }
+
+  std::string flag = m[1];
+  std::string value = m[2];
+  if (flag == "pid") {
+    const int pid = std::stoi(value);
     root = acacia::findRootAXAPINodeForPID(pid);
+    if (root.isNull()) {
+      std::cerr << "No program for PID " << pid << ".\n";
+      return 0;
+    }
+  } else if (flag == "name") {
+    root = acacia::findRootAXAPINodeForName(value);
+    if (root.isNull()) {
+      std::cerr << "No program matching name \"" << value << "\".\n";
+      return 0;
+    }
   } else {
-    root = acacia::findRootAXAPINodeForName(arg_string);
+    print_usage(program_name);
+    return 1;
   }
 
   try {
