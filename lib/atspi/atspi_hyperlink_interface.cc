@@ -5,6 +5,18 @@
 #include <stdexcept>
 #include <string>
 
+AtspiHyperlinkInterface::~AtspiHyperlinkInterface() {
+  if (interface_)
+    g_object_unref(interface_);
+};
+
+AtspiHyperlinkInterface::AtspiHyperlinkInterface(
+    AtspiHyperlinkInterface&& other)
+    : interface_(other.interface_) {
+  // Move constructor: take ownership of interface_
+  other.interface_ = nullptr;
+}
+
 std::string AtspiHyperlinkInterface::toString() const {
   if (isNull()) {
     return "Not implemented";
@@ -20,7 +32,7 @@ int AtspiHyperlinkInterface::getStartIndex() const {
   }
 
   GError* error = nullptr;
-  double result = atspi_hyperlink_get_start_index(interface_.get(), &error);
+  double result = atspi_hyperlink_get_start_index(interface_, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -35,7 +47,7 @@ int AtspiHyperlinkInterface::getEndIndex() const {
   }
 
   GError* error = nullptr;
-  double result = atspi_hyperlink_get_end_index(interface_.get(), &error);
+  double result = atspi_hyperlink_get_end_index(interface_, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -50,7 +62,7 @@ std::string AtspiHyperlinkInterface::getURI(int index) const {
   }
 
   GError* error = nullptr;
-  char* uri = atspi_hyperlink_get_uri(interface_.get(), index, &error);
+  char* uri = atspi_hyperlink_get_uri(interface_, index, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);

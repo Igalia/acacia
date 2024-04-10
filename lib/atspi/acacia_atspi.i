@@ -15,7 +15,6 @@
 %include <std_except.i>
 %include <std_pair.i>
 %include <std_string.i>
-%include <std_unique_ptr.i>
 %include <std_vector.i>
 
 namespace std {

@@ -15,17 +15,14 @@
  */
 class AtspiHyperlinkInterface {
  public:
-  AtspiHyperlinkInterface(AtspiHyperlink* interface)
-      : interface_(interface,
-                   [](AtspiHyperlink* iface) { g_object_unref(iface); }){};
-  AtspiHyperlinkInterface()
-      : interface_(nullptr, [](AtspiHyperlink* iface) {}){};
-  ~AtspiHyperlinkInterface(){};
+  AtspiHyperlinkInterface(AtspiHyperlink* interface) : interface_(interface) {}
+  AtspiHyperlinkInterface(AtspiHyperlinkInterface&&);
+  AtspiHyperlinkInterface() = default;
+
+  ~AtspiHyperlinkInterface();
 
   AtspiHyperlinkInterface(const AtspiHyperlinkInterface&) = delete;
   AtspiHyperlinkInterface& operator=(const AtspiHyperlinkInterface&) = delete;
-
-  AtspiHyperlinkInterface(AtspiHyperlinkInterface&&) = default;
 
   /**
    * Tests whether the underlying AtspiHyperlink pointer is the null pointer.
@@ -70,7 +67,7 @@ class AtspiHyperlinkInterface {
   // then unrefing it in the destructor works with C++ but results in a double-
   // free with both python and node.
   // TODO: Find a way to use a raw pointer by modifying something in SWIG.
-  std::unique_ptr<AtspiHyperlink, void (*)(AtspiHyperlink*)> interface_;
+  AtspiHyperlink* interface_{nullptr};
 };
 
 #endif  // LIB_ATSPI_ATSPI_HYPERLINK_H_
