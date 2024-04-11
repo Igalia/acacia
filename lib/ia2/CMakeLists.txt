@@ -63,6 +63,8 @@ if (ACACIA_PYTHON)
     SOURCES acacia_ia2.i
     LANGUAGE python
     OUTPUT_DIR "${WIN_OUTPUT_DIRECTORY}"
+    # Output for the generated C++ wrapper
+    OUTFILE_DIR "${CMAKE_CURRENT_BINARY_DIR}"
   )
 
   TARGET_LINK_LIBRARIES(
