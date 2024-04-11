@@ -98,13 +98,18 @@ if (ACACIA_NODEJS)
   )
 
   add_custom_command(
+    TARGET acacia_ia2_node_module
+    POST_BUILD
+    COMMAND
+      ${CMAKE_COMMAND} -E copy "${NODE_GYP_OUTPUT_DIR}/acacia_ia2.node" "${WIN_OUTPUT_DIRECTORY}"
+  )
+
+  add_custom_command(
     OUTPUT acacia_ia2.node
     DEPENDS
     "${CMAKE_CURRENT_BINARY_DIR}/acacia_ia2_nodejs_wrap.cxx"
     COMMAND
       ${NODE_GYP} configure build
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NODE_GYP_OUTPUT_DIR}/acacia_ia2.node" "${WIN_OUTPUT_DIRECTORY}"
-    VERBATIM
   )
 
   set_property(
