@@ -14,3 +14,5 @@ repos:
    -    id: clang-format
         types_or: [c++, javascript, objective-c]
         args: ["-style=file"]
+
+exclude: ^(third_party|LICENSE)
