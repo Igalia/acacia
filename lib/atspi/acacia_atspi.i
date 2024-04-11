@@ -10,6 +10,8 @@
 #include <acacia/atspi/atspi_text_interface.h>
 #include <acacia/atspi/atspi_value_interface.h>
 #include <acacia/atspi/linux_utils.h>
+
+using namespace acacia;
 %}
 
 %include <std_except.i>
@@ -95,9 +97,9 @@ namespace std {
 %include <acacia/atspi/atspi_component_interface.h>
 %include <acacia/atspi/atspi_document_interface.h>
 %include <acacia/atspi/atspi_hyperlink_interface.h>
-%include <acacia/atspi/atspi_node.h>
 %include <acacia/atspi/atspi_table_interface.h>
 %include <acacia/atspi/atspi_table_cell_interface.h>
 %include <acacia/atspi/atspi_text_interface.h>
 %include <acacia/atspi/atspi_value_interface.h>
+%include <acacia/atspi/atspi_node.h>
 %include <acacia/atspi/linux_utils.h>
