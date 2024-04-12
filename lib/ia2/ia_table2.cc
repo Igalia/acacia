@@ -2,7 +2,9 @@
 
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
+
+namespace acacia {
 
 std::string IATable2::toString() {
   if (isNull()) {
@@ -39,3 +41,5 @@ long IATable2::getNRows() {
   }
   return 0;
 }
+
+}  // namespace acacia

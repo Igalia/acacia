@@ -8,6 +8,8 @@
 #include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [IAccessibleValue](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_value.html)
@@ -58,5 +60,7 @@ class ACACIA_EXPORT IAValue {
  private:
   Microsoft::WRL::ComPtr<IAccessibleValue> iface_;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_IA2_IA_VALUE_H_

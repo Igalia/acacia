@@ -13,7 +13,8 @@
 #include "include/acacia/ia2/ia_table_cell.h"
 #include "include/acacia/ia2/ia_text.h"
 #include "include/acacia/ia2/ia_value.h"
-#include "include/acacia/ia2/win_utils.h"
+
+using namespace acacia;
 
 void print_usage(std::string& program_path) {
   std::string program_name = program_path;

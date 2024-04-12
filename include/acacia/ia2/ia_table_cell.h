@@ -8,6 +8,8 @@
 #include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
+namespace acacia {
+
 class ACACIA_EXPORT IATableCell {
  public:
   IATableCell(Microsoft::WRL::ComPtr<IAccessibleTableCell> iface)
@@ -24,5 +26,7 @@ class ACACIA_EXPORT IATableCell {
  private:
   Microsoft::WRL::ComPtr<IAccessibleTableCell> iface_;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_IA2_IA_TABLE_CELL_H_

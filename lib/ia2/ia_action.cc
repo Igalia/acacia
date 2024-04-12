@@ -2,7 +2,9 @@
 
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
+
+namespace acacia {
 
 std::string IAAction::toString() {
   if (isNull()) {
@@ -59,4 +61,6 @@ std::string IAAction::getName(int index) {
     return str_result;
   }
   return std::string();
+}
+
 }

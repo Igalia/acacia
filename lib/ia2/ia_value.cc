@@ -2,7 +2,9 @@
 
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
+
+namespace acacia {
 
 std::string IAValue::toString() {
   if (isNull()) {
@@ -59,3 +61,5 @@ std::string IAValue::getMinimumValue() {
   }
   return std::string();
 }
+
+}  // namespace acacia

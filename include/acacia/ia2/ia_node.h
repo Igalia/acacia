@@ -18,6 +18,8 @@
 #include "acacia/ia2/ia_text.h"
 #include "acacia/ia2/ia_value.h"
 
+namespace acacia {
+
 /** @defgroup ia2 MSAA with IAccessible2 (Windows)
  *  IA2 Accessiblity API for Windows
  *  @{
@@ -31,6 +33,36 @@
  * pointer.
  * @ingroup ia2
  */
+class ACACIA_EXPORT IANode;
+
+/**
+ * Returns the root node of the accessible tree of a running application
+ * referenced by the application's accessible name.
+ * @ingroup ia2
+ *
+ * @param name: The accessible name (or substring thereof) to search for.
+ * @param pid: Optional. The process id to search for.
+ *
+ * @returns An @ref IANode representing the root accessibility object for the
+ * application with the given name, or a null IANode if no such application
+ * exists.
+ */
+ACACIA_EXPORT IANode findRootIANodeForName(const std::string& name,
+                                           const int pid = 0);
+
+/**
+ * Returns the root node of the accessiblity tree of a running application
+ * referenced by pid.
+ * @ingroup ia2
+ *
+ * @param pid: The process id of the running application.
+ *
+ * @returns An @ref IANode representing the root accessibility object for the
+ * application with the given PID, or a null IANode if no such application
+ * exists.
+ */
+ACACIA_EXPORT IANode findRootIANodeForPID(const int pid);
+
 class ACACIA_EXPORT IANode {
  public:
   IANode(){};
@@ -191,5 +223,7 @@ class ACACIA_EXPORT IANode {
   // TODO: Create own type for partial children. #95
   VARIANT child_id_;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_IA2_IA_NODE_H_
