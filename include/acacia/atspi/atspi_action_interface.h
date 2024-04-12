@@ -1,6 +1,8 @@
 #ifndef INCLUDE_ACACIA_ATSPI_ATSPI_ACTION_INTERFACE_H_
 #define INCLUDE_ACACIA_ATSPI_ATSPI_ACTION_INTERFACE_H_
 
+#include "acacia/atspi/atspi_interface.h"
+
 #include <string>
 
 #include <atspi/atspi.h>
@@ -14,28 +16,17 @@ namespace acacia {
  * AtspiNode::queryAction().
  * @ingroup atspi
  */
-class AtspiActionInterface {
-  AtspiAction* interface_;
-
+class AtspiActionInterface : public AtspiInterface<AtspiAction> {
  public:
-  AtspiActionInterface(AtspiAction* interface) : interface_(interface){};
-  AtspiActionInterface() : interface_(nullptr){};
-  ~AtspiActionInterface(){};
-
-  /**
-   * Tests whether the underlying AtspiAction pointer is the null pointer. An
-   * AtspiActionInterface with an null AtspiAction pointer will be created if
-   * the wrapped API returned a nullptr with no error codes.
-   * @ingroup atspi
-   */
-  bool isNull() const { return !interface_; }
+  using AtspiInterface::AtspiInterface;
+  using AtspiInterface::operator=;
 
   /**
    * Helper function to print commonly needed values associated with this
    * interface.
    * @ingroup atspi
    */
-  std::string toString() const;
+  std::string toString() const override;
 
   /**
    * Wraps

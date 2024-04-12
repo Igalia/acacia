@@ -1,10 +1,12 @@
 #ifndef INCLUDE_ACACIA_ATSPI_ATSPI_NODE_H_
 #define INCLUDE_ACACIA_ATSPI_ATSPI_NODE_H_
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include <atspi/atspi.h>
+#include <glib.h>
 
 #include "acacia/atspi/atspi_action_interface.h"
 #include "acacia/atspi/atspi_component_interface.h"
@@ -23,17 +25,15 @@ namespace acacia {
  * @ingroup atspi
  */
 class AtspiNode {
-  AtspiAccessible* accessible_;
-
  public:
-  AtspiNode(AtspiAccessible* accessible) : accessible_(accessible){};
-  AtspiNode() : accessible_(nullptr){};
-  ~AtspiNode(){};
+  AtspiNode(AtspiAccessible* accessible) : accessible_(accessible, Deleter()) {}
+  AtspiNode() = default;
+  ~AtspiNode() = default;
 
   /**
-   * Tests whether the underlying AtspiAccessible pointer is the null pointer.
-   * An AtspiNode with an null AtspiAccessible pointer will be created if the
-   * wrapped API returned a nullptr with no error codes.
+   * Tests whether the underlying AtspiAccessible pointer is the null
+   * pointer. An AtspiNode with an null AtspiAccessible pointer will be
+   * created if the wrapped API returned a nullptr with no error codes.
    * @ingroup atspi
    */
   bool isNull() const;
@@ -210,6 +210,18 @@ class AtspiNode {
    * @returns An @ref AtspiValueInterface.
    */
   AtspiValueInterface queryValue() const;
+
+ private:
+  class Deleter {
+   public:
+    void operator()(AtspiAccessible* ptr) {
+      if (ptr == nullptr)
+        return;
+      g_object_unref(ptr);
+    }
+  };
+
+  std::shared_ptr<AtspiAccessible> accessible_;
 };
 
 }  // namespace acacia

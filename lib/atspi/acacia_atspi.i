@@ -1,5 +1,6 @@
 %module acacia_atspi
 %{
+#include <acacia/atspi/atspi_interface.h>
 #include <acacia/atspi/atspi_action_interface.h>
 #include <acacia/atspi/atspi_component_interface.h>
 #include <acacia/atspi/atspi_document_interface.h>
@@ -93,6 +94,7 @@ namespace std {
 %catches(std::runtime_error) acacia::AtspiValueInterface::getMaximumValue() const;
 %catches(std::runtime_error) acacia::AtspiValueInterface::getMinimumValue() const;
 
+%include <acacia/atspi/atspi_interface.h>
 %include <acacia/atspi/atspi_action_interface.h>
 %include <acacia/atspi/atspi_component_interface.h>
 %include <acacia/atspi/atspi_document_interface.h>

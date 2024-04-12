@@ -27,7 +27,7 @@ int AtspiActionInterface::getNActions() const {
     return 0;
 
   GError* error = nullptr;
-  int result = atspi_action_get_n_actions(interface_, &error);
+  int result = atspi_action_get_n_actions(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -41,7 +41,7 @@ std::string AtspiActionInterface::getName(int index) const {
     std::string();
 
   GError* error = nullptr;
-  char* name = atspi_action_get_name(interface_, index, &error);
+  char* name = atspi_action_get_name(interface_.get(), index, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -57,7 +57,8 @@ std::string AtspiActionInterface::getDescription(int index) const {
     std::string();
 
   GError* error = nullptr;
-  char* description = atspi_action_get_description(interface_, index, &error);
+  char* description =
+      atspi_action_get_description(interface_.get(), index, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);

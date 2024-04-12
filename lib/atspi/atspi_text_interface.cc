@@ -39,7 +39,7 @@ int AtspiTextInterface::getCaretOffset() const {
     return -1;
 
   GError* error = nullptr;
-  int result = atspi_text_get_caret_offset(interface_, &error);
+  int result = atspi_text_get_caret_offset(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -53,7 +53,7 @@ int AtspiTextInterface::getCharacterCount() const {
     return -1;
 
   GError* error = nullptr;
-  int result = atspi_text_get_character_count(interface_, &error);
+  int result = atspi_text_get_character_count(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -69,7 +69,7 @@ std::string AtspiTextInterface::getText(int start_offset,
 
   GError* error = nullptr;
   char* text =
-      atspi_text_get_text(interface_, start_offset, end_offset, &error);
+      atspi_text_get_text(interface_.get(), start_offset, end_offset, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);

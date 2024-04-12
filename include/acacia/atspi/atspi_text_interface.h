@@ -1,6 +1,8 @@
 #ifndef INCLUDE_ACACIA_ATSPI_ATSPI_TEXT_INTERFACE_H_
 #define INCLUDE_ACACIA_ATSPI_ATSPI_TEXT_INTERFACE_H_
 
+#include "acacia/atspi/atspi_interface.h"
+
 #include <string>
 
 #include <atspi/atspi.h>
@@ -14,28 +16,17 @@ namespace acacia {
  * AtspiNode::queryText().
  * @ingroup atspi
  */
-class AtspiTextInterface {
-  AtspiText* interface_;
-
+class AtspiTextInterface : public AtspiInterface<AtspiText> {
  public:
-  AtspiTextInterface(AtspiText* interface) : interface_(interface){};
-  AtspiTextInterface() : interface_(nullptr){};
-  ~AtspiTextInterface(){};
-
-  /**
-   * Tests whether the underlying AtspiText pointer is the null pointer. An
-   * AtspiTextInterface with an null AtspiText pointer will be created if the
-   * wrapped API returned a nullptr with no error codes.
-   * @ingroup atspi
-   */
-  bool isNull() const { return !interface_; }
+  using AtspiInterface::AtspiInterface;
+  using AtspiInterface::operator=;
 
   /**
    * Helper function to print commonly needed values associated with this
    * interface.
    * @ingroup atspi
    */
-  std::string toString() const;
+  std::string toString() const override;
 
   /**
    * Wraps
