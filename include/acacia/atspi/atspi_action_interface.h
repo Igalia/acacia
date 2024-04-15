@@ -1,5 +1,5 @@
-#ifndef LIB_ATSPI_ATSPI_ACTION_H_
-#define LIB_ATSPI_ATSPI_ACTION_H_
+#ifndef INCLUDE_ACACIA_ATSPI_ATSPI_ACTION_INTERFACE_H_
+#define INCLUDE_ACACIA_ATSPI_ATSPI_ACTION_INTERFACE_H_
 
 #include <string>
 
@@ -65,4 +65,4 @@ class AtspiActionInterface {
 
 }  // namespace acacia
 
-#endif  // LIB_ATSPI_ATSPI_ACTION_H_
+#endif  // INCLUDE_ACACIA_ATSPI_ATSPI_ACTION_INTERFACE_H_

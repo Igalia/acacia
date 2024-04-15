@@ -1,5 +1,5 @@
-#ifndef LIB_ATSPI_ATSPI_TEXT_H_
-#define LIB_ATSPI_ATSPI_TEXT_H_
+#ifndef INCLUDE_ACACIA_ATSPI_ATSPI_TEXT_INTERFACE_H_
+#define INCLUDE_ACACIA_ATSPI_ATSPI_TEXT_INTERFACE_H_
 
 #include <string>
 
@@ -64,4 +64,4 @@ class AtspiTextInterface {
 
 }  // namespace acacia
 
-#endif  // LIB_ATSPI_ATSPI_TEXT_H_
+#endif  // INCLUDE_ACACIA_ATSPI_ATSPI_TEXT_INTERFACE_H_

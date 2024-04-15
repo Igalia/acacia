@@ -1,5 +1,5 @@
-#ifndef LIB_ATSPI_ATSPI_VALUE_H_
-#define LIB_ATSPI_ATSPI_VALUE_H_
+#ifndef INCLUDE_ACACIA_ATSPI_ATSPI_VALUE_INTERFACE_H_
+#define INCLUDE_ACACIA_ATSPI_ATSPI_VALUE_INTERFACE_H_
 
 #include <string>
 
@@ -61,4 +61,4 @@ class AtspiValueInterface {
 
 }  // namespace acacia
 
-#endif  // LIB_ATSPI_ATSPI_VALUE_H_
+#endif  // INCLUDE_ACACIA_ATSPI_ATSPI_VALUE_INTERFACE_H_
