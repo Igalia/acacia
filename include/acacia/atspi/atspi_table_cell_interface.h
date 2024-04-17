@@ -1,5 +1,5 @@
-#ifndef LIB_ATSPI_ATSPI_TABLE_CELL_H_
-#define LIB_ATSPI_ATSPI_TABLE_CELL_H_
+#ifndef INCLUDE_ACACIA_ATSPI_ATSPI_TABLE_CELL_INTERFACE_H_
+#define INCLUDE_ACACIA_ATSPI_ATSPI_TABLE_CELL_INTERFACE_H_
 
 #include <string>
 
@@ -77,4 +77,4 @@ class AtspiTableCellInterface {
 
 }  // namespace acacia
 
-#endif  // LIB_ATSPI_ATSPI_TABLE_CELL_H_
+#endif  // INCLUDE_ACACIA_ATSPI_ATSPI_TABLE_CELL_INTERFACE_H_
