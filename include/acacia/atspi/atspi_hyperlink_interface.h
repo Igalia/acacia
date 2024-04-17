@@ -6,6 +6,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiHyperlink](https://docs.gtk.org/atspi2/iface.Hyperlink.html) pointer.
@@ -72,5 +74,7 @@ class AtspiHyperlinkInterface {
   // TODO: Find a way to use a raw pointer by modifying something in SWIG.
   std::unique_ptr<AtspiHyperlink, void (*)(AtspiHyperlink*)> interface_;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_HYPERLINK_H_

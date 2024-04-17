@@ -6,6 +6,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiDocument](https://docs.gtk.org/atspi2/iface.Document.html) pointer. It
@@ -54,5 +56,7 @@ class AtspiDocumentInterface {
    */
   std::vector<std::string> getDocumentAttributes() const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_DOCUMENT_H_

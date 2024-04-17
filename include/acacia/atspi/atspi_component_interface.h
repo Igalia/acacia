@@ -5,6 +5,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiComponent](https://docs.gtk.org/atspi2/iface.Component.html) pointer.
@@ -53,5 +55,7 @@ class AtspiComponentInterface {
    */
   std::pair<int, int> getSize() const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_COMPONENT_H_

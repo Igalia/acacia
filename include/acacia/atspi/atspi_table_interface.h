@@ -5,6 +5,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiTable](https://docs.gtk.org/atspi2/iface.Table.html) pointer. It can be
@@ -49,5 +51,7 @@ class AtspiTableInterface {
    */
   int getNRows() const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_TABLE_H_

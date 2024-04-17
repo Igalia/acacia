@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace acacia {
+
 static std::string ToPrintableString(std::string str) {
   const std::string ufffc = "\xEF\xBF\xBC";
   const std::string printable_ufffc = "[obj]";
@@ -77,3 +79,5 @@ std::string AtspiTextInterface::getText(int start_offset,
   g_free(text);
   return result;
 }
+
+}  // namespace acacia

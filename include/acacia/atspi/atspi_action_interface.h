@@ -5,6 +5,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiAction](https://docs.gtk.org/atspi2/iface.Action.html) pointer. It can
@@ -60,5 +62,7 @@ class AtspiActionInterface {
    */
   std::string getDescription(int index) const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_ACTION_H_

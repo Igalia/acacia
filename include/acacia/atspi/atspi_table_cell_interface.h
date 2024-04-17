@@ -5,6 +5,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiTableCell](https://docs.gtk.org/atspi2/iface.TableCell.html) pointer.
@@ -72,5 +74,7 @@ class AtspiTableCellInterface {
    */
   int getRowSpan() const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_TABLE_CELL_H_

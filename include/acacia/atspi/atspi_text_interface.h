@@ -5,6 +5,8 @@
 
 #include <atspi/atspi.h>
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [AtspiText](https://docs.gtk.org/atspi2/iface.Text.html) pointer. It can be
@@ -59,5 +61,7 @@ class AtspiTextInterface {
    */
   std::string getText(int start_offset, int end_offset) const;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_ATSPI_ATSPI_TEXT_H_

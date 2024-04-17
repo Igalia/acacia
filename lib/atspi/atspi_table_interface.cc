@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace acacia {
+
 std::string AtspiTableInterface::toString() const {
   if (isNull())
     return "Not implemented";
@@ -40,3 +42,5 @@ int AtspiTableInterface::getNRows() const {
   }
   return result;
 }
+
+}  // namespace acacia
