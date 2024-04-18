@@ -348,7 +348,7 @@ std::vector<AtspiNode> AtspiNode::getChildren() const {
     throw std::runtime_error(err_msg);
   }
 
-  result.reserve(child_count);
+  result.resize(child_count);
 
   for (auto i = 0; i < child_count; i++) {
     AtspiNode child_node = getChildAtIndex(i);
