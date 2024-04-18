@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Update apt
+        run: sudo apt update
       - name: Install System dependencies
         run: sudo apt install -y at-spi2-core libatspi2.0-dev libnode-dev
       - name: Install Chromium
