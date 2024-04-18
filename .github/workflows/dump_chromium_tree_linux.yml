@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Install System dependencies
-        run: sudo apt install -y at-spi2-core libatspi2.0-dev libnode-dev
+        run: sudo apt install -y at-spi2-core libatspi2.0-dev libnode-dev --fix-missing
       - name: Install Chromium
         run: sudo apt install -y chromium-browser
       - name: Launch D-Bus Session bus service
