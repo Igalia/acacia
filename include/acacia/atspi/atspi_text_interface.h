@@ -18,8 +18,7 @@ namespace acacia {
  */
 class AtspiTextInterface : public AtspiInterface<AtspiText> {
  public:
-  using AtspiInterface::AtspiInterface;
-  using AtspiInterface::operator=;
+  using AtspiInterface<AtspiText>::AtspiInterface;
 
   /**
    * Helper function to print commonly needed values associated with this

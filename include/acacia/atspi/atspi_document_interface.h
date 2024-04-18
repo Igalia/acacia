@@ -19,8 +19,7 @@ namespace acacia {
  */
 class AtspiDocumentInterface : public AtspiInterface<AtspiDocument> {
  public:
-  using AtspiInterface::AtspiInterface;
-  using AtspiInterface::operator=;
+  using AtspiInterface<AtspiDocument>::AtspiInterface;
 
   /**
    * Helper function to print commonly needed values associated with this

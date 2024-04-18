@@ -19,7 +19,6 @@ namespace acacia {
 class AtspiComponentInterface : public AtspiInterface<AtspiComponent> {
  public:
   using AtspiInterface::AtspiInterface;
-  using AtspiInterface::operator=;
 
   /**
    * Helper function to print commonly needed values associated with this

@@ -17,8 +17,7 @@ namespace acacia {
  */
 class AtspiHyperlinkInterface : public AtspiInterface<AtspiHyperlink> {
  public:
-  using AtspiInterface::AtspiInterface;
-  using AtspiInterface::operator=;
+  using AtspiInterface<AtspiHyperlink>::AtspiInterface;
 
   /**
    * Helper function to print commonly needed values associated with this
