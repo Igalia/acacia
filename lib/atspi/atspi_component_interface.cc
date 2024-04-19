@@ -29,8 +29,8 @@ std::pair<int, int> AtspiComponentInterface::getPosition() const {
   // the SCREEN coordinates. And some implementations (e.g. GTK4) don't
   // implement support for SCREEN coordinates even in X11.
   GError* error = nullptr;
-  AtspiPoint* position =
-      atspi_component_get_position(interface_, ATSPI_COORD_TYPE_WINDOW, &error);
+  AtspiPoint* position = atspi_component_get_position(
+      interface_.get(), ATSPI_COORD_TYPE_WINDOW, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -46,7 +46,7 @@ std::pair<int, int> AtspiComponentInterface::getSize() const {
     return std::make_pair(0, 0);
 
   GError* error = nullptr;
-  AtspiPoint* size = atspi_component_get_size(interface_, &error);
+  AtspiPoint* size = atspi_component_get_size(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);

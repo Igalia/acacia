@@ -20,7 +20,7 @@ std::string AtspiDocumentInterface::toString() const {
 std::vector<std::string> AtspiDocumentInterface::getDocumentAttributes() const {
   GError* error = nullptr;
   GHashTable* attributes_hash =
-      atspi_document_get_document_attributes(interface_, &error);
+      atspi_document_get_document_attributes(interface_.get(), &error);
   std::vector<std::string> attributes;
   if (error) {
     std::string err_msg = error->message;
@@ -46,7 +46,7 @@ std::string AtspiDocumentInterface::getLocale() const {
     std::string();
 
   GError* error = nullptr;
-  char* locale = atspi_document_get_locale(interface_, &error);
+  char* locale = atspi_document_get_locale(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);

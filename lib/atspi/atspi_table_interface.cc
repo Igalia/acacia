@@ -20,7 +20,7 @@ int AtspiTableInterface::getNColumns() const {
     return 0;
 
   GError* error = nullptr;
-  int result = atspi_table_get_n_columns(interface_, &error);
+  int result = atspi_table_get_n_columns(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -34,7 +34,7 @@ int AtspiTableInterface::getNRows() const {
     return 0;
 
   GError* error = nullptr;
-  int result = atspi_table_get_n_rows(interface_, &error);
+  int result = atspi_table_get_n_rows(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);

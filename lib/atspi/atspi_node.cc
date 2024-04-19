@@ -6,6 +6,10 @@
 #include <stdexcept>
 #include <string>
 
+#include <glib.h>
+
+#include "scoped_g_lib_ptr.h"
+
 namespace {
 static const std::string StateTypeToString(const AtspiStateType state) {
   switch (state) {
@@ -156,119 +160,125 @@ static const std::string RelationTypeToString(
   }
 }
 
+void free_g_array_and_contents(GArray* array) {
+  g_array_free(array, TRUE);
+}
+
 }  // Namespace
 
 namespace acacia {
 
+using ScopedCStr = ScopedGLibPtr<char>;
+using ScopedGError = ScopedGTypePtr<GError, &g_error_free>;
+using ScopedGHashTable = ScopedGTypePtr<GHashTable, &g_hash_table_destroy>;
+using ScopedGArray = ScopedGTypePtr<GArray, &free_g_array_and_contents>;
+
 bool AtspiNode::isNull() const {
-  return accessible_ == NULL;
+  return accessible_.get() == NULL;
 }
 
 std::string AtspiNode::getRoleName() const {
-  GError* error = nullptr;
-  char* role_name = atspi_accessible_get_role_name(accessible_, &error);
-  if (error) {
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  ScopedCStr role_name(
+      atspi_accessible_get_role_name(accessible_.get(), &error_ptr));
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
     return "";
   }
-  std::string result(role_name);
-  g_free(role_name);
-  return result;
+
+  return std::string(role_name.get());
 }
 
 std::string AtspiNode::getName() const {
-  GError* error = nullptr;
-  char* name = atspi_accessible_get_name(accessible_, &error);
-  if (error) {
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  ScopedCStr name(atspi_accessible_get_name(accessible_.get(), &error_ptr));
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
-  std::string result(name);
-  g_free(name);
-  return result;
+
+  return std::string(name.get());
 }
 
 std::string AtspiNode::getDescription() const {
-  GError* error = nullptr;
-  char* description = atspi_accessible_get_description(accessible_, &error);
-  if (error) {
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  ScopedCStr description(
+      atspi_accessible_get_description(accessible_.get(), &error_ptr));
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
-  std::string result(description);
-  g_free(description);
-  return result;
+
+  return std::string(description.get());
 }
 
 std::vector<std::string> AtspiNode::getAttributes() const {
-  GError* error = nullptr;
-  GHashTable* attributes_hash =
-      atspi_accessible_get_attributes(accessible_, &error);
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  ScopedGHashTable attributes_hash(
+      atspi_accessible_get_attributes(accessible_.get(), &error_ptr));
   std::vector<std::string> attributes;
-  if (error) {
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
 
   GHashTableIter iter;
   gpointer key, value;
-  g_hash_table_iter_init(&iter, attributes_hash);
+  g_hash_table_iter_init(&iter, attributes_hash.get());
   while (g_hash_table_iter_next(&iter, &key, &value)) {
     std::string attr_entry =
         static_cast<char*>(key) + std::string(":") + static_cast<char*>(value);
     attributes.push_back(attr_entry);
   }
 
-  g_hash_table_destroy(attributes_hash);
   return attributes;
 }
 
 std::vector<std::string> AtspiNode::getInterfaces() const {
-  GArray* interface_array = atspi_accessible_get_interfaces(accessible_);
+  ScopedGArray interface_array(
+      atspi_accessible_get_interfaces(accessible_.get()));
   std::vector<std::string> interfaces;
   for (unsigned i = 0; i < interface_array->len; i++) {
-    char* interface = g_array_index(interface_array, char*, i);
-    interfaces.push_back(interface);
-    g_free(interface);
+    ScopedCStr interface(g_array_index(interface_array, char*, i));
+    interfaces.push_back(interface.get());
   }
-  g_array_free(interface_array, TRUE);
   return interfaces;
 }
 
 std::vector<std::string> AtspiNode::getRelations() const {
-  GError* error = nullptr;
-  GArray* relation_array =
-      atspi_accessible_get_relation_set(accessible_, &error);
-  if (error) {
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  ScopedGArray relation_array(
+      atspi_accessible_get_relation_set(accessible_.get(), &error_ptr));
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
 
   std::vector<std::string> relations;
   for (unsigned i = 0; i < relation_array->len; i++) {
-    AtspiRelation* relation = g_array_index(relation_array, AtspiRelation*, i);
+    ScopedGObjectPtr<AtspiRelation> relation(
+        g_array_index(relation_array.get(), AtspiRelation*, i));
     AtspiRelationType relation_type =
-        atspi_relation_get_relation_type(relation);
+        atspi_relation_get_relation_type(relation.get());
     relations.push_back(RelationTypeToString(relation_type));
   }
-  g_array_free(relation_array, TRUE);
   return relations;
 }
 
 AtspiNode AtspiNode::getTargetForRelationAtIndex(int relation_index,
                                                  int target_index) const {
-  GError* error = nullptr;
-  GArray* relation_array =
-      atspi_accessible_get_relation_set(accessible_, &error);
-  if (error) {
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  ScopedGArray relation_array(
+      atspi_accessible_get_relation_set(accessible_.get(), &error_ptr));
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
 
@@ -276,54 +286,51 @@ AtspiNode AtspiNode::getTargetForRelationAtIndex(int relation_index,
     std::string msg = "Relation index " + std::to_string(relation_index) +
                       " exceeds relation count " +
                       std::to_string(relation_array->len);
-    g_array_free(relation_array, TRUE);
     throw std::runtime_error(msg);
   }
 
   AtspiRelation* relation =
-      g_array_index(relation_array, AtspiRelation*, relation_index);
+      g_array_index(relation_array.get(), AtspiRelation*, relation_index);
   AtspiAccessible* target = atspi_relation_get_target(relation, target_index);
   if (!target) {
-    g_array_free(relation_array, TRUE);
     throw std::runtime_error("Target is null");
   }
 
-  AtspiNode result = AtspiNode(target);
-  g_array_free(relation_array, TRUE);
-  return result;
+  return AtspiNode(target);
 }
 
 std::vector<std::string> AtspiNode::getStates() const {
-  AtspiStateSet* atspi_states = atspi_accessible_get_state_set(accessible_);
-  GArray* state_array = atspi_state_set_get_states(atspi_states);
+  ScopedGObjectPtr<AtspiStateSet> atspi_states(
+      atspi_accessible_get_state_set(accessible_.get()));
+  ScopedGArray state_array(atspi_state_set_get_states(atspi_states.get()));
+
   std::vector<std::string> states;
   for (unsigned i = 0; i < state_array->len; i++) {
     AtspiStateType state_type = g_array_index(state_array, AtspiStateType, i);
     states.push_back(StateTypeToString(state_type));
   }
-  g_array_free(state_array, TRUE);
-  g_object_unref(atspi_states);
+
   return states;
 }
 
 int AtspiNode::getChildCount() const {
-  GError* error = nullptr;
-  gint count = atspi_accessible_get_child_count(accessible_, &error);
-  if (error) {
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  gint count = atspi_accessible_get_child_count(accessible_.get(), &error_ptr);
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
   return (int)count;
 }
 
 AtspiNode AtspiNode::getChildAtIndex(int index) const {
-  GError* error = nullptr;
+  ScopedGError error;
+  GError* error_ptr = error.get();
   AtspiAccessible* child =
-      atspi_accessible_get_child_at_index(accessible_, index, &error);
-  if (error) {
+      atspi_accessible_get_child_at_index(accessible_.get(), index, &error_ptr);
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
   return AtspiNode(child);
@@ -332,11 +339,12 @@ AtspiNode AtspiNode::getChildAtIndex(int index) const {
 std::vector<AtspiNode> AtspiNode::getChildren() const {
   std::vector<AtspiNode> result;
 
-  GError* error = nullptr;
-  gint child_count = atspi_accessible_get_child_count(accessible_, &error);
-  if (error) {
+  ScopedGError error;
+  GError* error_ptr = error.get();
+  gint child_count =
+      atspi_accessible_get_child_count(accessible_.get(), &error_ptr);
+  if (error_ptr) {
     std::string err_msg = error->message;
-    g_error_free(error);
     throw std::runtime_error(err_msg);
   }
 
@@ -362,82 +370,80 @@ std::vector<AtspiNode> AtspiNode::getChildren() const {
 // interface. See https://gitlab.gnome.org/GNOME/at-spi2-core/-/issues/167 for
 // details.
 AtspiActionInterface AtspiNode::queryAction() const {
-  AtspiAction* iface = atspi_accessible_get_action_iface(accessible_);
-  if (iface) {
-    g_object_unref(iface);
-    return AtspiActionInterface(ATSPI_ACTION(accessible_));
+  ScopedGObjectPtr<AtspiAction> iface(
+      atspi_accessible_get_action_iface(accessible_.get()));
+  if (iface.get()) {
+    return AtspiActionInterface(iface.release());
   }
 
   return AtspiActionInterface();
 }
 
 AtspiComponentInterface AtspiNode::queryComponent() const {
-  AtspiComponent* iface = atspi_accessible_get_component_iface(accessible_);
-  if (iface) {
-    g_object_unref(iface);
-    return AtspiComponentInterface(ATSPI_COMPONENT(accessible_));
+  ScopedGObjectPtr<AtspiComponent> iface(
+      atspi_accessible_get_component_iface(accessible_.get()));
+  if (iface.get()) {
+    return AtspiComponentInterface(iface.release());
   }
 
   return AtspiComponentInterface();
 }
 
 AtspiDocumentInterface AtspiNode::queryDocument() const {
-  AtspiDocument* iface = atspi_accessible_get_document_iface(accessible_);
-  if (iface) {
-    g_object_unref(iface);
-    return AtspiDocumentInterface(ATSPI_DOCUMENT(accessible_));
+  ScopedGObjectPtr<AtspiDocument> iface(
+      atspi_accessible_get_document_iface(accessible_.get()));
+  if (iface.get()) {
+    return AtspiDocumentInterface(iface.release());
   }
 
   return AtspiDocumentInterface();
 }
 
 AtspiHyperlinkInterface AtspiNode::queryHyperlink() const {
-  // Unlike the other interfaces, `atspi_accessible_get_hyperlink` gives us a
-  // new hyperlink object that serves as the interface. Therefore we cannot
-  // free it until we're done with it. See also `atspi_hyperlink_interface.h`.
-  AtspiHyperlink* hyperlink = atspi_accessible_get_hyperlink(accessible_);
-  if (hyperlink) {
-    return AtspiHyperlinkInterface(hyperlink);
+  ScopedGObjectPtr<AtspiHyperlink> iface(
+      atspi_accessible_get_hyperlink(accessible_.get()));
+  if (iface.get()) {
+    return AtspiHyperlinkInterface(iface.release());
   }
 
   return AtspiHyperlinkInterface();
 }
 
 AtspiTableInterface AtspiNode::queryTable() const {
-  AtspiTable* iface = atspi_accessible_get_table_iface(accessible_);
-  if (iface) {
-    g_object_unref(iface);
-    return AtspiTableInterface(ATSPI_TABLE(accessible_));
+  ScopedGObjectPtr<AtspiTable> iface(
+      atspi_accessible_get_table_iface(accessible_.get()));
+  if (iface.get()) {
+    return AtspiTableInterface(iface.release());
   }
 
   return AtspiTableInterface();
 }
 
 AtspiTableCellInterface AtspiNode::queryTableCell() const {
-  AtspiTableCell* iface = atspi_accessible_get_table_cell(accessible_);
-  if (iface) {
-    g_object_unref(iface);
-    return AtspiTableCellInterface(ATSPI_TABLE_CELL(accessible_));
+  ScopedGObjectPtr<AtspiTableCell> iface(
+      atspi_accessible_get_table_cell(accessible_.get()));
+  if (iface.get()) {
+    return AtspiTableCellInterface(iface.release());
   }
 
   return AtspiTableCellInterface();
 }
 
 AtspiTextInterface AtspiNode::queryText() const {
-  AtspiText* iface = atspi_accessible_get_text_iface(accessible_);
-  if (iface) {
-    g_object_unref(iface);
-    return AtspiTextInterface(ATSPI_TEXT(accessible_));
+  ScopedGObjectPtr<AtspiText> iface(
+      atspi_accessible_get_text_iface(accessible_.get()));
+  if (iface.get()) {
+    return AtspiTextInterface(iface.release());
   }
 
   return AtspiTextInterface();
 }
 
 AtspiValueInterface AtspiNode::queryValue() const {
-  AtspiValue* iface = atspi_accessible_get_value_iface(accessible_);
-  if (iface) {
-    g_object_unref(iface);
-    return AtspiValueInterface(ATSPI_VALUE(accessible_));
+  ScopedGObjectPtr<AtspiValue> iface(
+      atspi_accessible_get_value_iface(accessible_.get()));
+  if (iface.get()) {
+    return AtspiValueInterface(iface.release());
   }
 
   return AtspiValueInterface();

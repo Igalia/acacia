@@ -23,7 +23,7 @@ std::pair<int, int> AtspiTableCellInterface::getPosition() const {
 
   GError* error = nullptr;
   int row, column;
-  atspi_table_cell_get_position(interface_, &row, &column, &error);
+  atspi_table_cell_get_position(interface_.get(), &row, &column, &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -41,7 +41,7 @@ int AtspiTableCellInterface::getColumnSpan() const {
     return 0;
 
   GError* error = nullptr;
-  int result = atspi_table_cell_get_column_span(interface_, &error);
+  int result = atspi_table_cell_get_column_span(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);
@@ -59,7 +59,7 @@ int AtspiTableCellInterface::getRowSpan() const {
     return 0;
 
   GError* error = nullptr;
-  int result = atspi_table_cell_get_row_span(interface_, &error);
+  int result = atspi_table_cell_get_row_span(interface_.get(), &error);
   if (error) {
     std::string err_msg = error->message;
     g_error_free(error);

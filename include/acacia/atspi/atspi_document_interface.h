@@ -1,6 +1,8 @@
 #ifndef INCLUDE_ACACIA_ATSPI_ATSPI_DOCUMENT_INTERFACE_H_
 #define INCLUDE_ACACIA_ATSPI_ATSPI_DOCUMENT_INTERFACE_H_
 
+#include "acacia/atspi/atspi_interface.h"
+
 #include <string>
 #include <vector>
 
@@ -15,28 +17,16 @@ namespace acacia {
  * using AtspiNode::queryDocument().
  * @ingroup atspi
  */
-class AtspiDocumentInterface {
-  AtspiDocument* interface_;
-
+class AtspiDocumentInterface : public AtspiInterface<AtspiDocument> {
  public:
-  AtspiDocumentInterface(AtspiDocument* interface) : interface_(interface){};
-  AtspiDocumentInterface() : interface_(nullptr){};
-  ~AtspiDocumentInterface(){};
-
-  /**
-   * Tests whether the underlying AtspiDocument pointer is the null pointer. An
-   * AtspiDocumentInterface with an null AtspiDocument pointer will be created
-   * if the wrapped API returned a nullptr with no error codes.
-   * @ingroup atspi
-   */
-  bool isNull() const { return !interface_; }
+  using AtspiInterface<AtspiDocument>::AtspiInterface;
 
   /**
    * Helper function to print commonly needed values associated with this
    * interface.
    * @ingroup atspi
    */
-  std::string toString() const;
+  std::string toString() const override;
 
   /**
    * Wraps
