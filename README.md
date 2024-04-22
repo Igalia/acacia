@@ -44,6 +44,10 @@ To pass feature flags on the command line, add `-D<flag>=ON` for each feature fl
 % cmake --fresh -DACACIA_NODEJS=ON -DACACIA_TESTS=OFF ../
 ```
 
+### SWIG Dependencies
+
+The Python and NodeJS bindings are built with SWIG. SWIG version 4.2.0 is required to build the bindings. If your package mananger provides and older version of SWIG, you will need to download and build from source, see: https://swig.org/
+
 ### On Linux
 
 The instructions below assume a Debian-like system (e.g. Debian, Ubuntu).
@@ -416,7 +420,7 @@ $ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 
 On Linux, the default prefix is `/usr/local`.
 
-Before installing, please make sure that the user has write permissions on the destination dir. Also, before using the library from the installation dir, make sure your that `<PREFIX>/lib` is added to ld.so configuration (e.g, via `LD_LIBRARY_PATH` environment variable).
+Before installing, please make sure that the user has write permissions on the destination dir. Also, before using the library from the installation dir, make sure your that `<PREFIX>/lib` is added to ld.so configuration. You can do this by adding a file `/etc/ld.so.conf.d/` (called, for example, acacia-libs.conf) with the path `<PREFIX>/lib` in it, then running `ldconfig`.
 
 ### On Mac
 
