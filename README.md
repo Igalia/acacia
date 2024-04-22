@@ -46,7 +46,7 @@ To pass feature flags on the command line, add `-D<flag>=ON` for each feature fl
 
 ### SWIG Dependencies
 
-The Python and NodeJS bindings are built with SWIG. SWIG version 4.2.0 is required to build the bindings. If your package mananger provides and older version of SWIG, you will need to download and build from source, see: https://swig.org/
+The Python and NodeJS bindings are built with SWIG. SWIG version 4.2.0 is required to build the bindings. If your package manager provides an older version of SWIG, you will need to download and build from source, see: https://swig.org/
 
 ### On Linux
 
