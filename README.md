@@ -14,9 +14,13 @@ This library is a work in progress, no API is completely supported, yet! :) To s
 
 ## Building and contributing to the library
 
-We use [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure our code is consistently formatted and readable. We recommend setting up clang-format and [pre-commit](https://pre-commit.com/) to ensure your code is consistent with the project style (and to make your life easier!)
+We use [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to ensure our code is consistently formatted and readable. Our pre-commit configuration includes checking clang-format has already been run, and runs on each pull request as a pre-merge check.
+
+We recommend setting up `clang-format` and [pre-commit](https://pre-commit.com/) to ensure your code is consistent with the project style (and to make your life easier!)
 
 Setting up pre-commit will cause clang-format to run on uncommitted code (changed lines only) when you run `git commit`, and prevent the commit if clang-format makes any changes. You can then run `git commit` again to commit the formatted change.
+
+You can also set up many editors (including Emacs and Visual Studio Code) to run clang-format automatically each time you save a file.
 
 The OS-specific instructions below include instructions on setting up clang-format and pre-commit, as well as setting up [CMake](https://cmake.org/) to build the project binaries.
 
