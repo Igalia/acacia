@@ -16,6 +16,7 @@ ATTRIBUTES = [
 
 def print_node_and_subtree(node, level):
   prefix = "--" * level
+  all_attributes =
   role_and_attributes = serialize_role_and_attributes(node, ATTRIBUTES)
   print(f'{prefix} {role_and_attributes}')
 
@@ -23,6 +24,9 @@ def print_node_and_subtree(node, level):
     return
 
   children = get_list_attribute_value(node, 'AXChildren')
+  if children is None:
+    return
+
   for child in children:
     print_node_and_subtree(child, level + 1)
 
@@ -37,6 +41,9 @@ def serialize_role_and_attributes(node, attributes):
     value = get_attribute_value(node, attribute)
     match type(value).__name__:
       case 'NoneType':
+        value_type = node.getValueType(attribute)
+        if value_type is acacia_axapi.ValueType_UNKNOWN:
+          output += f' {attribute}=(unknown)'
         continue
       case 'bool':
         if value:
@@ -79,8 +86,6 @@ def get_attribute_value(node, attribute):
       case acacia_axapi.ValueType_DICTIONARY:
         return node.getDictionaryValue(attribute)
       case _:
-        type_string = acacia_axapi.ValueTypeToString(type)
-        print(f'Unsupported type: {type_string} for {attribute}')
         return None
   except Exception as error:
     return f'(error: {error})'

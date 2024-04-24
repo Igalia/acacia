@@ -51,7 +51,7 @@ AXAPINode findRootAXAPINodeForPID(int pid);
  * application whose name matches the given name, or a null AXAPINode if no such
  * application exists.
  */
-AXAPINode findRootAXAPINodeForName(std::string name);
+AXAPINode findRootAXAPINodeForName(const std::string& name);
 
 /**
  * Represents a node in the macOS (AX API) accessibility tree.
@@ -265,7 +265,8 @@ class AXAPINode {
    * elements are ValueType::STRING values.
    * @ingroup axapi
    */
-  std::vector<std::string> getStringListValue(std::string& attribute) const;
+  std::vector<std::string> getStringListValue(
+      const std::string& attribute) const;
 
   /**
    * Wraps
@@ -275,7 +276,7 @@ class AXAPINode {
    * is a ValueType::LIST whose elements are ValueType::STRING values.
    * @ingroup axapi
    */
-  std::string getStringListValueAtIndex(std::string& attribute,
+  std::string getStringListValueAtIndex(const std::string& attribute,
                                         int index) const;
 
   /**
@@ -286,7 +287,7 @@ class AXAPINode {
    * elements are ValueType::RANGE values.
    * @ingroup axapi
    */
-  std::vector<Range> getRangeListValue(std::string& attribute) const;
+  std::vector<Range> getRangeListValue(const std::string& attribute) const;
 
   /**
    * Wraps
@@ -296,7 +297,7 @@ class AXAPINode {
    * is a ValueType::LIST whose elements are ValueType::RANGE values.
    * @ingroup axapi
    */
-  Range getRangeListValueAtIndex(std::string& attribute, int index) const;
+  Range getRangeListValueAtIndex(const std::string& attribute, int index) const;
 
   /**
    * Wraps
@@ -306,7 +307,8 @@ class AXAPINode {
    * elements are ValueType::DICTIONARY values.
    * @ingroup axapi
    */
-  std::vector<Dictionary> getDictionaryListValue(std::string& attribute) const;
+  std::vector<Dictionary> getDictionaryListValue(
+      const std::string& attribute) const;
 
   /**
    * Wraps
@@ -316,11 +318,11 @@ class AXAPINode {
    * is a ValueType::LIST whose elements are ValueType::DICTIONARY values.
    * @ingroup axapi
    */
-  Dictionary getDictionaryListValueAtIndex(std::string& attribute,
+  Dictionary getDictionaryListValueAtIndex(const std::string& attribute,
                                            int index) const;
 
   friend AXAPINode findRootAXAPINodeForPID(int pid);
-  friend AXAPINode findRootAXAPINodeForName(std::string name);
+  friend AXAPINode findRootAXAPINodeForName(const std::string& name);
 
  private:
   explicit AXAPINode(AXUIElementRef ax_element);
