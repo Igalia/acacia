@@ -9,6 +9,8 @@ ATTRIBUTES = [
   'AXTitle',
   'AXDescription',
   'AXFocused',
+  'AXDOMClassList',
+  'AXSelectedTextRanges',
 ]
 
 
