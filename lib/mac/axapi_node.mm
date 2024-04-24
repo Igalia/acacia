@@ -125,7 +125,7 @@ ValueType AXAPINode::getValueType(const std::string& attribute) const {
     return ValueType::UNKNOWN;
   }
 
-  return DeduceValueType(cf_value.get(), attribute);
+  return DeduceValueType(cf_value.get());
 }
 
 ValueType AXAPINode::getListElementType(const std::string& attribute) const {
