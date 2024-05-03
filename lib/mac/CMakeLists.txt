@@ -86,7 +86,7 @@ if (ACACIA_PYTHON)
   )
 
   add_custom_target(
-    python_acacia_axapi_install
+    python_acacia_axapi_install ALL
     DEPENDS
       python_acacia_axapi
     COMMAND
