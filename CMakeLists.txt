@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
+set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
+
 project(Acacia)
 
 # Enable cmake_print_variables() and cmake_print_properties() for debugging
