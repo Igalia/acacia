@@ -45,6 +45,10 @@ target_link_libraries(
     ${APPKIT_FRAMEWORK}
 )
 
+install(TARGETS
+  acacia_axapi LIBRARY
+)
+
 # SWIG Instructions to build library bindings to different languages
 # (only required if at least one binding is ON).
 
@@ -56,41 +60,67 @@ endif()
 # SWIG Instructions to build a python module called "acacia_axapi"
 
 if (ACACIA_PYTHON)
-  find_package(Python3 COMPONENTS Interpreter Development)
+  # find_package(Python3 COMPONENTS Interpreter Development)
 
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-  include_directories(${Python3_INCLUDE_DIRS})
+  # include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+  # include_directories(${Python3_INCLUDE_DIRS})
 
-  set_property(SOURCE acacia_axapi.i PROPERTY CPLUSPLUS ON)
+  # set_property(SOURCE acacia_axapi.i PROPERTY CPLUSPLUS ON)
 
-  swig_add_library(
-    # The name of the c++ library used by python module
-    python_acacia_axapi
-    TYPE SHARED
-    LANGUAGE python
-    SOURCES acacia_axapi.i
-  )
+  # swig_add_library(
+  #   # The name of the c++ library used by python module
+  #   python_acacia_axapi
+  #   TYPE SHARED
+  #   LANGUAGE python
+  #   SOURCES acacia_axapi.i
+  # )
 
-  set_target_properties(
-    python_acacia_axapi
+  # set_target_properties(
+  #   python_acacia_axapi
 
-    PROPERTIES
-    SUFFIX .so
-  )
+  #   PROPERTIES
+  #   SUFFIX .so
+  # )
 
-  target_link_libraries(
-    # Target to link
-    python_acacia_axapi
+  # target_link_libraries(
+  #   # Target to link
+  #   python_acacia_axapi
 
-    # Items to link into the target
-    acacia_axapi
-    ${Python3_LIBRARIES}
-  )
+  #   # Items to link into the target
+  #   acacia_axapi
+  #   ${Python3_LIBRARIES}
+  # )
 
-  set_property(
-    TARGET python_acacia_axapi
-    PROPERTY
-      SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+  # set_property(
+  #   TARGET python_acacia_axapi
+  #   PROPERTY
+  #     SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+  # )
+
+  # install(TARGETS
+  #   python_acacia_axapi
+  #     LIBRARY
+  #     DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
+  # )
+  # install(FILES
+  #   ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.py DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
+  # )
+
+  configure_file(setup.py.in setup.py)
+
+  add_custom_target(
+    python_acacia_axapi ALL
+    DEPENDS
+      acacia_axapi
+      setup.py
+    COMMAND
+      ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/acacia_axapi.i ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.i
+    COMMAND
+      MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} python3 -m build
+    COMMAND
+      pip3 uninstall -y acacia_axapi
+    COMMAND
+      pip3 install --no-index -f dist acacia_axapi
   )
 endif()
 

@@ -1,0 +1,37 @@
+from setuptools import Extension, find_packages, setup
+from setuptools.command.build_py import build_py
+
+acacia_module = Extension(
+  name='_acacia_axapi',
+  swig_opts=[
+    '-c++',
+    '-I${PROJECT_SOURCE_DIR}/include',
+  ],
+  include_dirs=[
+    "${PROJECT_SOURCE_DIR}/include"
+  ],
+  sources=[
+    "${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.i"
+  ],
+  library_dirs=[
+    "${CMAKE_CURRENT_BINARY_DIR}"
+  ],
+  libraries=[
+    "acacia_axapi"
+  ],
+  extra_compile_args=[
+    '-std=c++11',
+  ],
+  extra_link_args=[
+    '-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}',
+    '-framework', 'Foundation',
+    '-framework', 'AppKit',
+    '-framework', 'ApplicationServices',
+  ],
+)
+
+setup(
+  name='acacia_axapi',
+  description='Python bindings for acacia_axapi',
+  ext_modules=[acacia_module]
+)
