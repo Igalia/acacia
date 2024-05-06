@@ -138,7 +138,7 @@ if (ACACIA_NODEJS)
     OUTPUT nodejs_acacia_axapi_wrap.cxx
     DEPENDS acacia_axapi
     COMMAND
-      swig -c++ -javascript -node -o nodejs_acacia_axapi_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/acacia_axapi.i
+      swig -c++ -javascript -node -o nodejs_acacia_axapi_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/acacia_axapi.i
     VERBATIM
   )
 
