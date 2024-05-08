@@ -62,7 +62,6 @@ endif()
 if (ACACIA_PYTHON)
   configure_file(python/setup.py.in python/setup.py)
   configure_file(python/pyproject.toml python/pyproject.toml)
-  # configure_file(python/__init__.py python/acacia_axapi/__init__.py)
   configure_file(acacia_axapi.i python/acacia_axapi/acacia_axapi.i)
 
   find_package(Python COMPONENTS Interpreter Development)
