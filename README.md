@@ -129,7 +129,7 @@ PID of the browser, its name or substring thereof, or both:
 
 ##### Python module
 
-To use the Python module, `import` `acacia_atspi`from within your Python script or the Python Interpreter. For example:
+To use the Python module, `import` `acacia_atspi` from within your Python script or the Python Interpreter. For example:
 
 ```
 % cd build/example/atspi/
@@ -414,6 +414,12 @@ Use the CMAKE variable `CMAKE_INSTALL_PREFIX` to define the root directory where
 
 ```
 $ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+```
+
+To install the python library, run
+
+```
+make install_python
 ```
 
 ### On Linux

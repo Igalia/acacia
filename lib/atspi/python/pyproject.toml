@@ -1,8 +1,3 @@
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
-
-[project]
-name = 'acacia_atspi'
-version = '0.0.1'
-description = 'Python bindings for acacia_atspi'

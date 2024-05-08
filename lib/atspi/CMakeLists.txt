@@ -113,55 +113,17 @@ if (ACACIA_PYTHON)
     COMMAND
       ${CMAKE_COMMAND} -E rename acacia_atspi.py __init__.py
   )
+
   add_custom_target(
     install_python
     DEPENDS
       python_acacia_atspi
-      symlink_init_py
+      rename_init_py
     WORKING_DIRECTORY
       python
     COMMAND
       ${Python_EXECUTABLE} -m pip install .
   )
-  # FIND_PACKAGE(Python3 COMPONENTS Interpreter Development.Module)
-  # INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-  # INCLUDE_DIRECTORIES(${Python3_INCLUDE_DIRS})
-
-  # SET_SOURCE_FILES_PROPERTIES(acacia_atspi.i PROPERTIES CPLUSPLUS ON)
-
-  # SWIG_ADD_LIBRARY(
-  #   # The name of the c++ library used by python module
-  #   acacia_atspi_python
-  #   TYPE SHARED
-  #   LANGUAGE python
-  #   SOURCES acacia_atspi.i
-  # )
-
-  # TARGET_LINK_LIBRARIES(
-  #   acacia_atspi_python
-  #   acacia_atspi
-  #   ${python3_LIBRARIES}
-  # )
-
-  # set_property(
-  #   TARGET acacia_atspi_python
-  #   PROPERTY
-  #     SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-  # )
-
-  # execute_process (
-  #   COMMAND python3 -c "import sys; ver_info = sys.version_info; print(f'python{ver_info[0]}.{ver_info[1]}', end='')"
-  #   OUTPUT_VARIABLE PY_MODULE_DIR
-  # )
-
-  # install(TARGETS
-  #   acacia_atspi_python
-  #     LIBRARY
-  #     DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
-  # )
-  # install(FILES
-  #   ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.py DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
-  # )
 endif()
 
 

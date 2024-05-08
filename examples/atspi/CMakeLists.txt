@@ -15,23 +15,6 @@ add_custom_target(
     dump_tree_atspi
 )
 
-if (ACACIA_PYTHON)
-  add_custom_target(
-    dump_tree_atspi.py
-    ALL
-    DEPENDS
-      acacia_atspi
-      acacia_atspi_python
-    COMMAND
-      ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_atspi.py ${CMAKE_CURRENT_BINARY_DIR}/
-    COMMAND
-      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/_acacia_atspi_python.so ${CMAKE_CURRENT_BINARY_DIR}/_acacia_atspi_python.so
-    COMMAND
-      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/atspi/acacia_atspi.py ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.py
-    VERBATIM
-  )
-endif (ACACIA_PYTHON)
-
 if (ACACIA_NODEJS)
   add_custom_target(
     dump_tree_atspi.js

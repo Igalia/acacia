@@ -2,32 +2,35 @@ from setuptools import Extension, setup
 import pprint
 
 include_dirs = "${ATSPI2_INCLUDE_DIRS}".split(";")
-include_dirs.append("${CMAKE_CURRENT_BINARY_DIR}")
+include_dirs.append("${PROJECT_SOURCE_DIR}/include")
 pprint.pp(include_dirs)
 
 setup(
-  ext_modules = [
+  name='acacia_atspi',
+  version='0.0.1',
+  description='Python bindings for acacia_atspi',
+  ext_modules=[
     Extension(
       name='acacia_atspi._acacia_atspi',
       swig_opts=[
         '-c++',
         '-I${PROJECT_SOURCE_DIR}/include',
+        '-I${ATSPI_INCLUDE_DIRS}',
       ],
-      include_dirs=[
-        "${PROJECT_SOURCE_DIR}/include"
-      ],
+      include_dirs=include_dirs,
       sources=[
-        "${CMAKE_CURRENT_BINARY_DIR}/python/acacia_atspi/acacia_atspi.i"
+        "${CMAKE_CURRENT_BINARY_DIR}/python/acacia_atspi/acacia_atspi.i",
       ],
-      library_dirs=include_dirs,
+      library_dirs=[
+        "${CMAKE_CURRENT_BINARY_DIR}",
+      ],
       libraries=[
-        "acacia_atspi"
+        "acacia_atspi",
+        "atspi",
       ],
       extra_compile_args=[
         '-std=c++11',
       ],
-      extra_link_args=[
-      ]
     )
   ]
 )
