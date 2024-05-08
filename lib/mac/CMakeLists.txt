@@ -89,7 +89,7 @@ if (ACACIA_PYTHON)
   )
 
   add_custom_target(
-    symlink_init_py
+    rename_init_py
     DEPENDS
       python_acacia_axapi
     WORKING_DIRECTORY
@@ -101,7 +101,7 @@ if (ACACIA_PYTHON)
     install_python
     DEPENDS
       python_acacia_axapi
-      symlink_init_py
+      rename_init_py
     WORKING_DIRECTORY
       python
     COMMAND
