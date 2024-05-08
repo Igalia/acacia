@@ -45,3 +45,21 @@ if (ACACIA_NODEJS)
     VERBATIM
   )
 endif (ACACIA_NODEJS)
+
+if (ACACIA_PYTHON)
+  add_custom_target(
+    dump_tree_axapi.py
+    ALL
+    DEPENDS
+      acacia_axapi
+      python_acacia_axapi
+    COMMAND
+      ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/dump_tree_axapi.py ${CMAKE_CURRENT_BINARY_DIR}/dump_tree_axapi.py
+    COMMAND
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/mac/_python_acacia_axapi.so ${CMAKE_CURRENT_BINARY_DIR}/_python_acacia_axapi.so
+    COMMAND
+      ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/lib/mac/acacia_axapi.py ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.py
+
+    VERBATIM
+  )
+endif (ACACIA_PYTHON)

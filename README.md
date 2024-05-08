@@ -432,6 +432,8 @@ Before installing, please make sure that the user has write permissions on the d
 
 ### On Mac
 
+To install the C++ library:
+
 ```
 sudo ninja install
 ```
