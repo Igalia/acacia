@@ -60,9 +60,12 @@ endif()
 # Build and install a python module called "acacia_axapi" using setuptools
 
 if (ACACIA_PYTHON)
-  configure_file(setup.py.in python/setup.py)
-  configure_file(pyproject.toml python/pyproject.toml)
+  configure_file(python/setup.py.in python/setup.py)
+  configure_file(python/pyproject.toml python/pyproject.toml)
+  # configure_file(python/__init__.py python/acacia_axapi/__init__.py)
   configure_file(acacia_axapi.i python/acacia_axapi/acacia_axapi.i)
+
+  find_package(Python COMPONENTS Interpreter Development)
 
   add_custom_target(
     python_acacia_axapi ALL
@@ -72,29 +75,39 @@ if (ACACIA_PYTHON)
     WORKING_DIRECTORY
       python
     COMMAND
-      MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} python3 -m build .
+      MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} ${Python_EXECUTABLE} -m build .
   )
 
-  # set_property(
-  #   TARGET python_acacia_axapi
-  #   APPEND
-  #   PROPERTY ADDITIONAL_CLEAN_FILES
-  #     ${CMAKE_CURRENT_BINARY_DIR}/__pycache__
-  #     ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.egg-info
-  #     ${CMAKE_CURRENT_BINARY_DIR}/dist
-  #     ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.py
-  #     ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi_wrap.cpp
-  # )
+  set_property(
+    TARGET python_acacia_axapi
+    APPEND
+    PROPERTY ADDITIONAL_CLEAN_FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/python/__pycache__
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_axapi.egg-info
+      ${CMAKE_CURRENT_BINARY_DIR}/python/dist
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_axapi.py
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_axapi_wrap.cpp
+  )
 
-  # add_custom_target(
-  #   python_acacia_axapi_install ALL
-  #   DEPENDS
-  #     python_acacia_axapi
-  #   COMMAND
-  #     pip3 uninstall -y acacia_axapi
-  #   COMMAND
-  #     pip3 install --no-index -f dist acacia_axapi
-  # )
+  add_custom_target(
+    symlink_init_py
+    DEPENDS
+      python_acacia_axapi
+    WORKING_DIRECTORY
+      python/acacia_axapi
+    COMMAND
+      ${CMAKE_COMMAND} -E rename acacia_axapi.py __init__.py
+  )
+  add_custom_target(
+    install_python
+    DEPENDS
+      python_acacia_axapi
+      symlink_init_py
+    WORKING_DIRECTORY
+      python
+    COMMAND
+      ${Python_EXECUTABLE} -m pip install .
+  )
 endif()
 
 # Generate a NodeJS Module using swig + node-gyp
