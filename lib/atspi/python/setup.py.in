@@ -1,0 +1,33 @@
+from setuptools import Extension, setup
+import pprint
+
+include_dirs = "${ATSPI2_INCLUDE_DIRS}".split(";")
+include_dirs.append("${CMAKE_CURRENT_BINARY_DIR}")
+pprint.pp(include_dirs)
+
+setup(
+  ext_modules = [
+    Extension(
+      name='acacia_atspi._acacia_atspi',
+      swig_opts=[
+        '-c++',
+        '-I${PROJECT_SOURCE_DIR}/include',
+      ],
+      include_dirs=[
+        "${PROJECT_SOURCE_DIR}/include"
+      ],
+      sources=[
+        "${CMAKE_CURRENT_BINARY_DIR}/python/acacia_atspi/acacia_atspi.i"
+      ],
+      library_dirs=include_dirs,
+      libraries=[
+        "acacia_atspi"
+      ],
+      extra_compile_args=[
+        '-std=c++11',
+      ],
+      extra_link_args=[
+      ]
+    )
+  ]
+)
