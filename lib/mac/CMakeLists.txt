@@ -88,6 +88,9 @@ if (ACACIA_PYTHON)
       ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_axapi_wrap.cpp
   )
 
+  # Rename acacia_axapi.py to __init__.py:
+  # This makes the SWIG-generated API the "top level" of the module, so you can
+  # use `import acacia_axapi` instead of `from acacia_axapi import acacia_axapi`
   add_custom_target(
     rename_init_py
     DEPENDS
@@ -97,6 +100,7 @@ if (ACACIA_PYTHON)
     COMMAND
       ${CMAKE_COMMAND} -E rename acacia_axapi.py __init__.py
   )
+
   add_custom_target(
     install_python
     DEPENDS
