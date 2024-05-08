@@ -60,40 +60,41 @@ endif()
 # Build and install a python module called "acacia_axapi" using setuptools
 
 if (ACACIA_PYTHON)
-  configure_file(setup.py.in setup.py)
+  configure_file(setup.py.in python/setup.py)
+  configure_file(pyproject.toml python/pyproject.toml)
+  configure_file(acacia_axapi.i python/acacia_axapi/acacia_axapi.i)
 
   add_custom_target(
     python_acacia_axapi ALL
     DEPENDS
       acacia_axapi
-      setup.py
+      python/setup.py
+    WORKING_DIRECTORY
+      python
     COMMAND
-      ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/acacia_axapi.i ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.i
-    COMMAND
-      MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} python3 -m build
+      MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} python3 -m build .
   )
 
-  set_property(
-    TARGET python_acacia_axapi
-    APPEND
-    PROPERTY ADDITIONAL_CLEAN_FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/__pycache__
-      ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.egg-info
-      ${CMAKE_CURRENT_BINARY_DIR}/dist
-      ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.i
-      ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.py
-      ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi_wrap.cpp
-  )
+  # set_property(
+  #   TARGET python_acacia_axapi
+  #   APPEND
+  #   PROPERTY ADDITIONAL_CLEAN_FILES
+  #     ${CMAKE_CURRENT_BINARY_DIR}/__pycache__
+  #     ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.egg-info
+  #     ${CMAKE_CURRENT_BINARY_DIR}/dist
+  #     ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi.py
+  #     ${CMAKE_CURRENT_BINARY_DIR}/acacia_axapi_wrap.cpp
+  # )
 
-  add_custom_target(
-    python_acacia_axapi_install ALL
-    DEPENDS
-      python_acacia_axapi
-    COMMAND
-      pip3 uninstall -y acacia_axapi
-    COMMAND
-      pip3 install --no-index -f dist acacia_axapi
-  )
+  # add_custom_target(
+  #   python_acacia_axapi_install ALL
+  #   DEPENDS
+  #     python_acacia_axapi
+  #   COMMAND
+  #     pip3 uninstall -y acacia_axapi
+  #   COMMAND
+  #     pip3 install --no-index -f dist acacia_axapi
+  # )
 endif()
 
 # Generate a NodeJS Module using swig + node-gyp
