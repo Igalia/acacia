@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+namespace acacia {
+
 inline std::string lower(const std::string& str) {
   std::string result(str);
   std::transform(result.begin(), result.end(), result.begin(),
@@ -21,3 +23,16 @@ inline std::string StringVectorToString(std::vector<std::string> strings) {
     result = result.substr(0, pos + 1);
   return result;
 }
+
+template <typename Func>
+std::string exceptionToString(Func func) {
+  std::string result;
+  try {
+    result = func();
+  } catch (const std::exception& e) {
+    result = "<" + std::string(e.what()) + ">";
+  }
+  return result;
+}
+
+}  // namespace acacia

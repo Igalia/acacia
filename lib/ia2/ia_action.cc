@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "lib/ia2/win_utils.h"
+#include "lib/utils.h"
 
 namespace acacia {
 
@@ -10,14 +11,17 @@ std::string IAAction::toString() {
   if (isNull()) {
     return "Action: Not implemented";
   }
+  std::string actions = exceptionToString([this]() {
+    std::string action_list;
+    long count = this->nActions();
+    for (int i = 0; i < count; ++i) {
+      std::string name = this->getName(i);
+      action_list += " " + name;
+    }
+    return action_list;
+  });
 
-  long count = nActions();
-  std::string result = "Action:";
-  for (int i = 0; i < count; ++i) {
-    std::string name = getName(i);
-    result += " " + name;
-  }
-  return result;
+  return "Actions:" + actions;
 }
 
 long IAAction::nActions() {

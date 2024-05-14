@@ -54,21 +54,22 @@ static void PrintNode(AtspiNode node, int level) {
 
   std::string indent(level * 2, ' ');
   std::vector<std::string> states = node.getStates();
-  std::cout << indent << "* States=(" << StringVectorToString(states) << ")\n";
+  std::cout << indent << "* States=(" << acacia::StringVectorToString(states)
+            << ")\n";
 
   std::vector<std::string> interfaces = node.getInterfaces();
-  std::cout << indent << "* Interfaces=(" << StringVectorToString(interfaces)
-            << ")\n";
+  std::cout << indent << "* Interfaces=("
+            << acacia::StringVectorToString(interfaces) << ")\n";
 
   std::vector<std::string> attributes = node.getAttributes();
-  std::cout << indent << "* Attributes=(" << StringVectorToString(attributes)
-            << ")\n";
+  std::cout << indent << "* Attributes=("
+            << acacia::StringVectorToString(attributes) << ")\n";
 
   std::vector<std::string> relations = node.getRelations();
   // We dump this conditionally because most objects lack relations.
   if (!relations.empty()) {
-    std::cout << indent << "* Relations=(" << StringVectorToString(relations)
-              << ")\n";
+    std::cout << indent << "* Relations=("
+              << acacia::StringVectorToString(relations) << ")\n";
   }
 
   // We don't check if this is null because pretty much everything implements
