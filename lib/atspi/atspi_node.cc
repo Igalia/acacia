@@ -221,12 +221,16 @@ std::vector<std::string> AtspiNode::getAttributes() const {
   GError* error_ptr = error.get();
   ScopedGHashTable attributes_hash(
       atspi_accessible_get_attributes(accessible_.get(), &error_ptr));
-  std::vector<std::string> attributes;
   if (error_ptr) {
     std::string err_msg = error->message;
     throw std::runtime_error(err_msg);
   }
+  if (!attributes_hash.get()) {
+    // TODO: this element probably does not exist any more, and should be marked
+    throw std::runtime_error("ERROR: Attributes do not exist");
+  }
 
+  std::vector<std::string> attributes;
   GHashTableIter iter;
   gpointer key, value;
   g_hash_table_iter_init(&iter, attributes_hash.get());
