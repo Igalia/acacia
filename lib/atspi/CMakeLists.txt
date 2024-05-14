@@ -76,44 +76,53 @@ endif()
 # Generate Python bindings using swig + python3
 
 if (ACACIA_PYTHON)
-  FIND_PACKAGE(Python3 COMPONENTS Interpreter Development.Module)
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-  INCLUDE_DIRECTORIES(${Python3_INCLUDE_DIRS})
+  configure_file(python/setup.py.in python/setup.py)
+  configure_file(python/pyproject.toml python/pyproject.toml)
+  configure_file(acacia_atspi.i python/acacia_atspi/acacia_atspi.i)
 
-  SET_SOURCE_FILES_PROPERTIES(acacia_atspi.i PROPERTIES CPLUSPLUS ON)
+  find_package(Python COMPONENTS Interpreter Development)
 
-  SWIG_ADD_LIBRARY(
-    # The name of the c++ library used by python module
-    acacia_atspi_python
-    TYPE SHARED
-    LANGUAGE python
-    SOURCES acacia_atspi.i
-  )
-
-  TARGET_LINK_LIBRARIES(
-    acacia_atspi_python
-    acacia_atspi
-    ${python3_LIBRARIES}
+  add_custom_target(
+    python_acacia_atspi ALL
+    DEPENDS
+      acacia_atspi
+      python/setup.py
+    WORKING_DIRECTORY
+      python
+    COMMAND
+      ${Python_EXECUTABLE} -m build .
   )
 
   set_property(
-    TARGET acacia_atspi_python
-    PROPERTY
-      SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+    TARGET python_acacia_atspi
+    APPEND
+    PROPERTY ADDITIONAL_CLEAN_FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/python/__pycache__
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_atspi.egg-info
+      ${CMAKE_CURRENT_BINARY_DIR}/python/dist
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_atspi.py
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_atspi_wrap.cpp
   )
 
-  execute_process (
-    COMMAND python3 -c "import sys; ver_info = sys.version_info; print(f'python{ver_info[0]}.{ver_info[1]}', end='')"
-    OUTPUT_VARIABLE PY_MODULE_DIR
+  add_custom_target(
+    rename_init_py
+    DEPENDS
+      python_acacia_atspi
+    WORKING_DIRECTORY
+      python/acacia_atspi
+    COMMAND
+      ${CMAKE_COMMAND} -E rename acacia_atspi.py __init__.py
   )
 
-  install(TARGETS
-    acacia_atspi_python
-      LIBRARY
-      DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
-  )
-  install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/acacia_atspi.py DESTINATION "lib/${PY_MODULE_DIR}/dist-packages"
+  add_custom_target(
+    install_python
+    DEPENDS
+      python_acacia_atspi
+      rename_init_py
+    WORKING_DIRECTORY
+      python
+    COMMAND
+      ${Python_EXECUTABLE} -m pip install .
   )
 endif()
 
