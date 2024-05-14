@@ -209,7 +209,7 @@ _exports_AtspiPairIntInt { second: 2098, first: 3840 }
 
 #### Dependencies
 
-Ensure you have XCode and Ninja installed.
+Ensure you have XCode, Ninja and SWIG installed.
 
 ```
 brew install cmake
@@ -217,10 +217,18 @@ brew install ninja
 brew install swig
 ```
 
-If you encounter a python3_LIBRARIES not found, try updating python with:
+Ensure you have Python frameworks installed. You can install Python using `brew`:
 
 ```
 brew install python
+```
+
+or, get the [official installer package](https://www.python.org/downloads/macos/) and run it.
+
+Once Python is installed, install `build`:
+
+```
+python3 -m pip install --upgrade build
 ```
 
 For the NodeJS bindings, you will need to download and build node-gyp app and put the executable on your path. One way to do this is through npm:
@@ -424,7 +432,19 @@ Before installing, please make sure that the user has write permissions on the d
 
 ### On Mac
 
-*Not yet supported*.
+To install the C++ library:
+
+```
+sudo ninja install
+```
+
+To install the Python library:
+
+```
+ninja install_python
+```
+
+Note that for the Python install, you typically don't want to install as root.
 
 ### On Windows
 

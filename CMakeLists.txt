@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
+
 project(Acacia)
 
 # Enable cmake_print_variables() and cmake_print_properties() for debugging

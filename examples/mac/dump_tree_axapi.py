@@ -16,7 +16,6 @@ ATTRIBUTES = [
 
 def print_node_and_subtree(node, level):
   prefix = "--" * level
-  all_attributes =
   role_and_attributes = serialize_role_and_attributes(node, ATTRIBUTES)
   print(f'{prefix} {role_and_attributes}')
 

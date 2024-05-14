@@ -45,6 +45,10 @@ target_link_libraries(
     ${APPKIT_FRAMEWORK}
 )
 
+install(TARGETS
+  acacia_axapi LIBRARY
+)
+
 # SWIG Instructions to build library bindings to different languages
 # (only required if at least one binding is ON).
 
@@ -53,44 +57,59 @@ if (ACACIA_PYTHON OR ACACIA_NODEJS)
   include(UseSWIG)
 endif()
 
-# SWIG Instructions to build a python module called "acacia_axapi"
+# Build and install a python module called "acacia_axapi" using setuptools
 
 if (ACACIA_PYTHON)
-  find_package(Python3 COMPONENTS Interpreter Development)
+  configure_file(python/setup.py.in python/setup.py)
+  configure_file(python/pyproject.toml python/pyproject.toml)
+  configure_file(acacia_axapi.i python/acacia_axapi/acacia_axapi.i)
 
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-  include_directories(${Python3_INCLUDE_DIRS})
+  find_package(Python COMPONENTS Interpreter Development)
 
-  set_property(SOURCE acacia_axapi.i PROPERTY CPLUSPLUS ON)
-
-  swig_add_library(
-    # The name of the c++ library used by python module
-    python_acacia_axapi
-    TYPE SHARED
-    LANGUAGE python
-    SOURCES acacia_axapi.i
-  )
-
-  set_target_properties(
-    python_acacia_axapi
-
-    PROPERTIES
-    SUFFIX .so
-  )
-
-  target_link_libraries(
-    # Target to link
-    python_acacia_axapi
-
-    # Items to link into the target
-    acacia_axapi
-    ${Python3_LIBRARIES}
+  add_custom_target(
+    python_acacia_axapi ALL
+    DEPENDS
+      acacia_axapi
+      python/setup.py
+    WORKING_DIRECTORY
+      python
+    COMMAND
+      MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} ${Python_EXECUTABLE} -m build .
   )
 
   set_property(
     TARGET python_acacia_axapi
-    PROPERTY
-      SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+    APPEND
+    PROPERTY ADDITIONAL_CLEAN_FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/python/__pycache__
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_axapi.egg-info
+      ${CMAKE_CURRENT_BINARY_DIR}/python/dist
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_axapi.py
+      ${CMAKE_CURRENT_BINARY_DIR}/python/acacia_axapi_wrap.cpp
+  )
+
+  # Rename acacia_axapi.py to __init__.py:
+  # This makes the SWIG-generated API the "top level" of the module, so you can
+  # use `import acacia_axapi` instead of `from acacia_axapi import acacia_axapi`
+  add_custom_target(
+    rename_init_py
+    DEPENDS
+      python_acacia_axapi
+    WORKING_DIRECTORY
+      python/acacia_axapi
+    COMMAND
+      ${CMAKE_COMMAND} -E rename acacia_axapi.py __init__.py
+  )
+
+  add_custom_target(
+    install_python
+    DEPENDS
+      python_acacia_axapi
+      rename_init_py
+    WORKING_DIRECTORY
+      python
+    COMMAND
+      ${Python_EXECUTABLE} -m pip install .
   )
 endif()
 
@@ -136,7 +155,7 @@ if (ACACIA_NODEJS)
     OUTPUT nodejs_acacia_axapi_wrap.cxx
     DEPENDS acacia_axapi
     COMMAND
-      swig -c++ -javascript -node -o nodejs_acacia_axapi_wrap.cxx -I${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/acacia_axapi.i
+      swig -c++ -javascript -node -o nodejs_acacia_axapi_wrap.cxx -I${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/acacia_axapi.i
     VERBATIM
   )
 

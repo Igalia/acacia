@@ -1,8 +1,8 @@
 %module acacia_axapi
 
 %{
-#include <include/acacia/mac/mac_data_types.h>
-#include <include/acacia/mac/axapi_node.h>
+#include <acacia/mac/mac_data_types.h>
+#include <acacia/mac/axapi_node.h>
 %}
 
 %include <std_string.i>
@@ -50,5 +50,5 @@ namespace std {
 %warnfilter(503,362) acacia::Range::operator=;
 %warnfilter(503,362) acacia::Dictionary::operator=;
 
-%include <include/acacia/mac/mac_data_types.h>
-%include <include/acacia/mac/axapi_node.h>
+%include <acacia/mac/mac_data_types.h>
+%include <acacia/mac/axapi_node.h>
