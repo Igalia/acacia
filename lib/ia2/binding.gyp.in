@@ -22,7 +22,7 @@
       'link_settings': {
         'libraries': [
           "oleacc.lib",
-          "${CMAKE_BINARY_DIR}/third_party/ia2/lib/iaccessible2.lib",
+          "${CMAKE_BINARY_DIR}/third_party/ia2/lib/Release/iaccessible2.lib",
         ]
       },
       "defines": [ "acacia_EXPORTS" ],
