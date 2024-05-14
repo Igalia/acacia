@@ -99,6 +99,3 @@ namespace std {
 %include <acacia/ia2/ia_text.h>
 %include <acacia/ia2/ia_value.h>
 %include <acacia/ia2/ia_node.h>
-
-%rename(findRootIANodeForPID) acacia::findRootIANodeForPID;
-%rename(findRootIANodeForName) acacia::findRootIANodeForName;
