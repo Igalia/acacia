@@ -80,4 +80,4 @@ std::string IAText::getText(long start_offset, long end_offset) {
   return std::string();
 }
 
-}
+}  // namespace acacia

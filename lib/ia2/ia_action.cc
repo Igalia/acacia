@@ -63,4 +63,4 @@ std::string IAAction::getName(int index) {
   return std::string();
 }
 
-}
+}  // namespace acacia
