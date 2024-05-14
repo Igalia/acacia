@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "lib/ia2/win_utils.h"
+#include "lib/utils.h"
 
 namespace {
 std::string RoleToString(LONG role) {
@@ -127,27 +128,42 @@ std::string IA2::toString() {
   }
 
   std::string result = "IAccessible2: ";
-  GroupPosition group_position = getGroupPosition();
-  if (!group_position.IsEmpty()) {
-    result += "Position=" + std::to_string(group_position.position) + ", " +
-              "Setsize=" + std::to_string(group_position.setsize) + ", " +
-              "Level=" + std::to_string(group_position.level) + "; ";
-  }
 
-  std::vector<std::string> relations = getRelations();
-  if (!relations.empty()) {
-    result += "Relations=";
-    for (auto relation : relations) {
-      result += relation + ", ";
+  std::string group_position = exceptionToString([this]() {
+    GroupPosition group_position = this->getGroupPosition();
+    if (!group_position.IsEmpty()) {
+      return "Position=" + std::to_string(group_position.position) + ", " +
+             "Setsize=" + std::to_string(group_position.setsize) + ", " +
+             "Level=" + std::to_string(group_position.level);
     }
-    size_t pos = result.find_last_not_of(", ");
-    if (pos != std::string::npos) {
-      result = result.substr(0, pos + 1);
-    }
-    result += "; ";
-  }
+    return std::string();
+  });
 
-  result += "Attributes=" + getAttributes();
+  if (!group_position.empty())
+    result += "Group Position=" + group_position + ", ";
+
+  std::string relations = exceptionToString([this]() {
+    std::string str;
+    std::vector<std::string> relations = this->getRelations();
+    if (!relations.empty()) {
+      for (auto relation : relations) {
+        str += relation + ", ";
+      }
+      size_t pos = str.find_last_not_of(", ");
+      if (pos != std::string::npos) {
+        str = str.substr(0, pos + 1);
+      }
+    }
+    return str;
+  });
+
+  if (!relations.empty())
+    result += "Relations=" + relations + ", ";
+
+  std::string attributes =
+      exceptionToString([this]() { return this->getAttributes(); });
+
+  result += "Attributes=" + attributes;
   return result;
 }
 
