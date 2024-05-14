@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
 namespace {
@@ -146,6 +146,18 @@ std::string MSAARoleToString(LONG role) {
 }
 
 }  // Namespace
+
+namespace acacia {
+
+IANode findRootIANodeForName(const std::string& name, const int pid) {
+  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot(name, pid);
+  return IANode(root);
+}
+
+IANode findRootIANodeForPID(const int pid) {
+  Microsoft::WRL::ComPtr<IAccessible> root = GetAccessibleRoot("", pid);
+  return IANode(root);
+}
 
 Microsoft::WRL::ComPtr<IServiceProvider> IANode::GetServiceProvider() {
   if (isNull()) {
@@ -438,3 +450,5 @@ std::vector<std::string> IANode::getStateStrings() {
 
   return state_strings;
 }
+
+}  // namespace acacia

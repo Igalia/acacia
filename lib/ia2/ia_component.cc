@@ -3,7 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
 
 namespace {
 std::string ColorToString(IA2Color color) {
@@ -12,6 +12,8 @@ std::string ColorToString(IA2Color color) {
   return ss.str();
 }
 }  // namespace
+
+namespace acacia {
 
 std::string IAComponent::toString() {
   if (isNull()) {
@@ -66,3 +68,5 @@ std::pair<long, long> IAComponent::getLocationInParent() {
   }
   return std::make_pair(-1, -1);
 }
+
+}  // namespace acacia

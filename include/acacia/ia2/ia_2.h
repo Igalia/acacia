@@ -9,6 +9,8 @@
 #include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
+namespace acacia {
+
 /**
  * This object represents the information returned by @ref getGroupPosition.
  * @ingroup ia2
@@ -101,5 +103,7 @@ class ACACIA_EXPORT IA2 {
  private:
   Microsoft::WRL::ComPtr<IAccessible2> iface_;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_IA2_IA_2_H_

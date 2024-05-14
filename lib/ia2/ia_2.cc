@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
 
 namespace {
 std::string RoleToString(LONG role) {
@@ -118,6 +118,8 @@ std::string RoleToString(LONG role) {
   }
 }
 }  // namespace
+
+namespace acacia {
 
 std::string IA2::toString() {
   if (isNull()) {
@@ -304,3 +306,5 @@ std::vector<std::string> IA2::getStateStrings() {
 
   return state_strings;
 }
+
+}  // namespace acacia

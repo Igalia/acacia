@@ -2,7 +2,9 @@
 
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
+
+namespace acacia {
 
 std::string IATableCell::toString() {
   if (isNull()) {
@@ -67,3 +69,5 @@ long IATableCell::getRowIndex() {
   }
   return -1;
 }
+
+}  // namespace acacia

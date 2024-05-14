@@ -8,6 +8,8 @@
 #include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
+namespace acacia {
+
 /**
  * This object wraps an
  * [IAccessibleTable2](https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_table2.html)
@@ -50,5 +52,7 @@ class ACACIA_EXPORT IATable2 {
  private:
   Microsoft::WRL::ComPtr<IAccessibleTable2> iface_;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_IA2_IA_TABLE2_H_

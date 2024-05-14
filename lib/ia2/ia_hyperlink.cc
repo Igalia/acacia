@@ -2,7 +2,9 @@
 
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
+
+namespace acacia {
 
 std::string IAHyperlink::toString() {
   if (isNull()) {
@@ -57,3 +59,5 @@ std::string IAHyperlink::getAnchorTarget(long index) {
   }
   return std::string();
 }
+
+}  // namespace acacia

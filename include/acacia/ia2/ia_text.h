@@ -8,6 +8,8 @@
 #include "acacia/export.h"
 #include "third_party/ia2/include/ia2/ia2_api_all.h"
 
+namespace acacia {
+
 class ACACIA_EXPORT IAText {
  public:
   IAText(Microsoft::WRL::ComPtr<IAccessibleText> iface) : iface_(iface) {}
@@ -22,5 +24,7 @@ class ACACIA_EXPORT IAText {
  private:
   Microsoft::WRL::ComPtr<IAccessibleText> iface_;
 };
+
+}  // namespace acacia
 
 #endif  // LIB_IA2_IA_TEXT_H_

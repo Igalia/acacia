@@ -2,9 +2,10 @@
 
 #include <stdexcept>
 
-#include "acacia/ia2/win_utils.h"
+#include "lib/ia2/win_utils.h"
 
 namespace {
+
 std::string ToPrintableString(std::string str) {
   const std::string ufffc = "\xEF\xBF\xBC";
   const std::string printable_ufffc = "[obj]";
@@ -18,6 +19,8 @@ std::string ToPrintableString(std::string str) {
 }
 
 }  // namespace
+
+namespace acacia {
 
 std::string IAText::toString() {
   if (isNull()) {
@@ -76,3 +79,5 @@ std::string IAText::getText(long start_offset, long end_offset) {
   }
   return std::string();
 }
+
+}  // namespace acacia
